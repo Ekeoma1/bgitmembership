@@ -1,0 +1,279 @@
+@import "colors";
+
+.landing-page {
+  .hero {
+    padding: 50px 0;
+    height: 678px;
+    background-color: $pri-color1;
+    .hero-content {
+      color: #fff;
+
+      h1 {
+        max-width: 500px;
+        span {
+          &:first-child {
+            color: #ffc600;
+          }
+          &:nth-child(2) {
+            color: $pri-color2;
+          }
+        }
+      }
+    }
+
+    .learn-more-btn {
+      margin-top: 50px;
+      a {
+        font-size: 20px;
+        font-family: "THICCCBOI-Bold";
+        color: #fff;
+        text-transform: capitalize;
+      }
+    }
+
+    .color-box {
+      max-width: 555px;
+      height: 517px;
+      background-color: $pri-color2;
+
+      .img-box {
+        max-width: 525px;
+        height: 525px;
+        background-size: cover;
+        background-position: center;
+        position: relative;
+        left: -30px;
+        top: 41px;
+      }
+    }
+  }
+
+  .connect-section {
+    padding: 100px 0;
+
+    header {
+      h2 {
+        font-size: 31px;
+        font-family: "THICCCBOI-Bold";
+      }
+      p {
+        font-size: 19px;
+        color: $alt-text-color;
+      }
+    }
+
+    .resources-card {
+      width: 201px;
+      height: 183px;
+      border-radius: 0 0 5px 5px;
+      box-shadow: 0px 2.4841971397399902px 6.955751895904541px 0px #080f340a;
+      border: 0.5px solid #eff0f6;
+
+      .resource-card-img {
+        width: 100%;
+        height: 138px;
+        background-color: red;
+        background-size: cover;
+        background-position: center;
+        border-radius: 5px 5px 0 0;
+      }
+
+      .resource-card-body {
+        padding: 5px 10px;
+        box-sizing: border-box;
+        .card-text {
+          font-size: 9px;
+        }
+      }
+    }
+    .member-card-wrapper {
+      .member-card {
+        max-width: 219px;
+        padding: 20px;
+        border-radius: 24px;
+        // background: linear-gradient(0deg, #eff0f7, #eff0f7), linear-gradient(0deg, #ffffff, #ffffff);
+        background-color: #fff;
+        border: 1.19px solid #eff0f6;
+        box-shadow: 0px 5.969581604003906px 16.714828491210938px 0px #080f340a;
+
+        .member-duration {
+          font-size: 10px;
+          color: $pri-color1;
+          font-family: "THICCCBOI-Bold";
+        }
+
+        .member-img-frame {
+          width: 90.74px;
+          height: 90.74px;
+          border-radius: 50%;
+          background-size: cover;
+          background-position: center;
+        }
+
+        .member-name {
+          font-weight: 700;
+          font-size: 14.33px;
+          text-transform: capitalize;
+        }
+
+        .member-interest {
+          font-size: 10px;
+        }
+      }
+    }
+  }
+
+  .testimonial-section {
+    padding: 50px 0;
+
+    header {
+      h2 {
+        font-size: 31px;
+        font-family: "THICCCBOI-Bold";
+      }
+    }
+
+    .carousel-wrapper {
+      margin-top: 50px;
+
+      .react-multi-carousel-list {
+        margin-bottom: 10px;
+      }
+
+      .react-multi-carousel-dot-list {
+        bottom: auto !important;
+        column-gap: 5px;
+      }
+
+      .testimonial-dot-wrapper {
+        .testimonial-dot {
+          height: 10px;
+          width: 10px;
+          border-radius: 50%;
+        }
+
+        .testimonial-dot.active {
+          background: #161212;
+        }
+
+        .testimonial-dot.inactive {
+          background: #d9d9d9;
+        }
+      }
+
+      .testimonial-card {
+        max-width: 500px;
+        height: 355px;
+        border-radius: 20px;
+        background-color: #fff;
+        border: 1px solid #eff0f6;
+        box-shadow: 0px 5px 14px 0px #080f340a;
+        padding: 30px 20px;
+        box-sizing: border-box;
+        margin-bottom: 20px;
+        .testimonial-card-header {
+          color: #170f49;
+          font-size: 22px;
+          font-family: "THICCCBOI-Bold";
+        }
+
+        .pic-image {
+          box-shadow: 0px 4px 14px 0px #2427291a;
+          width: 60px;
+          height: 60px;
+          border-radius: 50%;
+          background-size: cover;
+          background-position: center;
+        }
+
+        .person-details {
+          .name {
+            font-weight: 700;
+            font-size: 18px;
+            color: #170f49;
+          }
+
+          .role {
+            font-size: 18px;
+            font-weight: 400;
+            color: #6f6c90;
+          }
+        }
+      }
+
+      .react-multiple-carousel__arrow {
+        background-color: #ff66ca !important;
+      }
+    }
+  }
+}
+
+@media screen and (max-width: 800px) {
+  .landing-page {
+    .hero {
+      height: auto !important;
+
+      .learn-more-btn {
+        a {
+          font-size: 16px !important;
+        }
+      }
+
+      .color-box {
+        max-width: 294px;
+        height: 273px;
+        margin-bottom: 30px;
+
+        .img-box {
+          max-width: 277px;
+          height: 277px;
+          left: -15px;
+          top: 30px;
+        }
+      }
+    }
+
+    .connect-section {
+      padding: 50px 0;
+
+      header {
+        h2 {
+          font-size: 18px;
+        }
+      }
+    }
+
+    .testimonial-section {
+      padding: 0 0 50px 0;
+
+      header {
+        h2 {
+          font-size: 18px !important;
+        }
+      }
+
+      .carousel-wrapper {
+        margin-top: 20px;
+
+        .testimonial-card {
+          height: auto !important;
+          .testimonial-card-header {
+            font-size: 16px;
+          }
+          .testimonial-card-body {
+            font-size: 12px !important;
+          }
+          .person-details {
+            .name {
+              font-size: 12px !important;
+            }
+
+            .role {
+              font-size: 12px !important;
+            }
+          }
+        }
+      }
+    }
+  }
+}
