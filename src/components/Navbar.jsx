@@ -9,7 +9,9 @@ const Navbar = () => {
     <nav className="">
       <div className="container">
         <div className="nav-divider">
-          <img src={Logo} alt="bgit logo" width="50" />
+          <Link to="/">
+            <img src={Logo} alt="bgit logo" width="50" />
+          </Link>
 
           <div className="d-lg-none menu-btn-wrapper">
             <button>

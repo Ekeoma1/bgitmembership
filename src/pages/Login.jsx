@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import "../assets/scss/loginRegister.scss";
 import LoginForm from "../components/Auth/LoginForm";
 import PasswordResetForm from "../components/Auth/PasswordResetForm";
+import LoginImage from "../assets/images/login-image.png";
 
 const Login = () => {
   const [formToSHow, setFormToShow] = useState(1);
@@ -13,7 +14,7 @@ const Login = () => {
     <div className="login-register-wrapper">
       <div className="container">
         <div className="row">
-          <div className="col-lg-6 col-12">
+          <div className="col-lg-6 col-12 ">
             {/* <form className="form-card">
               <div>
                 <header>
@@ -47,7 +48,10 @@ const Login = () => {
             {formToSHow === 1 && <LoginForm actionForForm={changFormToShow} />}
             {formToSHow === 2 && <PasswordResetForm />}
           </div>
-          <div className="col-lg-6 d-lg-block d-none">image</div>
+          <div className="col-lg-6 d-lg-block d-none">
+            {/* <img src={LoginImage} alt="" /> */}
+            <div style={{ backgroundImage: `url(${LoginImage})` }} className="img-house"></div>
+          </div>
         </div>
       </div>
     </div>

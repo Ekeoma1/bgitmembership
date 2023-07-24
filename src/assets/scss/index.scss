@@ -93,7 +93,7 @@ input[type="number"] {
   }
 
   h2 {
-    font-size: 40px;
+    font-size: 28px;
   }
 
   h3 {
@@ -101,7 +101,7 @@ input[type="number"] {
   }
 
   h4 {
-    font-size: 18px;
+    font-size: 16px;
   }
 
   p,
@@ -111,5 +111,10 @@ input[type="number"] {
 
   .pri-btn {
     font-size: 14px !important;
+  }
+
+  .primary-btn {
+    width: 193px;
+    height: 52px;
   }
 }

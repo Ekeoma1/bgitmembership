@@ -44,19 +44,14 @@ const PasswordResetForm = () => {
       return (
         <div className="input-wrapper">
           <label htmlFor="emailInput">Email</label>
-          <input
-            // value={email} onChange={(e) => setEmail(e.target.value)}
-            type="email"
-            placeholder="Input your email here"
-            id="emailInput"
-          />
+          <input value={email} onChange={(e) => setEmail(e.target.value)} type="email" placeholder="Input your email here" id="emailInput" />
         </div>
       );
     }
   };
 
   return (
-    <form onSubmit={handleFormSubmit} className="form-card">
+    <form onSubmit={handleFormSubmit} className="form-card mx-lg-0 mx-auto">
       <div>
         <header>
           <h2>Password Reset</h2>
@@ -64,11 +59,13 @@ const PasswordResetForm = () => {
         </header>
         {renderContent()}
       </div>
+
       <div className="text-center">
         {codeSent && !codeConfirmed && <div className="other-action-btn mb-3">Resend Code</div>}
         <button className="primary-btn" type="submit">
           {codeSent ? "Continue" : "Send Code"}
         </button>
+
         <div className="mt-3 next-action-text">
           <span>Don't have an account?</span> <span>Sign Up</span>
         </div>
