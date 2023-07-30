@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import "../assets/scss/loginRegister.scss";
 import PersonalDetailsForm from "../components/Auth/PersonalDetailsForm";
 import ProfileDetails from "../components/Auth/ProfileDetails";

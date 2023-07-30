@@ -3,6 +3,7 @@
 
 .login-register-wrapper {
   background-color: #fbfbfc;
+  position: relative;
 
   .form-card {
     max-width: 510px;
@@ -61,7 +62,7 @@
 
       .input-icon {
         position: absolute;
-        top: 25%;
+        top: 28%;
         right: 10px;
         display: flex;
         column-gap: 10px;
@@ -86,15 +87,21 @@
     }
 
     .next-action-text {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      column-gap: 5px;
       span {
         &:first-child {
           color: $alt-text-color;
         }
 
         &:nth-child(2) {
-          color: #29335c;
-          font-family: $thic600;
-          cursor: pointer;
+          a {
+            color: #29335c;
+            font-family: $thic600;
+            cursor: pointer;
+          }
         }
       }
     }
@@ -103,7 +110,8 @@
   .img-house {
     // background: red;
     width: 50%;
-    height: 780px;
+    height: 100%;
+    bottom: 0;
     position: absolute;
     right: 0;
     background-position: center;
@@ -268,6 +276,7 @@
         .radio-box {
           cursor: pointer;
           max-width: 200px;
+          min-width: 135px;
           height: 72px;
           border-radius: 16px;
           border: 1px solid #d9d9d9;
@@ -341,6 +350,7 @@
   }
 
   .registration-page {
+    padding: 20px !important;
     .register-wrapper {
       padding: 40px 20px !important;
 

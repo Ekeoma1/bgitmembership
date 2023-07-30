@@ -6,9 +6,10 @@ import ErrorPage from "./pages/ErrorPage";
 import LandingPage from "./pages/LandingPage";
 import Home from "./pages/Home";
 import Login from "./pages/Login";
-import Register from "./pages/Register";
+import SignUp from "./pages/SignUp";
+import ForgotPassword from "./pages/ForgotPassword";
 
-const isLoggedIn = false;
+const isLoggedIn = true;
 
 const PrivateRoute = () => {
   return isLoggedIn ? <Outlet /> : <Navigate to="/landing" />;
@@ -49,7 +50,11 @@ const router = createBrowserRouter([
           },
           {
             path: "register",
-            element: <Register />,
+            element: <SignUp />,
+          },
+          {
+            path: "forgot-password",
+            element: <ForgotPassword />,
           },
         ],
       },

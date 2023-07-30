@@ -5,6 +5,7 @@
 $thic800: "THICCCBOI-ExtraBold";
 $thic700: "THICCCBOI-Bold";
 $thic600: "THICCCBOI-SemiBold";
+$thic500: "THICCCBOI-Medium";
 
 h1 {
   font-size: 60px;
@@ -53,6 +54,11 @@ button {
   font-family: $thic700;
   font-size: 16px;
 
+  &.small-btn {
+    width: 175px;
+    height: 40px;
+  }
+
   &:hover {
     background-color: #fff;
     color: $pri-color1;
@@ -60,8 +66,8 @@ button {
   }
 }
 
-// remember to change this name
-.pri-btn {
+.pri-btn, // remember to change this name
+.sec-btn {
   padding: 10px 20px;
   border-radius: 30px;
   background-color: #fff;
@@ -70,10 +76,26 @@ button {
   font-size: 14px;
   font-family: $thic700;
 
+  &.smaller-text {
+    font-size: 12px;
+  }
+
+  &.added-width // was used for home community view all btn
+  {
+    width: 143px;
+  }
+
   &:hover {
     background-color: $pri-color1;
     color: #fff;
   }
+}
+.c-gap-5 {
+  column-gap: 5px;
+}
+
+.c-gap-10 {
+  column-gap: 10px;
 }
 
 input::-webkit-outer-spin-button,

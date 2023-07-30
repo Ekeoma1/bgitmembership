@@ -41,10 +41,10 @@ const ExperienceLevel = ({ tabChanger, currentTab }) => {
         <p>Please select what best describes you.</p>
       </header>
 
-      <div className="radio-wrapper row">
+      <div className="radio-wrapper row flex-wrap">
         {descriptionData.map((data) => {
           return (
-            <div key={data.id} className="col-4">
+            <div key={data.id} className="col-md-4 col">
               <div onClick={() => setLevel(data.id)} className="radio-box">
                 <div className={`radio-out-circle ${level === data.id && "active"}`}>
                   <div className="radio-in-circle"></div>

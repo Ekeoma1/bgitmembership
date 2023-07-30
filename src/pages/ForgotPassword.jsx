@@ -1,15 +1,15 @@
 import React from "react";
-import "../assets/scss/loginRegister.scss";
-import LoginForm from "../components/Auth/LoginForm";
 import LoginImage from "../assets/images/login-image.png";
+import "../assets/scss/loginRegister.scss";
+import PasswordResetForm from "../components/Auth/PasswordResetForm";
 
-const Login = () => {
+const ForgotPassword = () => {
   return (
     <div className="login-register-wrapper">
       <div className="container">
         <div className="row">
           <div className="col-lg-6 col-12 ">
-            <LoginForm forLogin={true} />
+            <PasswordResetForm />
           </div>
           <div className="col-lg-6 d-lg-block d-none">
             <div style={{ backgroundImage: `url(${LoginImage})` }} className="img-house"></div>
@@ -20,4 +20,4 @@ const Login = () => {
   );
 };
 
-export default Login;
+export default ForgotPassword;

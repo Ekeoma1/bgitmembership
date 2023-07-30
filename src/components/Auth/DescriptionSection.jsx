@@ -41,11 +41,11 @@ const DescriptionSection = ({ tabChanger, currentTab }) => {
         <p>Please select what best describes you.</p>
       </header>
 
-      <div className="radio-wrapper row">
+      <div className="radio-wrapper row flex-wrap">
         {descriptionData.map((data) => {
           return (
-            <div key={data.id} className="col-4">
-              <div onClick={() => setDesc(data.id)} className="radio-box">
+            <div key={data.id} className="col-md-4">
+              <div onClick={() => setDesc(data.id)} className="radio-box mx-md-0 mx-auto">
                 <div className={`radio-out-circle ${desc === data.id && "active"}`}>
                   <div className="radio-in-circle"></div>
                 </div>
