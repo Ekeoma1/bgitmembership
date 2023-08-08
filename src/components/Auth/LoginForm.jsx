@@ -4,13 +4,22 @@ import PasswordInput from "../Form-Input/PasswordInput";
 import TextInput from "../Form-Input/TextInput";
 import * as Yup from "yup";
 import { Link } from "react-router-dom";
+import { useDispatch } from "react-redux";
+import { register, login } from "../../Features/authSlice";
 
 // this component is used for both signup and login
 
 const LoginForm = ({ forLogin }) => {
+  const dispatch = useDispatch();
   const handleSubmit = (values) => {
     // Handle form submission here
-    console.log(values);
+    if (forLogin) {
+      console.log(values, "login");
+      dispatch(login());
+    } else {
+      console.log(values, "for signup");
+      dispatch(register());
+    }
   };
 
   const validationSchema = Yup.object().shape({

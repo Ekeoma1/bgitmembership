@@ -34,6 +34,20 @@ const descriptionData = [
 
 const DescriptionSection = ({ tabChanger, currentTab }) => {
   const [desc, setDesc] = useState(0);
+  const [errorMesssage, setErrorMessage] = useState("");
+
+  const nextStep = () => {
+    if (desc != 0) {
+      tabChanger(currentTab + 1);
+    } else {
+      setErrorMessage("Please select an option");
+    }
+  };
+
+  const selectOption = (id) => {
+    setDesc(id);
+    errorMesssage != "" && setErrorMessage("");
+  };
   return (
     <div className="details-wrapper">
       <header>
@@ -45,7 +59,7 @@ const DescriptionSection = ({ tabChanger, currentTab }) => {
         {descriptionData.map((data) => {
           return (
             <div key={data.id} className="col-md-4">
-              <div onClick={() => setDesc(data.id)} className="radio-box mx-md-0 mx-auto">
+              <div onClick={() => selectOption(data.id)} className="radio-box mx-md-0 mx-auto">
                 <div className={`radio-out-circle ${desc === data.id && "active"}`}>
                   <div className="radio-in-circle"></div>
                 </div>
@@ -57,8 +71,10 @@ const DescriptionSection = ({ tabChanger, currentTab }) => {
         })}
       </div>
 
+      <div className="text-center text-danger">{errorMesssage}</div>
+
       <div className="text-center my-5">
-        <button onClick={() => tabChanger(currentTab + 1)} className="primary-btn" type="submit">
+        <button onClick={nextStep} className="primary-btn" type="submit">
           Next
         </button>
       </div>

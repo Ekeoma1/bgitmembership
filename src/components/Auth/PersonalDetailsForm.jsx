@@ -1,6 +1,6 @@
 import { useState } from "react";
 import TextInput from "../Form-Input/TextInput";
-import { Formik, Form, Field, ErrorMessage } from "formik";
+import { Formik, Form } from "formik";
 import * as Yup from "yup";
 import CountryInput from "../Form-Input/CountryInput";
 import "react-phone-number-input/style.css";
@@ -21,6 +21,7 @@ const PersonalDetailsForm = ({ tabChanger, currentTab }) => {
     address1: Yup.string().required("Required"),
     postcode: Yup.string().required("Required"),
     country: Yup.string().required("Required"),
+    city: Yup.string().required("Required"),
     dob: Yup.date()
       .max(new Date(), "Birthdate must be in the past")
       .test("age", "Age should be between 18 and 99", (value) => {
@@ -52,6 +53,7 @@ const PersonalDetailsForm = ({ tabChanger, currentTab }) => {
           address2: "",
           postcode: "",
           country: "",
+          city: "",
         }}
         validationSchema={validationSchema}
         onSubmit={handleSubmit}
@@ -89,6 +91,12 @@ const PersonalDetailsForm = ({ tabChanger, currentTab }) => {
 
             <div className="col-lg">
               <CountryInput name="country" label="Country" />
+            </div>
+          </div>
+
+          <div className="row">
+            <div className="col">
+              <TextInput name="city" label="City" type="text" placeholder="Enter your city" />
             </div>
           </div>
 

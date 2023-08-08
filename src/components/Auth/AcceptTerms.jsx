@@ -1,7 +1,16 @@
-import React from "react";
+import React, { useState } from "react";
 import { Link } from "react-router-dom";
 
-const AcceptTerms = ({ tabChanger, currentTab }) => {
+const AcceptTerms = () => {
+  const [agreement, setAgreement] = useState(false);
+
+  const handleChange = (event) => {
+    setAgreement(event.target.checked);
+  };
+  const finalStage = () => {
+    agreement ? alert("completed") : alert("terms and condition");
+  };
+
   return (
     <div className="details-wrapper">
       <header>
@@ -16,14 +25,14 @@ const AcceptTerms = ({ tabChanger, currentTab }) => {
       </p>
 
       <div className="d-flex check-box-wrapper align-items-center gap-2">
-        <input type="checkbox" name="" id="" />
+        <input onChange={handleChange} type="checkbox" name="" id="acceptTerms" />
         <label>
           Lorem ipsum dolor sit amet <Link to="#"> Privacy Policy</Link>
         </label>
       </div>
 
       <div className="text-center">
-        <button className="primary-btn" type="submit">
+        <button onClick={finalStage} className="primary-btn" type="submit">
           Continue
         </button>
       </div>

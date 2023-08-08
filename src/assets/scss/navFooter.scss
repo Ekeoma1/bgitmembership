@@ -1,4 +1,5 @@
 @import "colors";
+@import "index";
 
 nav {
   padding: 10px 0;
@@ -9,6 +10,16 @@ nav {
     display: grid;
     grid-template-columns: 1fr 3fr;
     align-items: center;
+
+    .contact-btn {
+      padding: 12px 23px;
+      background-color: $pri-color2;
+      border-radius: 78px;
+      color: #fff;
+      font-weight: 500;
+      font-family: $thic500;
+      font-size: 10px;
+    }
 
     .menu-item {
       font-size: 16px;
@@ -26,13 +37,86 @@ nav {
 
     .menu-btn-wrapper {
       justify-self: end;
+      display: flex;
+      column-gap: 20px;
+      align-items: center;
     }
 
     .left-menu-border {
       border-left: 1px solid #9e9e9e;
+
+      .user-profile-image {
+        width: 50px;
+        height: 50px;
+        border-radius: 50%;
+        background-size: cover;
+        background-position: center;
+        background-color: red;
+        cursor: pointer;
+      }
     }
     .login-link {
       color: #0076bb;
+    }
+  }
+
+  .user-profile-dropdown {
+    border: 1.19px solid #9d8dd8;
+    width: 232px;
+    height: 146px;
+    border-radius: 23px;
+    position: absolute;
+    top: 90px;
+    right: 10%;
+    z-index: 100;
+    background-color: #fff;
+    box-sizing: border-box;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-evenly;
+
+    a,
+    button {
+      font-size: 14px;
+      color: #29335c;
+      font-weight: 400;
+      font-family: $thic500;
+
+      &:hover {
+        color: $pri-color2;
+      }
+    }
+  }
+
+  .mobile-nav {
+    width: 100%;
+    // height: 500px;
+    background-color: #fff;
+    z-index: 1000;
+    position: fixed;
+    padding: 20px;
+    box-sizing: border-box;
+    top: 75px;
+    right: 0;
+    left: 0;
+
+    .mobile-menu-item {
+      margin-bottom: 20px;
+
+      a {
+        color: #29335c;
+        font-weight: 400;
+        font-size: 20px;
+        font-family: $thic500;
+      }
+    }
+
+    .mobile-nav-log-out-btn {
+      color: #29335c;
+      font-weight: 400;
+      font-size: 20px;
+      font-family: $thic500;
     }
   }
 }
@@ -52,10 +136,50 @@ footer {
     color: #fff;
   }
 }
+.mobile-footer-nav-wrapper {
+  width: 100%;
+  height: 90px;
+  .mobile-footer-nav {
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+    box-shadow: 0px -1px 4px 0px #0000002b;
+    background-color: #fff;
+    padding: 12px 34px 26px 34px;
+    display: flex;
+    justify-content: space-between;
+    box-sizing: border-box;
+
+    .menu-item-wrapper {
+      text-align: center;
+
+      &.active {
+        svg {
+          path {
+            stroke: #ff66c4;
+            fill: #ff66c4;
+          }
+        }
+
+        .menu-item {
+          color: #000;
+        }
+      }
+
+      .menu-item {
+        font-size: 12px;
+        font-weight: 400;
+        color: #b3b0b9;
+      }
+    }
+  }
+}
 
 @media screen and (max-width: "1024px") {
-  .menu-item {
-    font-size: 14px !important;
+  nav {
+    .menu-item {
+      font-size: 14px !important;
+    }
   }
 
   footer {
@@ -66,10 +190,10 @@ footer {
 @media screen and (max-width: "500px") {
   footer {
     .name {
-      font-size: 10px;
+      font-size: 14px;
     }
     a {
-      font-size: 10px !important;
+      font-size: 12px !important;
     }
   }
 }

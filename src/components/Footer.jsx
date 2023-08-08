@@ -6,11 +6,23 @@ const Footer = () => {
   return (
     <footer>
       <div className="container">
-        <div className="d-flex justify-content-between">
-          <div className="name">Black Girls in Tech</div>
-          <Link to="#">About BGIT</Link>
-          <Link to="#">Events & News</Link>
-          <Link to="#">Disclaimer</Link>
+        <div className="row text-lg-start text-center gap-lg-0 gap-3">
+          <div className="col-lg-3 name">Black Girls in Tech &copy; 2023</div>
+          <div className="col-lg">
+            <Link to="#">About</Link>
+          </div>
+          <div className="col-lg">
+            <Link to="#">Ts & Cs</Link>
+          </div>
+          <div className="col-lg">
+            <Link to="#">Privacy Policy</Link>
+          </div>
+          <div className="col-lg">
+            <Link to="#">Cookie Policy</Link>
+          </div>
+          <div className="col-lg">
+            <Link to="#">Disclaimer</Link>
+          </div>
         </div>
       </div>
     </footer>

@@ -7,6 +7,10 @@ $thic700: "THICCCBOI-Bold";
 $thic600: "THICCCBOI-SemiBold";
 $thic500: "THICCCBOI-Medium";
 
+body {
+  background-color: $body-bg;
+}
+
 h1 {
   font-size: 60px;
   font-family: "THICCCBOI-ExtraBold";
@@ -90,6 +94,7 @@ button {
     color: #fff;
   }
 }
+
 .c-gap-5 {
   column-gap: 5px;
 }
