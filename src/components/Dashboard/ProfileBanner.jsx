@@ -1,7 +1,28 @@
-import React from "react";
+import { useState } from "react";
 import Icon from "../Icon";
+import AccountActionModal from "../Modals/AccountActionModal";
+import IndividualActionModal from "../Modals/IndividualActionModal";
+import { Link } from "react-router-dom";
+import ReportModal from "../Modals/ReportModal";
 
-const ProfileBanner = () => {
+const ProfileBanner = ({ othersView }) => {
+  const [actionAcctModal, setActionAcctModal] = useState(false);
+  const [individalAcctModal, setIndividualAcctModal] = useState(false);
+  const [contentToShow, setContentToShow] = useState(null);
+
+  const toggleAcctModal = () => {
+    setActionAcctModal(!actionAcctModal);
+  };
+
+  const showIndividualAcctModal = (num) => {
+    setContentToShow(num);
+    setIndividualAcctModal(true);
+  };
+
+  const hideIndividualAcctModal = () => {
+    setIndividualAcctModal(false);
+  };
+
   return (
     <div className="profile-banner-wrapper">
       <div className="banner-image"></div>
@@ -23,7 +44,7 @@ const ProfileBanner = () => {
                   <div className="other-details tag-names">UX design</div>
                   <div className="other-details tag-names">UI design</div>
                   <div className="other-details tag-names">Figma</div>
-                  <div className="see-more-btn d-lg-flex d-none">see 12 more</div>
+                  {!othersView && <div className="see-more-btn d-lg-flex d-none">see 2 more</div>}
                 </div>
 
                 <div className="tag-header mt-2">Featured Skill</div>
@@ -36,12 +57,32 @@ const ProfileBanner = () => {
           </div>
 
           <div className="col-md-1 col-2">
-            <button>
-              <Icon icon="edit" />
-            </button>
+            {othersView ? (
+              <button onClick={toggleAcctModal}>
+                <Icon icon="elipse" />
+              </button>
+            ) : (
+              <button>
+                <Icon icon="edit" />
+              </button>
+            )}
           </div>
         </div>
+
+        {othersView && (
+          <div className="d-flex c-gap-10 flex-wrap mt-3">
+            <button className="reach-btn">+ Connect</button>
+
+            <Link className="reach-btn" to="#">
+              Message
+            </Link>
+          </div>
+        )}
       </div>
+
+      {othersView && <AccountActionModal show={actionAcctModal} action={showIndividualAcctModal} />}
+      {othersView && <IndividualActionModal show={individalAcctModal} tab={contentToShow} close={hideIndividualAcctModal} />}
+      {othersView && <ReportModal />}
     </div>
   );
 };

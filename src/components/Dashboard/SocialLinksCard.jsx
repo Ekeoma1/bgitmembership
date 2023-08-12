@@ -8,7 +8,7 @@ const socialLinks = [
   },
 ];
 
-const SocialLinksCard = () => {
+const SocialLinksCard = ({ othersView }) => {
   return (
     <div className="dashboard-card">
       <div className="dashboard-header">Social Links</div>
@@ -21,9 +21,11 @@ const SocialLinksCard = () => {
         );
       })}
 
-      <div className="text-center">
-        <button className="add-text-btn">+Add Social Links</button>
-      </div>
+      {!othersView && (
+        <div className="text-center">
+          <button className="add-text-btn">+Add Social Links</button>
+        </div>
+      )}
     </div>
   );
 };

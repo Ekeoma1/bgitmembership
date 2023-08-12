@@ -66,7 +66,7 @@
       .see-more-btn {
         border: 1px solid #7a6d9f;
         width: 102px;
-        height: 44px;
+        height: 35px;
         border-radius: 20px;
         font-weight: 400;
         color: #40496b;
@@ -75,6 +75,16 @@
         display: flex;
         justify-content: center;
         align-items: center;
+      }
+
+      .reach-btn {
+        padding: 10px 21px 10px 21px;
+        background-color: $pri-color1;
+        color: #fff;
+        font-size: 12.44px;
+        font-weight: 700;
+        font-family: $thic700;
+        border-radius: 30px;
       }
     }
   }
@@ -148,6 +158,24 @@
     }
   }
 
+  .other-pages-btn {
+    max-width: 301px;
+    height: 60px;
+    border-radius: 15px;
+    border: 1px solid #9d8dd8;
+    padding: 20px;
+    box-sizing: border-box;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 40px;
+    div {
+      color: #170f49;
+      font-weight: 700;
+      font-size: 17px;
+    }
+  }
+
   .post-wrapper {
     .post-card {
       max-width: 409px;
@@ -197,6 +225,62 @@
       }
     }
   }
+
+  .members-you-may-know-wrapper {
+    .header {
+      font-family: $thic700;
+      font-weight: 700;
+      font-size: 24px;
+      color: #000;
+    }
+
+    .member-card-wrapper {
+      .member-card {
+        max-width: 280px;
+        min-height: 181px;
+        border-radius: 30px;
+        border: 1px solid #9d8dd8;
+        box-shadow: 0px 3.9095799922943115px 10.94682502746582px 0px #080f340a;
+        padding: 20px;
+        box-sizing: border-box;
+
+        .member-img {
+          width: 70px;
+          height: 70px;
+          border-radius: 50%;
+          background-size: cover;
+          background-position: center;
+        }
+
+        .name {
+          font-weight: 700;
+          font-size: 700;
+          font-size: 17px;
+          line-height: 23.42px;
+          color: $header-text-color;
+        }
+
+        .other-data {
+          font-weight: 400;
+          font-size: 17px;
+          color: #000;
+          line-height: 23.42px;
+        }
+      }
+    }
+
+    .see-more-btn {
+      color: $alt-text-color;
+      font-size: 14px;
+      font-weight: 400;
+    }
+  }
+
+  .see-more-btn {
+    color: $alt-text-color;
+    font-size: 14px;
+    font-weight: 400;
+  }
 }
 
 @media screen and (max-width: 800px) {
@@ -215,6 +299,11 @@
       .profile-details-card {
         padding: 50px 20px 20px 25px !important;
       }
+    }
+
+    .member-card-wrapper {
+      display: flex;
+      flex-wrap: wrap;
     }
   }
 }

@@ -10,6 +10,7 @@ import SignUp from "./pages/SignUp";
 import ForgotPassword from "./pages/ForgotPassword";
 import { useSelector } from "react-redux";
 import Dashboard from "./pages/Dashboard";
+import ViewOtherUsers from "./pages/ViewOtherUsers";
 
 function App() {
   const isLoggedIn = useSelector((state) => state.auth.isLoggedIn);
@@ -39,6 +40,10 @@ function App() {
             {
               path: "dashboard",
               element: <Dashboard />,
+            },
+            {
+              path: "other-users",
+              element: <ViewOtherUsers />,
             },
           ],
         },

@@ -33,7 +33,9 @@ const postList = [
 const Post = () => {
   return (
     <div className="post-wrapper">
-      <CreatePost />
+      <div className="d-lg-block d-none">
+        <CreatePost />
+      </div>
       <div className="post-card-wrapper">
         {postList.map((list, key) => {
           return (

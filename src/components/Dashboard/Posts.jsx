@@ -37,7 +37,7 @@ const Posts = () => {
         </div>
       </div>
 
-      <div className="row mt-3">
+      <div className="row mt-3 gap-md-0 gap-3">
         <div className="col-md">
           <div className="post-card">
             <div className="d-flex flex-wrap gap-2">

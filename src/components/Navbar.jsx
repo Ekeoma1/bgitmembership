@@ -22,6 +22,10 @@ const Navbar = () => {
   const toggleDropdown = () => {
     setShowDropdown(!showDropdown);
   };
+
+  const hideDropdown = () => {
+    setShowDropdown(false);
+  };
   return (
     <nav className="">
       <div className="container">
@@ -75,8 +79,12 @@ const Navbar = () => {
                   <div onClick={toggleDropdown} className="user-profile-image"></div>
                   <Icon icon="triDown" />
                   <div className={`user-profile-dropdown shadow-sm ${!showDropdown && "d-none"}`}>
-                    <Link to="#">My Dashboard</Link>
-                    <Link to="#">Settings</Link>
+                    <Link onClick={hideDropdown} to="/dashboard">
+                      My Dashboard
+                    </Link>
+                    <Link onClick={hideDropdown} to="#">
+                      Settings
+                    </Link>
                     <button>Log out</button>
                   </div>
                 </div>
