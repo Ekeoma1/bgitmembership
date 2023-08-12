@@ -17,7 +17,7 @@ const ProfileDetails = ({ tabChanger, currentTab }) => {
     // Add validation rules for other form fields, if needed
     image: Yup.string().required("Please upload an image"),
     bio: Yup.string().required("Tell us about yourself"),
-    niche: Yup.string().required("Please select a favorite greeting"),
+    niche: Yup.string().required("Please select your niche"),
     profession: Yup.string().required("Your profession is required"),
   });
 

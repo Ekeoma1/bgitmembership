@@ -1,14 +1,20 @@
 import React, { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 const AcceptTerms = () => {
   const [agreement, setAgreement] = useState(false);
+  const navigate = useNavigate();
 
   const handleChange = (event) => {
     setAgreement(event.target.checked);
   };
   const finalStage = () => {
-    agreement ? alert("completed") : alert("terms and condition");
+    if (agreement) {
+      alert("Registration completed");
+      navigate("/login");
+    } else {
+      alert("please accept terms and condition");
+    }
   };
 
   return (

@@ -6,19 +6,35 @@ const SelectInput = ({ name, ...props }) => {
   const [field, meta] = useField(name);
   const { setFieldValue } = useFormikContext();
 
-  const [options, setOptions] = useState([]);
-
-  useEffect(() => {
-    // Fetch options from API
-    axios
-      .get("https://api.example.com/greetings")
-      .then((response) => {
-        setOptions(response.data);
-      })
-      .catch((error) => {
-        console.error("Error fetching options:", error);
-      });
-  }, []);
+  const [options, setOptions] = useState([
+    {
+      id: 1,
+      value: "uiDesign",
+      label: "UI Design",
+    },
+    {
+      id: 2,
+      value: "uxResearch",
+      label: "UX Research",
+    },
+    {
+      id: 3,
+      value: "frontendDev",
+      label: "Frontend Development",
+    },
+  ]);
+  // when api is ready this activated
+  // useEffect(() => {
+  //   // Fetch options from API
+  //   axios
+  //     .get("https://api.example.com/greetings")
+  //     .then((response) => {
+  //       setOptions(response.data);
+  //     })
+  //     .catch((error) => {
+  //       console.error("Error fetching options:", error);
+  //     });
+  // }, []);
 
   const handleChange = (event) => {
     const selectedValue = event.target.value;
