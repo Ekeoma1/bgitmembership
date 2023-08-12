@@ -3,13 +3,15 @@ import "../assets/scss/navFooter.scss";
 import Logo from "../assets/images/logo.png";
 import { Link } from "react-router-dom";
 import Icon from "./Icon";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 import MobileNav from "./MobileNav";
+import { logout } from "../Features/authSlice";
 
 const Navbar = () => {
   const isLoggedIn = useSelector((state) => state.auth.isLoggedIn);
   const [showDropdown, setShowDropdown] = useState(false);
   const [mobNav, setMobNav] = useState(false);
+  const dispatch = useDispatch();
 
   const hideMobNav = () => {
     setMobNav(false);
@@ -85,7 +87,7 @@ const Navbar = () => {
                     <Link onClick={hideDropdown} to="#">
                       Settings
                     </Link>
-                    <button>Log out</button>
+                    <button onClick={() => dispatch(logout())}>Log out</button>
                   </div>
                 </div>
               ) : (
