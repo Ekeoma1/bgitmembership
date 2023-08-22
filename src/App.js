@@ -11,6 +11,7 @@ import ForgotPassword from "./pages/ForgotPassword";
 import { useSelector } from "react-redux";
 import Dashboard from "./pages/Dashboard";
 import ViewOtherUsers from "./pages/ViewOtherUsers";
+import Settings from "./pages/Settings";
 
 function App() {
   const isLoggedIn = useSelector((state) => state.auth.isLoggedIn);
@@ -44,6 +45,10 @@ function App() {
             {
               path: "other-users",
               element: <ViewOtherUsers />,
+            },
+            {
+              path: "settings",
+              element: <Settings />,
             },
           ],
         },

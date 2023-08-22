@@ -84,7 +84,7 @@ const Navbar = () => {
                     <Link onClick={hideDropdown} to="/dashboard">
                       My Dashboard
                     </Link>
-                    <Link onClick={hideDropdown} to="#">
+                    <Link onClick={hideDropdown} to="/settings">
                       Settings
                     </Link>
                     <button onClick={() => dispatch(logout())}>Log out</button>

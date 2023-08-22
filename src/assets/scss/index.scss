@@ -70,6 +70,30 @@ button {
   }
 }
 
+.secondary-btn {
+  width: 255px;
+  height: 61px;
+  padding: 10px;
+  box-sizing: border-box;
+  background-color: #fff;
+  border-radius: 6px;
+  font-family: $thic700;
+  font-size: 16px;
+  border: 1px solid $pri-color1;
+  color: $pri-color1;
+
+  &.small-btn {
+    width: 175px;
+    height: 40px;
+  }
+
+  &:hover {
+    background-color: $pri-color1;
+    color: #fff;
+    border: 2px solid $pri-color1;
+  }
+}
+
 .pri-btn, // remember to change this name
 .sec-btn {
   padding: 10px 20px;

@@ -8,6 +8,7 @@ const CreatePost = () => {
   const [postReach, setPostReach] = useState("anyone");
 
   const handleMediaChange = (e, type) => {
+    setSelectedMedia(null);
     const file = e.target.files[0];
     if (file) {
       const reader = new FileReader();
@@ -15,7 +16,15 @@ const CreatePost = () => {
         setSelectedMedia(event.target.result);
       };
       reader.readAsDataURL(file);
-      setMediaType(file.type.startsWith("image") ? "image" : "video");
+
+      // Get the file extension from the file name
+      const fileExtension = file.name.split(".").pop().toLowerCase();
+
+      // Check if the file is an image or a video based on the extension
+      const isImage = ["jpg", "jpeg", "png", "gif", "webp", "svg"].includes(fileExtension);
+      const isVideo = ["mp4", "avi", "mov", "wmv"].includes(fileExtension);
+
+      setMediaType(isImage ? "image" : isVideo ? "video" : "unknown");
     }
   };
 

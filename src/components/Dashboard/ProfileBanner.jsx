@@ -9,6 +9,7 @@ const ProfileBanner = ({ othersView }) => {
   const [actionAcctModal, setActionAcctModal] = useState(false);
   const [individalAcctModal, setIndividualAcctModal] = useState(false);
   const [contentToShow, setContentToShow] = useState(null);
+  const [reportModal, setReportModal] = useState(false);
 
   const toggleAcctModal = () => {
     setActionAcctModal(!actionAcctModal);
@@ -80,9 +81,9 @@ const ProfileBanner = ({ othersView }) => {
         )}
       </div>
 
-      {othersView && <AccountActionModal show={actionAcctModal} action={showIndividualAcctModal} />}
+      {othersView && <AccountActionModal reportAction={setReportModal} show={actionAcctModal} action={showIndividualAcctModal} />}
       {othersView && <IndividualActionModal show={individalAcctModal} tab={contentToShow} close={hideIndividualAcctModal} />}
-      {othersView && <ReportModal />}
+      {othersView && <ReportModal showReport={reportModal} reportAction={setReportModal} />}
     </div>
   );
 };
