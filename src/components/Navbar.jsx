@@ -63,7 +63,7 @@ const Navbar = () => {
                   </Link>
                 </div>
                 <div className="col-2 px-0 text-center">
-                  <Link className="menu-item" to="#">
+                  <Link to='/resources' className="menu-item">
                     Resources <Icon icon="chevronDown" />
                   </Link>
                 </div>

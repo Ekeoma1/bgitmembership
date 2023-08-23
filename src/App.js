@@ -12,6 +12,7 @@ import { useSelector } from "react-redux";
 import Dashboard from "./pages/Dashboard";
 import ViewOtherUsers from "./pages/ViewOtherUsers";
 import Settings from "./pages/Settings";
+import Resources from "./pages/Resources";
 
 function App() {
   const isLoggedIn = useSelector((state) => state.auth.isLoggedIn);
@@ -26,51 +27,55 @@ function App() {
 
   const router = createBrowserRouter([
     {
-      path: "/",
+      path: '/',
       element: <Layout />,
       errorElement: <ErrorPage />,
       children: [
         {
-          path: "",
+          path: '',
           element: <PrivateRoute />,
           children: [
             {
-              path: "",
+              path: '',
               element: <Home />,
             },
             {
-              path: "dashboard",
+              path: 'dashboard',
               element: <Dashboard />,
             },
             {
-              path: "other-users",
+              path: 'other-users',
               element: <ViewOtherUsers />,
             },
             {
-              path: "settings",
+              path: 'settings',
               element: <Settings />,
+            },
+            {
+              path: 'resources',
+              element: <Resources />,
             },
           ],
         },
 
         {
-          path: "",
+          path: '',
           element: <AuthRoute />,
           children: [
             {
-              path: "landing",
+              path: 'landing',
               element: <LandingPage />,
             },
             {
-              path: "login",
+              path: 'login',
               element: <Login />,
             },
             {
-              path: "register",
+              path: 'register',
               element: <SignUp />,
             },
             {
-              path: "forgot-password",
+              path: 'forgot-password',
               element: <ForgotPassword />,
             },
           ],
