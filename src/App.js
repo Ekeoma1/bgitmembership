@@ -12,6 +12,7 @@ import { useSelector } from "react-redux";
 import Dashboard from "./pages/Dashboard";
 import ViewOtherUsers from "./pages/ViewOtherUsers";
 import Settings from "./pages/Settings";
+import JobBoard from "./pages/JobBoard";
 import Resources from "./pages/Resources";
 
 function App() {
@@ -50,6 +51,10 @@ function App() {
             {
               path: 'settings',
               element: <Settings />,
+            },
+            {
+              path: 'job-board',
+              element: <JobBoard />,
             },
             {
               path: 'resources',

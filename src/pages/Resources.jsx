@@ -6,16 +6,6 @@ import SearchBox from '../components/Molecules/SearchBox';
 import { HiOutlineChevronRight } from 'react-icons/hi';
 
 const Resources = () => {
-  const [searchValue, setSearchValue] = useState('');
-  const onChange = (e) => {
-    setSearchValue(e.target.value);
-  };
-  const handleSearch = () => {
-    console.log('search', searchValue);
-  };
-  const handleResourceCard = (id) => {
-    console.log(id);
-  };
   const data = [
     {
       title: 'CV Builder',
@@ -38,6 +28,17 @@ const Resources = () => {
       id: 4,
     },
   ];
+  const [searchValue, setSearchValue] = useState('');
+  const onChange = (e) => {
+    setSearchValue(e.target.value);
+  };
+  const handleSearch = () => {
+    console.log('search', searchValue);
+  };
+  const handleResourceCard = (id) => {
+    console.log(id);
+  };
+
   return (
     <div className='resources-wrapper'>
       <div className='search-box-section mx-auto'>

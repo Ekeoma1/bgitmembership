@@ -58,7 +58,7 @@ const Navbar = () => {
                   </Link>
                 </div>
                 <div className="col-2 px-0 text-center">
-                  <Link className="menu-item" to="#">
+                  <Link className="menu-item" to="/job-board">
                     Job Board
                   </Link>
                 </div>
