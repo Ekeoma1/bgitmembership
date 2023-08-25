@@ -28,3 +28,30 @@
     top: 25%;
   }
 }
+.button-component {
+  height: 6.1rem;
+  padding: 1rem 9rem;
+  box-sizing: border-box;
+  background-color: $pri-color1;
+  border-radius: 0.6rem;
+  color: #fff;
+  font-family: $thic700;
+  font-size: 1.6rem;
+  border: 2px solid $pri-color1;
+  line-height: 100%;
+  transition: all linear 0.1s;
+
+  &.small-btn {
+    height: 4rem;
+    padding: 1rem 4rem;
+    @media screen and (max-width: '500px') {
+      padding: 1rem 3rem;
+      font-size: 1.2rem;
+    }
+  }
+  &:hover {
+    background-color: #fff;
+    color: $pri-color1;
+    border: 2px solid $pri-color1;
+  }
+}
