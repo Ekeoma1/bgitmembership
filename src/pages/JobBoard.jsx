@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import SearchBox from '../components/Molecules/SearchBox';
 import google from '../../src/assets/images/google.svg';
-import person2 from '../../src/assets/images/person2.png';
+import per1 from '../../src/assets/images/per1.svg';
 import '../../src/assets/scss/jobBoard.scss';
 import Icon from '../components/Icon';
 import {
@@ -20,7 +20,7 @@ const JobBoard = () => {
   const [idJobSelected, setIdJobSelected] = useState();
   const [jobSelected, setJobSelected] = useState({});
   const [filter, setFilter] = useState(false);
-  const [apply, setApply] = useState(true);
+  const [apply, setApply] = useState(false);
   const [mobileTab, setMobileTab] = useState('for you');
   const onChange = (e) => {
     setSearchValue(e.target.value);
@@ -720,7 +720,7 @@ const JobBoard = () => {
             </div>
             <div className='img-wrapper'>
               <div className='img-con'>
-                <img src={person2} alt='' className='' />
+                <img src={per1} alt='' className='' />
               </div>
               <div className='details'>
                 <h5 className='name'>Claire Tomas</h5>
