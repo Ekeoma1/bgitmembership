@@ -1,5 +1,5 @@
-@import "colors";
-@import "index";
+@import 'colors';
+@import 'index';
 
 nav {
   padding: 10px 0;
@@ -23,8 +23,21 @@ nav {
 
     .menu-item {
       font-size: 16px;
-      font-family: "THICCCBOI-Bold";
+      font-family: 'THICCCBOI-Bold';
       color: $pri-color1;
+
+      &:hover {
+        color: $pri-color2;
+
+        path {
+          stroke: $pri-color2;
+        }
+      }
+    }
+    .active-link {
+      color: $pri-color2;
+      font-size: 16px;
+      font-family: 'THICCCBOI-Bold';
 
       &:hover {
         color: $pri-color2;
@@ -128,7 +141,7 @@ footer {
   .name {
     font-size: 24px;
     color: #fff;
-    font-family: "THICCCBOI-Bold";
+    font-family: 'THICCCBOI-Bold';
   }
 
   a {
@@ -175,7 +188,7 @@ footer {
   }
 }
 
-@media screen and (max-width: "1024px") {
+@media screen and (max-width: '1024px') {
   nav {
     .menu-item {
       font-size: 14px !important;
@@ -187,7 +200,7 @@ footer {
   }
 }
 
-@media screen and (max-width: "500px") {
+@media screen and (max-width: '500px') {
   footer {
     .name {
       font-size: 14px;
