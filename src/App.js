@@ -14,6 +14,7 @@ import ViewOtherUsers from "./pages/ViewOtherUsers";
 import Settings from "./pages/Settings";
 import JobBoard from "./pages/JobBoard";
 import Resources from "./pages/Resources";
+import EventsAndNews from "./pages/EventsAndNews";
 
 function App() {
   const isLoggedIn = useSelector((state) => state.auth.isLoggedIn);
@@ -59,6 +60,10 @@ function App() {
             {
               path: 'resources',
               element: <Resources />,
+            },
+            {
+              path: 'events-and-news',
+              element: <EventsAndNews />,
             },
           ],
         },

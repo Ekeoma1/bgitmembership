@@ -49,7 +49,7 @@ const Navbar = () => {
               <>
                 <div className='col-3 px-0 text-center'>
                   <NavLink
-                    to='/community'
+                    to='/'
                     className={({ isActive }) =>
                       isActive ? 'active-link' : 'menu-item'
                     }
@@ -59,7 +59,7 @@ const Navbar = () => {
                 </div>
                 <div className='col-2 px-0 text-center'>
                   <NavLink
-                    to='/events'
+                    to='/events-and-news'
                     className={({ isActive }) =>
                       isActive ? 'active-link' : 'menu-item'
                     }
