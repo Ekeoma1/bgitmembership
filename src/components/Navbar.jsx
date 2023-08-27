@@ -6,6 +6,7 @@ import Icon from './Icon';
 import { useSelector, useDispatch } from 'react-redux';
 import MobileNav from './MobileNav';
 import { logout } from '../Features/authSlice';
+import { FiChevronDown } from 'react-icons/fi';
 
 const Navbar = () => {
   const isLoggedIn = useSelector((state) => state.auth.isLoggedIn);
@@ -44,7 +45,7 @@ const Navbar = () => {
               <Icon icon='menu' />
             </button>
           </div>
-          <div className='row d-lg-flex d-none mx-0 align-items-center justify-content-end'>
+          <div className='nav-buttons row d-lg-flex d-none mx-0 align-items-center justify-content-end'>
             {isLoggedIn ? (
               <>
                 <div className='col-3 px-0 text-center'>
@@ -64,7 +65,7 @@ const Navbar = () => {
                       isActive ? 'active-link' : 'menu-item'
                     }
                   >
-                    Events & News <Icon icon='chevronDown' />
+                    Events & News <FiChevronDown />
                   </NavLink>
                 </div>
                 <div className='col-2 px-0 text-center'>
@@ -84,7 +85,7 @@ const Navbar = () => {
                       isActive ? 'active-link' : 'menu-item'
                     }
                   >
-                    Resources <Icon icon='chevronDown' />
+                    Resources <FiChevronDown />
                   </NavLink>
                 </div>
               </>

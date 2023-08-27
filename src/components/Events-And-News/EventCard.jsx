@@ -1,10 +1,15 @@
-import React from 'react'
+import React from 'react';
 import { BsBookmark } from 'react-icons/bs';
 import { PiShareFat } from 'react-icons/pi';
+import { useNavigate } from 'react-router-dom';
 
-const EventCard = ({event}) => {
+const EventCard = ({ event }) => {
+  const navigate = useNavigate();
   return (
-    <div className='event-card'>
+    <div
+      className='event-card'
+      onClick={() => navigate('/events-and-news/event')}
+    >
       <div className='card-main'>
         <div className='card-info'>
           <h2>{event.title}</h2>
@@ -28,6 +33,6 @@ const EventCard = ({event}) => {
       </div>
     </div>
   );
-}
+};
 
-export default EventCard
+export default EventCard;

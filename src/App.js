@@ -15,6 +15,7 @@ import Settings from "./pages/Settings";
 import JobBoard from "./pages/JobBoard";
 import Resources from "./pages/Resources";
 import EventsAndNews from "./pages/EventsAndNews";
+import Event from "./pages/Event";
 
 function App() {
   const isLoggedIn = useSelector((state) => state.auth.isLoggedIn);
@@ -36,6 +37,7 @@ function App() {
         {
           path: '',
           element: <PrivateRoute />,
+          
           children: [
             {
               path: '',
@@ -64,6 +66,10 @@ function App() {
             {
               path: 'events-and-news',
               element: <EventsAndNews />,
+            },
+            {
+              path: 'events-and-news/event',
+              element: <Event />,
             },
           ],
         },

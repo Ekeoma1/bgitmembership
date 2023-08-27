@@ -15,9 +15,9 @@ const Banner = () => {
     >
       <div className='banner-gradient'>
         <div className='banner-content'>
-            <div className="arrow">
+            {/* <div className="arrow">
                 <HiArrowLeft/>
-            </div>
+            </div> */}
           <h2>Events and News</h2>
           <h5>
             Stay up to date with the latest BGIT News and Events. We always have
