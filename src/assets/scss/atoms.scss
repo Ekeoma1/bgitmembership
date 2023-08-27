@@ -1,0 +1,17 @@
+@import 'colors';
+@import 'index';
+
+.tag {
+  padding: 10px;
+  display: inline-block;
+  border-radius: 30px;
+  border: 0.78px solid #9d8dd8;
+
+  h5 {
+    color: #6f6c90;
+    font-size: 1.407rem;
+    font-weight: 700;
+    line-height: 21.9px;
+    margin: auto;
+  }
+}
