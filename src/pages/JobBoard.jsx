@@ -2,7 +2,6 @@ import React, { useState } from 'react';
 import SearchBox from '../components/Molecules/SearchBox';
 import google from '../../src/assets/images/google.svg';
 import per1 from '../../src/assets/images/per1.svg';
-import '../../src/assets/scss/jobBoard.scss';
 import Icon from '../components/Icon';
 import {
   HiOutlineChevronDown,
@@ -11,7 +10,8 @@ import {
 } from 'react-icons/hi';
 import { VscSettings } from 'react-icons/vsc';
 import useWindowSize from '../hooks/useWindowSize';
-import MainButton from '../components/Molecules/Button';
+import MainButton from '../components/Molecules/MainButton';
+import '../../src/assets/scss/jobBoard.scss';
 
 const JobBoard = () => {
   const { isMobile, windowSize } = useWindowSize();
