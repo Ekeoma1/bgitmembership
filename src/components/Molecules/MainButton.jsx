@@ -11,7 +11,6 @@ const MainButton = ({ onClick, size, variant, text, iconLeft, iconRight }) => {
       onClick={onClick}
     >
       {text}
-      {/* <Icon icon='searchIcon' /> */}
     </button>
   );
 };

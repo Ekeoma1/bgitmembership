@@ -1,31 +1,38 @@
-import "./assets/scss/index.scss";
-import "bootstrap/dist/css/bootstrap.min.css";
-import { createBrowserRouter, RouterProvider, Navigate, Outlet } from "react-router-dom";
-import Layout from "./Layout";
-import ErrorPage from "./pages/ErrorPage";
-import LandingPage from "./pages/LandingPage";
-import Home from "./pages/Home";
-import Login from "./pages/Login";
-import SignUp from "./pages/SignUp";
-import ForgotPassword from "./pages/ForgotPassword";
-import { useSelector } from "react-redux";
-import Dashboard from "./pages/Dashboard";
-import ViewOtherUsers from "./pages/ViewOtherUsers";
-import Settings from "./pages/Settings";
-import JobBoard from "./pages/JobBoard";
-import Resources from "./pages/Resources";
-import EventsAndNews from "./pages/EventsAndNews";
-import Event from "./pages/Event";
+import './assets/scss/index.scss';
+import 'bootstrap/dist/css/bootstrap.min.css';
+import {
+  createBrowserRouter,
+  RouterProvider,
+  Navigate,
+  Outlet,
+} from 'react-router-dom';
+import Layout from './Layout';
+import ErrorPage from './pages/ErrorPage';
+import LandingPage from './pages/LandingPage';
+import Home from './pages/Home';
+import Login from './pages/Login';
+import SignUp from './pages/SignUp';
+import ForgotPassword from './pages/ForgotPassword';
+import { useSelector } from 'react-redux';
+import Dashboard from './pages/Dashboard';
+import ViewOtherUsers from './pages/ViewOtherUsers';
+import Settings from './pages/Settings';
+import JobBoard from './pages/JobBoard';
+import Resources from './pages/Resources';
+import EventsAndNews from './pages/EventsAndNews';
+import Event from './pages/Event';
+import CommunityForums from './pages/CommunityForums';
+import CommunityForumsAllForums from './pages/CommunityForumsAllForums';
 
 function App() {
   const isLoggedIn = useSelector((state) => state.auth.isLoggedIn);
 
   const PrivateRoute = () => {
-    return isLoggedIn ? <Outlet /> : <Navigate to="/landing" />;
+    return isLoggedIn ? <Outlet /> : <Navigate to='/landing' />;
   };
 
   const AuthRoute = () => {
-    return !isLoggedIn ? <Outlet /> : <Navigate to="/" />;
+    return !isLoggedIn ? <Outlet /> : <Navigate to='/' />;
   };
 
   const router = createBrowserRouter([
@@ -37,7 +44,7 @@ function App() {
         {
           path: '',
           element: <PrivateRoute />,
-          
+
           children: [
             {
               path: '',
@@ -56,12 +63,12 @@ function App() {
               element: <Settings />,
             },
             {
-              path: 'job-board',
-              element: <JobBoard />,
+              path: 'community-forums',
+              element: <CommunityForums />,
             },
             {
-              path: 'resources',
-              element: <Resources />,
+              path: 'community-forums/all',
+              element: <CommunityForumsAllForums />,
             },
             {
               path: 'events-and-news',
@@ -70,6 +77,14 @@ function App() {
             {
               path: 'events-and-news/event',
               element: <Event />,
+            },
+            {
+              path: 'job-board',
+              element: <JobBoard />,
+            },
+            {
+              path: 'resources',
+              element: <Resources />,
             },
           ],
         },
