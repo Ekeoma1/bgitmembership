@@ -14,7 +14,7 @@ const CommunityCard = ({ community }) => {
   const { isMobile } = useWindowSize();
   const [more, setMore] = useState(false);
   return (
-    <div className='community-card'>
+    <div className='community-card bg-color-card'>
       <div className='card-body'>
         <img src={community.community_img} alt='community-img' className='' />
         {community.recently_joined && (
@@ -25,7 +25,7 @@ const CommunityCard = ({ community }) => {
       </div>
       <div className='card-footer'>
         <div className='info'>
-          <h3>{community.community_name}</h3>
+          <h3 className='text-color-secondary-bold'>{community.community_name}</h3>
           <div className='members-wrapper'>
             <div class='members-img'>
               <div class='image-con'>
@@ -44,18 +44,18 @@ const CommunityCard = ({ community }) => {
                 <img src={member5} alt='community-img-sm' />
               </div>
             </div>
-            <div className='members-amount'>
+            <div className='members-amount text-color-secondary-normal'>
               <p>{community.community_members}</p>
               <p>Members</p>
             </div>
             <div className='icon-con'>
-              <img src={msg} alt='message-icon' className='' />
+              <img src={msg} alt='message-icon' className='icon-color' />
               {community.unreadMsg && <div className='msg-circle'></div>}
             </div>
           </div>
         </div>
         <div className='more'>
-          <MdOutlineMoreHoriz className='icon' onClick={() => setMore(true)} />
+          <MdOutlineMoreHoriz className='icon secondary-text-color-normal' onClick={() => setMore(true)} />
           <HiOutlineChevronRight
             className='icon-mobile'
             onClick={() => console.log('mobile')}

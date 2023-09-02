@@ -24,7 +24,7 @@ const ForumContent = () => {
   ];
   useEffect(() => {}, []);
   return (
-    <div className='forum-content-wrapper'>
+    <div className='forum-content-wrapper bg-color'>
       <div className='container'>
         <div className='forum-content'>
           <div className='about-admin-wrapper'>
@@ -83,7 +83,7 @@ const ForumContent = () => {
             </div>
           </div>
           <div className='related-groups-wrapper'>
-            <h3>Related groups</h3>
+            <h3 className='text-color'>Related groups</h3>
             <div className='forum-cards'>
               {communities.map((forum, index) => (
                 <ForumCard key={index} forum={forum} />

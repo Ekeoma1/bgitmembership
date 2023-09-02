@@ -10,10 +10,10 @@ const ForumCard = ({ forum }) => {
   const [joined, setJoined] = useState(false);
   const navigate = useNavigate();
   return (
-    <div className='forum-card'>
+    <div className='forum-card bg-color-card'>
       <img src={forum.community_img} alt='forum-img' className='' />
-      <h3>{forum.community_name}</h3>
-      <p>
+      <h3 className='text-color-secondary-bold'>{forum.community_name}</h3>
+      <p className='text-color-secondary-normal'>
         {forum.info.length > 130 && !isMobile
           ? `${forum.info.substring(0, 130)}...`
           : forum.info.length > 100 && isMobile
@@ -24,12 +24,13 @@ const ForumCard = ({ forum }) => {
             onClick={() => {
               navigate('/community-forums/forum');
             }}
+            className='text-color-secondary-normal'
           >
             See more
           </span>
         )}
       </p>
-      <button onClick={() => setJoined(true)}>
+      <button className='bg-color text-color' onClick={() => setJoined(true)}>
         {!joined ? (
           <>
             <LuPlus className='icon' />

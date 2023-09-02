@@ -44,7 +44,7 @@ const SuggestedForums = () => {
     <div className='suggested-forums-wrapper'>
       <div className='container'>
         <div className='content-wrapper'>
-          <h3 className='section-title'> Suggested Forums </h3>
+          <h3 className='section-title text-color'> Suggested Forums </h3>
           <div className='view-all'>
             <button onClick={() => navigate('/community-forums/all')}>
               View all

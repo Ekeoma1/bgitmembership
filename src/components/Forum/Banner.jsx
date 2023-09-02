@@ -12,6 +12,7 @@ import { GrCheckmark } from 'react-icons/gr';
 import { FiPlus } from 'react-icons/fi';
 import { PiCheckBold } from 'react-icons/pi';
 import { useNavigate } from 'react-router-dom';
+import { ImCancelCircle } from 'react-icons/im';
 
 const Banner = ({
   setJoinForumRequestSuccessful,
@@ -21,14 +22,16 @@ const Banner = ({
   const [requestSent, setRequestSent] = useState(false);
 
   const handleClick = (e) => {
-    // console.log(e.);
-    if (e.currentTarget.className === 'join') {
+    if (e.currentTarget.classList.contains('join')) {
       setRequestSent(true);
       setTimeout(() => {
         setJoinForumRequestSuccessful(true);
       }, 3000);
+    } else if (e.currentTarget.classList.contains('request-sent')) {
+      // cancel request endpoint
     } else {
-      // setRequestSent(false);
+      setJoinForumRequestSuccessful(false);
+      setRequestSent(false);
     }
   };
   return (
@@ -82,19 +85,18 @@ const Banner = ({
                   Join
                 </button>
               )}
-              {requestSent &&
-                !joinForumRequestSuccessful && (
-                  <button
-                    className='request-sent'
-                    onClick={(e) => handleClick(e)}
-                  >
-                    <PiCheckBold className='icon' />
-                    Request Sent
-                  </button>
-                )}
+              {requestSent && !joinForumRequestSuccessful && (
+                <button
+                  className='request-sent'
+                  onClick={(e) => handleClick(e)}
+                >
+                  <PiCheckBold className='icon' />
+                  Request Sent
+                </button>
+              )}
               {joinForumRequestSuccessful && (
-                <button className='join' onClick={(e) => handleClick(e)}>
-                  <FiPlus className='icon' />
+                <button className='leave-forum' onClick={(e) => handleClick(e)}>
+                  <ImCancelCircle className='icon' />
                   Leave Forum
                 </button>
               )}

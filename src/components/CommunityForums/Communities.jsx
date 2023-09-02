@@ -67,8 +67,8 @@ const Communities = () => {
                 </div>
               </div>
               <div className='section-title'>
-                <h3>Communities </h3>
-                <p> (3)</p>
+                <h3 className='text-color'>Communities </h3>
+                <p className='text-color2'> (3)</p>
               </div>
               <div className='cards-wrapper'>
                 {communities.map((community, index) => (

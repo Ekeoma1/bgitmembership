@@ -13,7 +13,7 @@ const Banner = () => {
         <div className='page-title-wrapper'>
           <div className='title-wrapper'>
             {/* <HiArrowLeft /> */}
-            <h3>My forumns</h3>
+            <h3 className='text-color'>My forumns</h3>
           </div>
         </div>
       </div>
