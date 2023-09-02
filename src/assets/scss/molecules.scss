@@ -134,28 +134,30 @@
 .forum-card {
   width: 23.2rem;
   height: 29.8rem;
-  border-radius: 23.878px;
+  padding: 1.7rem 3.2rem;
+  border-radius: 2.3878rem;
   border: 1.194px solid #9d8dd8;
   background: #fff;
   box-shadow: 0px 5.969581604003906px 16.714828491210938px 0px
     rgba(8, 15, 52, 0.04);
-  padding: 3.2rem;
   display: flex;
   flex-direction: column;
   align-items: center;
   @media screen and (max-width: '500px') {
     width: 16.8rem;
     height: 28.9rem;
-    padding:  2.2rem 1.6rem;
+    padding: 2.2rem 1.6rem;
   }
   img {
     width: 49px;
     height: 49px;
+    min-width: 63.814px;
+    min-height: 63.814px;
     overflow: hidden;
     object-fit: cover;
     border-radius: 50%;
     overflow: hidden;
-    margin-bottom: 2rem;
+    margin-bottom: 1.69rem;
   }
   h3 {
     color: #000;
@@ -199,6 +201,141 @@
     line-height: 19.351px;
     .icon {
       font-size: 1.5rem;
+    }
+  }
+}
+.post-card {
+  max-width: 634px;
+  background-color: #fff;
+  border-radius: 30px;
+  padding: 25px 30px;
+  margin-top: 25px;
+
+  .post-card-header {
+    display: flex;
+    justify-content: space-between;
+
+    .post-owner-details {
+      display: flex;
+      column-gap: 15px;
+      .img-circle {
+        width: 55px;
+        height: 55px;
+        border-radius: 50%;
+        background-position: center;
+        background-size: cover;
+        background-color: red;
+      }
+
+      .name {
+        font-weight: 600;
+        font-family: $thic600;
+        color: #000;
+        font-size: 17px;
+        line-height: 20px;
+      }
+
+      .small-circle {
+        width: 5px;
+        height: 5px;
+        background-color: $pri-color2;
+        border-radius: 50%;
+        margin: 0 5px;
+        display: inline-block;
+      }
+
+      .follow-btn,
+      .job-role {
+        font-size: 17px;
+        color: #807c8b;
+        font-family: $thic500;
+        font-weight: 500;
+        line-height: 17px;
+      }
+
+      .post-time {
+        font-size: 13px;
+        color: #807c8b;
+        font-family: $thic500;
+        font-weight: 500;
+        line-height: 15px;
+      }
+    }
+
+    .rsvp-btn {
+      padding: 12px 25px;
+      border: 0.83px solid #7a6d9f;
+      box-shadow: 0.8257163166999817px 0.8257163166999817px 9.90859603881836px
+        0px #33246a1f;
+      background-color: #fff;
+      color: #33246a;
+      font-weight: 700;
+      font-family: $thic700;
+      font-size: 14px;
+      border-radius: 84px;
+    }
+  }
+
+  .post-content-wrapper {
+    margin: 20px 0;
+    .post-content {
+      font-size: 14px;
+      color: #000;
+    }
+
+    .post-image {
+      width: 100%;
+      height: 458px;
+      border-radius: 33px;
+      background-size: cover;
+      background-position: center;
+      background-color: red;
+      margin-top: 20px;
+    }
+  }
+
+  .post-card-footer {
+    border-top: 0.98px solid #9e9e9e40;
+    padding-top: 20px;
+    .post-card-footer-content {
+      max-width: 331px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+
+      .heart-icon {
+        &.active {
+          svg {
+            path {
+              fill: $pri-color2;
+              stroke: none;
+            }
+          }
+        }
+      }
+    }
+  }
+}
+@media screen and (max-width: '800px') {
+  .post-card {
+    padding: 20px 10px !important ;
+    margin-top: 0 !important;
+    margin-bottom: 25px !important;
+
+    .post-card-header {
+      .post-owner-details {
+        column-gap: 5px !important;
+        .name,
+        .follow-btn {
+          font-size: 16px !important;
+        }
+        .job-role {
+          font-size: 14px !important;
+        }
+      }
+      .rsvp-btn {
+        padding: 10px 20px !important;
+      }
     }
   }
 }

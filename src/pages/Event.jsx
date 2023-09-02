@@ -5,7 +5,6 @@ import EventDetails from '../components/Event/EventDetails';
 
 const Event = () => {
   const [tab, setTab] = useState('about');
-  console.log(tab);
   return (
     <div className='event-wrapper'>
       <Banner tab={tab} />

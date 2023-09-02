@@ -23,10 +23,16 @@ import EventsAndNews from './pages/EventsAndNews';
 import Event from './pages/Event';
 import CommunityForums from './pages/CommunityForums';
 import CommunityForumsAllForums from './pages/CommunityForumsAllForums';
-
+import Forum from './pages/Forum';
+import { ThemeProvider } from 'styled-components';
+import { useContext } from 'react';
+import { AppContext } from './context/Context';
+import { darkTheme, lightTheme } from './utils/themes/themes';
+import { GlobalStyles } from './utils/themes/themes';
 function App() {
   const isLoggedIn = useSelector((state) => state.auth.isLoggedIn);
-
+  const { theme } = useContext(AppContext);
+  const themeMode = theme === 'light' ? lightTheme : darkTheme;
   const PrivateRoute = () => {
     return isLoggedIn ? <Outlet /> : <Navigate to='/landing' />;
   };
@@ -69,6 +75,10 @@ function App() {
             {
               path: 'community-forums/all',
               element: <CommunityForumsAllForums />,
+            },
+            {
+              path: 'community-forums/forum',
+              element: <Forum />,
             },
             {
               path: 'events-and-news',
@@ -115,7 +125,12 @@ function App() {
     },
   ]);
 
-  return <RouterProvider router={router} />;
+  return (
+    <ThemeProvider theme={themeMode}>
+      <GlobalStyles />
+      <RouterProvider router={router} />;
+    </ThemeProvider>
+  );
 }
 
 export default App;

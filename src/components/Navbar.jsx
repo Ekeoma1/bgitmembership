@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useContext, useState } from 'react';
 import '../assets/scss/navFooter.scss';
 import Logo from '../assets/images/logo.png';
 import { Link, NavLink } from 'react-router-dom';
@@ -7,8 +7,11 @@ import { useSelector, useDispatch } from 'react-redux';
 import MobileNav from './MobileNav';
 import { logout } from '../Features/authSlice';
 import { FiChevronDown } from 'react-icons/fi';
+import { AppContext } from '../context/Context';
+import { BsFillMoonFill, BsFillSunFill } from 'react-icons/bs';
 
 const Navbar = () => {
+  const { toggleTheme, theme } = useContext(AppContext);
   const isLoggedIn = useSelector((state) => state.auth.isLoggedIn);
   const [showDropdown, setShowDropdown] = useState(false);
   const [mobNav, setMobNav] = useState(false);
@@ -29,6 +32,7 @@ const Navbar = () => {
   const hideDropdown = () => {
     setShowDropdown(false);
   };
+  console.log('theme', theme);
   return (
     <nav className=''>
       <div className='container'>
@@ -101,25 +105,36 @@ const Navbar = () => {
             )}
             <div className='col-2 left-menu-border px-0 text-end'>
               {isLoggedIn ? (
-                <div className='d-flex align-items-end justify-content-center'>
-                  <div
-                    onClick={toggleDropdown}
-                    className='user-profile-image'
-                  ></div>
-                  <Icon icon='triDown' />
-                  <div
-                    className={`user-profile-dropdown shadow-sm ${
-                      !showDropdown && 'd-none'
-                    }`}
-                  >
-                    <Link onClick={hideDropdown} to='/dashboard'>
-                      My Dashboard
-                    </Link>
-                    <Link onClick={hideDropdown} to='/settings'>
-                      Settings
-                    </Link>
-                    <button onClick={() => dispatch(logout())}>Log out</button>
+                <div className='left-menu-border-content'>
+                  <div className='d-flex align-items-end justify-content-center'>
+                    <div
+                      onClick={toggleDropdown}
+                      className='user-profile-image'
+                    ></div>
+                    <Icon icon='triDown' />
+                    <div
+                      className={`user-profile-dropdown shadow-sm ${
+                        !showDropdown && 'd-none'
+                      }`}
+                    >
+                      <Link onClick={hideDropdown} to='/dashboard'>
+                        My Dashboard
+                      </Link>
+                      <Link onClick={hideDropdown} to='/settings'>
+                        Settings
+                      </Link>
+                      <button onClick={() => dispatch(logout())}>
+                        Log out
+                      </button>
+                    </div>
                   </div>
+                  <button
+                    onClick={() => {
+                      toggleTheme();
+                    }}
+                  >
+                    {theme === 'light' ? <BsFillMoonFill /> : <BsFillSunFill />}
+                  </button>
                 </div>
               ) : (
                 <Link className='menu-item login-link' to='login'>
