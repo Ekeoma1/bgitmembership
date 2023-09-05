@@ -5,7 +5,7 @@ import Recommended from '../components/CommunityForumsAllForums/Recommended';
 
 const CommunityForumsAllForums = () => {
   return (
-    <div className='all-forums-wrapper'>
+    <div className='all-forums-wrapper bg-color2'>
       <AllForums />
       <Recommended basedOn='industry' />
       <Recommended basedOn='location' />

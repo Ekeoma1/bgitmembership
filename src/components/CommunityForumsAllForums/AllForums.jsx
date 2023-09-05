@@ -41,9 +41,9 @@ const AllForums = () => {
         <div className='page-title-wrapper'>
           <div className='title-wrapper'>
             <div className='icon' onClick={() => navigate('/community-forums')}>
-              <HiArrowLeft />
+              <HiArrowLeft  className='text-color'/>
             </div>
-            <h3>All forums</h3>
+            <h3 className='text-color'>All forums</h3>
           </div>
         </div>
         <div className='search-box'>

@@ -6,10 +6,10 @@ import CommunityCard from './CommunityCard';
 import community1 from '../../../src/assets/images/community1.svg';
 import community2 from '../../../src/assets/images/community2.svg';
 import community3 from '../../../src/assets/images/community3.svg';
-import emptyForum from '../../../src/assets/images/empty-forum.svg';
+import EmptyState from '../Molecules/EmptyState';
 const Communities = () => {
   const [searchValue, setSearchValue] = useState('');
-  const [userHasForums, setUserHasForums] = useState(true);
+  const [userHasForums, setUserHasForums] = useState(false);
 
   const onChange = (e) => {
     setSearchValue(e.target.value);
@@ -78,11 +78,10 @@ const Communities = () => {
             </div>
           )}
           {!userHasForums && (
-            <div className='forums-false'>
-              <img src={emptyForum} alt='empty forum' className='' />
-              <h5>No forums yet</h5>
-              <p>Search or browse suggested forums below.</p>
-            </div>
+            <EmptyState
+              title={'No forums yet?!'}
+              info={'Search or browse suggested forums below.'}
+            />
           )}
         </div>
       </div>

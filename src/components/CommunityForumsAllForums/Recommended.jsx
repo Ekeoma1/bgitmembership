@@ -39,7 +39,7 @@ const Recommended = ({ basedOn }) => {
       <div className='container'>
         <div className='recommended-section-content'>
           <div className='section-title-wrapper'>
-            <h5>Recommended based on your {basedOn}</h5>
+            <h5 className='text-colo'>Recommended based on your {basedOn}</h5>
           </div>
           {basedOn === 'industry' && (
             <div className='forums-cards-wrapper'>

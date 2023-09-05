@@ -10,6 +10,7 @@ import Layout from './Layout';
 import ErrorPage from './pages/ErrorPage';
 import LandingPage from './pages/LandingPage';
 import Home from './pages/Home';
+import Updates from './pages/Updates';
 import Login from './pages/Login';
 import SignUp from './pages/SignUp';
 import ForgotPassword from './pages/ForgotPassword';
@@ -29,6 +30,7 @@ import { useContext } from 'react';
 import { AppContext } from './context/Context';
 import { darkTheme, lightTheme } from './utils/themes/themes';
 import { GlobalStyles } from './utils/themes/themes';
+
 function App() {
   const isLoggedIn = useSelector((state) => state.auth.isLoggedIn);
   const { theme } = useContext(AppContext);
@@ -55,6 +57,10 @@ function App() {
             {
               path: '',
               element: <Home />,
+            },
+            {
+              path: 'updates',
+              element: <Updates />,
             },
             {
               path: 'dashboard',
