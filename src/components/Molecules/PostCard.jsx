@@ -1,18 +1,26 @@
 import React from 'react'
 import Icon from '../Icon';
 import '../../assets/scss/molecules.scss';
+import { useNavigate } from 'react-router-dom';
 const PostCard = ({list}) => {
+  const navigate=useNavigate()
   return (
-    <div  className='post-card shadow-sm mx-auto'>
+    <div className='post-card shadow-sm mx-auto'>
       <div className='post-card-header'>
         <div className='post-owner-details'>
           <div
             style={{ backgroundImage: `url(${list.authorImage})` }}
             className='img-circle'
+            onClick={() => navigate(`/${list.author}`)}
           ></div>
           <div>
             <div className='d-flex align-items-center'>
-              <span className='name'>{list.author}</span>
+              <span
+                className='name'
+                onClick={() => navigate(`/${list.author}`)}
+              >
+                {list.author}
+              </span>
               <span className='small-circle'></span>
               <span className='follow-btn'>
                 {list.following ? 'following' : 'follow'}

@@ -25,6 +25,7 @@ import Event from './pages/Event';
 import CommunityForums from './pages/CommunityForums';
 import CommunityForumsAllForums from './pages/CommunityForumsAllForums';
 import Forum from './pages/Forum';
+import User from './pages/User';
 import { ThemeProvider } from 'styled-components';
 import { useContext } from 'react';
 import { AppContext } from './context/Context';
@@ -57,6 +58,10 @@ function App() {
             {
               path: '',
               element: <Home />,
+            },
+            {
+              path: ':user',
+              element: <User />,
             },
             {
               path: 'updates',
