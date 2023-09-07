@@ -15,7 +15,7 @@ const User = () => {
     <div className='user-main-wrapper'>
       <div className='container'>
         <div className='search-box-wrapper ms-auto d-lg-block d-none'>
-          <input type='text' placeholder='Search members or forums' />
+          <input type='text' placeholder='Search posts' />
           <Icon icon='searchIcon' />
         </div>
         <div className='row mt-lg-5'>
