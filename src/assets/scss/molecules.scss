@@ -204,8 +204,9 @@
   }
 }
 .post-card {
-  // max-width: 634px;
+  max-width: 634px;
   max-width: 886px;
+  // max-width: 286px;
   background-color: #fff;
   border-radius: 30px;
   padding: 25px 30px;
@@ -426,13 +427,23 @@
 }
 .news-card {
   width: 29.8rem;
+  // width: 23.2rem;
   height: 30.6182rem;
   border-radius: 22.662px;
   overflow: hidden;
+  @media screen and (max-width: '600px') {
+    width: 20rem;
+    height: 28.9rem;
+
+  }
+  @media screen and (max-width: '500px') {
+    width: 16.8rem;
+    height: 28.9rem;
+
+  }
   .card-top {
     height: 17.852rem;
     width: 100%;
-    background-color: green;
     img {
       height: 100%;
       width: 100%;
@@ -447,12 +458,20 @@
     flex-direction: column;
     justify-content: center;
     padding: 0 1.6rem;
+    @media screen and (max-width: '500px') {
+      justify-content: flex-start;
+      padding-top: 1.23rem;
+    }
     h5 {
       color: #fff;
       font-size: 14px;
       font-weight: 600;
       line-height: 100%;
       margin-bottom: 0.8rem;
+
+      @media screen and (max-width: '500px') {
+        font-size: 1.0148rem;
+      }
     }
     p {
       color: #ffd600;
@@ -460,10 +479,16 @@
       font-weight: 700;
       line-height: 117%;
       margin-bottom: 1.3rem;
+      @media screen and (max-width: '500px') {
+        font-size: 8.457px;
+      }
     }
     .btn-con {
       display: flex;
       justify-content: flex-end;
+      @media screen and (max-width: '500px') {
+      justify-content: flex-start;
+      }
       button {
         width: 105.001px;
         height: 33.238px;
@@ -477,7 +502,14 @@
         background: #fff;
         box-shadow: 1.1038621664047241px 1.1038621664047241px
           13.246345520019531px 0px rgba(51, 36, 106, 0.12);
-        justify-self: start;
+        // justify-self: start;
+
+        @media screen and (max-width: '500px') {
+          width: 75.267px;
+          height: 23.68px;
+          font-size: 10.221px;
+          line-height: 100%;
+        }
       }
     }
   }

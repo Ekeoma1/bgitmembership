@@ -43,7 +43,7 @@ const WhatsNew = () => {
                     <div className=''>
                       <h3>Samantha</h3>
                       <h5>
-                        Liked your comment:{' '}
+                        Liked your comment<span className='colon'>:</span>{' '}
                         <p>
                           I’m not sure you know, think it’s gonna rain on the
                           day but i’m travelling from Manchester so gonna bring
@@ -64,15 +64,17 @@ const WhatsNew = () => {
                     <div className='section-top'>
                       <div className=''>
                         <h3>Destiny L</h3>
-                        <h5>Shared your post: </h5>
+                        <h5>Shared your post<span>:</span> </h5>
                       </div>
                       <span className='share'>
                         <IoMdShareAlt />
                       </span>
                     </div>
-                    {postList.map((list, key) => {
-                      return <PostCard key={key} list={list} />;
-                    })}
+                    <div className='postcard'>
+                      {postList.map((list, key) => {
+                        return <PostCard key={key} list={list} />;
+                      })}
+                    </div>
                   </div>
                 </div>
               </div>
@@ -83,7 +85,7 @@ const WhatsNew = () => {
                     <div className=''>
                       <h3>Amaka G</h3>
                       <h5>
-                        Commented on your post:{' '}
+                        Commented on your post<span>:</span>{' '}
                         <p>
                           LOOOOOOOL!! 🤣 omd, I can’t wait for the event in 3
                           weeks

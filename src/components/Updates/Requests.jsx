@@ -37,7 +37,7 @@ const Requests = ({ basedOn }) => {
       <div className='container'>
         <div className='requests-section-content'>
           <div className='section-title-wrapper'>
-            <h5 className='text-colo'>
+            <h5 className=''>
               Requests <span>{'(4)'}</span>
             </h5>
           </div>

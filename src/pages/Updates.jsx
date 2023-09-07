@@ -18,7 +18,7 @@ const Updates = () => {
             <div className='title-wrapper'>
               <div
                 className='icon'
-                onClick={() => navigate('/community-forums')}
+                onClick={() => navigate('/')}
               >
                 <HiArrowLeft className='text-color' />
               </div>
