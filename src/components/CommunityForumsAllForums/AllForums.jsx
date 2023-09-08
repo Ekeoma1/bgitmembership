@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import '../../../src/assets/scss/communityForums.scss';
 import { HiArrowLeft } from 'react-icons/hi';
 
@@ -7,15 +7,43 @@ import FilterBtn from '../Molecules/FilterBtn';
 import MainButton from '../Molecules/MainButton';
 import FilterBtn2 from '../Molecules/FilterBtn2';
 import { useNavigate } from 'react-router-dom';
+import forumImg1 from '../../../src/assets/images/forumcard1.svg';
+import forumImg2 from '../../../src/assets/images/forumcard2.svg';
+import forumImg3 from '../../../src/assets/images/forumcard3.svg';
+import forumImg4 from '../../../src/assets/images/forumcard4.svg';
+import ForumCard from '../Molecules/ForumCard';
+import EmptyState from '../Molecules/EmptyState';
 
-const AllForums = () => {
+const AllForums = ({ setSearchMain }) => {
   const navigate = useNavigate();
-  const [searchValue, setSearchValue] = useState('');
+  const communities = [
+    {
+      community_img: forumImg1,
+      community_name: 'UX/UI Design',
+      info: 'Dorem ipsum dolor sit amet consectetur. Urus fringilla mi. Lorem ipsu consectetur. Urus fringilla mi. Lorem ipsu Urus fringilla mi. Lorem ipsu consectetur. Urus fringilla mi. Lorem ipsu Urus fringilla mi. Lorem ipsu consectetur. Urus fringilla mi. Lorem ipsu',
+    },
+    {
+      community_img: forumImg2,
+      community_name: 'Engineer Girls',
+      info: 'Lorem ipsum dolor sit amet consectetur. Urus fringilla mi. Lorem ipsu consectetur. Urus fringilla mi. Lorem ipsu Urus fringilla mi. Lorem ipsu consectetur. Urus fringilla mi. Lorem ipsu Urus fringilla mi. Lorem ipsu consectetur. Urus fringilla mi. Lorem ipsu',
+    },
+    {
+      community_img: forumImg3,
+      community_name: 'Data Babes 😍👩🏾‍💻',
+      info: 'Lorem ipsum dolor sit amet consectetur. Urus fringilla mi. Lorem ipsu consectetur. Urus fringilla mi. Lorem ipsu Urus fringilla mi. Lorem ipsu consectetur. Urus fringilla mi. Lorem ipsu Urus fringilla mi. Lorem ipsu consectetur. Urus fringilla mi. Lorem ipsu',
+    },
+    {
+      community_img: forumImg4,
+      community_name: 'Data Babes 😍👩🏾‍💻',
+      info: 'Lorem ipsum dolor sit amet consectetur. Urus fringilla mi. Lorem ipsu consectetur. Urus fringilla mi. Lorem ipsu Urus fringilla mi. Lorem ipsu consectetur. Urus fringilla mi. Lorem ipsu Urus fringilla mi. Lorem ipsu consectetur. Urus fringilla mi. Lorem ipsu',
+    },
+    {
+      community_img: forumImg1,
+      community_name: 'Data Babes 😍👩🏾‍💻',
+      info: 'Lorem ipsum dolor sit amet consectetur. Urus fringilla mi. Lorem ipsu consectetur. Urus fringilla mi. Lorem ipsu Urus fringilla mi. Lorem ipsu consectetur. Urus fringilla mi. Lorem ipsu Urus fringilla mi. Lorem ipsu consectetur. Urus fringilla mi. Lorem ipsu',
+    },
+  ];
   const [showFilterBoxSection, setShowFilterBoxSection] = useState(false);
-
-  const onChange = (e) => {
-    setSearchValue(e.target.value);
-  };
   const [filterData, setFilterData] = useState({
     sort_by: '',
     ui_ux_design: false,
@@ -35,34 +63,77 @@ const AllForums = () => {
       setFilterData({ ...filterData, [e.target.name]: e.target.checked });
     }
   };
+  const [search, setSearch] = useState(false);
+  const [searchValue, setSearchValue] = useState('');
+  const [dispatchSearch, setDispatchLogSearch] = useState(false);
+  const [searchedCommunities, setSearchedCommunities] = useState([]);
+  const [showSearchEmptyState, setShowSearchEmptyState] = useState(false);
+
+  const onChange = (e) => {
+    setSearchValue(e.target.value);
+  };
+  const handleSearch = () => {
+    // console.log('search', searchValue);
+  };
+  useEffect(() => {
+    if (dispatchSearch) {
+      handleSearch();
+    }
+    if (searchValue) {
+      let communitiesTemp = [...communities];
+      communitiesTemp = communitiesTemp.filter((item) =>
+        item.community_name.toLowerCase().includes(searchValue.toLowerCase())
+      );
+      setSearchedCommunities(communitiesTemp);
+      setSearch(true);
+      setSearchMain(true);
+      if (communitiesTemp.length === 0) {
+        setShowSearchEmptyState(true);
+      } else {
+        setShowSearchEmptyState(false);
+      }
+    } else {
+      setSearch(false);
+      setSearchMain(false);
+    }
+    handleSearch();
+  }, [dispatchSearch, searchValue]);
+  console.log('empty', showSearchEmptyState);
   return (
     <div className='all-forums-section'>
       <div className='container'>
         <div className='page-title-wrapper'>
           <div className='title-wrapper'>
             <div className='icon' onClick={() => navigate('/community-forums')}>
-              <HiArrowLeft  className='text-color'/>
+              <HiArrowLeft className='text-color' />
             </div>
             <h3 className='text-color'>All forums</h3>
           </div>
         </div>
-        <div className='search-box'>
-          <div className='search-box-wrapper'>
+        <div className={`search-box-section mx-auto ${search && 'search'}`}>
+          <div className='search-box-component-wrapper'>
             <SearchBox
               onChange={onChange}
               value={searchValue}
-              placeholder='Search'
+              placeholder='Search posts'
+              enterKeyPressed={() => setDispatchLogSearch(true)}
+              otherKeysPressed={() => setDispatchLogSearch(false)}
             />
           </div>
-        </div>
-        <div className={`filter ${showFilterBoxSection && 'filter2'}`}>
-          <div className='filter-btn'>
-            <FilterBtn onClick={() => setShowFilterBoxSection(true)} />
-          </div>
-          <div className='filter-btn-mobile'>
-            <FilterBtn2 onClick={() => setShowFilterBoxSection(true)} />
+          <div className='btn'>
+            <MainButton onClick={handleSearch} size={'small'} text={'search'} />
           </div>
         </div>
+        {!search && (
+          <div className={`filter ${showFilterBoxSection && 'filter2'}`}>
+            <div className='filter-btn'>
+              <FilterBtn onClick={() => setShowFilterBoxSection(true)} />
+            </div>
+            <div className='filter-btn-mobile'>
+              <FilterBtn2 onClick={() => setShowFilterBoxSection(true)} />
+            </div>
+          </div>
+        )}
         {showFilterBoxSection && (
           <div className='filter-box-wrapper'>
             <div className='filter-box'>
@@ -188,6 +259,26 @@ const AllForums = () => {
                 />
               </div>
             </div>
+          </div>
+        )}
+        {search && (
+          <div className='search-results'>
+            {showSearchEmptyState ? (
+              <div className='empty-state-con'>
+                <EmptyState
+                  title={'No items match'}
+                  info={'No communities found '}
+                />
+              </div>
+            ) : (
+              <>
+                <div className='forums-cards-wrapper'>
+                  {searchedCommunities.map((forum, index) => (
+                    <ForumCard forum={forum} key={index} />
+                  ))}
+                </div>
+              </>
+            )}
           </div>
         )}
       </div>

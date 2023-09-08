@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import '../assets/scss/user.scss';
 import Info from '../components/Forum/Info';
 import Post from '../components/User/Post';
@@ -17,9 +17,17 @@ const User = () => {
   const onChange = (e) => {
     setSearchValue(e.target.value);
   };
+
   const handleSearch = () => {
-    console.log('search', searchValue);
+    // console.log('search', searchValue);
   };
+  const [dispatchSearch, setDispatchLogSearch] = useState(false);
+  useEffect(() => {
+    if (dispatchSearch) {
+      handleSearch();
+    }
+    handleSearch();
+  }, [dispatchSearch, searchValue]);
   return (
     <div className='user-main-wrapper'>
       <div className='container'>
@@ -29,9 +37,13 @@ const User = () => {
               onChange={onChange}
               value={searchValue}
               placeholder='Search posts'
+              enterKeyPressed={() => setDispatchLogSearch(true)}
+              otherKeysPressed={() => setDispatchLogSearch(false)}
             />
           </div>
-          <MainButton onClick={handleSearch} size={'small'} text={'search'} />
+          <div className='btn'>
+            <MainButton onClick={handleSearch} size={'small'} text={'search'} />
+          </div>
         </div>
         <div className='content-wrapper mt-lg-5'>
           <div className='d-lg-block user-card-con'>

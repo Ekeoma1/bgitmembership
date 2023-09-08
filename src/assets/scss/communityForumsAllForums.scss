@@ -42,19 +42,40 @@
       }
     }
     .search-box {
-      padding: 0 6.2rem;
+      .search-box-wrapper {
+        width: 30rem;
+        @media screen and (max-width: '500px') {
+          width: 100%;
+        }
+      }
+    }
+    .search-box-section {
       display: flex;
       justify-content: flex-end;
+      width: 100%;
+      margin: 0 auto;
+      display: flex;
+      column-gap: 2rem;
+      padding: 0 6.2rem;
       margin-bottom: 18.7rem;
+      align-items: center;
+      &.search {
+        margin-bottom: 0;
+      }
       @media screen and (max-width: '500px') {
         justify-content: center;
         margin-bottom: 5.1rem;
         padding: 0rem;
       }
-      .search-box-wrapper {
+      .search-box-component-wrapper {
         width: 30rem;
         @media screen and (max-width: '500px') {
           width: 100%;
+        }
+      }
+      .btn {
+        @media screen and (max-width: '500px') {
+          display: none;
         }
       }
     }
@@ -176,6 +197,26 @@
           justify-content: flex-end;
           margin-bottom: 4rem;
         }
+      }
+    }
+    .forums-cards-wrapper {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      row-gap: 4rem;
+      justify-items: center;
+      margin: 4rem 0;
+      @media screen and (max-width: '1100px') {
+        grid-template-columns: repeat(3, 1fr);
+      }
+      @media screen and (max-width: '900px') {
+        grid-template-columns: repeat(2, 1fr);
+      }
+      .empty-state-con{
+        display: flex;
+        justify-content: center;
+        background-color: green;
+        width: 100%;
+        // align-items: center;
       }
     }
   }
