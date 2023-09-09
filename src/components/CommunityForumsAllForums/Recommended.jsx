@@ -5,7 +5,8 @@ import forumImg1 from '../../../src/assets/images/forumcard1.svg';
 import forumImg2 from '../../../src/assets/images/forumcard2.svg';
 import forumImg3 from '../../../src/assets/images/forumcard3.svg';
 import forumImg4 from '../../../src/assets/images/forumcard4.svg';
-
+import Carousel from 'react-multi-carousel';
+import 'react-multi-carousel/lib/styles.css';
 const Recommended = ({ basedOn }) => {
   const communities = [
     {
@@ -34,6 +35,20 @@ const Recommended = ({ basedOn }) => {
       info: 'Lorem ipsum dolor sit amet consectetur. Urus fringilla mi. Lorem ipsu consectetur. Urus fringilla mi. Lorem ipsu Urus fringilla mi. Lorem ipsu consectetur. Urus fringilla mi. Lorem ipsu Urus fringilla mi. Lorem ipsu consectetur. Urus fringilla mi. Lorem ipsu',
     },
   ];
+  const responsive = {
+    desktop: {
+      breakpoint: { max: 4000, min: 1024 },
+      items: 4,
+    },
+    tablet: {
+      breakpoint: { max: 1024, min: 600 },
+      items: 3,
+    },
+    mobile: {
+      breakpoint: { max: 600, min: 0 },
+      items: 2,
+    },
+  };
   return (
     <div className='recommended-section'>
       <div className='container'>
@@ -43,16 +58,20 @@ const Recommended = ({ basedOn }) => {
           </div>
           {basedOn === 'industry' && (
             <div className='forums-cards-wrapper'>
-              {communities.map((forum, index) => (
-                <ForumCard forum={forum} key={index} />
-              ))}
+              <Carousel responsive={responsive}>
+                {communities.map((forum, index) => (
+                  <ForumCard forum={forum} key={index} />
+                ))}
+              </Carousel>
             </div>
           )}
           {basedOn === 'location' && (
             <div className='forums-cards-wrapper'>
-              {communities.map((forum, index) => (
-                <ForumCard forum={forum} key={index} />
-              ))}
+              <Carousel responsive={responsive}>
+                {communities.map((forum, index) => (
+                  <ForumCard forum={forum} key={index} />
+                ))}
+              </Carousel>
             </div>
           )}
         </div>

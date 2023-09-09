@@ -3,6 +3,8 @@ import news1 from '../../assets/images/news1.svg';
 import news2 from '../../assets/images/news2.svg';
 import news3 from '../../assets/images/news3.svg';
 import NewsCard from '../Molecules/NewsCard';
+import Carousel from 'react-multi-carousel';
+import 'react-multi-carousel/lib/styles.css';
 
 const News = () => {
   const newsData = [
@@ -21,7 +23,31 @@ const News = () => {
       title: 'Trends to watch',
       date: 'November 21',
     },
+    {
+      img: news3,
+      title: 'Trends to watch',
+      date: 'November 21',
+    },
+    {
+      img: news3,
+      title: 'Trends to watch',
+      date: 'November 21',
+    },
   ];
+  const responsive = {
+    desktop: {
+      breakpoint: { max: 4000, min: 1024 },
+      items: 3,
+    },
+    tablet: {
+      breakpoint: { max: 1024, min: 600 },
+      items: 2,
+    },
+    mobile: {
+      breakpoint: { max: 600, min: 0 },
+      items: 2,
+    },
+  };
 
   return (
     <div className='news-wrapper'>
@@ -39,21 +65,11 @@ const News = () => {
               <button>View all</button>
             </div>
             <div className='cards-wrapper'>
-              {newsData.map((item, index) => (
-                <NewsCard news={item} key={index} />
-              ))}
-              {/* <div className='news-card'>
-                <div className='card-top'>
-                  <img src={news1} alt='' className='' />
-                </div>
-                <div className='card-footer'>
-                  <h5>BGIT Staycation Retreat</h5>
-                  <p>October 6 - 8 (Fri - Sun)</p>
-                  <div className='btn-con'>
-                    <button>More info</button>
-                  </div>
-                </div>
-              </div> */}
+              <Carousel responsive={responsive}>
+                {newsData.map((item, index) => (
+                  <NewsCard news={item} key={index} />
+                ))}
+              </Carousel>
             </div>
           </div>
         </div>

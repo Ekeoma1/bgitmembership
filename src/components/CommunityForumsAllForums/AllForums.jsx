@@ -13,6 +13,8 @@ import forumImg3 from '../../../src/assets/images/forumcard3.svg';
 import forumImg4 from '../../../src/assets/images/forumcard4.svg';
 import ForumCard from '../Molecules/ForumCard';
 import EmptyState from '../Molecules/EmptyState';
+import Carousel from 'react-multi-carousel';
+import 'react-multi-carousel/lib/styles.css';
 
 const AllForums = ({ setSearchMain }) => {
   const navigate = useNavigate();
@@ -42,7 +44,31 @@ const AllForums = ({ setSearchMain }) => {
       community_name: 'Data Babes 😍👩🏾‍💻',
       info: 'Lorem ipsum dolor sit amet consectetur. Urus fringilla mi. Lorem ipsu consectetur. Urus fringilla mi. Lorem ipsu Urus fringilla mi. Lorem ipsu consectetur. Urus fringilla mi. Lorem ipsu Urus fringilla mi. Lorem ipsu consectetur. Urus fringilla mi. Lorem ipsu',
     },
+    {
+      community_img: forumImg1,
+      community_name: 'Data Babes 😍👩🏾‍💻',
+      info: 'Lorem ipsum dolor sit amet consectetur. Urus fringilla mi. Lorem ipsu consectetur. Urus fringilla mi. Lorem ipsu Urus fringilla mi. Lorem ipsu consectetur. Urus fringilla mi. Lorem ipsu Urus fringilla mi. Lorem ipsu consectetur. Urus fringilla mi. Lorem ipsu',
+    },
+    {
+      community_img: forumImg1,
+      community_name: 'Data Babes 😍👩🏾‍💻',
+      info: 'Lorem ipsum dolor sit amet consectetur. Urus fringilla mi. Lorem ipsu consectetur. Urus fringilla mi. Lorem ipsu Urus fringilla mi. Lorem ipsu consectetur. Urus fringilla mi. Lorem ipsu Urus fringilla mi. Lorem ipsu consectetur. Urus fringilla mi. Lorem ipsu',
+    },
   ];
+  const responsive = {
+    desktop: {
+      breakpoint: { max: 4000, min: 1024 },
+      items: 4,
+    },
+    tablet: {
+      breakpoint: { max: 1024, min: 600 },
+      items: 3,
+    },
+    mobile: {
+      breakpoint: { max: 600, min: 0 },
+      items: 2,
+    },
+  };
   const [showFilterBoxSection, setShowFilterBoxSection] = useState(false);
   const [filterData, setFilterData] = useState({
     sort_by: '',
@@ -65,7 +91,7 @@ const AllForums = ({ setSearchMain }) => {
   };
   const [search, setSearch] = useState(false);
   const [searchValue, setSearchValue] = useState('');
-  const [dispatchSearch, setDispatchLogSearch] = useState(false);
+  const [dispatchSearch, setDispatchSearch] = useState(false);
   const [searchedCommunities, setSearchedCommunities] = useState([]);
   const [showSearchEmptyState, setShowSearchEmptyState] = useState(false);
 
@@ -78,6 +104,7 @@ const AllForums = ({ setSearchMain }) => {
   useEffect(() => {
     if (dispatchSearch) {
       handleSearch();
+      console.log('search', searchValue);
     }
     if (searchValue) {
       let communitiesTemp = [...communities];
@@ -98,7 +125,8 @@ const AllForums = ({ setSearchMain }) => {
     }
     handleSearch();
   }, [dispatchSearch, searchValue]);
-  console.log('empty', showSearchEmptyState);
+  // console.log('empty', showSearchEmptyState);
+  // console.log('empty', showSearchEmptyState);
   return (
     <div className='all-forums-section'>
       <div className='container'>
@@ -116,8 +144,8 @@ const AllForums = ({ setSearchMain }) => {
               onChange={onChange}
               value={searchValue}
               placeholder='Search posts'
-              enterKeyPressed={() => setDispatchLogSearch(true)}
-              otherKeysPressed={() => setDispatchLogSearch(false)}
+              enterKeyPressed={() => setDispatchSearch(true)}
+              otherKeysPressed={() => setDispatchSearch(false)}
             />
           </div>
           <div className='btn'>
@@ -273,9 +301,11 @@ const AllForums = ({ setSearchMain }) => {
             ) : (
               <>
                 <div className='forums-cards-wrapper'>
-                  {searchedCommunities.map((forum, index) => (
-                    <ForumCard forum={forum} key={index} />
-                  ))}
+                  <Carousel responsive={responsive}>
+                    {searchedCommunities.map((forum, index) => (
+                      <ForumCard forum={forum} key={index} />
+                    ))}
+                  </Carousel>
                 </div>
               </>
             )}

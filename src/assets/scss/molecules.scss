@@ -434,12 +434,10 @@
   @media screen and (max-width: '600px') {
     width: 20rem;
     height: 28.9rem;
-
   }
   @media screen and (max-width: '500px') {
     width: 16.8rem;
     height: 28.9rem;
-
   }
   .card-top {
     height: 17.852rem;
@@ -487,7 +485,7 @@
       display: flex;
       justify-content: flex-end;
       @media screen and (max-width: '500px') {
-      justify-content: flex-start;
+        justify-content: flex-start;
       }
       button {
         width: 105.001px;
@@ -520,6 +518,12 @@
   align-items: center;
   flex-direction: column;
   justify-content: center;
+  @media screen and (max-width: '600px') {
+    padding: 8.9rem 0 10.9rem;
+  }
+  @media screen and (max-width: '500px') {
+    // padding: 2rem 0 2.2rem;
+  }
   img {
     width: 121.934px;
     height: 75px;

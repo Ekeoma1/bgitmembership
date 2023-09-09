@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import '../../assets/scss/molecules.scss';
 import Icon from '../Icon';
 
@@ -9,6 +9,7 @@ const SearchBox = ({
   enterKeyPressed,
   otherKeysPressed,
 }) => {
+  const inputContainer = useRef(null);
   useEffect(() => {
     const listener = (event) => {
       if (event.key === 'Enter') {
@@ -18,10 +19,12 @@ const SearchBox = ({
         otherKeysPressed();
       }
     };
-    document.addEventListener('keydown', listener);
-    return () => {
-      document.removeEventListener('keydown', listener);
-    };
+    if (inputContainer.current) {
+      inputContainer.current.addEventListener('keydown', listener);
+      return () => {
+        document.removeEventListener('keydown', listener);
+      };
+    }
   }, []);
 
   return (
@@ -31,6 +34,7 @@ const SearchBox = ({
         placeholder={placeholder}
         onChange={onChange}
         value={value}
+        ref={inputContainer}
       />
       <Icon icon='searchIcon' />
     </div>

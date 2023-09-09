@@ -7,6 +7,8 @@ import community1 from '../../../src/assets/images/community1.svg';
 import community2 from '../../../src/assets/images/community2.svg';
 import community3 from '../../../src/assets/images/community3.svg';
 import EmptyState from '../Molecules/EmptyState';
+import Carousel from 'react-multi-carousel';
+import 'react-multi-carousel/lib/styles.css';
 const Communities = () => {
   const [searchValue, setSearchValue] = useState('');
   const [userHasForums, setUserHasForums] = useState(false);
@@ -50,7 +52,35 @@ const Communities = () => {
       community_members: 83,
       unreadMsg: true,
     },
+    {
+      community_img: community3,
+      recently_joined: true,
+      community_name: 'Data Babes 😍👩🏾‍💻',
+      community_members: 83,
+      unreadMsg: true,
+    },
+    {
+      community_img: community3,
+      recently_joined: true,
+      community_name: 'Data Babes 😍👩🏾‍💻',
+      community_members: 83,
+      unreadMsg: true,
+    },
   ];
+  const responsive = {
+    desktop: {
+      breakpoint: { max: 4000, min: 1024 },
+      items: 3,
+    },
+    tablet: {
+      breakpoint: { max: 1024, min: 464 },
+      items: 2,
+    },
+    mobile: {
+      breakpoint: { max: 464, min: 0 },
+      items: 2,
+    },
+  };
   return (
     <div className='communities-wrapper'>
       <div className='container'>
@@ -71,9 +101,11 @@ const Communities = () => {
                 <p className='text-color2'> (3)</p>
               </div>
               <div className='cards-wrapper'>
+                <Carousel responsive={responsive}>
                 {communities.map((community, index) => (
                   <CommunityCard community={community} key={index} />
                 ))}
+                </Carousel>
               </div>
             </div>
           )}

@@ -7,6 +7,8 @@ import forumImg4 from '../../../src/assets/images/forumcard4.svg';
 
 import { useNavigate } from 'react-router-dom';
 import ForumCard from '../Molecules/ForumCard';
+import Carousel from 'react-multi-carousel';
+import 'react-multi-carousel/lib/styles.css';
 const SuggestedForums = () => {
   const navigate = useNavigate();
   const [searchValue, setSearchValue] = useState('');
@@ -40,6 +42,20 @@ const SuggestedForums = () => {
       info: 'Lorem ipsum dolor sit amet consectetur. Urus fringilla mi. Lorem ipsu consectetur. Urus fringilla mi. Lorem ipsu Urus fringilla mi. Lorem ipsu consectetur. Urus fringilla mi. Lorem ipsu Urus fringilla mi. Lorem ipsu consectetur. Urus fringilla mi. Lorem ipsu',
     },
   ];
+  const responsive = {
+    desktop: {
+      breakpoint: { max: 4000, min: 1024 },
+      items: 4,
+    },
+    tablet: {
+      breakpoint: { max: 1024, min: 600 },
+      items: 3,
+    },
+    mobile: {
+      breakpoint: { max: 600, min: 0 },
+      items: 2,
+    },
+  };
   return (
     <div className='suggested-forums-wrapper'>
       <div className='container'>
@@ -51,9 +67,11 @@ const SuggestedForums = () => {
             </button>
           </div>
           <div className='forums-cards-wrapper'>
-            {communities.map((forum, index) => (
-              <ForumCard key={index} forum={forum} />
-            ))}
+            <Carousel responsive={responsive}>
+              {communities.map((forum, index) => (
+                <ForumCard key={index} forum={forum} />
+              ))}
+            </Carousel>
           </div>
         </div>
       </div>
