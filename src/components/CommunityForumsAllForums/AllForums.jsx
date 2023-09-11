@@ -126,7 +126,6 @@ const AllForums = ({ setSearchMain }) => {
     handleSearch();
   }, [dispatchSearch, searchValue]);
   // console.log('empty', showSearchEmptyState);
-  // console.log('empty', showSearchEmptyState);
   return (
     <div className='all-forums-section'>
       <div className='container'>
