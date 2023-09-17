@@ -2,9 +2,9 @@
 <rect width="375" height="242" fill="url(#pattern0)"/>
 <g filter="url(#filter0_d_812_6689)">
 <path d="M16 20.5938H55V59.8577H16V20.5938Z" fill="black" fill-opacity="0.5"/>
-<path d="M24.1243 40.2266H46.8743" stroke="white" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
-<path d="M24.1243 40.2266L33.8743 50.0426" stroke="white" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
-<path d="M24.1243 40.2222L33.8743 30.4062" stroke="white" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+<path d="M24.1243 40.2266H46.8743" stroke="white" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round"/>
+<path d="M24.1243 40.2266L33.8743 50.0426" stroke="white" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round"/>
+<path d="M24.1243 40.2222L33.8743 30.4062" stroke="white" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round"/>
 </g>
 <defs>
 <pattern id="pattern0" patternContentUnits="objectBoundingBox" width="1" height="1">

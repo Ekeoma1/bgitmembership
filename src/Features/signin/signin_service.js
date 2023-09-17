@@ -4,7 +4,7 @@ import { post } from '../../network/https';
 export default class SigninService {
   static async signin(data) {
     const response = await post({
-      url: apiRoutes.signinUser,
+      url: apiRoutes.signin,
       data: { ...data },
     });
     if (response.status !== 'success') {

@@ -1,6 +1,6 @@
 const apiRoutes = {
-  signup: '/signup',
-  signin: '/signin',
+  signup: '/Auth/SignUp',
+  signin: '/Auth/Login',
 };
 
 export default apiRoutes;

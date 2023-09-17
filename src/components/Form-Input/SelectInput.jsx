@@ -37,22 +37,31 @@ const SelectInput = ({ name, ...props }) => {
   // }, []);
 
   const handleChange = (event) => {
-    const selectedValue = event.target.value;
+    const selectedValue = Number(event.target.value);
     setFieldValue(name, selectedValue);
   };
 
   return (
-    <div className="input-wrapper">
+    <div className='input-wrapper'>
       <label htmlFor={name}>{props.label}</label>
-      <select className={meta.touched && meta.error && "input-error"} id={name} name={name} {...field} {...props} onChange={handleChange}>
-        <option value="">Select an option</option>
+      <select
+        className={meta.touched && meta.error && 'input-error'}
+        id={name}
+        name={name}
+        {...field}
+        {...props}
+        onChange={handleChange}
+      >
+        <option value=''>Select an option</option>
         {options.map((option) => (
-          <option key={option.id} value={option.value}>
+          <option key={option.id} value={Number(option.id)}>
             {option.label}
           </option>
         ))}
       </select>
-      {meta.touched && meta.error && <div className="error-label">{meta.error}</div>}
+      {meta.touched && meta.error && (
+        <div className='error-label'>{meta.error}</div>
+      )}
     </div>
   );
 };

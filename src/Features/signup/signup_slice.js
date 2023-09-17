@@ -3,6 +3,7 @@ import SignupService from './signup_service';
 import * as states from '../../utils/strings';
 
 const initialState = {
+  signUpFormData: {},
   signup: {
     status: states.BASE,
     data: {},
@@ -13,6 +14,7 @@ export const triggerSignup = createAsyncThunk(
   'sign up',
   async (params, thunkAPI) => {
     try {
+      console.log('sign up params', params);
       return await SignupService.signup(params);
     } catch (e) {
       return thunkAPI.rejectWithValue(e.message);
@@ -23,7 +25,18 @@ export const triggerSignup = createAsyncThunk(
 const signupSlice = createSlice({
   name: 'sign up',
   initialState,
-  reducers: {},
+  reducers: {
+    addSignUpFormData: (state, action) => {
+      const { payload } = action;
+      state.signUpFormData = {
+        ...state.signUpFormData,
+        ...payload,
+      };
+    },
+    resetSignUpFormData: (state) => {
+      state.signUpFormData = initialState.signUpFormData;
+    },
+  },
   extraReducers: (builder) => {
     builder.addCase(triggerSignup.pending, (state) => {
       state.signup.status = states.LOADING;
@@ -41,3 +54,4 @@ const signupSlice = createSlice({
 });
 
 export default signupSlice.reducer;
+export const { addSignUpFormData, resetSignUpFormData } = signupSlice.actions;

@@ -13,6 +13,7 @@ export const triggerSignin = createAsyncThunk(
   'sign in',
   async (params, thunkAPI) => {
     try {
+      console.log('sign up params', params);
       return await SigninService.signin(params);
     } catch (e) {
       return thunkAPI.rejectWithValue(e.message);
