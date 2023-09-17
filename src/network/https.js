@@ -1,90 +1,35 @@
 import axios from 'axios';
-// const URL = process.env.REACT_APP_URL || '';
-// export const axiosInstance = axios.create({
-//   baseURL: URL,
-//   headers: { 'Content-Type': 'application/json' },
-// });
-// // Send HTTP Request
-// async function ajax({
-//   method = 'GET',
-//   url,
-//   data,
-//   baseURL,
-//   headers = {},
-//   before = () => {},
-//   after = () => {},
-//   mutate = false,
-//   success = () => {},
-//   error = () => {},
-//   serverError = false,
-//   formErrors = true,
-//   axiosProps = {},
-// }) {
-//   let result = {
-//     message: '',
-//     data: '',
-//     status: '',
-//     error: '',
-//   };
-//   // Call Before Function
-//   before();
+const URL = process.env.REACT_APP_URL || '';
 
-//   // Send Request
-//   await axiosInstance({
-//     // Request URL
-//     url,
-//     // Request Method
-//     method,
-//     // To overwrite incase
-//     baseURL,
-//     // Post Data
-//     data,
-//     // Request Headers
-//     headers,
-//     // Axios Specific Properties
-//     ...axiosProps,
-//   })
-//     .then((response) => {
-//       console.log('response', response);
+async function ajax({ method = 'GET', url, data }) {
+  let result, contentType;
+  if (data.Photo) {
+    contentType = 'multipart/form-data';
+  } else {
+    contentType = 'application/json';
+  }
+  const axiosInstance = axios.create({
+    baseURL: URL,
+    // timeout: 5000, // Set a timeout if needed
+    headers: {
+      'Content-Type': contentType,
+    },
+  });
 
-//       result = response;
-//       // if (result.status !== 'success') {
-//       //   throw new Error(`${result.status} ${result.message}`);
-//       // }
-//     })
-//     .catch((err) => {
-//       // Assign Response Error
-//       result.error = true;
-//       result.message = err.message;
-//       result.status = err.status;
-//     });
-
-//   return result;
-// }
-
-const ajax = async (params) => {
-  // try {
-  //   const data = await axios.post(
-  //     'http://biodundrizzle-001-site1.atempurl.com/api/Auth/SignUp',{body:}
-  //   );
-
-  // } catch (error) {}
-  console.log('params http file', params.data);
-  axios({
-    method: 'post',
-    url: 'http://biodundrizzle-001-site1.atempurl.com/api/Auth/SignUp',
-    data: params.data,
-    headers: { 'Content-Type': 'multipart/form-data' },
+  await axiosInstance({
+    url,
+    method,
+    data,
   })
-    .then(function (response) {
-      //handle success
-      console.log('response http file', response);
+    .then((response) => {
+      const { data } = response;
+      result = data;
     })
-    .catch(function (response) {
-      //handle error
-      console.log(response);
+    .catch((err) => {
+      console.log('response error', err);
     });
-};
+  return result;
+}
 
 // Send GET Requests
 export const get = async (payload) => await ajax({ ...payload, method: 'GET' });

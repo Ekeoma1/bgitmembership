@@ -7,11 +7,6 @@ export default class SigninService {
       url: apiRoutes.signin,
       data: { ...data },
     });
-    if (response.status !== 'success') {
-      throw new Error(response.message);
-    }
-    if (response.status === 'success') {
-      return response.data;
-    }
+    return response;
   }
 }

@@ -7,12 +7,6 @@ export default class SignupService {
       url: apiRoutes.signup,
       data: { ...data },
     });
-    if (response.status !== 'success') {
-      throw new Error(response.message);
-    }
-    if (response.status === 'success') {
-      console.log(response);
-      return response.data;
-    }
+    return response;
   }
 }

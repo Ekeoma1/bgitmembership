@@ -1,10 +1,10 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Formik, Form } from 'formik';
 import PasswordInput from '../Form-Input/PasswordInput';
 import TextInput from '../Form-Input/TextInput';
 import * as Yup from 'yup';
-import { Link } from 'react-router-dom';
-import { useDispatch } from 'react-redux';
+import { Link, useNavigate } from 'react-router-dom';
+import { useDispatch, useSelector } from 'react-redux';
 import { login } from '../../Features/authSlice';
 import { triggerSignin } from '../../Features/signin/signin_slice';
 import {
@@ -15,18 +15,17 @@ import {
 // this component is used for both signup and login
 
 const LoginForm = ({ forLogin, regFirstStep }) => {
+  const navigate = useNavigate();
   const dispatch = useDispatch();
+  const { signin } = useSelector((state) => state);
   const handleSubmit = (values) => {
     // Handle form submission here
     if (forLogin) {
-      console.log(values, 'login');
       // dispatch(login());
       dispatch(triggerSignin(values));
     } else {
-      console.log(values, 'for signup');
       dispatch(addSignUpFormData(values));
       regFirstStep(true);
-      // dispatch(triggerSignup(values));
     }
   };
 
@@ -40,6 +39,14 @@ const LoginForm = ({ forLogin, regFirstStep }) => {
       ),
   });
 
+  useEffect(() => {
+    if (signin.signin.status === 'successful') {
+      // if the axios request was successful and token was sent
+      if (signin.signin.data.token) {
+        dispatch(login());
+      }
+    }
+  }, [signin.signin.status]);
   return (
     <Formik
       initialValues={{

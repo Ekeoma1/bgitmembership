@@ -58,7 +58,7 @@ const Connect = () => {
             <header className="text-center d-lg-none">
               <h2> Membership Created Just for You</h2>
             </header>
-            <div className="d-flex gap-4 flex-wrap">
+            <div className="d-flex gap-5 flex-wrap">
               {resourceList.map((res, index) => {
                 return (
                   <div key={index} className="resources-card mx-lg-0 mx-auto">
