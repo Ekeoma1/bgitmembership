@@ -10,17 +10,18 @@ const CircleImageUploader = ({ name }) => {
   const handleImageChange = (event) => {
     const file = event.target.files[0];
     if (file) {
-      const reader = new FileReader();
-      reader.onloadend = () => {
-        setFieldValue(name, reader.result);
-      };
-      reader.readAsDataURL(file);
+      // Set the selected file directly in the form field
+      setFieldValue(name, file);
     }
   };
 
   return (
     <div className="circle-container">
-      {image ? <img src={image} alt="Uploaded" className="uploaded-image" /> : <div className="placeholder-text">Add a photo</div>}
+      {image ? (
+        <img src={URL.createObjectURL(image)} alt="Uploaded" className="uploaded-image" />
+      ) : (
+        <div className="placeholder-text">Add a photo</div>
+      )}
       <input type="file" accept="image/*" onChange={handleImageChange} className="file-input" />
     </div>
   );
