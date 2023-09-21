@@ -18,12 +18,15 @@ const apiRoutes = {
   unmuteUser: '/Connections/UnmuteUser',
 
   // jobs
-  addJob:'/Jobs/AddJob',
-  editJob:'/Jobs/EditJob',
-  getAllJobs:'/Jobs/GetAllJobs',
-  getAllInactiveJobs:'/Jobs/GetAllInactiveJobs',
-  getAllClosedJobs:'/Jobs/GetAllClosedJobs',
-  deleteJob:'/Jobs/DeleteJob',
+  addJob: '/Jobs/AddJob',
+  editJob: '/Jobs/EditJob',
+  getAllJobs: '/Jobs/GetAllJobs',
+  getAllInactiveJobs: '/Jobs/GetAllInactiveJobs',
+  getAllClosedJobs: '/Jobs/GetAllClosedJobs',
+  deleteJob: '/Jobs/DeleteJob',
+
+  // jobs application
+  applyForJob:'/JobsApplication/ApplyForJob'
 };
 
 export default apiRoutes;
