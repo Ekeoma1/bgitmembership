@@ -1,7 +1,7 @@
 import apiRoutes from '../../routes/api_routes';
 import { get, post } from '../../network/https';
 
-export default class AuthService {
+export default class ReportsService {
   static async reportUser(data) {
     const response = await post({
       url: apiRoutes.reportUser,

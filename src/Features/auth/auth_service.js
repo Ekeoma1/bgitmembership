@@ -2,6 +2,15 @@ import apiRoutes from '../../routes/api_routes';
 import { post } from '../../network/https';
 
 export default class AuthService {
+  // sign up
+  static async signup(data) {
+    const response = await post({
+      url: apiRoutes.signup,
+      data: { ...data },
+    });
+    return response;
+  }
+
   // sign in
   static async signin(data) {
     const response = await post({

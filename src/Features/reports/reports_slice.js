@@ -17,7 +17,7 @@ export const triggerReportUser = createAsyncThunk(
   'report-user',
   async (params, thunkAPI) => {
     try {
-      return await ReportsService.signup(params);
+      return await ReportsService.reportUser(params);
     } catch (e) {
       return thunkAPI.rejectWithValue(e.message);
     }
@@ -28,7 +28,7 @@ export const triggerGetAllReports = createAsyncThunk(
   'get-all-reports',
   async (params, thunkAPI) => {
     try {
-      return await ReportsService.signin(params);
+      return await ReportsService.getAllReports(params);
     } catch (e) {
       return thunkAPI.rejectWithValue(e.message);
     }

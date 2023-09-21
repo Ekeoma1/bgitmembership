@@ -1,7 +1,7 @@
 import apiRoutes from '../../routes/api_routes';
 import { get, post, put } from '../../network/https';
 
-export default class AuthService {
+export default class ConnectionsService {
   //  get accepted connections
   static async getAcceptedConnections(data) {
     const response = await get({

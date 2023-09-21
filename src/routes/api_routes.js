@@ -38,7 +38,24 @@ const apiRoutes = {
 
   // reports
   reportUser: '/Reports/ReportUser',
-  getAllReports:'/Reports/GetAllReports'
+  getAllReports: '/Reports/GetAllReports',
+
+  // social links
+  addSocialLinks: '/SocialLinks/AddSocialLinks',
+  getSocialLinks: '/SocialLinks/GetSocialLinks',
+  updateSocialLinks: '/SocialLinks/UpdateSocialLinks',
+  deleteSocialLink: 'SocialLinks/DeleteSocialLink',
+
+  // users
+  getUserProfileById: '/Users/GetUserProfileById',
+  getMyProfile: '/Users/GetMyProfile',
+  changePassword: '/Users/ChangePassword',
+  updateMyProfile: '/Users/UpdateMyProfile',
+  getFeedPreference: '/Users/GetFeedPreference',
+  updateFeedPreference: '/Users/UpdateFeedPreference',
+  getPrivacySettings: '/Users/GetPrivacySettings',
+  updatePrivacySettings: '/Users/UpdatePrivacySettings',
+  closeAccount: '/Users/CloseAccount',
 };
 
 export default apiRoutes;
