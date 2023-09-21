@@ -16,6 +16,14 @@ const apiRoutes = {
   unblockUser: '/Connections/UnblockUser',
   muteUser: '/Connections/MuteUser',
   unmuteUser: '/Connections/UnmuteUser',
+
+  // jobs
+  addJob:'/Jobs/AddJob',
+  editJob:'/Jobs/EditJob',
+  getAllJobs:'/Jobs/GetAllJobs',
+  getAllInactiveJobs:'/Jobs/GetAllInactiveJobs',
+  getAllClosedJobs:'/Jobs/GetAllClosedJobs',
+  deleteJob:'/Jobs/DeleteJob',
 };
 
 export default apiRoutes;

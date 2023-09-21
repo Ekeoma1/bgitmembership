@@ -56,7 +56,6 @@ export const triggerGetAcceptedConnections = createAsyncThunk(
   'get-accepted-connections',
   async (params, thunkAPI) => {
     try {
-      console.log('sign up params', params);
       return await ConnectionService.getAcceptedConnections(params);
     } catch (e) {
       return thunkAPI.rejectWithValue(e.message);
@@ -176,20 +175,9 @@ export const triggerUnmuteUser = createAsyncThunk(
 );
 
 const connectionSlice = createSlice({
-  name: 'auth',
+  name: 'connections',
   initialState,
-  reducers: {
-    addSignUpFormData: (state, action) => {
-      const { payload } = action;
-      state.signUpFormData = {
-        ...state.signUpFormData,
-        ...payload,
-      };
-    },
-    resetSignUpFormData: (state) => {
-      state.signUpFormData = initialState.signUpFormData;
-    },
-  },
+  reducers: {},
   extraReducers: (builder) => {
     // Get accepted connections
     builder.addCase(triggerGetAcceptedConnections.pending, (state) => {
