@@ -42,7 +42,7 @@ const LoginForm = ({ forLogin, regFirstStep }) => {
   useEffect(() => {
     if (signin.signin.status === 'successful') {
       // if the axios request was successful and token was sent
-      if (signin.signin.data.token) {
+      if (signin.signin.data?.token) {
         dispatch(login());
       }
     }
