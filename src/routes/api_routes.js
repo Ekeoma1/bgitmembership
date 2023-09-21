@@ -26,7 +26,19 @@ const apiRoutes = {
   deleteJob: '/Jobs/DeleteJob',
 
   // jobs application
-  applyForJob:'/JobsApplication/ApplyForJob'
+  applyForJob: '/JobsApplication/ApplyForJob',
+
+  // posts
+  createPost: '/Posts/CreatePost',
+  toggleLikeUnlikePost: '/Posts/ToggleLikeUnlikePost',
+  getAllPosts: '/Posts/GetAllPosts',
+  getPostsByUserId: '/Posts/GetPostsByUserId',
+  getMyPosts: '/Posts/GetMyPosts',
+  createComment: '/Posts/CreateComment',
+
+  // reports
+  reportUser: '/Reports/ReportUser',
+  getAllReports:'/Reports/GetAllReports'
 };
 
 export default apiRoutes;
