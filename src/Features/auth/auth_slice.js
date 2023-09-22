@@ -2,8 +2,10 @@ import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import AuthService from './auth_service';
 import * as states from '../../utils/strings';
 
+const token = JSON.parse(localStorage.getItem('token'));
+
 const initialState = {
-  isLoggedIn: false,
+  isLoggedIn: token ? true : false,
   signUpFormData: {},
   signup: {
     status: states.BASE,
@@ -27,7 +29,7 @@ export const triggerSignup = createAsyncThunk(
   async (params, thunkAPI) => {
     try {
       console.log('sign up params', params);
-        return await AuthService.signup(params);
+      return await AuthService.signup(params);
     } catch (e) {
       return thunkAPI.rejectWithValue(e.message);
     }
@@ -73,6 +75,7 @@ const authSlice = createSlice({
       state.isLoggedIn = true;
     },
     logout: (state) => {
+      localStorage.removeItem('token');
       state.isLoggedIn = false;
     },
 

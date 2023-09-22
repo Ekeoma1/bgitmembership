@@ -1,8 +1,8 @@
 import { configureStore } from '@reduxjs/toolkit';
 // import authReducer from './Features/authSlice';
-import eventReducer from './Features/eventSlice';
 // import signupReducer from './Features/signup/signup_slice';
 // import signinReducer from './Features/signin/signin_slice';
+import eventReducer from './Features/eventSlice';
 import authReducer from './Features/auth/auth_slice';
 import connectionsReducer from './Features/connections/connections_slice';
 import jobsReducer from './Features/jobs/jobs_slice';
@@ -15,9 +15,9 @@ import usersReducer from './Features/users/users_slice';
 export default configureStore({
   reducer: {
     // auth: authReducer,
-    event: eventReducer,
     // signup: signupReducer,
     // signin: signinReducer,
+    event: eventReducer,
     auth: authReducer,
     connections: connectionsReducer,
     jobs: jobsReducer,

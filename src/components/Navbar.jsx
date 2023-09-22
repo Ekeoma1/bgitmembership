@@ -1,14 +1,15 @@
-import { useContext, useState } from "react";
-import "../assets/scss/navFooter.scss";
-import Logo from "../assets/images/logo.png";
-import { Link, NavLink } from "react-router-dom";
-import Icon from "./Icon";
-import { useSelector, useDispatch } from "react-redux";
-import MobileNav from "./MobileNav";
-import { FiChevronDown } from "react-icons/fi";
-import { AppContext } from "../context/Context";
-import { BsFillMoonFill, BsFillSunFill } from "react-icons/bs";
+import { useContext, useState } from 'react';
+import '../assets/scss/navFooter.scss';
+import Logo from '../assets/images/logo.png';
+import { Link, NavLink } from 'react-router-dom';
+import Icon from './Icon';
+import { useSelector, useDispatch } from 'react-redux';
+import MobileNav from './MobileNav';
+import { FiChevronDown } from 'react-icons/fi';
+import { AppContext } from '../context/Context';
+import { BsFillMoonFill, BsFillSunFill } from 'react-icons/bs';
 import { logout, resetSignIn } from '../Features/auth/auth_slice';
+import OutsideClickHandler from 'react-outside-click-handler';
 
 const Navbar = () => {
   const { toggleTheme, theme } = useContext(AppContext);
@@ -32,7 +33,7 @@ const Navbar = () => {
   const hideDropdown = () => {
     setShowDropdown(false);
   };
-  console.log("theme", theme);
+  // console.log('theme', theme);
   return (
     <nav className=''>
       <div className='container'>
@@ -106,42 +107,49 @@ const Navbar = () => {
             )}
             <div className='col-2 left-menu-border px-0 text-end'>
               {isLoggedIn ? (
-                <div className='left-menu-border-content'>
-                  <div className='d-flex align-items-end justify-content-center'>
-                    <div
-                      onClick={toggleDropdown}
-                      className='user-profile-image'
-                    ></div>
-                    <Icon icon='triDown' />
-                    <div
-                      className={`user-profile-dropdown shadow-sm ${
-                        !showDropdown && 'd-none'
-                      }`}
-                    >
-                      <Link onClick={hideDropdown} to='/dashboard'>
-                        My Dashboard
-                      </Link>
-                      <Link onClick={hideDropdown} to='/settings'>
-                        Settings
-                      </Link>
-                      <button
-                        onClick={() => {
-                          dispatch(logout());
-                          dispatch(resetSignIn());
-                        }}
+                <OutsideClickHandler
+                  onOutsideClick={() => {
+                    setShowDropdown(false);
+                  }}
+                >
+                  <div className='left-menu-border-content'>
+                    <div className='d-flex align-items-end justify-content-center'>
+                      <div
+                        onClick={toggleDropdown}
+                        className='user-profile-image'
+                      ></div>
+                      <Icon icon='triDown' />
+                      <div
+                        className={`user-profile-dropdown shadow-sm ${
+                          !showDropdown && 'd-none'
+                        }`}
                       >
-                        Log out
-                      </button>
+                        <Link onClick={hideDropdown} to='/dashboard'>
+                          My Dashboard
+                        </Link>
+                        <Link onClick={hideDropdown} to='/settings'>
+                          Settings
+                        </Link>
+                        <button
+                          onClick={() => {
+                            dispatch(logout());
+                            dispatch(resetSignIn());
+                            setShowDropdown(false)
+                          }}
+                        >
+                          Log out
+                        </button>
+                      </div>
                     </div>
-                  </div>
-                  {/* <button
+                    {/* <button
                     onClick={() => {
                       toggleTheme();
                     }}
                   >
                     {theme === 'light' ? <BsFillMoonFill /> : <BsFillSunFill />}
                   </button> */}
-                </div>
+                  </div>
+                </OutsideClickHandler>
               ) : (
                 <Link className='menu-item login-link' to='login'>
                   Log in / Register

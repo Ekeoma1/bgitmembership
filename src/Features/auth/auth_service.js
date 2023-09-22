@@ -17,6 +17,7 @@ export default class AuthService {
       url: apiRoutes.signin,
       data: { ...data },
     });
+    this._saveToken(response);
     return response;
   }
 
@@ -36,5 +37,9 @@ export default class AuthService {
       data: { ...data },
     });
     return response;
+  }
+
+  static _saveToken(data) {
+    localStorage.setItem('token', JSON.stringify(data.token));
   }
 }

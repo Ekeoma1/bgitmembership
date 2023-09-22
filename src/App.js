@@ -27,7 +27,7 @@ import CommunityForumsAllForums from './pages/CommunityForumsAllForums';
 import Forum from './pages/Forum';
 import User from './pages/User';
 import { ThemeProvider } from 'styled-components';
-import { useContext } from 'react';
+import { useContext, useEffect } from 'react';
 import { AppContext } from './context/Context';
 import { darkTheme, lightTheme } from './utils/themes/themes';
 import { GlobalStyles } from './utils/themes/themes';

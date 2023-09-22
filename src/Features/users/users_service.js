@@ -73,4 +73,13 @@ export default class UsersService {
     });
     return response;
   }
+
+  static _getToken() {
+    const token = JSON.parse(localStorage.getItem('token'));
+    return token;
+  }
+
+  static _removeToken() {
+    localStorage.removeItem('token');
+  }
 }
