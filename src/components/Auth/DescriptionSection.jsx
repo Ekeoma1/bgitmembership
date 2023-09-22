@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
-import { addSignUpFormData } from '../../Features/signup/signup_slice';
+import { addSignUpFormData } from '../../Features/auth/auth_slice';
 
 const descriptionData = [
   {

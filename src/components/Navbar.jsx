@@ -5,10 +5,10 @@ import { Link, NavLink } from "react-router-dom";
 import Icon from "./Icon";
 import { useSelector, useDispatch } from "react-redux";
 import MobileNav from "./MobileNav";
-import { logout } from "../Features/authSlice";
 import { FiChevronDown } from "react-icons/fi";
 import { AppContext } from "../context/Context";
 import { BsFillMoonFill, BsFillSunFill } from "react-icons/bs";
+import { logout, resetSignIn } from '../Features/auth/auth_slice';
 
 const Navbar = () => {
   const { toggleTheme, theme } = useContext(AppContext);
@@ -34,70 +34,104 @@ const Navbar = () => {
   };
   console.log("theme", theme);
   return (
-    <nav className="">
-      <div className="container">
-        <div className="nav-divider">
-          <Link to="/">
-            <img src={Logo} alt="bgit logo" width="50" />
+    <nav className=''>
+      <div className='container'>
+        <div className='nav-divider'>
+          <Link to='/'>
+            <img src={Logo} alt='bgit logo' width='50' />
           </Link>
 
-          <div className="d-lg-none menu-btn-wrapper">
+          <div className='d-lg-none menu-btn-wrapper'>
             <button>
-              <Icon icon="envelope" />
+              <Icon icon='envelope' />
             </button>
             <button onClick={showMobNav}>
-              <Icon icon="menu" />
+              <Icon icon='menu' />
             </button>
           </div>
-          <div className="nav-buttons row d-lg-flex d-none mx-0 align-items-center justify-content-end">
+          <div className='nav-buttons row d-lg-flex d-none mx-0 align-items-center justify-content-end'>
             {isLoggedIn ? (
               <>
-                <div className="col-3 px-0 text-center">
-                  <NavLink to="/community-forums" className={({ isActive }) => (isActive ? "active-link" : "menu-item")}>
+                <div className='col-3 px-0 text-center'>
+                  <NavLink
+                    to='/community-forums'
+                    className={({ isActive }) =>
+                      isActive ? 'active-link' : 'menu-item'
+                    }
+                  >
                     Community Forums
                   </NavLink>
                 </div>
-                <div className="col-2 px-0 text-center">
-                  <NavLink to="/events-and-news" className={({ isActive }) => (isActive ? "active-link" : "menu-item")}>
+                <div className='col-2 px-0 text-center'>
+                  <NavLink
+                    to='/events-and-news'
+                    className={({ isActive }) =>
+                      isActive ? 'active-link' : 'menu-item'
+                    }
+                  >
                     Events & News <FiChevronDown />
                   </NavLink>
                 </div>
-                <div className="col-2 px-0 text-center">
-                  <NavLink to="/job-board" className={({ isActive }) => (isActive ? "active-link" : "menu-item")}>
+                <div className='col-2 px-0 text-center'>
+                  <NavLink
+                    to='/job-board'
+                    className={({ isActive }) =>
+                      isActive ? 'active-link' : 'menu-item'
+                    }
+                  >
                     Job Board
                   </NavLink>
                 </div>
-                <div className="col-2 px-0 text-center">
-                  <NavLink to="/resources" className={({ isActive }) => (isActive ? "active-link" : "menu-item")}>
+                <div className='col-2 px-0 text-center'>
+                  <NavLink
+                    to='/resources'
+                    className={({ isActive }) =>
+                      isActive ? 'active-link' : 'menu-item'
+                    }
+                  >
                     Resources <FiChevronDown />
                   </NavLink>
                 </div>
               </>
             ) : (
-              <div className="col text-end">
+              <div className='col text-end'>
                 <NavLink
-                  to="#"
+                  to='#'
                   // className={({ isActive }) => (isActive ? '' : 'contact-btn')}
-                  className="contact-btn"
+                  className='contact-btn'
                 >
                   Contact us
                 </NavLink>
               </div>
             )}
-            <div className="col-2 left-menu-border px-0 text-end">
+            <div className='col-2 left-menu-border px-0 text-end'>
               {isLoggedIn ? (
-                <div className="left-menu-border-content">
-                  <div className="d-flex align-items-end justify-content-center">
-                    <div onClick={toggleDropdown} className="user-profile-image"></div>
-                    <Icon icon="triDown" />
-                    <div className={`user-profile-dropdown shadow-sm ${!showDropdown && "d-none"}`}>
-                      <Link onClick={hideDropdown} to="/dashboard">
+                <div className='left-menu-border-content'>
+                  <div className='d-flex align-items-end justify-content-center'>
+                    <div
+                      onClick={toggleDropdown}
+                      className='user-profile-image'
+                    ></div>
+                    <Icon icon='triDown' />
+                    <div
+                      className={`user-profile-dropdown shadow-sm ${
+                        !showDropdown && 'd-none'
+                      }`}
+                    >
+                      <Link onClick={hideDropdown} to='/dashboard'>
                         My Dashboard
                       </Link>
-                      <Link onClick={hideDropdown} to="/settings">
+                      <Link onClick={hideDropdown} to='/settings'>
                         Settings
                       </Link>
-                      <button onClick={() => dispatch(logout())}>Log out</button>
+                      <button
+                        onClick={() => {
+                          dispatch(logout());
+                          dispatch(resetSignIn());
+                        }}
+                      >
+                        Log out
+                      </button>
                     </div>
                   </div>
                   {/* <button
@@ -109,7 +143,7 @@ const Navbar = () => {
                   </button> */}
                 </div>
               ) : (
-                <Link className="menu-item login-link" to="login">
+                <Link className='menu-item login-link' to='login'>
                   Log in / Register
                 </Link>
               )}

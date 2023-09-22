@@ -1,15 +1,15 @@
 import React, { useEffect, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
+
+import { useDispatch, useSelector } from 'react-redux';
 import {
-  addSignUpFormData,
   resetSignUpFormData,
   triggerSignup,
-} from '../../Features/signup/signup_slice';
-import { useDispatch, useSelector } from 'react-redux';
+} from '../../Features/auth/auth_slice';
 
 const AcceptTerms = () => {
   const [agreement, setAgreement] = useState(false);
-  const { signup } = useSelector((state) => state);
+  const { auth } = useSelector((state) => state);
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const handleChange = (event) => {
@@ -17,24 +17,21 @@ const AcceptTerms = () => {
   };
   const finalStage = () => {
     if (agreement) {
-      // alert('Registration completed');
-
-      const signupFinal = { ...signup.signUpFormData, Terms:agreement };
-      console.log('sign up temp', signupFinal);
+      const signupFinal = { ...auth.signUpFormData, Terms: agreement };
       dispatch(triggerSignup(signupFinal));
     } else {
       alert('please accept terms and condition');
     }
   };
   useEffect(() => {
-    if (signup.signup.status === 'successful') {
+    if (auth.signup.status === 'successful') {
+      console.log('sign up successful,show alert here');
       navigate('/login');
       dispatch(resetSignUpFormData());
-    } else if (signup.signup.status === 'error') {
-      alert('sign up failed');
+    } else if (auth.signup.status === 'error') {
+      console.log('sign up failed,show alert here');
     }
-  }, [signup.signup.status]);
-  console.log(signup);
+  }, [auth.signup.status]);
   return (
     <div className='details-wrapper'>
       <header>

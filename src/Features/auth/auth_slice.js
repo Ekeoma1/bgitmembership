@@ -3,6 +3,7 @@ import AuthService from './auth_service';
 import * as states from '../../utils/strings';
 
 const initialState = {
+  isLoggedIn: false,
   signUpFormData: {},
   signup: {
     status: states.BASE,
@@ -22,11 +23,11 @@ const initialState = {
   },
 };
 export const triggerSignup = createAsyncThunk(
-  'sign up',
+  'sign-up',
   async (params, thunkAPI) => {
     try {
       console.log('sign up params', params);
-      return await AuthService.signup(params);
+        return await AuthService.signup(params);
     } catch (e) {
       return thunkAPI.rejectWithValue(e.message);
     }
@@ -54,7 +55,7 @@ export const triggerForgotPassword = createAsyncThunk(
   }
 );
 export const triggerResetPassword = createAsyncThunk(
-  'forgot-password',
+  'reset-password',
   async (params, thunkAPI) => {
     try {
       return await AuthService.resetPassword(params);
@@ -68,6 +69,13 @@ const authSlice = createSlice({
   name: 'auth',
   initialState,
   reducers: {
+    login: (state) => {
+      state.isLoggedIn = true;
+    },
+    logout: (state) => {
+      state.isLoggedIn = false;
+    },
+
     addSignUpFormData: (state, action) => {
       const { payload } = action;
       state.signUpFormData = {
@@ -77,6 +85,9 @@ const authSlice = createSlice({
     },
     resetSignUpFormData: (state) => {
       state.signUpFormData = initialState.signUpFormData;
+    },
+    resetSignIn: (state) => {
+      state.signin = initialState.signin;
     },
   },
   extraReducers: (builder) => {
@@ -139,5 +150,10 @@ const authSlice = createSlice({
 });
 
 export default authSlice.reducer;
-export const { addSignUpFormData, resetSignUpFormData } = authSlice.actions;
-
+export const {
+  addSignUpFormData,
+  resetSignUpFormData,
+  login,
+  logout,
+  resetSignIn,
+} = authSlice.actions;

@@ -3,25 +3,22 @@ import { Formik, Form } from 'formik';
 import PasswordInput from '../Form-Input/PasswordInput';
 import TextInput from '../Form-Input/TextInput';
 import * as Yup from 'yup';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
-import { login } from '../../Features/authSlice';
-import { triggerSignin } from '../../Features/signin/signin_slice';
 import {
   addSignUpFormData,
-  triggerSignup,
-} from '../../Features/signup/signup_slice';
+  login,
+  triggerSignin,
+} from '../../Features/auth/auth_slice';
+import MainButton from '../Molecules/MainButton';
 
 // this component is used for both signup and login
 
 const LoginForm = ({ forLogin, regFirstStep }) => {
-  const navigate = useNavigate();
   const dispatch = useDispatch();
-  const { signin } = useSelector((state) => state);
+  const { auth } = useSelector((state) => state);
   const handleSubmit = (values) => {
-    // Handle form submission here
     if (forLogin) {
-      // dispatch(login());
       dispatch(triggerSignin(values));
     } else {
       dispatch(addSignUpFormData(values));
@@ -40,13 +37,13 @@ const LoginForm = ({ forLogin, regFirstStep }) => {
   });
 
   useEffect(() => {
-    if (signin.signin.status === 'successful') {
-      // if the axios request was successful and token was sent
-      if (signin.signin.data?.token) {
-        dispatch(login());
+    if (auth.signin.status === 'successful') {
+      if (auth.signin.data?.token) {
+        console.log('true login');
+        dispatch(login(true));
       }
     }
-  }, [signin.signin.status]);
+  }, [auth.signin.status]);
   return (
     <Formik
       initialValues={{
@@ -96,9 +93,21 @@ const LoginForm = ({ forLogin, regFirstStep }) => {
         </div>
 
         <div className='text-center'>
-          <button className='primary-btn' type='submit'>
-            {forLogin ? 'Log in' : 'Sign up'}
-          </button>
+          <div className='btn-wrapper'>
+            {forLogin ? (
+              <MainButton
+                text={'Log in'}
+                width={'25.5rem'}
+                loading={auth.signin.status === 'loading'}
+              />
+            ) : (
+              <MainButton
+                text={'Sign up'}
+                width={'25.5rem'}
+                loading={auth.signin.status === 'loading'}
+              />
+            )}
+          </div>
 
           <div className='mt-3 next-action-text'>
             {forLogin ? (

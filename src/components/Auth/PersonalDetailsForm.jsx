@@ -6,15 +6,13 @@ import CountryInput from '../Form-Input/CountryInput';
 import 'react-phone-number-input/style.css';
 import PhoneInputField from '../Form-Input/PhoneNumberInput';
 import { useDispatch } from 'react-redux';
-import { addSignUpFormData } from '../../Features/signup/signup_slice';
+import { addSignUpFormData } from '../../Features/auth/auth_slice';
 
 const PersonalDetailsForm = ({ tabChanger, currentTab }) => {
   const [value, setValue] = useState();
   const dispatch = useDispatch();
 
   const handleSubmit = (values) => {
-    // Handle form submission here
-    console.log(values);
     dispatch(addSignUpFormData(values));
     tabChanger(currentTab + 1);
   };

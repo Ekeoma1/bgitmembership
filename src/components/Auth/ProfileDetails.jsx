@@ -6,13 +6,11 @@ import TextInput from "../Form-Input/TextInput";
 import CircleImageUploader from "../Form-Input/CircleImageUploader";
 import SelectInput from "../Form-Input/SelectInput";
 import { useDispatch } from "react-redux";
-import { addSignUpFormData } from "../../Features/signup/signup_slice";
+import { addSignUpFormData } from '../../Features/auth/auth_slice';
 
 const ProfileDetails = ({ tabChanger, currentTab }) => {
   const dispatch = useDispatch();
   const handleSubmit = (values) => {
-    // Handle form submission here
-    console.log(values);
     dispatch(addSignUpFormData(values));
     tabChanger(currentTab + 1);
   };
