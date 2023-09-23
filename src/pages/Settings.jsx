@@ -1,52 +1,71 @@
-import React from "react";
-import Icon from "../components/Icon";
-import { useNavigate } from "react-router-dom";
-import "../assets/scss/settings.scss";
-import Accordion from "react-bootstrap/Accordion";
-import PersonalInfo from "../components/Settings/PersonalInfo";
-import ChangePassword from "../components/Settings/ChangePassword";
-import FeedPreference from "../components/Settings/FeedPreference";
-import Privacy from "../components/Settings/Privacy";
-import CloseAccount from "../components/Settings/CloseAccount";
-import SocialLinks from "../components/Settings/SocialLinks";
+import React, { useEffect, useState } from 'react';
+import Icon from '../components/Icon';
+import { useNavigate } from 'react-router-dom';
+import '../assets/scss/settings.scss';
+import Accordion from 'react-bootstrap/Accordion';
+import PersonalInfo from '../components/Settings/PersonalInfo';
+import ChangePassword from '../components/Settings/ChangePassword';
+import FeedPreference from '../components/Settings/FeedPreference';
+import Privacy from '../components/Settings/Privacy';
+import CloseAccount from '../components/Settings/CloseAccount';
+import SocialLinks from '../components/Settings/SocialLinks';
+import 'react-toastify/dist/ReactToastify.css';
+import { useDispatch, useSelector } from 'react-redux';
+import {
+  triggerGetMyProfile,
+} from '../Features/users/users_slice';
 
 const Settings = () => {
+  const { getMyProfile, updateMyProfile } = useSelector((state) => state.users);
+  const dispatch = useDispatch();
   const navigate = useNavigate();
+  const [seed, setSeed] = useState(1);
+
+  useEffect(() => {
+    dispatch(triggerGetMyProfile());
+  }, []);
+
+  useEffect(() => {
+    if (updateMyProfile.status === 'successful') {
+      // Trying to close back the update profile tab. It's not working yet though
+      setSeed(Math.random());
+    }
+  }, [updateMyProfile.status]);
   return (
-    <div className="settings-page">
-      <div className="container">
-        <div className="d-flex">
+    <div className='settings-page'>
+      <div className='container'>
+        <div className='d-flex'>
           <button onClick={() => navigate(-1)}>
-            <Icon icon="arrowLeft" />
+            <Icon icon='arrowLeft' />
           </button>
-          <div className="page-title ms-3">Settings</div>
+          <div className='page-title ms-3'>Settings</div>
         </div>
 
-        <div className="text-center">
-          <div className="page-header">Account Settings</div>
+        <div className='text-center'>
+          <div className='page-header'>Account Settings</div>
         </div>
 
-        <Accordion className="mt-3">
-          <Accordion.Item eventKey="0">
+        <Accordion className='mt-3'>
+          <Accordion.Item eventKey='0'>
             <Accordion.Header>
-              <div className="d-flex align-items-center gap-3">
-                <div className="icon-circle">
-                  <Icon icon="personalInfo" />
+              <div className='d-flex align-items-center gap-3'>
+                <div className='icon-circle'>
+                  <Icon icon='personalInfo' />
                 </div>
-                <div className="header">Edit Personal Info</div>
+                <div className='header'>Edit Personal Info</div>
               </div>
             </Accordion.Header>
             <Accordion.Body>
               <PersonalInfo />
             </Accordion.Body>
           </Accordion.Item>
-          <Accordion.Item eventKey="1">
+          <Accordion.Item eventKey='1'>
             <Accordion.Header>
-              <div className="d-flex align-items-center gap-3">
-                <div className="icon-circle">
-                  <Icon icon="lock" />
+              <div className='d-flex align-items-center gap-3'>
+                <div className='icon-circle'>
+                  <Icon icon='lock' />
                 </div>
-                <div className="header">Change your password</div>
+                <div className='header'>Change your password</div>
               </div>
             </Accordion.Header>
             <Accordion.Body>
@@ -54,13 +73,13 @@ const Settings = () => {
             </Accordion.Body>
           </Accordion.Item>
 
-          <Accordion.Item eventKey="2">
+          <Accordion.Item eventKey='2'>
             <Accordion.Header>
-              <div className="d-flex align-items-center gap-3">
-                <div className="icon-circle">
-                  <Icon icon="feed" />
+              <div className='d-flex align-items-center gap-3'>
+                <div className='icon-circle'>
+                  <Icon icon='feed' />
                 </div>
-                <div className="header">Feed preference</div>
+                <div className='header'>Feed preference</div>
               </div>
             </Accordion.Header>
             <Accordion.Body>
@@ -68,13 +87,13 @@ const Settings = () => {
             </Accordion.Body>
           </Accordion.Item>
 
-          <Accordion.Item eventKey="3">
+          <Accordion.Item eventKey='3'>
             <Accordion.Header>
-              <div className="d-flex align-items-center gap-3">
-                <div className="icon-circle">
-                  <Icon icon="eye" />
+              <div className='d-flex align-items-center gap-3'>
+                <div className='icon-circle'>
+                  <Icon icon='eye' />
                 </div>
-                <div className="header">Privacy Settings</div>
+                <div className='header'>Privacy Settings</div>
               </div>
             </Accordion.Header>
             <Accordion.Body>
@@ -82,13 +101,13 @@ const Settings = () => {
             </Accordion.Body>
           </Accordion.Item>
 
-          <Accordion.Item eventKey="4">
+          <Accordion.Item eventKey='4'>
             <Accordion.Header>
-              <div className="d-flex align-items-center gap-3">
-                <div className="icon-circle">
-                  <Icon icon="globe" />
+              <div className='d-flex align-items-center gap-3'>
+                <div className='icon-circle'>
+                  <Icon icon='globe' />
                 </div>
-                <div className="header">Social Links</div>
+                <div className='header'>Social Links</div>
               </div>
             </Accordion.Header>
             <Accordion.Body>
@@ -96,13 +115,13 @@ const Settings = () => {
             </Accordion.Body>
           </Accordion.Item>
 
-          <Accordion.Item eventKey="5">
+          <Accordion.Item eventKey='5'>
             <Accordion.Header>
-              <div className="d-flex align-items-center gap-3">
-                <div className="icon-circle">
-                  <Icon icon="trash" />
+              <div className='d-flex align-items-center gap-3'>
+                <div className='icon-circle'>
+                  <Icon icon='trash' />
                 </div>
-                <div className="header">Close Account</div>
+                <div className='header'>Close Account</div>
               </div>
             </Accordion.Header>
             <Accordion.Body>

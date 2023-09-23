@@ -19,6 +19,7 @@ const LoginForm = ({ forLogin, regFirstStep }) => {
   const { auth } = useSelector((state) => state);
   const handleSubmit = (values) => {
     if (forLogin) {
+      console.log('values login', values);
       dispatch(triggerSignin(values));
     } else {
       dispatch(addSignUpFormData(values));

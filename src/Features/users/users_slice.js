@@ -152,7 +152,11 @@ export const triggerCloseAccount = createAsyncThunk(
 const usersSlice = createSlice({
   name: 'users',
   initialState,
-  reducers: {},
+  reducers: {
+    resetUpdateMyProfile: (state) => {
+      state.updateMyProfile = initialState.updateMyProfile;
+    },
+  },
   extraReducers: (builder) => {
     // get user profile by id
     builder.addCase(triggerGetUserProfileById.pending, (state) => {
@@ -283,3 +287,4 @@ const usersSlice = createSlice({
 });
 
 export default usersSlice.reducer;
+export const { resetUpdateMyProfile } = usersSlice.actions;

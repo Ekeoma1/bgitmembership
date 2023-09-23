@@ -5,6 +5,7 @@ import Icon from '../Icon';
 const TextInput = ({ label, ...props }) => {
   // console.log('props', props);
   const [field, meta, helpers] = useField(props);
+  // console.log(field, meta, helpers);
   const handleBlur = () => {
     helpers.setTouched(true);
   };

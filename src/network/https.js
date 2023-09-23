@@ -10,37 +10,41 @@ async function ajax({ method = 'GET', url, data }) {
   } else {
     contentType = 'application/json';
   }
-  // const authToken = localStorage.getItem('token');
-  const authToken = JSON.parse(localStorage.getItem('token'));
-
-  const axiosInstance = axios.create({
-    baseURL: URL,
-    // timeout: 5000, // Set a timeout if needed
-    headers: {
-      'Content-Type': contentType,
-      Authorization: authToken ? `Bearer ${authToken}` : '',
-    },
-  });
-  await axiosInstance({
-    url,
-    method,
-    data,
-  })
-    .then((response) => {
-      const { data } = response;
-      result = data;
-    })
-    .catch((err) => {
-      result = 'error';
-      if (
-        err.response?.status === 401 &&
-        err.response?.statusText === 'Unauthorized'
-      ) {
-        localStorage.removeItem('token');
-        window.location.replace('/login');
-      }
+  const token = localStorage.getItem('token');
+  if (token !== 'undefined') {
+    const authToken = JSON.parse(token);
+    const axiosInstance = axios.create({
+      baseURL: URL,
+      // timeout: 5000, // Set a timeout if needed
+      headers: {
+        'Content-Type': contentType,
+        Authorization: `Bearer ${authToken}`,
+      },
     });
-  return result;
+    await axiosInstance({
+      url,
+      method,
+      data,
+    })
+      .then((response) => {
+        const { data } = response;
+        result = data;
+      })
+      .catch((err) => {
+        result = 'error';
+        if (
+          err.response?.status === 401 &&
+          err.response?.statusText === 'Unauthorized'
+        ) {
+          localStorage.removeItem('token');
+          window.location.replace('/login');
+        }
+      });
+    return result;
+  } else {
+    window.location.replace('/login');
+    localStorage.removeItem('token');
+  }
 }
 
 // Send GET Requests

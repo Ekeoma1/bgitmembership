@@ -30,8 +30,10 @@ const ProfileBanner = ({ othersView }) => {
   };
   const { getMyProfile } = useSelector((state) => state.users);
 
-  console.log('profile', getMyProfile);
-  console.log('status', profileImgOnLoadStatus);
+  const dispatch = useDispatch();
+  useEffect(() => {
+    dispatch(triggerGetMyProfile());
+  }, []);
   return (
     <div className='profile-banner-wrapper'>
       <div className='banner-image'></div>
