@@ -9,11 +9,16 @@ import Resources from '../components/Dashboard/Resources';
 import Posts from '../components/Dashboard/Posts';
 import { Link, useNavigate } from 'react-router-dom';
 import Member from '../components/Dashboard/Member';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { triggerGetMyProfile } from '../Features/users/users_slice';
 
 const Dashboard = () => {
   const navigate = useNavigate();
+  const dispatch = useDispatch();
+  const { getMyProfile } = useSelector((state) => state.users);
+  useEffect(() => {
+    dispatch(triggerGetMyProfile());
+  }, []);
 
   return (
     <div className='user-dashboard'>

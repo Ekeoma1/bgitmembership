@@ -19,6 +19,41 @@
   min-width: 100%;
   min-height: 100%;
 }
+.details-loader {
+  display: flex;
+  padding: 2rem 0;
+  //  background-color: rgba(0, 128, 0, 0.57);
+  .left-content {
+    width: 50%;
+
+    .name {
+      width: 70%;
+      height: 5rem;
+      border-radius: 1.6rem;
+      margin-bottom: 2rem;
+    }
+    .niche,
+    .city {
+      width: 50%;
+      height: 2rem;
+      border-radius: 1.6rem;
+      margin-bottom: 2rem;
+    }
+  }
+  .right-content {
+    width: 50%;
+    .tags,
+    .skills {
+      width: 50%;
+      height: 2rem;
+      border-radius: 1.6rem;
+      margin-bottom: 2rem;
+    }
+    .skills{
+       width: 70%;
+    }
+  }
+}
 .skeleton-loader {
   display: block;
   background-color: #bdc3c7;
@@ -39,4 +74,3 @@
     opacity: 0.8;
   }
 }
-

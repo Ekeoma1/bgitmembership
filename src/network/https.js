@@ -1,4 +1,6 @@
+/* eslint-disable react-hooks/rules-of-hooks */
 import axios from 'axios';
+import useLogout from '../hooks/useLogout';
 const URL = process.env.REACT_APP_URL || '';
 
 async function ajax({ method = 'GET', url, data }) {
@@ -9,7 +11,7 @@ async function ajax({ method = 'GET', url, data }) {
     contentType = 'application/json';
   }
   // const authToken = localStorage.getItem('token');
-   const authToken = JSON.parse(localStorage.getItem('token'));
+  const authToken = JSON.parse(localStorage.getItem('token'));
 
   const axiosInstance = axios.create({
     baseURL: URL,
@@ -19,7 +21,6 @@ async function ajax({ method = 'GET', url, data }) {
       Authorization: authToken ? `Bearer ${authToken}` : '',
     },
   });
-
   await axiosInstance({
     url,
     method,
@@ -30,7 +31,14 @@ async function ajax({ method = 'GET', url, data }) {
       result = data;
     })
     .catch((err) => {
-      console.log('response error', err);
+      result = 'error';
+      if (
+        err.response?.status === 401 &&
+        err.response?.statusText === 'Unauthorized'
+      ) {
+        localStorage.removeItem('token');
+        window.location.replace('/login');
+      }
     });
   return result;
 }

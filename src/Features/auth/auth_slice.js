@@ -2,7 +2,10 @@ import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import AuthService from './auth_service';
 import * as states from '../../utils/strings';
 
-const token = JSON.parse(localStorage.getItem('token'));
+let token = localStorage.getItem('token');
+if (token !== 'undefined') {
+  token = JSON.parse(token);
+}
 
 const initialState = {
   isLoggedIn: token ? true : false,
