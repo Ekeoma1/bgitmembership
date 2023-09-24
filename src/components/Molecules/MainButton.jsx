@@ -6,7 +6,7 @@ import loaderIcon from '../../assets/images/loader-icon.svg';
 const MainButton = ({
   onClick,
   size,
-  variant,
+  outlined,
   text,
   iconLeft,
   iconRight,
@@ -17,7 +17,7 @@ const MainButton = ({
   return (
     <button
       className={`button-component ${size === 'small' && 'small-btn'} ${
-        variant === 'outlined' && 'outlined'
+        outlined && 'outlined'
       } ${loading && 'loading'} ${disabled && 'disabled'}`}
       style={{ width }}
       onClick={onClick}

@@ -88,7 +88,7 @@ const Privacy = () => {
   const notify = () => toast('Privacy settings successfully updated');
   useEffect(() => {
     if (updatePrivacySettings.status === 'successful') {
-      notify();
+      // notify();
       dispatch(resetUpdatePrivacySettings());
       dispatch(triggerGetPrivacySettings());
     }

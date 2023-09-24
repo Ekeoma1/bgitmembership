@@ -13,6 +13,7 @@ import {
 } from '../../Features/auth/auth_slice';
 import MainButton from '../Molecules/MainButton';
 import { ToastContainer, toast } from 'react-toastify';
+import { resetCloseAccount } from '../../Features/users/users_slice';
 
 // this component is used for both signup and login
 
@@ -38,12 +39,16 @@ const LoginForm = ({ forLogin, regFirstStep }) => {
       regFirstStep(true);
     }
   };
-  const notify = () => toast('Invalid password');
+  const notify = (toastText) => toast(toastText);
   useEffect(() => {
     if (auth.signin.status === 'successful') {
       if (auth.signin.data === 'Invalid password') {
-        resetSignIn();
-        notify();
+        notify('Invalid password');
+        dispatch(resetSignIn());
+      }
+      if (auth.signin.data === 'Kindly contact the administrator') {
+        notify('Account disabled. Kindly contact the administrator');
+        dispatch(resetSignIn());
       }
       if (auth.signin.data?.token) {
         dispatch(login(true));

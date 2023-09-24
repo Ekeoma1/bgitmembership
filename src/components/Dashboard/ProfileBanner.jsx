@@ -44,7 +44,7 @@ const ProfileBanner = ({ othersView }) => {
             <>
               <UserProfilePhotoLoader />
             </>
-          ) : (
+          ) : ( 
             <>
               <img
                 src={getMyProfile.data.imageUrl}

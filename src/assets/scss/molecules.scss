@@ -32,8 +32,8 @@
   height: 6.1rem;
   padding: 1rem 9rem;
   box-sizing: border-box;
-  background-color: $pri-color1;
   border-radius: 0.6rem;
+  background-color: $pri-color1;
   color: #fff;
   font-family: $thic700;
   font-size: 1.6rem;
@@ -75,7 +75,14 @@
       color: #ffffff;
     }
   }
-
+  &.outlined {
+    background-color: #fff;
+    color: $pri-color1;
+    &:hover {
+      background-color: $pri-color1;
+      color: #ffffff;
+    }
+  }
   .img-container {
     display: flex;
     align-items: center;

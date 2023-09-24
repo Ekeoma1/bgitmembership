@@ -165,6 +165,9 @@ const usersSlice = createSlice({
     resetUpdatePrivacySettings: (state) => {
       state.updatePrivacySettings = initialState.updatePrivacySettings;
     },
+    resetCloseAccount: (state) => {
+      state.closeAccount = initialState.closeAccount;
+    },
   },
   extraReducers: (builder) => {
     // get user profile by id
@@ -301,4 +304,5 @@ export const {
   resetChangePassword,
   resetUpdateFeedPreference,
   resetUpdatePrivacySettings,
+  resetCloseAccount,
 } = usersSlice.actions;
