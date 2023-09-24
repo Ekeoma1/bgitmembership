@@ -162,6 +162,9 @@ const usersSlice = createSlice({
     resetUpdateFeedPreference: (state) => {
       state.updateFeedPreference = initialState.updateFeedPreference;
     },
+    resetUpdatePrivacySettings: (state) => {
+      state.updatePrivacySettings = initialState.updatePrivacySettings;
+    },
   },
   extraReducers: (builder) => {
     // get user profile by id
@@ -293,5 +296,9 @@ const usersSlice = createSlice({
 });
 
 export default usersSlice.reducer;
-export const { resetUpdateMyProfile, resetChangePassword, resetUpdateFeedPreference } =
-  usersSlice.actions;
+export const {
+  resetUpdateMyProfile,
+  resetChangePassword,
+  resetUpdateFeedPreference,
+  resetUpdatePrivacySettings,
+} = usersSlice.actions;

@@ -76,23 +76,22 @@ const PersonalInfo = () => {
   useEffect(() => {
     dispatch(triggerGetMyProfile());
   }, []);
-  console.log('getmyproilfe', getMyProfile);
   return (
     <div className='settings-card shadow'>
       <div className='header'>Personal Info</div>
       <div className='mt-3'>
         <Formik
           initialValues={{
-            firstName: getMyProfile.data.firstName ?? '',
-            secondName: getMyProfile.data.secondName ?? '',
-            additionalName: getMyProfile.data.additionalName ?? '',
-            biography: getMyProfile.data.biography ?? '',
-            dob: getMyProfile.data.dob ?? '',
-            tags: getMyProfile.data.tags ?? [],
-            skills: getMyProfile.data.skills ?? [],
-            industry: getMyProfile.data.industry ?? '',
-            country: getMyProfile.data.country ?? '',
-            city: getMyProfile.data.city ?? '',
+            firstName: getMyProfile.data?.firstName ?? '',
+            secondName: getMyProfile.data?.secondName ?? '',
+            additionalName: getMyProfile.data?.additionalName ?? '',
+            biography: getMyProfile.data?.biography ?? '',
+            dob: getMyProfile.data?.dob ?? '',
+            tags: getMyProfile.data?.tags ?? [],
+            skills: getMyProfile.data?.skills ?? [],
+            industry: getMyProfile.data?.industry ?? '',
+            country: getMyProfile.data?.country ?? '',
+            city: getMyProfile.data?.city ?? '',
           }}
           validationSchema={validationSchema}
           onSubmit={handleSubmit}

@@ -214,6 +214,11 @@
         font-family: $thic700;
         font-size: 18px;
       }
+
+      .text-end{
+        display: flex;
+        justify-content: flex-end;
+      }
     }
   }
 }

@@ -12,12 +12,13 @@ const MainButton = ({
   iconRight,
   width,
   loading,
+  disabled,
 }) => {
   return (
     <button
       className={`button-component ${size === 'small' && 'small-btn'} ${
         variant === 'outlined' && 'outlined'
-      } ${loading && 'loading'}`}
+      } ${loading && 'loading'} ${disabled && 'disabled'}`}
       style={{ width }}
       onClick={onClick}
       type='submit'

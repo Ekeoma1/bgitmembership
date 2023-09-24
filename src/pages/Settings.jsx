@@ -13,9 +13,12 @@ import { useDispatch, useSelector } from 'react-redux';
 import { triggerGetMyProfile } from '../Features/users/users_slice';
 
 const Settings = () => {
-  const { updateMyProfile, changePassword, updateFeedPreference } = useSelector(
-    (state) => state.users
-  );
+  const {
+    updateMyProfile,
+    changePassword,
+    updateFeedPreference,
+    updatePrivacySettings,
+  } = useSelector((state) => state.users);
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const [seed, setSeed] = useState(1);
@@ -29,7 +32,8 @@ const Settings = () => {
       updateMyProfile.status === 'successful' ||
       (changePassword.status === 'successful' &&
         changePassword.data === 'Password changed successfully') ||
-      updateFeedPreference.status === 'successful'
+      updateFeedPreference.status === 'successful' ||
+      updatePrivacySettings.status === 'successful'
     ) {
       // Trying to reload the settings page to close all the open tabs. It's not working yet though
       setSeed(Math.random());

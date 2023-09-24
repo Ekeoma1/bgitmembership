@@ -51,16 +51,7 @@ const FeedPreference = () => {
           secondValue='Most recent posts'
         />
 
-        <div
-          className='mt-3 text-end'
-        >
-          {/* <button
-            onClick={handleSubmit}
-            type='submit'
-            className='primary-btn small-btn'
-          >
-            save
-          </button> */}
+        <div className='mt-3 text-end'>
           <MainButton
             text={'Save'}
             size={'small'}
