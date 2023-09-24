@@ -17,9 +17,10 @@ const MainButton = ({
     <button
       className={`button-component ${size === 'small' && 'small-btn'} ${
         variant === 'outlined' && 'outlined'
-      } ${loading && 'loading' }`}
+      } ${loading && 'loading'}`}
       style={{ width }}
       onClick={onClick}
+      type='submit'
     >
       {loading ? (
         <div className='img-container'>

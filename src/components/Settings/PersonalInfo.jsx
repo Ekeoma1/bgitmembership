@@ -13,6 +13,7 @@ import {
   triggerUpdateMyProfile,
 } from '../../Features/users/users_slice';
 import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 const PersonalInfo = () => {
   const dispatch = useDispatch();
@@ -72,8 +73,10 @@ const PersonalInfo = () => {
     }
   }, [updateMyProfile.status]);
 
-  console.log('getmy profile', getMyProfile);
-
+  useEffect(() => {
+    dispatch(triggerGetMyProfile());
+  }, []);
+  console.log('getmyproilfe', getMyProfile);
   return (
     <div className='settings-card shadow'>
       <div className='header'>Personal Info</div>
@@ -89,7 +92,7 @@ const PersonalInfo = () => {
             skills: getMyProfile.data.skills ?? [],
             industry: getMyProfile.data.industry ?? '',
             country: getMyProfile.data.country ?? '',
-            city: getMyProfile.data.city ?? 'warri',
+            city: getMyProfile.data.city ?? '',
           }}
           validationSchema={validationSchema}
           onSubmit={handleSubmit}

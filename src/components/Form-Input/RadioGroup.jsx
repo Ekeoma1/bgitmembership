@@ -1,11 +1,18 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect } from 'react';
 
-const RadioGroup = ({ selectedValue, onRadioChange, initialValue, firstValue, secondValue, radioGroup }) => {
+const RadioGroup = ({
+  selectedValue,
+  onRadioChange,
+  initialValue,
+  firstValue,
+  secondValue,
+  radioGroup,
+}) => {
   //   const [selectedOption, setSelectedOption] = useState(initialValue);
 
   const handleRadioChange = (event) => {
-    const newValue = event.target.value === "true"; // Convert string to boolean
-    onRadioChange(newValue);
+    const newValue = event.target.value; // Convert string to boolean
+    onRadioChange(Number(newValue));
   };
 
   //   const handleSubmit = (event) => {
@@ -22,14 +29,26 @@ const RadioGroup = ({ selectedValue, onRadioChange, initialValue, firstValue, se
   //   }, [initialValue]);
 
   return (
-    <form className="radio-group">
-      <div className="d-flex align-items-center gap-2 mb-3">
-        <input type="radio" name={radioGroup} value="true" checked={selectedValue === true} onChange={handleRadioChange} />
-        <label htmlFor="true">{firstValue}</label>
+    <form className='radio-group'>
+      <div className='d-flex align-items-center gap-2 mb-3'>
+        <input
+          type='radio'
+          name={radioGroup}
+          value='0'
+          checked={selectedValue ===0}
+          onChange={handleRadioChange}
+        />
+        <label htmlFor='true'>{firstValue}</label>
       </div>
-      <div className="d-flex align-items-center gap-2">
-        <input type="radio" name={radioGroup} value="false" checked={selectedValue === false} onChange={handleRadioChange} />
-        <label htmlFor="false">{secondValue}</label>
+      <div className='d-flex align-items-center gap-2'>
+        <input
+          type='radio'
+          name={radioGroup}
+          value='1'
+          checked={selectedValue === 1}
+          onChange={handleRadioChange}
+        />
+        <label htmlFor='false'>{secondValue}</label>
       </div>
     </form>
   );

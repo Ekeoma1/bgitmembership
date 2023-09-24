@@ -8,24 +8,17 @@ import { useDispatch, useSelector } from 'react-redux';
 import {
   addSignUpFormData,
   login,
+  resetSignIn,
   triggerSignin,
 } from '../../Features/auth/auth_slice';
 import MainButton from '../Molecules/MainButton';
+import { ToastContainer, toast } from 'react-toastify';
 
 // this component is used for both signup and login
 
 const LoginForm = ({ forLogin, regFirstStep }) => {
   const dispatch = useDispatch();
   const { auth } = useSelector((state) => state);
-  const handleSubmit = (values) => {
-    if (forLogin) {
-      console.log('values login', values);
-      dispatch(triggerSignin(values));
-    } else {
-      dispatch(addSignUpFormData(values));
-      regFirstStep(true);
-    }
-  };
 
   const validationSchema = Yup.object().shape({
     Email: Yup.string().email('Invalid email address').required('Required'),
@@ -37,99 +30,115 @@ const LoginForm = ({ forLogin, regFirstStep }) => {
       ),
   });
 
+  const handleSubmit = (values) => {
+    if (forLogin) {
+      dispatch(triggerSignin(values));
+    } else {
+      dispatch(addSignUpFormData(values));
+      regFirstStep(true);
+    }
+  };
+  const notify = () => toast('Invalid password');
   useEffect(() => {
     if (auth.signin.status === 'successful') {
+      if (auth.signin.data === 'Invalid password') {
+        resetSignIn();
+        notify();
+      }
       if (auth.signin.data?.token) {
-        console.log('true login');
         dispatch(login(true));
       }
     }
   }, [auth.signin.status]);
   return (
-    <Formik
-      initialValues={{
-        Email: '',
-        Password: '',
-      }}
-      validationSchema={validationSchema}
-      onSubmit={handleSubmit}
-    >
-      <Form className='form-card mx-lg-0 mx-auto'>
-        <div>
-          <header>
-            {forLogin ? (
-              <>
-                <h2>Log In</h2>
-                <div>
-                  Please login to your membership account using the form below.
-                </div>
-              </>
-            ) : (
-              <>
-                <h2>Sign up</h2>
-                <div>
-                  Create an account today to begin your free membership!
-                </div>
-              </>
-            )}
-          </header>
+    <>
+      <Formik
+        initialValues={{
+          Email: '',
+          Password: '',
+        }}
+        validationSchema={validationSchema}
+        onSubmit={handleSubmit}
+      >
+        <Form className='form-card mx-lg-0 mx-auto'>
+          <div>
+            <header>
+              {forLogin ? (
+                <>
+                  <h2>Log In</h2>
+                  <div>
+                    Please login to your membership account using the form
+                    below.
+                  </div>
+                </>
+              ) : (
+                <>
+                  <h2>Sign up</h2>
+                  <div>
+                    Create an account today to begin your free membership!
+                  </div>
+                </>
+              )}
+            </header>
 
-          <TextInput
-            name='Email'
-            label='Email'
-            type='email'
-            placeholder='Input your email here'
-          />
-          <PasswordInput
-            name='Password'
-            label='Password'
-            placeholder='Input your password here'
-          />
+            <TextInput
+              name='Email'
+              label='Email'
+              type='email'
+              placeholder='Input your email here'
+            />
+            <PasswordInput
+              name='Password'
+              label='Password'
+              placeholder='Input your password here'
+            />
 
-          {forLogin && (
-            <Link to='/forgot-password' className='other-action-btn mt-3'>
-              Forgot Password?
-            </Link>
-          )}
-        </div>
-
-        <div className='text-center'>
-          <div className='btn-wrapper'>
-            {forLogin ? (
-              <MainButton
-                text={'Log in'}
-                width={'25.5rem'}
-                loading={auth.signin.status === 'loading'}
-              />
-            ) : (
-              <MainButton
-                text={'Sign up'}
-                width={'25.5rem'}
-                loading={auth.signin.status === 'loading'}
-              />
+            {forLogin && (
+              <Link to='/forgot-password' className='other-action-btn mt-3'>
+                Forgot Password?
+              </Link>
             )}
           </div>
 
-          <div className='mt-3 next-action-text'>
-            {forLogin ? (
-              <>
-                <span>Don't have an account?</span>{' '}
-                <span>
-                  <Link to='/register'>Sign Up</Link>
-                </span>
-              </>
-            ) : (
-              <>
-                <span>Already have an account?</span>{' '}
-                <span>
-                  <Link to='/login'>Log in</Link>
-                </span>
-              </>
-            )}
+          <div className='text-center'>
+            <div className='btn-wrapper'>
+              {forLogin ? (
+                <MainButton
+                  text={'Log in'}
+                  width={'25.5rem'}
+                  loading={auth.signin.status === 'loading'}
+                />
+              ) : (
+                <MainButton
+                  text={'Sign up'}
+                  width={'25.5rem'}
+                  loading={auth.signin.status === 'loading'}
+                />
+              )}
+            </div>
+
+            <div className='mt-3 next-action-text'>
+              {forLogin ? (
+                <>
+                  <span>Don't have an account?</span>{' '}
+                  <span>
+                    <Link to='/register'>Sign Up</Link>
+                  </span>
+                </>
+              ) : (
+                <>
+                  <span>Already have an account?</span>{' '}
+                  <span>
+                    <Link to='/login'>Log in</Link>
+                  </span>
+                </>
+              )}
+            </div>
           </div>
-        </div>
-      </Form>
-    </Formik>
+        </Form>
+      </Formik>
+      <ToastContainer />
+    </>
   );
 };
 

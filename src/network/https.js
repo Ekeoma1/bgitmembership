@@ -1,8 +1,8 @@
 /* eslint-disable react-hooks/rules-of-hooks */
 import axios from 'axios';
-import useLogout from '../hooks/useLogout';
+const form = new FormData();
 const URL = process.env.REACT_APP_URL || '';
-
+console.log('axios');
 async function ajax({ method = 'GET', url, data }) {
   let result, contentType;
   if (data.photo) {
@@ -11,11 +11,35 @@ async function ajax({ method = 'GET', url, data }) {
     contentType = 'application/json';
   }
   const token = localStorage.getItem('token');
-  if (token !== 'undefined') {
+
+  if (token === 'undefined' && url !== '/Auth/Login') {
+    window.location.replace('/login');
+    localStorage.removeItem('token');
+  } else if (url === '/Auth/Login') {
+    const axiosInstance = axios.create({
+      baseURL: URL,
+      headers: {
+        'Content-Type': contentType,
+      },
+    });
+    await axiosInstance({
+      url,
+      method,
+      data,
+    })
+      .then((response) => {
+        const { data } = response;
+        result = data;
+      })
+      .catch((err) => {
+        result = err.response?.data;
+      
+      });
+    return result;
+  } else {
     const authToken = JSON.parse(token);
     const axiosInstance = axios.create({
       baseURL: URL,
-      // timeout: 5000, // Set a timeout if needed
       headers: {
         'Content-Type': contentType,
         Authorization: `Bearer ${authToken}`,
@@ -31,7 +55,7 @@ async function ajax({ method = 'GET', url, data }) {
         result = data;
       })
       .catch((err) => {
-        result = 'error';
+        result = err.response?.data;
         if (
           err.response?.status === 401 &&
           err.response?.statusText === 'Unauthorized'
@@ -41,9 +65,6 @@ async function ajax({ method = 'GET', url, data }) {
         }
       });
     return result;
-  } else {
-    window.location.replace('/login');
-    localStorage.removeItem('token');
   }
 }
 

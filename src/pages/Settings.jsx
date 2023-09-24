@@ -9,14 +9,13 @@ import FeedPreference from '../components/Settings/FeedPreference';
 import Privacy from '../components/Settings/Privacy';
 import CloseAccount from '../components/Settings/CloseAccount';
 import SocialLinks from '../components/Settings/SocialLinks';
-import 'react-toastify/dist/ReactToastify.css';
 import { useDispatch, useSelector } from 'react-redux';
-import {
-  triggerGetMyProfile,
-} from '../Features/users/users_slice';
+import { triggerGetMyProfile } from '../Features/users/users_slice';
 
 const Settings = () => {
-  const { getMyProfile, updateMyProfile } = useSelector((state) => state.users);
+  const { updateMyProfile, changePassword, updateFeedPreference } = useSelector(
+    (state) => state.users
+  );
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const [seed, setSeed] = useState(1);
@@ -26,8 +25,13 @@ const Settings = () => {
   }, []);
 
   useEffect(() => {
-    if (updateMyProfile.status === 'successful') {
-      // Trying to close back the update profile tab. It's not working yet though
+    if (
+      updateMyProfile.status === 'successful' ||
+      (changePassword.status === 'successful' &&
+        changePassword.data === 'Password changed successfully') ||
+      updateFeedPreference.status === 'successful'
+    ) {
+      // Trying to reload the settings page to close all the open tabs. It's not working yet though
       setSeed(Math.random());
     }
   }, [updateMyProfile.status]);
