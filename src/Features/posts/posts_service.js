@@ -11,27 +11,37 @@ export default class PostsService {
     return response;
   }
 
-  // toggle like unlike post
-  static async toggleLikeUnlikePost(data) {
+  // toggle like post
+  static async toggleLikePost(data) {
     const response = await post({
-      url: apiRoutes.toggleLikeUnlikePost,
+      url: apiRoutes.toggleLikePost,
       data: { ...data },
     });
     return response;
   }
 
+  //   get posts liked users
+  static async getPostLikedUsers() {
+    const response = await get({
+      url: apiRoutes.getPostLikedUsers,
+    });
+    return response;
+  }
+
   //   get all posts
-  static async getAllPosts() {
+  static async getAllPosts(data) {
     const response = await get({
       url: apiRoutes.getAllPosts,
+      data: { ...data },
+      queryParams: data.queryParams,
     });
     return response;
   }
 
   // get posts by user id
-  static async getPostsByUserId() {
+  static async getAllPostsByUserId() {
     const response = await get({
-      url: apiRoutes.getPostsByUserId,
+      url: apiRoutes.getAllPostsByUserId,
     });
     return response;
   }

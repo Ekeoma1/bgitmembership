@@ -14,9 +14,9 @@ const SocialLinksCard = ({ othersView }) => {
   return (
     <div className='dashboard-card'>
       <div className='dashboard-header'>Social Links</div>
-      {getMyProfile.data.socials?.length > 0 ? (
+      {getMyProfile.data?.socials?.length > 0 ? (
         <>
-          {getMyProfile.data.socials?.map((link, key) => {
+          {getMyProfile.data?.socials?.map((link, key) => {
             return (
               <div key={key} className='d-flex gap-1 align-items-center mt-1'>
                 <img width={30} src={link.logo} alt='logo' />

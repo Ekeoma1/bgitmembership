@@ -1,46 +1,61 @@
-import React from 'react'
+import React from 'react';
 import Icon from '../Icon';
 import '../../assets/scss/molecules.scss';
 import { useNavigate } from 'react-router-dom';
-const PostCard = ({list}) => {
-  const navigate=useNavigate()
+import moment from 'moment';
+import ReactTimeAgo from 'react-time-ago';
+const PostCard = ({ post }) => {
+  const navigate = useNavigate();
+  const timeago = moment(post?.createdDate).fromNow();
+  const date = new Date(post?.createdDate);
+  // console.log('date', date);
   return (
     <div className='post-card shadow-sm mx-auto'>
       <div className='post-card-header'>
         <div className='post-owner-details'>
           <div
-            style={{ backgroundImage: `url(${list.authorImage})` }}
             className='img-circle'
-            onClick={() => navigate(`/${list.author}`)}
-          ></div>
+            onClick={() => navigate(`/${post?.author}`)}
+          >
+            <img src={post?.userProfilePicture} alt='post-img' />
+          </div>
           <div>
             <div className='d-flex align-items-center'>
               <span
                 className='name'
-                onClick={() => navigate(`/${list.author}`)}
+                onClick={() => navigate(`/${post?.author}`)}
               >
-                {list.author}
+                {post?.userName}
               </span>
               <span className='small-circle'></span>
               <span className='follow-btn'>
-                {list.following ? 'following' : 'follow'}
+                {post?.following ? 'following' : 'follow'}
               </span>
             </div>
-            <div className='job-role'>{list.role}</div>
-            <div className='post-time'>{list.time}</div>
+            <div className='job-role'>{post?.userProfession}</div>
+            <div className='post-time'>{timeago}</div>
           </div>
         </div>
 
-        <div>{list.event && <div className='rsvp-btn'>RSVP</div>}</div>
+        <div>{post?.event && <div className='rsvp-btn'>RSVP</div>}</div>
       </div>
 
       <div className='post-content-wrapper'>
-        <div className='post-content'>{list.content}</div>
-        {list.image !== null && (
-          <div
-            style={{ backgroundImage: `url(${list.image})` }}
-            className='post-image'
-          ></div>
+        <div className='post-content'>{post?.content}</div>
+        {(post.postImageUrl || post.postVideoUrl) && (
+          <>
+            {post.postImageUrl ? (
+              <div className='post-image'>
+                <img src={post?.postImageUrl} alt='post-img' />
+              </div>
+            ) : (
+              <div className='post-video'>
+                <video controls>
+                  <source src={post?.postVideoUrl} type='video/mp4' />
+                </video>
+              </div>
+            )}
+          </>
         )}
       </div>
 
@@ -77,6 +92,6 @@ const PostCard = ({list}) => {
       </div>
     </div>
   );
-}
+};
 
-export default PostCard
+export default PostCard;

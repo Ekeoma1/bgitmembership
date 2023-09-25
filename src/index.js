@@ -7,14 +7,22 @@ import { Provider } from 'react-redux';
 import Store from './Store';
 import ContextProvider from './context/Context';
 
+import TimeAgo from 'javascript-time-ago';
+
+import en from 'javascript-time-ago/locale/en.json';
+import ru from 'javascript-time-ago/locale/ru.json';
+
+TimeAgo.addDefaultLocale(en);
+TimeAgo.addLocale(ru);
+
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   // <React.StrictMode>
-    <Provider store={Store}>
-      <ContextProvider>
-        <App />
-      </ContextProvider>
-    </Provider>
+  <Provider store={Store}>
+    <ContextProvider>
+      <App />
+    </ContextProvider>
+  </Provider>
   // </React.StrictMode>
 );
 

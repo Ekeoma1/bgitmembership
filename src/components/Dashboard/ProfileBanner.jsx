@@ -47,8 +47,8 @@ const ProfileBanner = ({ othersView }) => {
           ) : ( 
             <>
               <img
-                src={getMyProfile.data.imageUrl}
-                alt={`${getMyProfile.data.firstName} ${getMyProfile.data.secondName}`}
+                src={getMyProfile.data?.imageUrl}
+                alt={`${getMyProfile.data?.firstName} ${getMyProfile.data?.secondName}`}
                 className={`${
                   profileImgOnLoadStatus === 'success' ? 'd-block' : 'd-none'
                 }`}
@@ -73,29 +73,29 @@ const ProfileBanner = ({ othersView }) => {
                 <div className='row gap-md-0 gap-2'>
                   <div className='col-md-6'>
                     <h2 className='profile-name'>
-                      {getMyProfile.data.firstName}{' '}
-                      {getMyProfile.data.secondName}
+                      {getMyProfile.data?.firstName}{' '}
+                      {getMyProfile.data?.secondName}
                     </h2>
-                    <div className='job'>{getMyProfile.data.niche}</div>
-                    <div className='job'>{getMyProfile.data.profession}</div>
+                    <div className='job'>{getMyProfile.data?.niche}</div>
+                    <div className='job'>{getMyProfile.data?.profession}</div>
                     <div className='other-details location'>
-                      {getMyProfile.data.city}
+                      {getMyProfile.data?.city}
                     </div>
                     <div className='other-details connect'>21 connections</div>
                   </div>
                   <div className='col-md-6'>
                     <div className='tag-header'>Tags</div>
                     <div className='d-flex gap-2 flex-wrap align-items-center'>
-                      {getMyProfile.data.tags?.length > 0 ? (
-                        getMyProfile.data.tags?.map((tag) => (
-                          <div className='other-details tag-names'>{tag}</div>
+                      {getMyProfile.data?.tags?.length > 0 ? (
+                        getMyProfile.data?.tags?.map((tag,index) => (
+                          <div key={index} className='other-details tag-names'>{tag}</div>
                         ))
                       ) : (
                         <div className='other-details tag-names'>
                           You have no tags
                         </div>
                       )}
-                      {!othersView && getMyProfile.data.tags?.length > 3 && (
+                      {!othersView && getMyProfile.data?.tags?.length > 3 && (
                         <div className='see-more-btn d-lg-flex d-none'>
                           see 2 more
                         </div>
@@ -103,9 +103,9 @@ const ProfileBanner = ({ othersView }) => {
                     </div>
                     <div className='tag-header mt-2'>Featured Skill</div>
                     <div className='d-flex gap-3 flex-wrap align-items-center'>
-                      {getMyProfile.data.skills?.length > 0 ? (
-                        getMyProfile.data.skills?.map((skill) => (
-                          <div className='other-details tag-names'>{skill}</div>
+                      {getMyProfile.data?.skills?.length > 0 ? (
+                        getMyProfile.data?.skills?.map((skill,index) => (
+                          <div key={index} className='other-details tag-names'>{skill}</div>
                         ))
                       ) : (
                         <div className='other-details tag-names'>

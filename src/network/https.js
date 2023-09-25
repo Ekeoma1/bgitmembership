@@ -1,11 +1,12 @@
-/* eslint-disable react-hooks/rules-of-hooks */
 import axios from 'axios';
-const form = new FormData();
 const URL = process.env.REACT_APP_URL || '';
-console.log('axios');
-async function ajax({ method = 'GET', url, data }) {
+// console.log('axios');
+
+async function ajax({ method = 'GET', url, data, queryParams }) {
+  // console.log('data ', data);
+  // console.log('query ', queryParams);
   let result, contentType;
-  if (data.photo) {
+  if (data.photo || data.postImageUrl || data.postVideoUrl || data.content) {
     contentType = 'multipart/form-data';
   } else {
     contentType = 'application/json';
@@ -30,10 +31,10 @@ async function ajax({ method = 'GET', url, data }) {
       .then((response) => {
         const { data } = response;
         result = data;
+        console.log('axios data', data);
       })
       .catch((err) => {
         result = err.response?.data;
-      
       });
     return result;
   } else {
@@ -49,12 +50,15 @@ async function ajax({ method = 'GET', url, data }) {
       url,
       method,
       data,
+      params: queryParams,
     })
       .then((response) => {
         const { data } = response;
         result = data;
+        console.log('axios data', data);
       })
       .catch((err) => {
+        console.log('axios errp', err);
         result = err.response?.data;
         if (
           err.response?.status === 401 &&

@@ -19,6 +19,12 @@
   min-width: 100%;
   min-height: 100%;
 }
+.user-profile-photo-loader2 {
+  min-width: 5rem;
+  min-height: 5rem;
+  border-radius: 50%;
+  overflow: hidden;
+}
 .details-loader {
   display: flex;
   padding: 2rem 0;
@@ -49,9 +55,67 @@
       border-radius: 1.6rem;
       margin-bottom: 2rem;
     }
-    .skills{
-       width: 70%;
+    .skills {
+      width: 70%;
     }
+  }
+}
+.posts-loader {
+  padding: 2.9rem;
+  width: 100%;
+  margin-bottom: 4rem;
+  .card-top {
+    display: flex;
+    column-gap: 2rem;
+    margin-bottom: 4rem;
+    .profile-photo {
+      min-width: 5.5226rem;
+      min-height: 5.5226rem;
+      max-width: 5.5226rem;
+      max-height: 5.5226rem;
+      border-radius: 50%;
+      overflow: hidden;
+    }
+    .card-details {
+      width: 100%;
+      height: 7rem;
+      .name:empty {
+        width: 70%;
+        height: 2rem;
+        border-radius: 1.6rem;
+        margin-bottom: 1rem;
+      }
+      .role:empty,
+      .time:empty {
+        height: 1.8rem;
+        width: 50%;
+        border-radius: 1.6rem;
+        margin-bottom: 1rem;
+      }
+      .time:empty {
+        height: 1.5rem;
+        width: 20%;
+        border-radius: 1.6rem;
+        margin-bottom: 1rem;
+      }
+    }
+  }
+  .card-text {
+    height: 1.8rem;
+    width: 100%;
+    border-radius: 1.6rem;
+    margin-bottom: 2rem;
+  }
+  .card-content {
+    height: 45.8rem;
+    width: 100%;
+    border-radius: 1.6rem;
+  }
+  .card-content2 {
+    height: 8rem;
+    width: 100%;
+    border-radius: 1.6rem;
+    margin-bottom: 1rem;
   }
 }
 .skeleton-loader {

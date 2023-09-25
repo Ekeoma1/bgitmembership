@@ -24,9 +24,12 @@ const MainButton = ({
       type='submit'
     >
       {loading ? (
-        <div className='img-container'>
-          <img src={loaderIcon} alt='' className='' />
-        </div>
+        <>
+          {/* <div className='img-container'>
+            <img src={loaderIcon} alt='' className='' />
+          </div> */}
+          Loading...
+        </>
       ) : (
         <>{text}</>
       )}

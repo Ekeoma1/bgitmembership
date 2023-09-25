@@ -30,9 +30,11 @@ const apiRoutes = {
 
   // posts
   createPost: '/Posts/CreatePost',
-  toggleLikeUnlikePost: '/Posts/ToggleLikeUnlikePost',
+  toggleLikePost: '/Posts/ToggleLikeUnlikePost',
+  getPostLikedUsers: '/Posts/GetPostLikedUsers',
+  // getAllPosts: '/Posts/GetAllPosts?pageNumber=1&PageSize=10',
   getAllPosts: '/Posts/GetAllPosts',
-  getPostsByUserId: '/Posts/GetPostsByUserId',
+  getAllPostsByUserId: '/Posts/GetAllPostsByUserId',
   getMyPosts: '/Posts/GetMyPosts',
   createComment: '/Posts/CreateComment',
 

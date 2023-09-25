@@ -18,14 +18,14 @@ const BioCard = ({ othersView }) => {
               </span>
             )}
           </div>
-          <div className='dashboard-text'>{getMyProfile.data.biography}</div>
+          <div className='dashboard-text'>{getMyProfile.data?.biography}</div>
 
           <div className='dashboard-header mt-1'>What best desribe you?</div>
-          <div className='dashboard-text'>{getMyProfile.data.purpose}</div>
+          <div className='dashboard-text'>{getMyProfile.data?.purpose}</div>
           <div className='dashboard-header mt-1'>
             What your experience level?
           </div>
-          <div className='dashboard-text'>{getMyProfile.data.experience}</div>
+          <div className='dashboard-text'>{getMyProfile.data?.experience}</div>
         </div>
         {!othersView && (
           <div className='col-md-1 d-md-block d-none'>

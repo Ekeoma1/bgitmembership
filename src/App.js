@@ -31,6 +31,8 @@ import { useContext, useEffect } from 'react';
 import { AppContext } from './context/Context';
 import { darkTheme, lightTheme } from './utils/themes/themes';
 import { GlobalStyles } from './utils/themes/themes';
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 function App() {
   const isLoggedIn = useSelector((state) => state.auth.isLoggedIn);
@@ -138,6 +140,11 @@ function App() {
 
   return (
     <ThemeProvider theme={themeMode}>
+      <ToastContainer
+        className={'custom-toastify'}
+        position='top-center'
+        autoClose={2000}
+      />
       <GlobalStyles />
       <RouterProvider router={router} />
     </ThemeProvider>

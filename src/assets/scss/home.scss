@@ -76,11 +76,28 @@
           height: 500px;
           overflow-y: scroll;
           overflow-x: scroll;
+          img,
+          video {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            source {
+              width: 100%;
+              height: 100%;
+            }
+          }
         }
       }
     }
 
     .post-card-wrapper {
+      .internet-error-state,
+      .server-error-state {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        height: 30rem;
+      }
     }
   }
 

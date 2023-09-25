@@ -183,3 +183,26 @@ input[type='number'] {
     height: 52px;
   }
 }
+.custom-toastify {
+  .Toastify__toast--error,
+  .Toastify__toast--success,
+  .Toastify__toast--warning {
+    width: 400px !important;
+    border-left: 8px solid !important;
+  }
+  .Toastify__toast--success {
+    border-left-color: #36743d !important;
+    background-color: #f1fef1 !important;
+    color: #163c29;
+  }
+  .Toastify__toast--error {
+    border-left-color: #e74c3c !important;
+    background-color: #fbe9e9 !important;
+    color: #a4251a !important;
+  }
+  .Toastify__toast--warning {
+    border-left-color: #f1c40f !important;
+    background-color: #fef6cf !important;
+    color: #af5f26 !important;
+  }
+}

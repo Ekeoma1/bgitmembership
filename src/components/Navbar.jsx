@@ -10,10 +10,12 @@ import { AppContext } from '../context/Context';
 import { BsFillMoonFill, BsFillSunFill } from 'react-icons/bs';
 import { logout, resetSignIn } from '../Features/auth/auth_slice';
 import OutsideClickHandler from 'react-outside-click-handler';
+import { UserProfilePhotoLoader2 } from './Atoms/skeleton-loaders/dashboard-page/UserProfilePhotoLoader';
 
 const Navbar = () => {
   const { toggleTheme, theme } = useContext(AppContext);
   const isLoggedIn = useSelector((state) => state.auth.isLoggedIn);
+  const { getMyProfile } = useSelector((state) => state.users);
   const [showDropdown, setShowDropdown] = useState(false);
   const [mobNav, setMobNav] = useState(false);
   const dispatch = useDispatch();
@@ -33,7 +35,7 @@ const Navbar = () => {
   const hideDropdown = () => {
     setShowDropdown(false);
   };
-  // console.log('theme', theme);
+  console.log('getmyprofile', getMyProfile);
   return (
     <nav className=''>
       <div className='container'>
@@ -117,7 +119,21 @@ const Navbar = () => {
                       <div
                         onClick={toggleDropdown}
                         className='user-profile-image'
-                      ></div>
+                      >
+                        {getMyProfile.status === 'base' ||
+                        getMyProfile.status === 'loading' ? (
+                          <>
+                            <UserProfilePhotoLoader2 />
+                          </>
+                        ) : (
+                          <>
+                            <img
+                              src={getMyProfile.data?.imageUrl}
+                              alt='post-img'
+                            />
+                          </>
+                        )}
+                      </div>
                       <Icon icon='triDown' />
                       <div
                         className={`user-profile-dropdown shadow-sm ${
@@ -134,7 +150,7 @@ const Navbar = () => {
                           onClick={() => {
                             dispatch(logout());
                             dispatch(resetSignIn());
-                            setShowDropdown(false)
+                            setShowDropdown(false);
                           }}
                         >
                           Log out

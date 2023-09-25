@@ -7,7 +7,11 @@ const initialState = {
     status: states.BASE,
     data: {},
   },
-  toggleLikeUnlikePost: {
+  toggleLikePost: {
+    status: states.BASE,
+    data: {},
+  },
+  getPostLikedUsers: {
     status: states.BASE,
     data: {},
   },
@@ -15,7 +19,7 @@ const initialState = {
     status: states.BASE,
     data: {},
   },
-  getPostsByUserId: {
+  getAllPostsByUserId: {
     status: states.BASE,
     data: {},
   },
@@ -32,18 +36,29 @@ export const triggerCreatePost = createAsyncThunk(
   'create-post',
   async (params, thunkAPI) => {
     try {
-      return await PostsService.addJob(params);
+      return await PostsService.createPost(params);
     } catch (e) {
       return thunkAPI.rejectWithValue(e.message);
     }
   }
 );
 
-export const triggerToggleLikeUnlikePost = createAsyncThunk(
-  'toggle-like-unlike-post',
+export const triggerToggleLikePost = createAsyncThunk(
+  'toggle-like-post',
   async (params, thunkAPI) => {
     try {
-      return await PostsService.editJob(params);
+      return await PostsService.toggleLikePost(params);
+    } catch (e) {
+      return thunkAPI.rejectWithValue(e.message);
+    }
+  }
+);
+
+export const triggerGetPostLikedUsers = createAsyncThunk(
+  'get-posts-liked-users',
+  async (params, thunkAPI) => {
+    try {
+      return await PostsService.getPostLikedUsers(params);
     } catch (e) {
       return thunkAPI.rejectWithValue(e.message);
     }
@@ -53,17 +68,17 @@ export const triggerGetAllPosts = createAsyncThunk(
   'get-all-posts',
   async (params, thunkAPI) => {
     try {
-      return await PostsService.getAllJobs(params);
+      return await PostsService.getAllPosts(params);
     } catch (e) {
       return thunkAPI.rejectWithValue(e.message);
     }
   }
 );
-export const triggerGetPostsByUserId = createAsyncThunk(
-  'get-posts-by-user-id',
+export const triggerGetAllPostsByUserId = createAsyncThunk(
+  'get-all-posts-by-user-id',
   async (params, thunkAPI) => {
     try {
-      return await PostsService.getAllInactiveJobs(params);
+      return await PostsService.getAllPostsByUserId(params);
     } catch (e) {
       return thunkAPI.rejectWithValue(e.message);
     }
@@ -73,7 +88,7 @@ export const triggerGetMyPosts = createAsyncThunk(
   'get-my-posts',
   async (params, thunkAPI) => {
     try {
-      return await PostsService.getAllClosedJobs(params);
+      return await PostsService.getMyPosts(params);
     } catch (e) {
       return thunkAPI.rejectWithValue(e.message);
     }
@@ -83,17 +98,21 @@ export const triggerCreateComment = createAsyncThunk(
   'create-comment',
   async (params, thunkAPI) => {
     try {
-      return await PostsService.deleteJob(params);
+      return await PostsService.createComment(params);
     } catch (e) {
       return thunkAPI.rejectWithValue(e.message);
     }
   }
 );
 
-const connectionSlice = createSlice({
+const postsSlice = createSlice({
   name: 'posts',
   initialState,
-  reducers: {},
+  reducers: {
+    resetCreatePost: (state) => {
+      state.createPost = initialState.createPost;
+    },
+  },
   extraReducers: (builder) => {
     //create post
     builder.addCase(triggerCreatePost.pending, (state) => {
@@ -109,18 +128,32 @@ const connectionSlice = createSlice({
       state.createPost.data = {};
     });
 
-    // toggle like unlike post
-    builder.addCase(triggerToggleLikeUnlikePost.pending, (state) => {
-      state.toggleLikeUnlikePost.status = states.LOADING;
-      state.toggleLikeUnlikePost.data = {};
+    // toggle like  post
+    builder.addCase(triggerToggleLikePost.pending, (state) => {
+      state.toggleLikePost.status = states.LOADING;
+      state.toggleLikePost.data = {};
     });
-    builder.addCase(triggerToggleLikeUnlikePost.fulfilled, (state, action) => {
-      state.toggleLikeUnlikePost.status = states.SUCCESSFUL;
-      state.toggleLikeUnlikePost.data = action.payload;
+    builder.addCase(triggerToggleLikePost.fulfilled, (state, action) => {
+      state.toggleLikePost.status = states.SUCCESSFUL;
+      state.toggleLikePost.data = action.payload;
     });
-    builder.addCase(triggerToggleLikeUnlikePost.rejected, (state) => {
-      state.toggleLikeUnlikePost.status = states.ERROR;
-      state.toggleLikeUnlikePost.data = {};
+    builder.addCase(triggerToggleLikePost.rejected, (state) => {
+      state.toggleLikePost.status = states.ERROR;
+      state.toggleLikePost.data = {};
+    });
+
+    // get posts liked by users
+    builder.addCase(triggerGetPostLikedUsers.pending, (state) => {
+      state.getPostLikedUsers.status = states.LOADING;
+      state.getPostLikedUsers.data = {};
+    });
+    builder.addCase(triggerGetPostLikedUsers.fulfilled, (state, action) => {
+      state.getPostLikedUsers.status = states.SUCCESSFUL;
+      state.getPostLikedUsers.data = action.payload;
+    });
+    builder.addCase(triggerGetPostLikedUsers.rejected, (state) => {
+      state.getPostLikedUsers.status = states.ERROR;
+      state.getPostLikedUsers.data = {};
     });
 
     // Get all posts
@@ -137,18 +170,18 @@ const connectionSlice = createSlice({
       state.getAllPosts.data = {};
     });
 
-    // get posts by user id
-    builder.addCase(triggerGetPostsByUserId.pending, (state) => {
-      state.getPostsByUserId.status = states.LOADING;
-      state.getPostsByUserId.data = {};
+    // get all posts by user id
+    builder.addCase(triggerGetAllPostsByUserId.pending, (state) => {
+      state.getAllPostsByUserId.status = states.LOADING;
+      state.getAllPostsByUserId.data = {};
     });
-    builder.addCase(triggerGetPostsByUserId.fulfilled, (state, action) => {
-      state.getPostsByUserId.status = states.SUCCESSFUL;
-      state.getPostsByUserId.data = action.payload;
+    builder.addCase(triggerGetAllPostsByUserId.fulfilled, (state, action) => {
+      state.getAllPostsByUserId.status = states.SUCCESSFUL;
+      state.getAllPostsByUserId.data = action.payload;
     });
-    builder.addCase(triggerGetPostsByUserId.rejected, (state) => {
-      state.getPostsByUserId.status = states.ERROR;
-      state.getPostsByUserId.data = {};
+    builder.addCase(triggerGetAllPostsByUserId.rejected, (state) => {
+      state.getAllPostsByUserId.status = states.ERROR;
+      state.getAllPostsByUserId.data = {};
     });
 
     // get my posts
@@ -181,4 +214,5 @@ const connectionSlice = createSlice({
   },
 });
 
-export default connectionSlice.reducer;
+export default postsSlice.reducer;
+export const { resetCreatePost } = postsSlice.actions;
