@@ -19,6 +19,7 @@ const Navbar = () => {
   const [showDropdown, setShowDropdown] = useState(false);
   const [mobNav, setMobNav] = useState(false);
   const dispatch = useDispatch();
+  const [profileImgOnLoadStatus, setProfileImgOnLoadStatus] = useState('base');
 
   const hideMobNav = () => {
     setMobNav(false);
@@ -35,7 +36,6 @@ const Navbar = () => {
   const hideDropdown = () => {
     setShowDropdown(false);
   };
-  console.log('getmyprofile', getMyProfile);
   return (
     <nav className=''>
       <div className='container'>
@@ -130,7 +130,22 @@ const Navbar = () => {
                             <img
                               src={getMyProfile.data?.imageUrl}
                               alt='post-img'
+                              className={`${
+                                profileImgOnLoadStatus === 'success'
+                                  ? 'd-block'
+                                  : 'd-none'
+                              }`}
+                              onLoad={() =>
+                                setProfileImgOnLoadStatus('success')
+                              }
+                              onError={() => setProfileImgOnLoadStatus('error')}
                             />
+                            {profileImgOnLoadStatus === 'base' && (
+                              <UserProfilePhotoLoader2 />
+                            )}
+                            {profileImgOnLoadStatus === 'error' && (
+                              <div className='error-img'>couldn't load img</div>
+                            )}
                           </>
                         )}
                       </div>

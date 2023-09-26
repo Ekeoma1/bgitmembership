@@ -19,6 +19,10 @@ const initialState = {
     status: states.BASE,
     data: {},
   },
+  getAllPostsRender: {
+    status: states.BASE,
+    data: {},
+  },
   getAllPostsByUserId: {
     status: states.BASE,
     data: {},
@@ -112,6 +116,12 @@ const postsSlice = createSlice({
     resetCreatePost: (state) => {
       state.createPost = initialState.createPost;
     },
+    resetToggleLikePost: (state) => {
+      state.toggleLikePost = initialState.toggleLikePost;
+    },
+    updateGetAllPosts: (state, action) => {
+      state.getAllPosts = action.payload;
+    },
   },
   extraReducers: (builder) => {
     //create post
@@ -164,6 +174,7 @@ const postsSlice = createSlice({
     builder.addCase(triggerGetAllPosts.fulfilled, (state, action) => {
       state.getAllPosts.status = states.SUCCESSFUL;
       state.getAllPosts.data = action.payload;
+      state.getAllPostsRender.data = action.payload;
     });
     builder.addCase(triggerGetAllPosts.rejected, (state) => {
       state.getAllPosts.status = states.ERROR;
@@ -215,4 +226,5 @@ const postsSlice = createSlice({
 });
 
 export default postsSlice.reducer;
-export const { resetCreatePost } = postsSlice.actions;
+export const { resetCreatePost, resetToggleLikePost, updateGetAllPosts } =
+  postsSlice.actions;

@@ -31,7 +31,7 @@ async function ajax({ method = 'GET', url, data, queryParams }) {
       .then((response) => {
         const { data } = response;
         result = data;
-        console.log('axios data', data);
+        
       })
       .catch((err) => {
         result = err.response?.data;
@@ -55,7 +55,7 @@ async function ajax({ method = 'GET', url, data, queryParams }) {
       .then((response) => {
         const { data } = response;
         result = data;
-        console.log('axios data', data);
+        // console.log('axios data', data);
       })
       .catch((err) => {
         console.log('axios errp', err);

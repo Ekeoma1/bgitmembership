@@ -62,7 +62,7 @@ const CreatePost = () => {
       dispatch(resetCreatePost());
     }
   }, [createPost.status]);
-  console.log('selectedMedia', selectedMediaDispatch);
+  // console.log('selectedMedia', selectedMediaDispatch);
 
   return (
     <div className='create-post-card shadow-sm mx-auto '>

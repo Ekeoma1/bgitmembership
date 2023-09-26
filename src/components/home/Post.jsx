@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import CreatePost from './CreatePost';
 import Icon from '../Icon';
 import PostImage from '../../assets/images/post-image.png';
@@ -38,20 +38,38 @@ const postList = [
 
 const Post = () => {
   const dispatch = useDispatch();
-  const { getAllPosts, createPost } = useSelector((state) => state.posts);
+  const { getAllPosts, createPost, getAllPostsRender } = useSelector(
+    (state) => state.posts
+  );
+  const [pageNumber, setPageNumber] = useState(1);
+  const [pageSize, setPageSize] = useState(4);
+  const [firstDispatch, setFirstDispatch] = useState(false);
+  const [idsOfUsersWhoHaveLikedThePost, setIdsOfUsersWhoHaveLikedThePost] =
+    useState([]);
+
   useEffect(() => {
     if (createPost.status === 'successful') {
-      const data = { queryParams: { pageNumbesr: 1, pageSize: 10 } };
+      const data = { queryParams: { pageNumber, pageSize } };
       dispatch(triggerGetAllPosts(data));
     }
   }, [createPost.status]);
 
   useEffect(() => {
-    const data = { queryParams: { pageNumbesr: 1, pageSize: 10 } };
+    const data = { queryParams: { pageNumber, pageSize } };
     dispatch(triggerGetAllPosts(data));
   }, []);
 
-  console.log('getall posts', getAllPosts);
+  useEffect(() => {
+    if (getAllPosts?.status === 'successful') {
+      const idsOfUsersWhoHaveLikedThePostTemp =
+        getAllPosts?.data?.posts?.likedUsers?.map((item) => item.userId);
+      console.log(idsOfUsersWhoHaveLikedThePostTemp);
+      // console.log('useeffect2');
+    }
+  }, [getAllPosts?.status]);
+
+  // console.log('getall posts render', getAllPosts.data.posts);
+  // console.log('getall posts render2', getAllPostsRender);
 
   return (
     <div className='post-wrapper'>
@@ -65,22 +83,33 @@ const Post = () => {
           </>
         ) : getAllPosts.status === 'successful' ? (
           <>
-            {getAllPosts.data ? (
+            {getAllPostsRender.data ? (
               <>
-                {getAllPosts.data?.length === 0 ? (
+                {getAllPostsRender.data?.length === 0 ? (
                   <>
                     <div className='no-data'>No posts to show</div>
                   </>
                 ) : (
                   <>
-                    {getAllPosts.data?.posts?.map((post, key) => {
-                      return <PostCard key={key} post={post} />;
+                    {getAllPostsRender.data?.posts?.map((post, key) => {
+                      return (
+                        <PostCard
+                          key={key}
+                          post={post}
+                          pageNumber={pageNumber}
+                          pageSize={pageSize}
+                        />
+                      );
                     })}
                   </>
                 )}
               </>
             ) : (
-              <><div className="internet-error-state">Check your internet and try again...</div></>
+              <>
+                <div className='internet-error-state'>
+                  Check your internet and try again...
+                </div>
+              </>
             )}
           </>
         ) : (
