@@ -49,12 +49,21 @@ const LoginForm = ({ forLogin, regFirstStep }) => {
           message: auth.signin?.data ?? 'Your password is invalid',
         });
         dispatch(resetSignIn());
-      }
-      if (auth.signin.data === 'Kindly contact the administrator') {
-        // notify('Account disabled. Kindly contact the administrator');
+      } else if (auth.signin.data === 'User not found') {
+        renderToast({
+          status: 'error',
+          message: auth.signin?.data ?? 'User not found',
+        });
         dispatch(resetSignIn());
-      }
-      if (auth.signin.data?.token) {
+      } else if (auth.signin.data === 'Kindly contact the administrator') {
+        renderToast({
+          status: 'error',
+          message:
+            auth.signin?.data ??
+            'Account disabled. Kindly contact the administrator',
+        });
+        dispatch(resetSignIn());
+      } else if (auth.signin.data?.token) {
         dispatch(login(true));
       }
     }
