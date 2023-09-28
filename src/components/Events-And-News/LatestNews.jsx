@@ -1,12 +1,9 @@
-import React, { useEffect, useRef, useState } from "react";
+import React from "react";
 import SearchBox from "../Molecules/SearchBox";
 import { VscSettings } from "react-icons/vsc";
 import { HiChevronDown } from "react-icons/hi";
-import { BsBookmark } from "react-icons/bs";
-import { PiShareFat } from "react-icons/pi";
 import people1 from "../../assets/images/event-people1.svg";
 import people2 from "../../assets/images/event-people2.svg";
-import { Scrollbar } from "react-scrollbars-custom";
 import EventCard from "./EventCard";
 import Carousel from "react-multi-carousel";
 import "react-multi-carousel/lib/styles.css";

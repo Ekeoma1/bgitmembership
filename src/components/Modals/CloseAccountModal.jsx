@@ -28,7 +28,7 @@ const CloseAccountModal = ({ show, hide }) => {
       }
       dispatch(resetCloseAccount());
     }
-  }, [closeAccount.status]);
+  }, [closeAccount.data.user.status, closeAccount.status]);
   return (
     <OutsideClickHandler
       onOutsideClick={() => {

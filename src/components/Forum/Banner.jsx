@@ -1,14 +1,12 @@
 import React, { useState } from 'react';
 import backgroundImage1 from '../../assets/images/people1.svg';
-import backgroundImage2 from '../../assets/images/forum.svg';
 import msg from '../../assets/images/message-icon.svg';
 import member1 from '../../../src/assets/images/member1.svg';
 import member2 from '../../../src/assets/images/member2.svg';
 import member3 from '../../../src/assets/images/member3.svg';
 import member4 from '../../../src/assets/images/member4.svg';
 import member5 from '../../../src/assets/images/member5.svg';
-import { HiArrowLeft, HiPlusSm } from 'react-icons/hi';
-import { GrCheckmark } from 'react-icons/gr';
+import { HiArrowLeft } from 'react-icons/hi';
 import { FiPlus } from 'react-icons/fi';
 import { PiCheckBold } from 'react-icons/pi';
 import { useNavigate } from 'react-router-dom';

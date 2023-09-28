@@ -1,6 +1,5 @@
 import React from "react";
 import backgroundImage1 from "../../assets/images/people1.svg";
-import { HiArrowLeft } from "react-icons/hi";
 
 const Banner = () => {
   return (

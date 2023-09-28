@@ -1,13 +1,5 @@
 import React from 'react';
-import Fb from '../../assets/images/logos_facebook.png';
 import { useSelector } from 'react-redux';
-
-const socialLinks = [
-  {
-    logo: Fb,
-    link: 'facebook.com/claire.jenkins',
-  },
-];
 
 const SocialLinksCard = ({ othersView }) => {
   const { getMyProfile } = useSelector((state) => state.users);

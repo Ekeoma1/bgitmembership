@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import Icon from '../components/Icon';
 import { useNavigate } from 'react-router-dom';
 import '../assets/scss/settings.scss';
@@ -21,7 +21,7 @@ const Settings = () => {
   } = useSelector((state) => state.users);
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const [seed, setSeed] = useState(1);
+  // const [seed, setSeed] = useState(1);
 
   useEffect(() => {
     dispatch(triggerGetMyProfile());
@@ -36,9 +36,9 @@ const Settings = () => {
       updatePrivacySettings.status === 'successful'
     ) {
       // Trying to reload the settings page to close all the open tabs. It's not working yet though
-      setSeed(Math.random());
+      // setSeed(Math.random());
     }
-  }, [updateMyProfile.status]);
+  }, [changePassword.data, changePassword.status, updateFeedPreference.status, updateMyProfile.status, updatePrivacySettings.status]);
   return (
     <div className='settings-page'>
       <div className='container'>

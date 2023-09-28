@@ -8,12 +8,9 @@ import { useDispatch, useSelector } from 'react-redux';
 import {
   addSignUpFormData,
   login,
-  resetSignIn,
   triggerSignin,
 } from '../../Features/auth/auth_slice';
 import MainButton from '../Molecules/MainButton';
-import { ToastContainer, toast } from 'react-toastify';
-import { resetCloseAccount } from '../../Features/users/users_slice';
 import { renderToast } from '../Molecules/CustomToastify';
 
 // this component is used for both signup and login
@@ -40,34 +37,19 @@ const LoginForm = ({ forLogin, regFirstStep }) => {
       regFirstStep(true);
     }
   };
-  const notify = (toastText) => toast(toastText);
   useEffect(() => {
     if (auth.signin.status === 'successful') {
-      if (auth.signin.data === 'Invalid password') {
-        renderToast({
-          status: 'error',
-          message: auth.signin?.data ?? 'Your password is invalid',
-        });
-        dispatch(resetSignIn());
-      } else if (auth.signin.data === 'User not found') {
-        renderToast({
-          status: 'error',
-          message: auth.signin?.data ?? 'User not found',
-        });
-        dispatch(resetSignIn());
-      } else if (auth.signin.data === 'Kindly contact the administrator') {
-        renderToast({
-          status: 'error',
-          message:
-            auth.signin?.data ??
-            'Account disabled. Kindly contact the administrator',
-        });
-        dispatch(resetSignIn());
-      } else if (auth.signin.data?.token) {
+      if (auth.signin.data?.token) {
         dispatch(login(true));
+      } else {
+        renderToast({
+          status: 'error',
+          message: auth.signin?.data,
+        });
       }
     }
-  }, [auth.signin.status]);
+  }, [auth.signin.data, auth.signin.status]);
+  
   return (
     <>
       <Formik

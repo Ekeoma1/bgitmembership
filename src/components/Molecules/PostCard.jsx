@@ -11,7 +11,7 @@ const PostCard = ({ post }) => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const { toggleLikePost } = useSelector((state) => state.posts);
-  const { getMyProfile, getAllPosts } = useSelector((state) => state.users);
+  const { getMyProfile } = useSelector((state) => state.users);
   const [profileImgOnLoadStatus, setProfileImgOnLoadStatus] = useState('base');
   const [postImgOnLoadStatus, setPostImgOnLoadStatus] = useState('base');
   const [postVideoOnLoadStatus, setPostVideoOnLoadStatus] = useState('base');
@@ -62,7 +62,7 @@ const PostCard = ({ post }) => {
         setIdsOfUsersWhoHaveLikedThePost(idsOfUsersWhoHaveLikedThePostTemp2);
       }
     }
-  }, [toggleLikePost.status]);
+  }, [getMyProfile.data.userId, idsOfUsersWhoHaveLikedThePost, post.postId, toggleLikePost.data.postId, toggleLikePost.data.postLiked, toggleLikePost.status]);
 
   useEffect(() => {
     if (
@@ -73,13 +73,13 @@ const PostCard = ({ post }) => {
     } else {
       setLiked(false);
     }
-  }, [idsOfUsersWhoHaveLikedThePost]);
+  }, [getMyProfile.data.userId, idsOfUsersWhoHaveLikedThePost]);
   useEffect(() => {
     const idsOfUsersWhoHaveLikedThePostTemp = post.likedUsers.map(
       (item) => item.userId
     );
     setIdsOfUsersWhoHaveLikedThePost(idsOfUsersWhoHaveLikedThePostTemp);
-  }, []);
+  }, [post.likedUsers]);
   console.log(idsOfUsersWhoHaveLikedThePost);
 
   return (

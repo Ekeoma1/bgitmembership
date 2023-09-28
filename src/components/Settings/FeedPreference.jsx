@@ -31,7 +31,7 @@ const FeedPreference = () => {
       }
       dispatch(resetUpdateFeedPreference());
     }
-  }, [updateFeedPreference.status]);
+  }, [ updateFeedPreference.data.user.feedPreference, updateFeedPreference.status]);
   return (
     <div className='settings-card shadow'>
       <div className='header'>Feed Preference</div>

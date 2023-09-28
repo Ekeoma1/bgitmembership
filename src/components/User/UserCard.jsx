@@ -3,8 +3,6 @@ import coverPhoto from '../../assets/images/cover-photo.svg';
 import profilePhoto from '../../assets/images/admin.svg';
 import { IoIosAdd } from 'react-icons/io';
 import { FiCheck } from 'react-icons/fi';
-import { RiCheckLine } from 'react-icons/ri';
-import { BiCheck } from 'react-icons/bi';
 
 const UserCard = () => {
   const [connected, setConnected] = useState(false);

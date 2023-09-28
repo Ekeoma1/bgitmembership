@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import Icon from '../components/Icon';
 import '../assets/scss/dashboard.scss';
 import ProfileBanner from '../components/Dashboard/ProfileBanner';
@@ -9,8 +9,6 @@ import Resources from '../components/Dashboard/Resources';
 import Posts from '../components/Dashboard/Posts';
 import { Link, useNavigate } from 'react-router-dom';
 import Member from '../components/Dashboard/Member';
-import { useDispatch } from 'react-redux';
-import { triggerGetMyProfile } from '../Features/users/users_slice';
 
 const Dashboard = () => {
   const navigate = useNavigate();

@@ -14,7 +14,7 @@ const CreatePost = () => {
   const [selectedMedia, setSelectedMedia] = useState(null);
   const [selectedMediaDispatch, setSelectedMediaDispatch] = useState(null);
   const [mediaType, setMediaType] = useState('image');
-  const [postReach, setPostReach] = useState('anyone');
+  // const [postReach, setPostReach] = useState('anyone');
 
   const handleMediaChange = (e, type) => {
     setSelectedMedia(null);
@@ -58,11 +58,10 @@ const CreatePost = () => {
       });
       setPostContent('');
       setSelectedMedia(null);
-      setPostReach('anyone');
+      // setPostReach('anyone');
       dispatch(resetCreatePost());
     }
   }, [createPost.status]);
-  // console.log('selectedMedia', selectedMediaDispatch);
 
   return (
     <div className='create-post-card shadow-sm mx-auto '>
@@ -70,7 +69,7 @@ const CreatePost = () => {
         <h2>Create a Post</h2>
 
         <select
-          onChange={(e) => setPostReach(e.target.value)}
+          // onChange={(e) => setPostReach(e.target.value)}
           name='postReach'
           id=''
         >

@@ -11,7 +11,7 @@ import Carousel from 'react-multi-carousel';
 import 'react-multi-carousel/lib/styles.css';
 const Communities = () => {
   const [searchValue, setSearchValue] = useState('');
-  const [userHasForums, setUserHasForums] = useState(false);
+  const [userHasForums] = useState(false);
 
   const onChange = (e) => {
     setSearchValue(e.target.value);

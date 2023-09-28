@@ -1,7 +1,4 @@
 import React, { useState } from 'react';
-import Icon from '../Icon';
-import PostImage from '../../assets/images/post-image.png';
-import AuthorImg1 from '../../assets/images/author1.png';
 import AuthorImg2 from '../../assets/images/author2.png';
 import PostCard from '../Molecules/PostCard';
 

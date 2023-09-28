@@ -9,7 +9,7 @@ import {
   triggerUpdatePrivacySettings,
 } from '../../Features/users/users_slice';
 import MainButton from '../Molecules/MainButton';
-import { ToastContainer, toast } from 'react-toastify';
+import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
 const PrivacyOption = ({ title, selectedValue, onRadioChange }) => {
@@ -85,7 +85,7 @@ const Privacy = () => {
       dispatch(triggerUpdatePrivacySettings(values));
     }
   };
-  const notify = () => toast('Privacy settings successfully updated');
+  // const notify = () => toast('Privacy settings successfully updated');
   useEffect(() => {
     if (updatePrivacySettings.status === 'successful') {
       // notify();
@@ -103,7 +103,7 @@ const Privacy = () => {
       });
       setPrivacySettings(array);
     }
-  }, [getPrivacySettings.status]);
+  }, [getPrivacySettings.data, getPrivacySettings.status, privacySettings]);
 
   useEffect(() => {
     if (getPrivacySettings.status === 'successful') {
@@ -133,7 +133,7 @@ const Privacy = () => {
         setSave(false);
       }
     }
-  }, [privacySettings, getPrivacySettings.status]);
+  }, [privacySettings, getPrivacySettings.status, getPrivacySettings.data]);
 
   useEffect(() => {
     dispatch(triggerGetPrivacySettings());

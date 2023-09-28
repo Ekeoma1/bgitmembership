@@ -1,17 +1,14 @@
 import React, { useState } from 'react';
 import { MdOutlineMoreHoriz } from 'react-icons/md';
-import community1 from '../../../src/assets/images/community1.svg';
 import member1 from '../../../src/assets/images/member1.svg';
 import member2 from '../../../src/assets/images/member2.svg';
 import member3 from '../../../src/assets/images/member3.svg';
 import member4 from '../../../src/assets/images/member4.svg';
 import member5 from '../../../src/assets/images/member5.svg';
 import msg from '../../../src/assets/images/message-icon.svg';
-import useWindowSize from '../../hooks/useWindowSize';
 import { HiOutlineChevronRight } from 'react-icons/hi';
 
 const CommunityCard = ({ community }) => {
-  const { isMobile } = useWindowSize();
   const [more, setMore] = useState(false);
   return (
     <div className='community-card bg-color-card'>

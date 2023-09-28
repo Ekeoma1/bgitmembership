@@ -1,7 +1,5 @@
 import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
 import '../assets/scss/resources.scss';
-import Icon from '../components/Icon';
 import SearchBox from '../components/Molecules/SearchBox';
 import { HiOutlineChevronRight } from 'react-icons/hi';
 

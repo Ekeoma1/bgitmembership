@@ -40,7 +40,7 @@ const ExperienceLevel = ({ tabChanger, currentTab }) => {
   const [errorMesssage, setErrorMessage] = useState('');
 
   const nextStep = () => {
-    if (level != 0) {
+    if (level !== 0) {
       tabChanger(currentTab + 1);
     } else {
       setErrorMessage('Please select an option');
@@ -49,7 +49,7 @@ const ExperienceLevel = ({ tabChanger, currentTab }) => {
 
   const selectOption = (id) => {
     setLevel(id);
-    errorMesssage != '' && setErrorMessage('');
+    errorMesssage !== '' && setErrorMessage('');
   };
   const handleSubmit = () => {
     if (

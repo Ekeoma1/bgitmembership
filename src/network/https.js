@@ -12,10 +12,17 @@ async function ajax({ method = 'GET', url, data, queryParams }) {
     contentType = 'application/json';
   }
   const token = localStorage.getItem('token');
+  const currentToken = JSON.parse(atob(token.split('.')[1]));
+  console.log('token', currentToken);
+  const expiredDate = new Date(currentToken.exp * 1000);
+  let currentDate = new Date();
+  if(expiredDate < currentDate){
 
+  }
   if (token === 'undefined' && url !== '/Auth/Login') {
     window.location.replace('/login');
     localStorage.removeItem('token');
+    console.log('auth/login');
   } else if (url === '/Auth/Login') {
     const axiosInstance = axios.create({
       baseURL: URL,
@@ -31,13 +38,13 @@ async function ajax({ method = 'GET', url, data, queryParams }) {
       .then((response) => {
         const { data } = response;
         result = data;
-        
       })
       .catch((err) => {
         result = err.response?.data;
       });
     return result;
   } else {
+    console.log('else');
     const authToken = JSON.parse(token);
     const axiosInstance = axios.create({
       baseURL: URL,
@@ -55,18 +62,10 @@ async function ajax({ method = 'GET', url, data, queryParams }) {
       .then((response) => {
         const { data } = response;
         result = data;
-        // console.log('axios data', data);
       })
       .catch((err) => {
         console.log('axios errp', err);
-        result = err.response?.data;
-        if (
-          err.response?.status === 401 &&
-          err.response?.statusText === 'Unauthorized'
-        ) {
-          localStorage.removeItem('token');
-          window.location.replace('/login');
-        }
+        result = err.response;
       });
     return result;
   }

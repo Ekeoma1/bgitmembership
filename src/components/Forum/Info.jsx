@@ -1,6 +1,4 @@
 import React from 'react';
-import Icon from '../Icon';
-import { Link } from 'react-router-dom';
 import { colors } from '../../utils/helpers';
 
 const infoData = [

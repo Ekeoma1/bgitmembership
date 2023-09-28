@@ -1,26 +1,25 @@
-import React, { useEffect, useState } from "react";
-import { useField, useFormikContext } from "formik";
-import axios from "axios";
+import React, { useState } from 'react';
+import { useField, useFormikContext } from 'formik';
 
 const SelectInput = ({ name, ...props }) => {
   const [field, meta] = useField(name);
   const { setFieldValue } = useFormikContext();
 
-  const [options, setOptions] = useState([
+  const [options] = useState([
     {
       id: 1,
-      value: "uiDesign",
-      label: "UI Design",
+      value: 'uiDesign',
+      label: 'UI Design',
     },
     {
       id: 2,
-      value: "uxResearch",
-      label: "UX Research",
+      value: 'uxResearch',
+      label: 'UX Research',
     },
     {
       id: 3,
-      value: "frontendDev",
-      label: "Frontend Development",
+      value: 'frontendDev',
+      label: 'Frontend Development',
     },
   ]);
   // when api is ready this activated

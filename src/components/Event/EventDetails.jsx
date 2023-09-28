@@ -1,9 +1,6 @@
-import React, { useState } from 'react';
-import bgitlogo from '../../assets/images/bgit-logo.svg';
-import { LuCalendarDays } from 'react-icons/lu';
-import { MdOutlineLocationOn } from 'react-icons/md';
+import React from 'react';
+
 import '../../assets/scss/event.scss';
-import Tag from '../Atoms/Tag';
 import About from './About';
 import Booking from './Booking';
 import Checkout from './Checkout';

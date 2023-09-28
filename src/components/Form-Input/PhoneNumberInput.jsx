@@ -2,7 +2,6 @@ import React from "react";
 import { Field, useField } from "formik";
 import PhoneInput from "react-phone-number-input";
 import "react-phone-number-input/style.css";
-import Icon from "../Icon";
 
 const PhoneInputField = ({ name }) => {
   const [field, meta] = useField(name);

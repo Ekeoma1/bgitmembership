@@ -1,13 +1,10 @@
-import React, { useEffect, useRef, useState } from 'react';
-import { PiLockSimpleBold } from 'react-icons/pi';
+import React, { useEffect } from 'react';
 import { CgLock } from 'react-icons/cg';
 import { TbClockHour9 } from 'react-icons/tb';
 import adminImg from '../../assets/images/admin.svg';
 import ForumCard from '../Molecules/ForumCard';
 import forumImg1 from '../../../src/assets/images/forumcard1.svg';
 import forumImg2 from '../../../src/assets/images/forumcard2.svg';
-import forumImg3 from '../../../src/assets/images/forumcard3.svg';
-import forumImg4 from '../../../src/assets/images/forumcard4.svg';
 
 const ForumContent = () => {
   const communities = [

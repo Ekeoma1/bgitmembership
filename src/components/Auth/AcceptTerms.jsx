@@ -3,9 +3,12 @@ import { Link, useNavigate } from 'react-router-dom';
 
 import { useDispatch, useSelector } from 'react-redux';
 import {
+  resetSignUp,
   resetSignUpFormData,
   triggerSignup,
 } from '../../Features/auth/auth_slice';
+import { renderToast } from '../Molecules/CustomToastify';
+import MainButton from '../Molecules/MainButton';
 
 const AcceptTerms = () => {
   const [agreement, setAgreement] = useState(false);
@@ -25,13 +28,34 @@ const AcceptTerms = () => {
   };
   useEffect(() => {
     if (auth.signup.status === 'successful') {
-      console.log('sign up successful,show alert here');
-      navigate('/login');
-      dispatch(resetSignUpFormData());
+      if (auth.signup.data.status === 'Success') {
+        renderToast({
+          status: 'success',
+          message: 'Registration Successful, Please Login',
+        });
+        setTimeout(() => {
+          navigate('/login');
+        }, [3000]);
+        dispatch(resetSignUpFormData());
+        dispatch(resetSignUp());
+      } else {
+        renderToast({
+          status: 'error',
+          message: auth.signup.data.data,
+        });
+        setTimeout(() => {
+          navigate('/register');
+        }, [3000]);
+        dispatch(resetSignUp());
+      }
     } else if (auth.signup.status === 'error') {
-      console.log('sign up failed,show alert here');
+      renderToast({
+        status: 'error',
+        message: auth.signup.status,
+      });
     }
-  }, [auth.signup.status]);
+  }, [auth.signup.data.data, auth.signup.data.status, auth.signup.status]);
+
   return (
     <div className='details-wrapper'>
       <header>
@@ -62,9 +86,11 @@ const AcceptTerms = () => {
       </div>
 
       <div className='text-center'>
-        <button onClick={finalStage} className='primary-btn' type='submit'>
-          Continue
-        </button>
+        <MainButton
+          text={'Finish'}
+          onClick={finalStage}
+          loading={auth.signup.status === 'loading'}
+        />
       </div>
     </div>
   );

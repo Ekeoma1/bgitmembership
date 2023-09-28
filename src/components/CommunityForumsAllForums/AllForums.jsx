@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import React, { useEffect, useState } from 'react';
 import '../../../src/assets/scss/communityForums.scss';
 import { HiArrowLeft } from 'react-icons/hi';
@@ -124,7 +125,7 @@ const AllForums = ({ setSearchMain }) => {
       setSearchMain(false);
     }
     handleSearch();
-  }, [dispatchSearch, searchValue]);
+  }, [communities, dispatchSearch, searchValue, setSearchMain]);
   // console.log('empty', showSearchEmptyState);
   return (
     <div className='all-forums-section'>

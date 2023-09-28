@@ -1,10 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import '../assets/scss/user.scss';
-import Info from '../components/Forum/Info';
 import Post from '../components/User/Post';
-import CommunityForums from '../components/home/CommunityForums';
-import Resources from '../components/home/Resources';
-import Icon from '../components/Icon';
 import UserCard from '../components/User/UserCard';
 import { HiOutlineArrowLeft } from 'react-icons/hi';
 import { useNavigate } from 'react-router-dom';

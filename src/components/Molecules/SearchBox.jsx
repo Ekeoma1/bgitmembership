@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useRef } from 'react';
 import '../../assets/scss/molecules.scss';
 import Icon from '../Icon';
 
@@ -25,7 +25,7 @@ const SearchBox = ({
         document.removeEventListener('keydown', listener);
       };
     }
-  }, []);
+  }, [enterKeyPressed, otherKeysPressed]);
 
   return (
     <div className='search-box-component'>

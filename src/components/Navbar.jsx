@@ -1,4 +1,4 @@
-import { useContext, useState } from 'react';
+import {  useState } from 'react';
 import '../assets/scss/navFooter.scss';
 import Logo from '../assets/images/logo.png';
 import { Link, NavLink } from 'react-router-dom';
@@ -6,14 +6,14 @@ import Icon from './Icon';
 import { useSelector, useDispatch } from 'react-redux';
 import MobileNav from './MobileNav';
 import { FiChevronDown } from 'react-icons/fi';
-import { AppContext } from '../context/Context';
-import { BsFillMoonFill, BsFillSunFill } from 'react-icons/bs';
+// import { AppContext } from '../context/Context';
+// import { BsFillMoonFill, BsFillSunFill } from 'react-icons/bs';
 import { logout, resetSignIn } from '../Features/auth/auth_slice';
 import OutsideClickHandler from 'react-outside-click-handler';
 import { UserProfilePhotoLoader2 } from './Atoms/skeleton-loaders/dashboard-page/UserProfilePhotoLoader';
 
 const Navbar = () => {
-  const { toggleTheme, theme } = useContext(AppContext);
+  // const { toggleTheme, theme } = useContext(AppContext);
   const isLoggedIn = useSelector((state) => state.auth.isLoggedIn);
   const { getMyProfile } = useSelector((state) => state.users);
   const [showDropdown, setShowDropdown] = useState(false);

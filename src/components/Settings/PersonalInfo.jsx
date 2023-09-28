@@ -3,10 +3,8 @@ import { Formik, Form } from 'formik';
 import TextInput from '../Form-Input/TextInput';
 import TextArea from '../Form-Input/TextArea';
 import CountryInput from '../Form-Input/CountryInput';
-import MultiSelectInput from '../Form-Input/MultiSelectInput';
 import * as Yup from 'yup';
 import { useDispatch, useSelector } from 'react-redux';
-import { triggerSignin } from '../../Features/auth/auth_slice';
 import {
   resetUpdateMyProfile,
   triggerGetMyProfile,
@@ -33,14 +31,14 @@ const PersonalInfo = () => {
     console.log(typeof skills);
     console.log(typeof tags);
     if (typeof tags === 'string') {
-      const tagsTemp = tags.split(/[ .:;?!~,`"&|()<>{}\[\]\r\n/\\]+/);
+      const tagsTemp = tags.split(/[ .:;?!~,`"&|()<>{}[\]\r\n/\\]+/);
       tagsFinal = tagsTemp.map((tag) => {
         return { name: tag };
       });
       tags = tagsFinal;
     }
     if (typeof skills === 'string') {
-      const skillsTemp = skills.split(/[ .:;?!~,`"&|()<>{}\[\]\r\n/\\]+/);
+      const skillsTemp = skills.split(/[ .:;?!~,`"&|()<>{}[\]\r\n/\\]+/);
       skillsFinal = skillsTemp.map((skill) => {
         return { name: skill };
       });

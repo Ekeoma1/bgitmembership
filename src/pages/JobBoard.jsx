@@ -14,7 +14,7 @@ import MainButton from '../components/Molecules/MainButton';
 import '../../src/assets/scss/jobBoard.scss';
 
 const JobBoard = () => {
-  const { isMobile, windowSize } = useWindowSize();
+  const { isMobile } = useWindowSize();
   const [searchValue, setSearchValue] = useState('');
   const [showJobInfo, setShowJobInfo] = useState(false);
   const [idJobSelected, setIdJobSelected] = useState();
@@ -25,9 +25,9 @@ const JobBoard = () => {
   const onChange = (e) => {
     setSearchValue(e.target.value);
   };
-  const handleSearch = () => {
-    console.log('search', searchValue);
-  };
+  // const handleSearch = () => {
+  //   console.log('search', searchValue);
+  // };
   const jobsData = [
     {
       id: 1,

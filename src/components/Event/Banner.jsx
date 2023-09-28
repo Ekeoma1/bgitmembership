@@ -2,7 +2,7 @@ import React from 'react';
 import backgroundImage1 from '../../assets/images/people1.svg';
 import { HiArrowLeft } from 'react-icons/hi';
 import { FaRegBookmark } from 'react-icons/fa';
-import { MdIosShare, MdOutlineIosShare } from 'react-icons/md';
+import { MdIosShare } from 'react-icons/md';
 import { useNavigate } from 'react-router-dom';
 
 const Banner = ({ tab }) => {

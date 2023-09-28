@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import '../../src/assets/scss/forum.scss';
 import Banner from '../components/Forum/Banner';
-import UpcomingEvents from '../components/Events-And-News/UpcomingEvents';
 import ForumContent from '../components/Forum/ForumContent';
 import ForumContentMain from '../components/Forum/ForumContentMain';
 

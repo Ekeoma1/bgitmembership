@@ -1,4 +1,3 @@
-import { useState } from 'react';
 import TextInput from '../Form-Input/TextInput';
 import { Formik, Form } from 'formik';
 import * as Yup from 'yup';
@@ -9,7 +8,6 @@ import { useDispatch } from 'react-redux';
 import { addSignUpFormData } from '../../Features/auth/auth_slice';
 
 const PersonalDetailsForm = ({ tabChanger, currentTab }) => {
-  const [value, setValue] = useState();
   const dispatch = useDispatch();
 
   const handleSubmit = (values) => {

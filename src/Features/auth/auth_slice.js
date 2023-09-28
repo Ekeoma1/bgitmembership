@@ -36,6 +36,7 @@ export const triggerSignup = createAsyncThunk(
       console.log('sign up params', params);
       return await AuthService.signup(params);
     } catch (e) {
+      console.log('reject error', e);
       return thunkAPI.rejectWithValue(e.message);
     }
   }
@@ -97,6 +98,9 @@ const authSlice = createSlice({
     resetSignIn: (state) => {
       state.signin = initialState.signin;
     },
+    resetSignUp: (state) => {
+      state.signup = initialState.signup;
+    },
   },
   extraReducers: (builder) => {
     // Sign up
@@ -125,6 +129,7 @@ const authSlice = createSlice({
     builder.addCase(triggerSignin.rejected, (state) => {
       state.signin.status = states.ERROR;
       state.signin.data = {};
+      console.log('rejected');
     });
 
     //   forgot password
@@ -164,4 +169,5 @@ export const {
   login,
   logout,
   resetSignIn,
+  resetSignUp,
 } = authSlice.actions;

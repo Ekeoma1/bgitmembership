@@ -1,9 +1,8 @@
-import React, { useState } from 'react';
+import React from 'react';
 import '../../assets/scss/molecules.scss';
 import { TfiCheck } from 'react-icons/tfi'
 import { LiaTimesSolid } from 'react-icons/lia';
-import useWindowSize from '../../hooks/useWindowSize';
-import { useNavigate } from 'react-router-dom';
+
 
 const RequestCard = ({ item }) => {
 

@@ -9,7 +9,7 @@ import EmptyState from '../components/Molecules/EmptyState';
 
 const Updates = () => {
   const navigate = useNavigate();
-  const [emptyState, setEmptyState] = useState(false);
+  const [emptyState] = useState(false);
   return (
     <div className='updates-wrapper bg-color2'>
       <div className='top-section'>

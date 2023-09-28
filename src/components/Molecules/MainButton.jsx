@@ -1,6 +1,6 @@
 import React from 'react';
 import '../../assets/scss/molecules.scss';
-import loaderIcon from '../../assets/images/loader-icon.svg';
+// import loaderIcon from '../../assets/images/loader-icon.svg';
 // import loaderIcon from '../../assets/images/loading.svg';
 
 const MainButton = ({

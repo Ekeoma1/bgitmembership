@@ -104,7 +104,6 @@ const PasswordResetForm = () => {
 export default PasswordResetForm;
 
 const Email = () => {
-  const dispatch = useDispatch();
   return (
     <Form className='form-card mx-lg-0 mx-auto'>
       <div>

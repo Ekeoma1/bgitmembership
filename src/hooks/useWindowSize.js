@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 // import { isMobile as moduleIsMobile } from 'react-device-detect';
 
 const MAX_MOBILE_SCREEN_WIDTH = 499;

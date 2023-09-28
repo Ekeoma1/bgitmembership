@@ -7,7 +7,6 @@ import request2 from '../../../src/assets/images/request2.svg';
 import request3 from '../../../src/assets/images/request3.svg';
 import PostCard from '../Molecules/PostCard';
 import AuthorImg1 from '../../../src/assets/images/author1.png';
-import AuthorImg2 from '../../../src/assets/images/author2.png';
 import PostImage from '../../../src/assets/images/post-image.png';
 import MainButton from '../Molecules/MainButton';
 

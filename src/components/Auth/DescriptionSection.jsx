@@ -40,7 +40,7 @@ const DescriptionSection = ({ tabChanger, currentTab }) => {
   const [errorMesssage, setErrorMessage] = useState('');
   const [selectedOption, setSelectedOption] = useState({});
   const nextStep = () => {
-    if (desc != 0) {
+    if (desc !== 0) {
       tabChanger(currentTab + 1);
     } else {
       setErrorMessage('Please select an option');
@@ -49,7 +49,7 @@ const DescriptionSection = ({ tabChanger, currentTab }) => {
 
   const selectOption = (id) => {
     setDesc(id);
-    errorMesssage != '' && setErrorMessage('');
+    errorMesssage !== '' && setErrorMessage('');
   };
   const handleSubmit = () => {
     if (

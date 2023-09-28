@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import '../../../src/assets/scss/updates.scss';
 import request1 from '../../../src/assets/images/request1.svg';
 import request2 from '../../../src/assets/images/request2.svg';

@@ -1,5 +1,5 @@
 import apiRoutes from '../../routes/api_routes';
-import { del, get, post, put } from '../../network/https';
+import { get, post, } from '../../network/https';
 
 export default class PostsService {
   //  create post

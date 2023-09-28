@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import { Formik, Form } from 'formik';
 import * as Yup from 'yup';
 import PasswordInput from '../Form-Input/PasswordInput';
@@ -45,7 +45,7 @@ const ChangePassword = () => {
       notify(changePassword.data);
       dispatch(resetChangePassword());
     }
-  }, [changePassword.status]);
+  }, [changePassword.data, changePassword.status]);
   return (
     <div className='settings-card shadow'>
       <div className='header'>Change Your Password</div>

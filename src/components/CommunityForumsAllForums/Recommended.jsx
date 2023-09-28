@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import '../../../src/assets/scss/communityForums.scss';
 import ForumCard from '../Molecules/ForumCard';
 import forumImg1 from '../../../src/assets/images/forumcard1.svg';
