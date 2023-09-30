@@ -80,7 +80,7 @@ const PostCard = ({ post }) => {
     );
     setIdsOfUsersWhoHaveLikedThePost(idsOfUsersWhoHaveLikedThePostTemp);
   }, [post.likedUsers]);
-  console.log(idsOfUsersWhoHaveLikedThePost);
+  // console.log(idsOfUsersWhoHaveLikedThePost);
 
   return (
     <div className='post-card shadow-sm mx-auto'>

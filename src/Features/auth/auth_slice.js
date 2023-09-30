@@ -126,10 +126,10 @@ const authSlice = createSlice({
       state.signin.status = states.SUCCESSFUL;
       state.signin.data = action.payload;
     });
-    builder.addCase(triggerSignin.rejected, (state) => {
+    builder.addCase(triggerSignin.rejected, (state, action) => {
       state.signin.status = states.ERROR;
-      state.signin.data = {};
-      console.log('rejected');
+      state.signin.data = action.payload;
+      console.log('rejected', action.payload);
     });
 
     //   forgot password

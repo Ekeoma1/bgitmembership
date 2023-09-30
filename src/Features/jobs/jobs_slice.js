@@ -132,9 +132,9 @@ const connectionSlice = createSlice({
       state.getAllJobs.status = states.SUCCESSFUL;
       state.getAllJobs.data = action.payload;
     });
-    builder.addCase(triggerGetAllJobs.rejected, (state) => {
+    builder.addCase(triggerGetAllJobs.rejected, (state, action) => {
       state.getAllJobs.status = states.ERROR;
-      state.getAllJobs.data = {};
+      state.getAllJobs.data = action.payload;
     });
 
     // get all inactive jobs

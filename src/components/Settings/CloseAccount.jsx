@@ -26,8 +26,8 @@ const CloseAccount = () => {
           ) : (
             <>
               <img
-                src={getMyProfile.data.imageUrl}
-                alt={`${getMyProfile.data.firstName} ${getMyProfile.data.secondName}`}
+                src={getMyProfile?.data?.imageUrl}
+                alt={`${getMyProfile?.data?.firstName} ${getMyProfile?.data?.secondName}`}
                 className={`${
                   profileImgOnLoadStatus === 'success' ? 'd-block' : 'd-none'
                 }`}
@@ -44,10 +44,10 @@ const CloseAccount = () => {
 
         <div className='profile-info-wrapper'>
           <div className='name'>
-            {getMyProfile.data.firstName} {getMyProfile.data.secondName}
+            {getMyProfile?.data?.firstName} {getMyProfile?.data?.secondName}
           </div>
-          <div className='role'>{getMyProfile.data.profession}</div>
-          <div className='location'>{getMyProfile.data.city}</div>
+          <div className='role'>{getMyProfile?.data?.profession}</div>
+          <div className='location'>{getMyProfile?.data?.city}</div>
         </div>
       </div>
 

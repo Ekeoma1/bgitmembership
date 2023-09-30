@@ -432,9 +432,12 @@
           }
         }
         .btn {
-          margin-top: 6.4rem;
           display: flex;
+          flex-direction: column;
           justify-content: center;
+          width: 19.3rem;
+          margin: 6.4rem auto 0;
+          row-gap: 1rem;
         }
       }
     }
@@ -1032,8 +1035,10 @@
           }
           .btn {
             margin-top: 6.4rem;
-            display: flex;
+            display: none !important;
             justify-content: center;
+            flex-direction: column !important;
+            row-gap: 2rem;
           }
         }
       }
