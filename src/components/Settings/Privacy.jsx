@@ -93,6 +93,17 @@ const Privacy = () => {
       dispatch(triggerGetPrivacySettings());
     }
   }, [updatePrivacySettings.status]);
+  // useEffect(() => {
+  //   if (getPrivacySettings.status === 'successful') {
+  //     const getPrivacySettingsTemp = { ...getPrivacySettings.data };
+  //     const array = privacySettings.map((item) => {
+  //       const x = getPrivacySettingsTemp[item.tag];
+  //       const y = { ...item, selectedValue: x };
+  //       return y;
+  //     });
+  //     setPrivacySettings(array);
+  //   }
+  // }, [getPrivacySettings, privacySettings]);
   useEffect(() => {
     if (getPrivacySettings.status === 'successful') {
       const getPrivacySettingsTemp = { ...getPrivacySettings.data };
@@ -103,7 +114,7 @@ const Privacy = () => {
       });
       setPrivacySettings(array);
     }
-  }, [getPrivacySettings.data, getPrivacySettings.status, privacySettings]);
+  }, [getPrivacySettings]);
 
   useEffect(() => {
     if (getPrivacySettings.status === 'successful') {
@@ -133,7 +144,7 @@ const Privacy = () => {
         setSave(false);
       }
     }
-  }, [privacySettings, getPrivacySettings.status, getPrivacySettings.data]);
+  }, [privacySettings, getPrivacySettings]);
 
   useEffect(() => {
     dispatch(triggerGetPrivacySettings());
@@ -176,7 +187,7 @@ const Privacy = () => {
           onClick={handleSubmit}
           width={'17.5rem'}
           disabled={!save}
-          loading={updatePrivacySettings.status==='loading'}
+          loading={updatePrivacySettings.status === 'loading'}
         />
       </div>
       <ToastContainer />

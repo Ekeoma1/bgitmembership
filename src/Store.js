@@ -27,4 +27,8 @@ export default configureStore({
     socialLinks: socialLinksReducer,
     users: usersReducer,
   },
+  middleware: (getDefaultMiddleware) =>
+    getDefaultMiddleware({
+      serializableCheck: false,
+    }),
 });

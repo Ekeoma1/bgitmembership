@@ -1,8 +1,14 @@
+import moment from 'moment';
 import '../../assets/scss/molecules.scss';
 import Icon from '../Icon';
 import MainButton from './MainButton';
 
-const JobInfoCard = ({ jobSelected, setShowJobInfo, setApply }) => {
+const JobInfoCard = ({
+  jobSelected,
+  setShowJobInfo,
+  setApply,
+  setJobSelected,
+}) => {
   return (
     <div className='job-info'>
       <div className='back' onClick={() => setShowJobInfo(false)}>
@@ -10,15 +16,15 @@ const JobInfoCard = ({ jobSelected, setShowJobInfo, setApply }) => {
       </div>
       <div className='role-hybrid-con'>
         <div className='role-con'>
-          <h4 className='role'>{jobSelected?.role}</h4>
+          <h4 className='role'>{jobSelected?.jobTitle}</h4>
           <p className='company'>{jobSelected?.company}</p>
-          <p className='location'>Canary wharf London</p>
+          <p className='location'>{jobSelected?.location}</p>
         </div>
         <div className='hybrid'>
           <div className='icon'>
             <Icon icon={'tag'} />
           </div>
-          <p>Hybrid</p>
+          <p>{jobSelected?.jobType}</p>
         </div>
       </div>
       <div className='sec-2'>
@@ -28,8 +34,8 @@ const JobInfoCard = ({ jobSelected, setShowJobInfo, setApply }) => {
           </div>
           <div className='info-con'>
             <h5 className='title'>Salary</h5>
-            <h5 className='info'>{`Up to ${jobSelected.currency}${Number(
-              jobSelected.price
+            <h5 className='info'>{`Up to ${Number(
+              jobSelected.salary
             ).toLocaleString()} a year`}</h5>
           </div>
         </div>
@@ -40,8 +46,7 @@ const JobInfoCard = ({ jobSelected, setShowJobInfo, setApply }) => {
           <div className='info-con'>
             <h5 className='title'>Job Type</h5>
             <div className='d-flex items-center justify-between test'>
-              <h5 className='info'>Contract</h5>
-              <h5 className='info'>Part time</h5>
+              <h5 className='info'>{jobSelected?.jobType}</h5>
             </div>
           </div>
         </div>
@@ -51,51 +56,23 @@ const JobInfoCard = ({ jobSelected, setShowJobInfo, setApply }) => {
           </div>
           <div className='info-con'>
             <h5 className='title'>Application Deadline</h5>
-            <h5 className='info'>12th of August 2023</h5>
+            <h5 className='info'>
+              {moment(jobSelected.deadlineDate).format('dddd, MMMM Do YYYY')}
+            </h5>
           </div>
         </div>
       </div>
       <div className='overview'>
         <h3 className='title'>Overview</h3>
-        <p>
-          Corem ipsum dolor sit amet, consectetur adipiscing elit. Etiam eu
-          turpis molestie, dictum est a, mattis tellus. Sed dignissim, metus nec
-          fringilla accumsan, risus sem sollicitudin lacus, ut inte
-        </p>
-        <p>
-          Corem ipsum dolor sit amet, consectetur adipiscing elit. Etiam eu
-          turpis molestie, dictum est a, mattis tellus. Sed dignissim, metus nec
-          fringilla accumsan, risus sem sollicitudin lacus, ut inte
-        </p>
-        <p>Corem ipsum dolor sit amet, consectetur adipiscing elit.</p>
-        <p>Corem ipsum dolor sit amet, consectetur adipiscing elit.</p>
+        {jobSelected.overview}
       </div>
       <div className='job-requirements'>
         <h3 className='title'>Job Requirements</h3>
-        <p>Corem ipsum dolor sit amet, consectetur adipiscing elit</p>
-        <p>
-          Corem ipsum dolor sit amet, consectetur adipiscing elit. Etiam eu
-          turpis molestie, dictum est a, mattis tellus. Sed dignissim, metus nec
-          fringilla accumsan, risus sem sollicitudin lacus, ut inte
-        </p>
-        <p>
-          Corem ipsum dolor sit amet, consectetur adipiscing elit. Etiam eu
-          turpis molestie, dictum est a, mattis tellus. Sed dignissim, metus nec
-          fringilla accumsan, risus sem sollicitudin lacus, ut inte
-        </p>
+        {jobSelected.requirements}
       </div>
       <div className='benefits'>
         <h3 className='title'>Benefits</h3>
-        <p>
-          Corem ipsum dolor sit amet, consectetur adipiscing elit. Etiam eu
-          turpis molestie, dictum est a, mattis tellus. Sed dignissim, metus nec
-          fringilla accumsan, risus sem sollicitudin lacus, ut inte
-        </p>
-        <p>
-          Corem ipsum dolor sit amet, consectetur adipiscing elit. Etiam eu
-          turpis molestie, dictum est a, mattis tellus. Sed dignissim, metus nec
-          fringilla accumsan, risus sem sollicitudin lacus, ut inte
-        </p>
+        {jobSelected.benefits}
       </div>
       <div className='btn'>
         {/* <button
@@ -106,7 +83,7 @@ const JobInfoCard = ({ jobSelected, setShowJobInfo, setApply }) => {
           Apply
         </button> */}
         <MainButton
-          text={'Submit'}
+          text={'Apply'}
           size={'small'}
           onClick={() => setApply(true)}
         />
@@ -114,7 +91,10 @@ const JobInfoCard = ({ jobSelected, setShowJobInfo, setApply }) => {
           text={'Cancel'}
           size={'small'}
           outlined
-          onClick={() => setShowJobInfo(false)}
+          onClick={() => {
+            setShowJobInfo(false);
+            setJobSelected({});
+          }}
         />
         {/* <button
           onClick={() => setShowJobInfo(false)}

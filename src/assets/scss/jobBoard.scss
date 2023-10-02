@@ -48,8 +48,8 @@
             background: #fff;
             box-shadow: 0px 5.969581604003906px 16.714828491210938px 0px
               rgba(8, 15, 52, 0.04);
-            width: 100%;
             padding: 4.5rem 5.1rem;
+            width: 100%;
             display: flex;
             column-gap: 10.0997%;
             position: relative;
@@ -337,7 +337,7 @@
         box-shadow: 0px 6px 5px 0px rgba(0, 0, 0, 0.25);
         padding: 3.6rem 5.3rem;
         width: 93.407%;
-        height: 1500px;
+        // min-height: 1500px;
         .back {
           display: none;
         }
@@ -594,6 +594,10 @@
           font-size: 1.4rem;
           line-height: 100%;
         }
+      }
+      .loader-con {
+        width: 70%;
+        height: 4rem;
       }
       .email {
         color: #000;

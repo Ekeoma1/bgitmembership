@@ -15,13 +15,19 @@ import '../../src/assets/scss/jobBoard.scss';
 import JobInfoCard from '../components/Molecules/JobInfoCard';
 import { useDispatch, useSelector } from 'react-redux';
 import { triggerGetAllJobs } from '../Features/jobs/jobs_slice';
+import JobCard from '../components/Molecules/JobCard';
+import Apply from '../components/Job-Board/Apply';
+import { triggerGetMyProfile } from '../Features/users/users_slice';
+import PostsLoader from '../components/Atoms/skeleton-loaders/home-page/PostsLoader';
+import JobCardsLoader from '../components/Atoms/skeleton-loaders/job-board-page/JobCardsLoader';
 
 const JobBoard = () => {
   const { isMobile } = useWindowSize();
   const { getAllJobs } = useSelector((state) => state.jobs);
+  const { getMyProfile } = useSelector((state) => state.users);
   const [searchValue, setSearchValue] = useState('');
   const [showJobInfo, setShowJobInfo] = useState(false);
-  const [idJobSelected, setIdJobSelected] = useState();
+  const [idJobSelected, setIdJobSelected] = useState('');
   const [jobSelected, setJobSelected] = useState({});
   const [filter, setFilter] = useState(false);
   const [apply, setApply] = useState(false);
@@ -94,7 +100,10 @@ const JobBoard = () => {
   const dispatch = useDispatch();
   useEffect(() => {
     dispatch(triggerGetAllJobs());
+    dispatch(triggerGetMyProfile());
   }, []);
+  console.log('get my profile', getMyProfile);
+
   return (
     <div className='job-board-wrapper'>
       <div className='search-box-section mx-auto'>
@@ -129,7 +138,10 @@ const JobBoard = () => {
             For you
           </button>
           <button
-            onClick={() => setMobileTab('saved jobs')}
+            onClick={() => {
+              setMobileTab('saved jobs');
+              setShowJobInfo(false);
+            }}
             className={`${mobileTab === 'saved jobs' ? 'active' : 'inactive'}`}
           >
             Saved Jobs
@@ -161,49 +173,31 @@ const JobBoard = () => {
                   } 
                   `}
                 >
-                  {jobsData.map((item, index) => (
-                    <div
-                      key={index}
-                      className={`job-card ${
-                        item.id === idJobSelected && 'selected-job'
-                      }`}
-                      onClick={() => {
-                        setShowJobInfo(true);
-                        setIdJobSelected(item.id);
-                        setJobSelected(
-                          jobsData.find((job) => job.id === item.id)
-                        );
-                      }}
-                    >
-                      <div className='img-con'>
-                        <img src={google} alt='' className='' />
-                      </div>
-                      <div className='info'>
-                        <h5 className='role'>{item.role}</h5>
-                        <h5 className='company'>{item.company}</h5>
-                        <p className='location'>{item.location}</p>
-                        <div className='salary-type'>
-                          <div className='salary'>
-                            <Icon icon='money' />
-                            <div className='amount'>
-                              <h5 className='currency'>{item.currency}</h5>
-                              <h5 className='price'>
-                                {Number(item.price).toLocaleString()}
-                              </h5>
-                            </div>
-                          </div>
-                          <div className='type'>
-                            <Icon icon='box' />
-                            <h5 className=''>{item.type}</h5>
-                          </div>
-                        </div>
-                        <h5 className='just-posted'>{item.timePosted}</h5>
-                      </div>
-                      <div className='tag'>
-                        <Icon icon={'tag'} />
-                      </div>
-                    </div>
-                  ))}
+                  {getAllJobs.status === 'loading' ? (
+                    <>
+                      <JobCardsLoader />
+                    </>
+                  ) : getAllJobs.status === 'successful' ? (
+                    <>
+                      {getAllJobs?.data?.jobs?.length === 0 ? (
+                        <></>
+                      ) : (
+                        <>
+                          {getAllJobs?.data?.jobs?.map((job, index) => (
+                            <JobCard
+                              key={index}
+                              job={job}
+                              jobSelected={jobSelected}
+                              setJobSelected={setJobSelected}
+                              setShowJobInfo={setShowJobInfo}
+                            />
+                          ))}
+                        </>
+                      )}
+                    </>
+                  ) : (
+                    <></>
+                  )}
                 </div>
               </div>
             )}
@@ -599,118 +593,13 @@ const JobBoard = () => {
                 jobSelected={jobSelected}
                 setShowJobInfo={setShowJobInfo}
                 setApply={setApply}
+                setJobSelected={setJobSelected}
               />
             )}
           </div>
         </div>
       )}
-      {apply && (
-        <div className='apply'>
-          <div className='sec-1'>
-            <div className='role-job-con'>
-              <div className='role-con'>
-                <h5 className='role'>UX Designer</h5>
-                <h5 className='company'>Google</h5>
-              </div>
-              <div className='job-con'>
-                <p>View full job description</p>
-                <HiOutlineChevronDown className='icon' />
-              </div>
-            </div>
-            <div className='img-wrapper'>
-              <div className='img-con'>
-                <img src={per1} alt='' className='' />
-              </div>
-              <div className='details'>
-                <h5 className='name'>Claire Tomas</h5>
-                <h5 className='role'>UI/UX Designer</h5>
-                <p>London, UK</p>
-              </div>
-            </div>
-          </div>
-          <div className='email-address'>
-            <p className='title'>Email Address</p>
-            <p className='email'>clairejenkins@gmail.com</p>
-          </div>
-          <div className='resume'>
-            <div className='title-wrapper'>
-              <p className='title'>CV/Resume</p>
-              <div className='edit'>
-                <h4 className='edit'>Edit</h4>
-              </div>
-            </div>
-            <div className='resume-box-wrapper'>
-              <div className='resume-box'>
-                <div className='pdf'>PDF</div>
-                <div className='filename-wrapper'>
-                  <div className=''>
-                    <p className='filename'>Claire Jenkins' CV</p>
-                    <p className='filesize'>84kb</p>
-                  </div>
-                </div>
-                <div className='btn-con'>
-                  <MainButton
-                    text={'View'}
-                    size={'small'}
-                    onClick={() => {
-                      console.log('click btn');
-                    }}
-                  />
-                </div>
-              </div>
-            </div>
-          </div>
-          <div className='cover-letter'>
-            <p className='title'>Cover letter (Optional)</p>
-            <div className='btn'>
-              <button>Upload Cover letter</button>
-            </div>
-          </div>
-          <div className='add-qstns'>
-            <p className='title'>Additional questions</p>
-            <div className='qstn'>
-              <p className=''>
-                How many years of UX design experience do you have*
-              </p>
-              <div className='input-wrapper'>
-                <input type='text' className='input-component' />
-              </div>
-            </div>
-            <div className='qstn'>
-              <p className=''>
-                Do you have a right to work in the UK without restrictions*
-              </p>
-              <div className='input-wrapper radio'>
-                <div className='radio-con'>
-                  <input
-                    type='radio'
-                    name='right-to-work'
-                    className='input-component'
-                    id='yes'
-                  />
-                  <label htmlFor='yes' className=''>
-                    Yes
-                  </label>
-                </div>
-                <div className='radio-con'>
-                  <input
-                    type='radio'
-                    name='right-to-work'
-                    className='input-component'
-                    id='no'
-                  />
-                  <label htmlFor='no' className=''>
-                    No
-                  </label>
-                </div>
-              </div>
-            </div>
-          </div>
-          <div className='submit-btn'>
-            <MainButton text={'Submit'} onClick={() => setApply(false)} />
-          </div>
-        </div>
-      )}
+      {apply && <Apply setApply={setApply} jobSelected={jobSelected} />}
     </div>
   );
 };

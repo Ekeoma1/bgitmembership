@@ -32,9 +32,9 @@ const connectionSlice = createSlice({
       state.applyForJob.status = states.SUCCESSFUL;
       state.applyForJob.data = action.payload;
     });
-    builder.addCase(triggerApplyForJob.rejected, (state) => {
+    builder.addCase(triggerApplyForJob.rejected, (state, action) => {
       state.applyForJob.status = states.ERROR;
-      state.applyForJob.data = {};
+      state.applyForJob.data = action.payload;
     });
   },
 });

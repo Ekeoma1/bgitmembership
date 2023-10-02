@@ -95,11 +95,98 @@
       .time:empty {
         height: 1.5rem;
         width: 20%;
-        border-radius: 1.6rem;
-        margin-bottom: 1rem;
       }
     }
   }
+  .card-text {
+    height: 1.8rem;
+    width: 100%;
+    border-radius: 1.6rem;
+    margin-bottom: 2rem;
+  }
+  .card-content {
+    height: 45.8rem;
+    width: 100%;
+    border-radius: 1.6rem;
+  }
+  .card-content2 {
+    height: 8rem;
+    width: 100%;
+    border-radius: 1.6rem;
+    margin-bottom: 1rem;
+  }
+}
+.job-cards-loader {
+  padding: 2.9rem;
+  width: 100%;
+  margin-bottom: 4rem;
+  border-radius: 2.3878rem;
+  // border: 1.194px solid rgba(128, 124, 139, 0.25);
+  background: #fff;
+  box-shadow: 0px 5.969581604003906px 16.714828491210938px 0px
+    rgba(8, 15, 52, 0.04);
+  padding: 4.5rem 5.1rem;
+  display: flex;
+  column-gap: 10.0997%;
+  height: 23.8rem;
+  margin-bottom: 2rem;
+  @media screen and (max-width: '600px') {
+    width: 100%;
+    padding: 2.5rem 2.8rem;
+    display: flex;
+    column-gap: 10.0997%;
+    position: relative;
+    height: 22rem;
+    margin-bottom: 2rem;
+  }
+  .profile-photo {
+    min-width: 5.8rem;
+    min-height: 5.8rem;
+    max-width: 5.8rem;
+    max-height: 5.8rem;
+    border-radius: 50%;
+    overflow: hidden;
+  }
+  .card-details {
+    width: 100%;
+    height: 7rem;
+    .role:empty {
+      width: 70%;
+      height: 2rem;
+      border-radius: 1.6rem;
+      margin-bottom: 1rem;
+    }
+    .company:empty,
+    .location:empty {
+      height: 1.8rem;
+      width: 25%;
+      border-radius: 1.6rem;
+      margin-bottom: 2rem;
+    }
+    .location:empty {
+      height: 1.5rem;
+      width: 50%;
+      margin-bottom: 5rem;
+    }
+    .salary-type {
+      display: flex;
+      column-gap: 4.5rem;
+      margin-bottom: 3.2rem;
+      border-radius: 1.6rem;
+      .salary:empty,
+      .type:empty {
+        height: 1.5rem;
+        width: 30%;
+        border-radius: 1.6rem;
+      }
+    }
+    .just-posted:empty {
+      height: 1.5rem;
+      width: 20%;
+      border-radius: 1.6rem;
+    }
+  }
+
   .card-text {
     height: 1.8rem;
     width: 100%;
@@ -122,7 +209,11 @@
   width: 100%;
   height: 45.8rem;
   border-radius: 1.6rem;
-
+}
+.single-line-loader {
+  width: 100%;
+  height: 100%;
+  border-radius: 1.6rem;
 }
 .skeleton-loader {
   display: block;

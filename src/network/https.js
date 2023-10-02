@@ -3,18 +3,18 @@ const URL = process.env.REACT_APP_URL || '';
 // console.log('axios');
 
 async function ajax({ method = 'GET', url, data, queryParams }) {
-  console.log('data ', data);
+  // console.log('data ', data);
   // console.log('query ', queryParams);
   let result, contentType;
-  if (data?.photo || data?.postImageUrl || data?.postVideoUrl || data?.content) {
+  if (data?.photo || data?.postImageUrl || data?.postVideoUrl || data?.content || data?.resume) {
     contentType = 'multipart/form-data';
   } else {
     contentType = 'application/json';
   }
-  console.log('two');
+  // console.log('two');
 
   if (url === '/Auth/Login' || url === '/Auth/Signup') {
-    console.log('login in or signing up requests');
+    // console.log('login in or signing up requests');
     const axiosInstance = axios.create({
       baseURL: URL,
       headers: {

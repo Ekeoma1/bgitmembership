@@ -9,9 +9,6 @@ const Banner = () => {
       <div className='container'>
         <div className='page-title-wrapper'>
           <div className='title-wrapper'>
-            <button>
-              <HiArrowLeft />
-            </button>
             <h3 className='text-color'>My forumns</h3>
           </div>
         </div>
