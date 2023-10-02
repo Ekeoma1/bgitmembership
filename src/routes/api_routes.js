@@ -34,7 +34,7 @@ const apiRoutes = {
   getPostLikedUsers: '/Posts/GetPostLikedUsers',
   // getAllPosts: '/Posts/GetAllPosts?pageNumber=1&PageSize=10',
   getAllPosts: '/Posts/GetAllPosts',
-  getAllPostsByUserId: '/Posts/GetAllPostsByUserId',
+  getAllPostsByUserId: '/Posts/GetPostsByUserId',
   getMyPosts: '/Posts/GetMyPosts',
   createComment: '/Posts/CreateComment',
 

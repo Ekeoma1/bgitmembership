@@ -9,7 +9,7 @@ import { triggerGetMyProfile } from '../../Features/users/users_slice';
 import UserProfilePhotoLoader from '../Atoms/skeleton-loaders/dashboard-page/UserProfilePhotoLoader';
 import DetailsLoader from '../Atoms/skeleton-loaders/dashboard-page/DetailsLoader';
 
-const ProfileBanner = ({ othersView }) => {
+const ProfileBanner = ({ othersView, data }) => {
   const [actionAcctModal, setActionAcctModal] = useState(false);
   const [individalAcctModal, setIndividualAcctModal] = useState(false);
   const [contentToShow, setContentToShow] = useState(null);
@@ -28,27 +28,21 @@ const ProfileBanner = ({ othersView }) => {
   const hideIndividualAcctModal = () => {
     setIndividualAcctModal(false);
   };
-  const { getMyProfile } = useSelector((state) => state.users);
-
-  const dispatch = useDispatch();
-  useEffect(() => {
-    dispatch(triggerGetMyProfile());
-  }, []);
+  console.log('data', data);
   return (
     <div className='profile-banner-wrapper'>
       <div className='banner-image'></div>
       <div className='profile-image-wrapper'>
         <div className='profile-image'>
-          {getMyProfile.status === 'base' ||
-          getMyProfile.status === 'loading' ? (
+          {data?.status === 'base' || data?.status === 'loading' ? (
             <>
               <UserProfilePhotoLoader />
             </>
-          ) : ( 
+          ) : (
             <>
               <img
-                src={getMyProfile.data?.imageUrl}
-                alt={`${getMyProfile.data?.firstName} ${getMyProfile.data?.secondName}`}
+                src={data?.data?.imageUrl}
+                alt={`${data?.data?.firstName} ${data?.data?.secondName}`}
                 className={`${
                   profileImgOnLoadStatus === 'success' ? 'd-block' : 'd-none'
                 }`}
@@ -65,7 +59,7 @@ const ProfileBanner = ({ othersView }) => {
       </div>
       <div className='profile-details-card'>
         <div className='row'>
-          {getMyProfile.status === 'loading' ? (
+          {data?.status === 'loading' ? (
             <DetailsLoader />
           ) : (
             <>
@@ -73,29 +67,30 @@ const ProfileBanner = ({ othersView }) => {
                 <div className='row gap-md-0 gap-2'>
                   <div className='col-md-6'>
                     <h2 className='profile-name'>
-                      {getMyProfile.data?.firstName}{' '}
-                      {getMyProfile.data?.secondName}
+                      {data?.data?.firstName} {data?.data?.secondName}
                     </h2>
-                    <div className='job'>{getMyProfile.data?.niche}</div>
-                    <div className='job'>{getMyProfile.data?.profession}</div>
+                    <div className='job'>{data?.data?.niche}</div>
+                    <div className='job'>{data?.data?.profession}</div>
                     <div className='other-details location'>
-                      {getMyProfile.data?.city}
+                      {data?.data?.city}
                     </div>
                     <div className='other-details connect'>21 connections</div>
                   </div>
                   <div className='col-md-6'>
                     <div className='tag-header'>Tags</div>
                     <div className='d-flex gap-2 flex-wrap align-items-center'>
-                      {getMyProfile.data?.tags?.length > 0 ? (
-                        getMyProfile.data?.tags?.map((tag,index) => (
-                          <div key={index} className='other-details tag-names'>{tag}</div>
+                      {data?.data?.tags?.length > 0 ? (
+                        data?.data?.tags?.map((tag, index) => (
+                          <div key={index} className='other-details tag-names'>
+                            {tag}
+                          </div>
                         ))
                       ) : (
                         <div className='other-details tag-names'>
                           You have no tags
                         </div>
                       )}
-                      {!othersView && getMyProfile.data?.tags?.length > 3 && (
+                      {!othersView && data.data?.tags?.length > 3 && (
                         <div className='see-more-btn d-lg-flex d-none'>
                           see 2 more
                         </div>
@@ -103,9 +98,11 @@ const ProfileBanner = ({ othersView }) => {
                     </div>
                     <div className='tag-header mt-2'>Featured Skill</div>
                     <div className='d-flex gap-3 flex-wrap align-items-center'>
-                      {getMyProfile.data?.skills?.length > 0 ? (
-                        getMyProfile.data?.skills?.map((skill,index) => (
-                          <div key={index} className='other-details tag-names'>{skill}</div>
+                      {data?.data?.skills?.length > 0 ? (
+                        data?.data?.skills?.map((skill, index) => (
+                          <div key={index} className='other-details tag-names'>
+                            {skill}
+                          </div>
                         ))
                       ) : (
                         <div className='other-details tag-names'>
