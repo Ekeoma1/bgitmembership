@@ -1,6 +1,5 @@
 import React from 'react';
 import '../../../src/assets/scss/communityForums.scss';
-import { HiArrowLeft } from 'react-icons/hi';
 import backgroundImage1 from '../../../src/assets/images/the-girls.svg';
 
 const Banner = () => {

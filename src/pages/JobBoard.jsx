@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import SearchBox from '../components/Molecules/SearchBox';
 import google from '../../src/assets/images/google.svg';
-import per1 from '../../src/assets/images/per1.svg';
 import Icon from '../components/Icon';
 import {
   HiOutlineChevronDown,
@@ -10,7 +9,6 @@ import {
 } from 'react-icons/hi';
 import { VscSettings } from 'react-icons/vsc';
 import useWindowSize from '../hooks/useWindowSize';
-import MainButton from '../components/Molecules/MainButton';
 import '../../src/assets/scss/jobBoard.scss';
 import JobInfoCard from '../components/Molecules/JobInfoCard';
 import { useDispatch, useSelector } from 'react-redux';
@@ -18,7 +16,6 @@ import { triggerGetAllJobs } from '../Features/jobs/jobs_slice';
 import JobCard from '../components/Molecules/JobCard';
 import Apply from '../components/Job-Board/Apply';
 import { triggerGetMyProfile } from '../Features/users/users_slice';
-import PostsLoader from '../components/Atoms/skeleton-loaders/home-page/PostsLoader';
 import JobCardsLoader from '../components/Atoms/skeleton-loaders/job-board-page/JobCardsLoader';
 
 const JobBoard = () => {
@@ -27,7 +24,6 @@ const JobBoard = () => {
   const { getMyProfile } = useSelector((state) => state.users);
   const [searchValue, setSearchValue] = useState('');
   const [showJobInfo, setShowJobInfo] = useState(false);
-  const [idJobSelected, setIdJobSelected] = useState('');
   const [jobSelected, setJobSelected] = useState({});
   const [filter, setFilter] = useState(false);
   const [apply, setApply] = useState(false);
