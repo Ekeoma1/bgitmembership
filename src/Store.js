@@ -11,6 +11,7 @@ import postsReducer from './Features/posts/posts_slice';
 import reportsReducer from './Features/reports/reports_slice';
 import socialLinksReducer from './Features/social-links/social_links_slice';
 import usersReducer from './Features/users/users_slice';
+import forumsReducer from './Features/forums/forums_slice';
 
 export default configureStore({
   reducer: {
@@ -26,6 +27,7 @@ export default configureStore({
     reports: reportsReducer,
     socialLinks: socialLinksReducer,
     users: usersReducer,
+    forums: forumsReducer,
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({

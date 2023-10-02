@@ -58,6 +58,10 @@ const apiRoutes = {
   getPrivacySettings: '/Users/GetPrivacySettings',
   updatePrivacySettings: '/Users/UpdatePrivacySettings',
   closeAccount: '/Users/CloseAccount',
+
+  // users
+  getAllForums: '/Forums/GetAllForums',
+
 };
 
 export default apiRoutes;

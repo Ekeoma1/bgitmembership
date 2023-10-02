@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import '../assets/scss/home.scss';
 import Post from '../components/home/Post';
 import CommunityForums from '../components/home/CommunityForums';
@@ -7,12 +7,18 @@ import Icon from '../components/Icon';
 import Resources from '../components/home/Resources';
 import { useDispatch } from 'react-redux';
 import { triggerGetMyProfile } from '../Features/users/users_slice';
+import { triggerGetAllForums } from '../Features/forums/forums_slice';
 
 const Home = () => {
+  const [pageNumber] = useState(1);
+  const [pageSize] = useState(10);
   const dispatch = useDispatch();
   useEffect(() => {
     dispatch(triggerGetMyProfile());
+    const data = { queryParams: { pageNumber, pageSize } };
+    dispatch(triggerGetAllForums(data));
   }, []);
+
   return (
     <div className='home-wrapper'>
       <div className='container'>
