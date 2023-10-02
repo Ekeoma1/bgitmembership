@@ -10,22 +10,22 @@ const SearchBox = ({
   otherKeysPressed,
 }) => {
   const inputContainer = useRef(null);
-  useEffect(() => {
-    const listener = (event) => {
-      if (event.key === 'Enter') {
-        event.preventDefault();
-        enterKeyPressed();
-      } else {
-        otherKeysPressed();
-      }
-    };
-    if (inputContainer.current) {
-      inputContainer.current.addEventListener('keydown', listener);
-      return () => {
-        document.removeEventListener('keydown', listener);
-      };
-    }
-  }, [enterKeyPressed, otherKeysPressed]);
+  // useEffect(() => {
+  //   const listener = (event) => {
+  //     if (event.key === 'Enter') {
+  //       event.preventDefault();
+  //       enterKeyPressed();
+  //     } else {
+  //       otherKeysPressed();
+  //     }
+  //   };
+  //   if (inputContainer.current) {
+  //     inputContainer.current.addEventListener('keydown', listener);
+  //     return () => {
+  //       document.removeEventListener('keydown', listener);
+  //     };
+  //   }
+  // }, [enterKeyPressed, otherKeysPressed]);
 
   return (
     <div className='search-box-component'>

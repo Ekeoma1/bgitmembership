@@ -6,6 +6,7 @@ export default class UsersService {
     const response = await get({
       url: apiRoutes.getUserProfileById,
       data: { ...data },
+      queryParams: data.queryParams,
     });
     return response;
   }

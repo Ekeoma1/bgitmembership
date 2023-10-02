@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import Icon from '../components/Icon';
 import '../assets/scss/dashboard.scss';
 import ProfileBanner from '../components/Dashboard/ProfileBanner';
@@ -9,11 +9,23 @@ import Resources from '../components/Dashboard/Resources';
 import Posts from '../components/Dashboard/Posts';
 import { Link, useNavigate } from 'react-router-dom';
 import Member from '../components/Dashboard/Member';
+import { useDispatch, useSelector } from 'react-redux';
+import { triggerGetMyProfile } from '../Features/users/users_slice';
+import { triggerGetAllPosts } from '../Features/posts/posts_slice';
 
 const Dashboard = () => {
   const navigate = useNavigate();
- 
-
+  const dispatch = useDispatch();
+  const { getMyProfile } = useSelector((state) => state.users);
+  const { getAllPosts } = useSelector((state) => state.posts);
+  const [pageNumber] = useState(1);
+  const [pageSize] = useState(10);
+  useEffect(() => {
+    dispatch(triggerGetMyProfile());
+    const data = { queryParams: { pageNumber, pageSize } };
+    dispatch(triggerGetAllPosts(data));
+  }, []);
+  console.log('getAllPosts', getAllPosts);
   return (
     <div className='user-dashboard'>
       <div className='container'>
@@ -24,7 +36,7 @@ const Dashboard = () => {
         </div>
         <div className='row mt-5'>
           <div className='col-lg-9 col-12'>
-            <ProfileBanner />
+            <ProfileBanner data={getMyProfile} />
             <div className='dashboard-card d-lg-none'>
               <div className='text-end mb-2'>
                 <Link className='see-more-btn'>See more</Link>
@@ -51,7 +63,7 @@ const Dashboard = () => {
                 </div>
               </div>
             </div>
-            <BioCard />
+            <BioCard data={getMyProfile} />
             <SocialLinksCard />
             <div className='dashboard-card d-lg-none'>
               <div className='text-end mb-2'>
@@ -61,7 +73,7 @@ const Dashboard = () => {
             </div>
             <Group />
             <Resources />
-            <Posts />
+            <Posts data={getAllPosts} />
           </div>
           <div className='col-lg-3 d-lg-block d-none'>
             <Link className='' to='#'>
