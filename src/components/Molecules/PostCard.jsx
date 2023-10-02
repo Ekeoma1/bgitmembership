@@ -58,7 +58,6 @@ const PostCard = ({ post }) => {
     const idsOfUsersWhoHaveLikedThePostTemp = post.likedUsers.map((item) => item.userId);
     setIdsOfUsersWhoHaveLikedThePost(idsOfUsersWhoHaveLikedThePostTemp);
   }, [post.likedUsers]);
-  console.log(idsOfUsersWhoHaveLikedThePost);
 
   return (
     <div className="post-card shadow-sm mx-auto">
