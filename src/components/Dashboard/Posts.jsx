@@ -3,28 +3,6 @@ import { Link } from 'react-router-dom';
 import postImg from '../../assets/images/author1.png';
 import Icon from '../Icon';
 
-// const postList = [
-//     {
-//         author: "Claire Jenkins",
-//         content: "Hi all, as I have just joined I would love to connect with other people in the UX/UI field. I am keen to find a community of link minded people to share resources and support!";
-//         time: "15 minutes ago",
-//         image: postImg
-//     },
-//     {
-//         author: "Claire Jenkins",
-//         content: "Hi all, as I have just joined I would love to connect with other people in the UX/UI field. I am keen to find a community of link minded people to share resources and support!";
-//         time: "15 minutes ago",
-//         image: postImg
-//     },
-
-//     {
-//         author: "Claire Jenkins",
-//         content: "Hi all, as I have just joined I would love to connect with other people in the UX/UI field. I am keen to find a community of link minded people to share resources and support!";
-//         time: "15 minutes ago",
-//         image: postImg
-//     },
-// ]
-
 const Posts = ({ data }) => {
   return (
     <div className='dashboard-card post-wrapper'>

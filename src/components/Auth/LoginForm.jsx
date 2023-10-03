@@ -8,6 +8,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import {
   addSignUpFormData,
   login,
+  resetSignIn,
   triggerSignin,
 } from '../../Features/auth/auth_slice';
 import MainButton from '../Molecules/MainButton';
@@ -46,10 +47,11 @@ const LoginForm = ({ forLogin, regFirstStep }) => {
           status: 'error',
           message: auth.signin?.data,
         });
+        dispatch(resetSignIn());
       }
     }
   }, [auth.signin.data, auth.signin.status]);
-  
+
   return (
     <>
       <Formik

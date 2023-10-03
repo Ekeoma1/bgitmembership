@@ -13,7 +13,7 @@ async function ajax({ method = 'GET', url, data, queryParams }) {
   }
   // console.log('two');
 
-  if (url === '/Auth/Login' || url === '/Auth/Signup') {
+  if (url === '/Auth/Login' || url === '/Auth/SignUp') {
     // console.log('login in or signing up requests');
     const axiosInstance = axios.create({
       baseURL: URL,
