@@ -13,28 +13,17 @@ import PostsLoader from '../Atoms/skeleton-loaders/home-page/PostsLoader';
 import ForumDetailsLoader from '../Atoms/skeleton-loaders/ForumDetailsLoader';
 import { triggerGetAllForums } from '../../Features/forums/forums_slice';
 import ForumCardsLoader from '../Atoms/skeleton-loaders/ForumCardsLoader';
-import { Link } from 'react-router-dom';
+import { Link, useParams } from 'react-router-dom';
 import Icon from '../Icon';
 
 const ForumContent = ({ forum }) => {
-  const communities = [
-    {
-      community_img: forumImg1,
-      community_name: 'UX/UI Design',
-      info: 'Dorem ipsum dolor sit amet consectetur. Urus fringilla mi sier. Lorem ipsu consectetur. Urus fringilla mi sier. Lorem ipsu Urus fringilla mi sier. Lorem ipsu consectetur. Urus fringilla mi sier. Lorem ipsu Urus fringilla mi sier. Lorem ipsu consectetur. Urus fringilla mi sier. Lorem ipsu',
-    },
-    {
-      community_img: forumImg2,
-      community_name: 'Engineer Girls',
-      info: 'Lorem ipsum dolor sit amet consectetur. Urus fringilla mi sier. Lorem ipsu consectetur. Urus fringilla mi sier. Lorem ipsu Urus fringilla mi sier. Lorem ipsu consectetur. Urus fringilla mi sier. Lorem ipsu Urus fringilla mi sier. Lorem ipsu consectetur. Urus fringilla mi sier. Lorem ipsu',
-    },
-  ];
+   const params = useParams();
   const { getAllForums } = useSelector((state) => state.forums);
   const [relatedGroups, setRelatedGroups] = useState([]);
   useEffect(() => {
     if (getAllForums.status === 'successful') {
       setRelatedGroups(
-        getAllForums.data.filter((item) => item.forumId !== forum.forumId)
+        getAllForums.data?.filter((item) => item.forumId !== params.forumId)
       );
     }
   }, [getAllForums]);
@@ -110,13 +99,13 @@ const ForumContent = ({ forum }) => {
                 </div>
               ) : getAllForums.status === 'successful' ? (
                 <>
-                  {getAllForums.data.length === 0 ? (
+                  {getAllForums.data?.length === 0 ? (
                     <>
                       <div className='empty-state'>Empty forums</div>
                     </>
                   ) : (
                     <>
-                      {relatedGroups.slice(0, 2).map((forum, index) => {
+                      {relatedGroups?.slice(0, 2).map((forum, index) => {
                         return <ForumCard key={index} forum={forum} />;
                       })}
                     </>

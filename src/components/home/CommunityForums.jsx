@@ -25,7 +25,7 @@ const CommunityForums = () => {
           </>
         ) : getAllForums.status === 'successful' ? (
           <>
-            {getAllForums.data.length === 0 ? (
+            {getAllForums.data?.length === 0 ? (
               <>
                 <div className='empty-state'>Empty forums</div>
               </>

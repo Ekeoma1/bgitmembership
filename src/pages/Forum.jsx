@@ -20,7 +20,7 @@ const Forum = () => {
   useEffect(() => {
     const data = { queryParams: { pageNumber, pageSize } };
     dispatch(triggerGetAllForums(data));
-  }, []);
+  }, [params]);
   useEffect(() => {
     if (getAllForums.status === 'successful') {
       setForum(
