@@ -13,6 +13,8 @@ import PostsLoader from '../Atoms/skeleton-loaders/home-page/PostsLoader';
 import ForumDetailsLoader from '../Atoms/skeleton-loaders/ForumDetailsLoader';
 import { triggerGetAllForums } from '../../Features/forums/forums_slice';
 import ForumCardsLoader from '../Atoms/skeleton-loaders/ForumCardsLoader';
+import { Link } from 'react-router-dom';
+import Icon from '../Icon';
 
 const ForumContent = ({ forum }) => {
   const communities = [
@@ -28,6 +30,14 @@ const ForumContent = ({ forum }) => {
     },
   ];
   const { getAllForums } = useSelector((state) => state.forums);
+  const [relatedGroups, setRelatedGroups] = useState([]);
+  useEffect(() => {
+    if (getAllForums.status === 'successful') {
+      setRelatedGroups(
+        getAllForums.data.filter((item) => item.forumId !== forum.forumId)
+      );
+    }
+  }, [getAllForums]);
 
   return (
     <div className='forum-content-wrapper bg-color'>
@@ -106,7 +116,7 @@ const ForumContent = ({ forum }) => {
                     </>
                   ) : (
                     <>
-                      {getAllForums?.data?.slice(0, 3).map((forum, index) => {
+                      {relatedGroups.slice(0, 2).map((forum, index) => {
                         return <ForumCard key={index} forum={forum} />;
                       })}
                     </>
@@ -115,20 +125,15 @@ const ForumContent = ({ forum }) => {
               ) : (
                 <></>
               )}
-              {/* {communities.map((forum, index) => (
-                
-              ))} */}
             </div>
-
-            {/* {getAllForums.status === 'loading' ? (
-              <>
-                <ForumCardsLoader />
-              </>
-            ) : getAllForums.status === 'successful' ? (
-             
-            ) : (
-              <></>
-            )} */}
+            <div className='text-center my-4'>
+              <Link
+                to='/community-forums'
+                className='sec-btn mx-auto c-gap-5 smallert-text added-width d-flex align-items-center justify-content-center'
+              >
+                <span>See More</span> <Icon icon='arrowRight' />
+              </Link>
+            </div>
           </div>
         </div>
       </div>
