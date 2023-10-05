@@ -1,12 +1,20 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import Icon from '../Icon';
 import { Link } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import ForumCardsLoader from '../Atoms/skeleton-loaders/ForumCardsLoader';
+import { useDispatch } from 'react-redux';
+import { triggerGetAllForums } from '../../Features/forums/forums_slice';
 
 const CommunityForums = () => {
   const { getAllForums } = useSelector((state) => state.forums);
-  console.log('forums', getAllForums);
+  const [pageNumber] = useState(1);
+  const [pageSize] = useState(10);
+  const dispatch = useDispatch();
+  useEffect(() => {
+    const data = { queryParams: { pageNumber, pageSize } };
+    dispatch(triggerGetAllForums(data));
+  }, []);
   return (
     <div className='community-forum-wrapper'>
       <div className='community-forum-card-wrapper shadow-sm'>

@@ -1,44 +1,22 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import '../../../src/assets/scss/communityForums.scss';
-import forumImg1 from '../../../src/assets/images/forumcard1.svg';
-import forumImg2 from '../../../src/assets/images/forumcard2.svg';
-import forumImg3 from '../../../src/assets/images/forumcard3.svg';
-import forumImg4 from '../../../src/assets/images/forumcard4.svg';
 
 import { useNavigate } from 'react-router-dom';
 import ForumCard from '../Molecules/ForumCard';
 import Carousel from 'react-multi-carousel';
 import 'react-multi-carousel/lib/styles.css';
+import { useDispatch, useSelector } from 'react-redux';
+import { triggerGetAllForums } from '../../Features/forums/forums_slice';
 const SuggestedForums = () => {
   const navigate = useNavigate();
-
-  const communities = [
-    {
-      community_img: forumImg1,
-      community_name: 'UX/UI Design',
-      info: 'Dorem ipsum dolor sit amet consectetur. Urus fringilla mi. Lorem ipsu consectetur. Urus fringilla mi. Lorem ipsu Urus fringilla mi. Lorem ipsu consectetur. Urus fringilla mi. Lorem ipsu Urus fringilla mi. Lorem ipsu consectetur. Urus fringilla mi. Lorem ipsu',
-    },
-    {
-      community_img: forumImg2,
-      community_name: 'Engineer Girls',
-      info: 'Lorem ipsum dolor sit amet consectetur. Urus fringilla mi. Lorem ipsu consectetur. Urus fringilla mi. Lorem ipsu Urus fringilla mi. Lorem ipsu consectetur. Urus fringilla mi. Lorem ipsu Urus fringilla mi. Lorem ipsu consectetur. Urus fringilla mi. Lorem ipsu',
-    },
-    {
-      community_img: forumImg3,
-      community_name: 'Data Babes 😍👩🏾‍💻',
-      info: 'Lorem ipsum dolor sit amet consectetur. Urus fringilla mi. Lorem ipsu consectetur. Urus fringilla mi. Lorem ipsu Urus fringilla mi. Lorem ipsu consectetur. Urus fringilla mi. Lorem ipsu Urus fringilla mi. Lorem ipsu consectetur. Urus fringilla mi. Lorem ipsu',
-    },
-    {
-      community_img: forumImg4,
-      community_name: 'Data Babes 😍👩🏾‍💻',
-      info: 'Lorem ipsum dolor sit amet consectetur. Urus fringilla mi. Lorem ipsu consectetur. Urus fringilla mi. Lorem ipsu Urus fringilla mi. Lorem ipsu consectetur. Urus fringilla mi. Lorem ipsu Urus fringilla mi. Lorem ipsu consectetur. Urus fringilla mi. Lorem ipsu',
-    },
-    {
-      community_img: forumImg1,
-      community_name: 'Data Babes 😍👩🏾‍💻',
-      info: 'Lorem ipsum dolor sit amet consectetur. Urus fringilla mi. Lorem ipsu consectetur. Urus fringilla mi. Lorem ipsu Urus fringilla mi. Lorem ipsu consectetur. Urus fringilla mi. Lorem ipsu Urus fringilla mi. Lorem ipsu consectetur. Urus fringilla mi. Lorem ipsu',
-    },
-  ];
+  const { getAllForums } = useSelector((state) => state.forums);
+  const [pageNumber] = useState(1);
+  const [pageSize] = useState(10);
+  const dispatch = useDispatch();
+  useEffect(() => {
+    const data = { queryParams: { pageNumber, pageSize } };
+    dispatch(triggerGetAllForums(data));
+  }, []);
   const responsive = {
     desktop: {
       breakpoint: { max: 4000, min: 1024 },
@@ -64,11 +42,28 @@ const SuggestedForums = () => {
             </button>
           </div>
           <div className='forums-cards-wrapper'>
-            <Carousel responsive={responsive}>
-              {communities.map((forum, index) => (
-                <ForumCard key={index} forum={forum} />
-              ))}
-            </Carousel>
+            {getAllForums.status === 'base' ||
+            getAllForums.status === 'loading' ? (
+              <></>
+            ) : getAllForums.status === 'successful' ? (
+              <>
+                {getAllForums.data.length === 0 ? (
+                  <></>
+                ) : (
+                  <>
+                    <Carousel responsive={responsive}>
+                      {getAllForums.data.map((forum, index) => (
+                        <ForumCard key={index} forum={forum} />
+                      ))}
+                    </Carousel>
+                  </>
+                )}
+              </>
+            ) : getAllForums.status === 'error' ? (
+              <></>
+            ) : (
+              <></>
+            )}
           </div>
         </div>
       </div>

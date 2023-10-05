@@ -15,6 +15,7 @@ import { ImCancelCircle } from 'react-icons/im';
 const Banner = ({
   setJoinForumRequestSuccessful,
   joinForumRequestSuccessful,
+  forum,
 }) => {
   const navigate = useNavigate();
   const [requestSent, setRequestSent] = useState(false);
@@ -48,7 +49,7 @@ const Banner = ({
             <HiArrowLeft />
           </div>
           <h2>
-            UX/UI Design Forum{' '}
+            {forum?.forumName ?? ''}
             <img src={msg} alt='message-icon' className='icon-color2' />
           </h2>
           <div className='banner-bottom'>

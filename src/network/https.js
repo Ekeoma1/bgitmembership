@@ -67,7 +67,7 @@ async function ajax({ method = 'GET', url, data, queryParams }) {
         })
         .catch((err) => {
           console.log('axios errp', err);
-          result = err.response;
+         result = err.response?.data;
         });
       return result;
     }

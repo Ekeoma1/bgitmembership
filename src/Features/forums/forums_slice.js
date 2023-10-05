@@ -21,7 +21,7 @@ export const triggerGetAllForums = createAsyncThunk(
   }
 );
 
-const usersSlice = createSlice({
+const forumsSlice = createSlice({
   name: 'forums',
   initialState,
   reducers: {},
@@ -42,5 +42,5 @@ const usersSlice = createSlice({
   },
 });
 
-export default usersSlice.reducer;
+export default forumsSlice.reducer;
 

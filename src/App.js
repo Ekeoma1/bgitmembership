@@ -85,7 +85,7 @@ function App() {
               element: <CommunityForumsAllForums />,
             },
             {
-              path: "community-forums/forum",
+              path: "community-forums/forum/:forumId",
               element: <Forum />,
             },
             {

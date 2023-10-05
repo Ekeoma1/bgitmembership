@@ -5,7 +5,7 @@ import Post from '../home/Post';
 import CommunityForums from '../home/CommunityForums';
 import Info from './Info';
 
-const ForumContentMain = () => {
+const ForumContentMain = ({ forum }) => {
   return (
     <div className='forum-content-main-wrapper'>
       <div className='container'>

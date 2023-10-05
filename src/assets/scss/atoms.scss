@@ -1,6 +1,25 @@
 @import 'colors';
 @import 'index';
+.skeleton-loader {
+  display: block;
+  background-color: #bdc3c7;
+  animation-name: skeletonAnimation;
+  animation-duration: 1.5s;
+  animation-iteration-count: infinite;
+  animation-timing-function: linear;
+}
 
+@keyframes skeletonAnimation {
+  0% {
+    opacity: 0.8;
+  }
+  50% {
+    opacity: 0.4;
+  }
+  100% {
+    opacity: 0.8;
+  }
+}
 .tag {
   padding: 10px;
   display: inline-block;
@@ -251,7 +270,6 @@
     margin-bottom: 0.51rem;
     margin: 0 auto;
   }
-
 }
 .media-loader {
   width: 100%;
@@ -263,23 +281,96 @@
   height: 100%;
   border-radius: 1.6rem;
 }
-.skeleton-loader {
-  display: block;
-  background-color: #bdc3c7;
-  animation-name: skeletonAnimation;
-  animation-duration: 1.5s;
-  animation-iteration-count: infinite;
-  animation-timing-function: linear;
-}
+.double-line-loader {
+  width: 100%;
+  height: 100%;
 
-@keyframes skeletonAnimation {
-  0% {
-    opacity: 0.8;
+  .line-1 {
+    width: 90%;
+    height: 50%;
+    border-radius: 1.6rem;
+    margin-bottom: 0.5rem;
   }
-  50% {
-    opacity: 0.4;
+  .line-2 {
+    width: 70%;
+    height: 50%;
+    border-radius: 1.6rem;
   }
-  100% {
-    opacity: 0.8;
+}
+.forum-details-loader {
+  width: 100%;
+  margin-bottom: 3rem;
+
+  .title {
+    width: 10rem;
+    height: 2rem;
+    border-radius: 1.6rem;
+    margin-bottom: 1rem;
+  }
+  .about,
+  .info {
+    margin-bottom: 3rem;
+  }
+  .side-wrapper {
+    width: 40%;
+    margin-left: auto;
+    @media screen and (max-width: '500px') {
+      width: 100%;
+    }
+  }
+  .admin {
+    margin-top: 10rem;
+    .admin-details {
+      display: flex;
+      align-items: flex-start;
+      column-gap: 2rem;
+      .admin-photo {
+        min-height: 7.192rem;
+        min-width: 7.192rem;
+        border-radius: 50%;
+        overflow: hidden;
+      }
+      .info {
+        width: 100%;
+      }
+    }
+  }
+  .wrapper {
+    margin-bottom: 2rem;
+    .line-1,
+    .line-2,
+    .line-3,
+    .line-4,
+    .line-5,
+    .line-6,
+    .line-7 {
+      height: 2rem;
+      border-radius: 1.6rem;
+      margin-bottom: 0.5rem;
+    }
+    .line-1 {
+      width: 90%;
+    }
+    .line-2 {
+      width: 70%;
+    }
+    .line-3 {
+      width: 50%;
+    }
+    .line-4 {
+      width: 70%;
+    }
+    .line-5 {
+      width: 40%;
+    }
+    .line-6 {
+      width: 100%;
+      @media screen and (max-width: '500px') {
+        width: 80%;
+      }
+    }
+    .line-7 {
+      width: 30%;
+    }
   }
 }
