@@ -1,4 +1,4 @@
-import {  useState } from 'react';
+import { useEffect, useState } from 'react';
 import '../assets/scss/navFooter.scss';
 import Logo from '../assets/images/logo.png';
 import { Link, NavLink } from 'react-router-dom';
@@ -11,6 +11,7 @@ import { FiChevronDown } from 'react-icons/fi';
 import { logout, resetSignIn } from '../Features/auth/auth_slice';
 import OutsideClickHandler from 'react-outside-click-handler';
 import { UserProfilePhotoLoader2 } from './Atoms/skeleton-loaders/dashboard-page/UserProfilePhotoLoader';
+import { triggerGetMyProfile } from '../Features/users/users_slice';
 
 const Navbar = () => {
   // const { toggleTheme, theme } = useContext(AppContext);
@@ -36,6 +37,9 @@ const Navbar = () => {
   const hideDropdown = () => {
     setShowDropdown(false);
   };
+  useEffect(() => {
+    dispatch(triggerGetMyProfile());
+  }, []);
   return (
     <nav className=''>
       <div className='container'>

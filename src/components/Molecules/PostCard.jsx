@@ -1,21 +1,26 @@
-import React, { useEffect, useState } from "react";
-import Icon from "../Icon";
-import "../../assets/scss/molecules.scss";
-import { useNavigate } from "react-router-dom";
-import moment from "moment";
-import { UserProfilePhotoLoader2 } from "../Atoms/skeleton-loaders/dashboard-page/UserProfilePhotoLoader";
-import MediaLoader from "../Atoms/skeleton-loaders/home-page/MediaLoader";
-import { triggerToggleLikePost } from "../../Features/posts/posts_slice";
-import { useDispatch, useSelector } from "react-redux";
+import React, { useEffect, useState } from 'react';
+import Icon from '../Icon';
+import '../../assets/scss/molecules.scss';
+import { useNavigate } from 'react-router-dom';
+import moment from 'moment';
+import { UserProfilePhotoLoader2 } from '../Atoms/skeleton-loaders/dashboard-page/UserProfilePhotoLoader';
+import MediaLoader from '../Atoms/skeleton-loaders/home-page/MediaLoader';
+import {
+  resetToggleLikePost,
+  triggerToggleLikePost,
+} from '../../Features/posts/posts_slice';
+import { useDispatch, useSelector } from 'react-redux';
 const PostCard = ({ post }) => {
+  // console.log('postsss', post);
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const { toggleLikePost } = useSelector((state) => state.posts);
   const { getMyProfile } = useSelector((state) => state.users);
-  const [profileImgOnLoadStatus, setProfileImgOnLoadStatus] = useState("base");
-  const [postImgOnLoadStatus, setPostImgOnLoadStatus] = useState("base");
-  const [postVideoOnLoadStatus, setPostVideoOnLoadStatus] = useState("base");
-  const [idsOfUsersWhoHaveLikedThePost, setIdsOfUsersWhoHaveLikedThePost] = useState([]);
+  const [profileImgOnLoadStatus, setProfileImgOnLoadStatus] = useState('base');
+  const [postImgOnLoadStatus, setPostImgOnLoadStatus] = useState('base');
+  const [postVideoOnLoadStatus, setPostVideoOnLoadStatus] = useState('base');
+  const [idsOfUsersWhoHaveLikedThePost, setIdsOfUsersWhoHaveLikedThePost] =
+    useState([]);
   const [liked, setLiked] = useState(false);
   const timeago = moment(post?.createdDate).fromNow();
 
@@ -26,39 +31,68 @@ const PostCard = ({ post }) => {
   };
 
   useEffect(() => {
-    if (toggleLikePost.status === "successful") {
-      if (toggleLikePost.data.postLiked === true && toggleLikePost.data.postId === post.postId && Array.isArray(idsOfUsersWhoHaveLikedThePost)) {
-        // console.log('true post id', toggleLikePost.data.postId);
-        let idsOfUsersWhoHaveLikedThePostTemp = [...idsOfUsersWhoHaveLikedThePost];
-        const filter = idsOfUsersWhoHaveLikedThePostTemp.filter((item) => item.postId !== getMyProfile.data.userId);
-        let idsOfUsersWhoHaveLikedThePostTemp2 = [...filter, getMyProfile.data.userId];
+    if (toggleLikePost.status === 'successful') {
+      if (
+        toggleLikePost.data.postLiked === true &&
+        toggleLikePost.data.postId === post.postId &&
+        Array.isArray(idsOfUsersWhoHaveLikedThePost)
+      ) {
+        let idsOfUsersWhoHaveLikedThePostTemp = [
+          ...idsOfUsersWhoHaveLikedThePost,
+        ];
+        const filter = idsOfUsersWhoHaveLikedThePostTemp.filter(
+          (item) => item.postId !== getMyProfile.data.userId
+        );
+        let idsOfUsersWhoHaveLikedThePostTemp2 = [
+          ...filter,
+          getMyProfile.data.userId,
+        ];
         setIdsOfUsersWhoHaveLikedThePost(idsOfUsersWhoHaveLikedThePostTemp2);
+        dispatch(resetToggleLikePost());
       } else if (
         toggleLikePost.data.postLiked === false &&
         toggleLikePost.data.postId === post.postId &&
         Array.isArray(idsOfUsersWhoHaveLikedThePost)
       ) {
-        // console.log('false post id', toggleLikePost.data.postId);
-        let idsOfUsersWhoHaveLikedThePostTemp = [...idsOfUsersWhoHaveLikedThePost];
+        let idsOfUsersWhoHaveLikedThePostTemp = [
+          ...idsOfUsersWhoHaveLikedThePost,
+        ];
 
-        const idsOfUsersWhoHaveLikedThePostTemp2 = idsOfUsersWhoHaveLikedThePostTemp.filter((item) => item !== getMyProfile.data.userId);
+        const idsOfUsersWhoHaveLikedThePostTemp2 =
+          idsOfUsersWhoHaveLikedThePostTemp.filter(
+            (item) => item !== getMyProfile.data.userId
+          );
         setIdsOfUsersWhoHaveLikedThePost(idsOfUsersWhoHaveLikedThePostTemp2);
+        dispatch(resetToggleLikePost());
       }
     }
-  }, [getMyProfile.data.userId, post.postId, toggleLikePost.data.postId, toggleLikePost.data.postLiked, toggleLikePost.status]);
+  }, [
+    getMyProfile.data.userId,
+    post.postId,
+    toggleLikePost.data.postId,
+    toggleLikePost.data.postLiked,
+    toggleLikePost.status,
+  ]);
 
   useEffect(() => {
-    if (Array.isArray(idsOfUsersWhoHaveLikedThePost) && idsOfUsersWhoHaveLikedThePost?.includes(getMyProfile.data.userId)) {
+    if (
+      Array.isArray(idsOfUsersWhoHaveLikedThePost) &&
+      idsOfUsersWhoHaveLikedThePost?.includes(getMyProfile.data.userId)
+    ) {
       setLiked(true);
     } else {
       setLiked(false);
     }
   }, [getMyProfile.data.userId, idsOfUsersWhoHaveLikedThePost]);
   useEffect(() => {
-    const idsOfUsersWhoHaveLikedThePostTemp = post.likedUsers.map((item) => item.userId);
+    const idsOfUsersWhoHaveLikedThePostTemp = post.likedUsers.map(
+      (item) => item.userId
+    );
     setIdsOfUsersWhoHaveLikedThePost(idsOfUsersWhoHaveLikedThePostTemp);
   }, [post.likedUsers]);
-
+  // console.log('idslikedusers', idsOfUsersWhoHaveLikedThePost);
+  // console.log('getMyProfile.data.userId', getMyProfile.data.userId);
+  // console.log('toggleLikePost', toggleLikePost);
   return (
     <div className='post-card shadow-sm mx-auto'>
       <div className='post-card-header'>
