@@ -66,11 +66,7 @@ const LatestNews = () => {
       items: 1,
     },
   };
-  // const elementRef = useRef(null);
-  // const scrollBarConRef = useRef(null);
-  // const scrollBarRef = useRef(null);
-  // const [scrollbarWidth, setScrollbarWidth] = useState(0);
-  // useEffect(() => {}, []);
+
   return (
     <div className="latest-news-wrapper">
       <div className="container">
