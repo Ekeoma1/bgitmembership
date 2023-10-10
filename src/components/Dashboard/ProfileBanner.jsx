@@ -69,6 +69,8 @@ const ProfileBanner = ({ othersView, data }) => {
                     <h2 className='profile-name'>
                       {data?.data?.firstName} {data?.data?.secondName}
                     </h2>
+                    {/* Added  this so users can see their emails as well. It's not on the original design. Remove if it's not okay*/}
+                    <div className='email'>{data?.data?.email}</div>
                     <div className='job'>{data?.data?.niche}</div>
                     <div className='job'>{data?.data?.profession}</div>
                     <div className='other-details location'>
@@ -120,7 +122,9 @@ const ProfileBanner = ({ othersView, data }) => {
                   </button>
                 ) : (
                   <button>
-                    <Icon icon='edit' />
+                    <Link to={'/settings'}>
+                      <Icon icon='edit' />
+                    </Link>
                   </button>
                 )}
               </div>

@@ -46,6 +46,10 @@ const CloseAccount = () => {
           <div className='name'>
             {getMyProfile?.data?.firstName} {getMyProfile?.data?.secondName}
           </div>
+          {/* Added  this. Not on the original design. Remove if it's not okay*/}
+          <div className='email'>
+            {getMyProfile?.data?.email}
+          </div>
           <div className='role'>{getMyProfile?.data?.profession}</div>
           <div className='location'>{getMyProfile?.data?.city}</div>
         </div>

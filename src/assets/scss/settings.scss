@@ -190,6 +190,7 @@
           img{
             width: 100%;
             height: 100%;
+            object-fit: cover;
 
           }
         }
@@ -201,6 +202,11 @@
           font-size: 24px;
         }
 
+        .email {
+          font-weight: 400;
+          font-size: 17px;
+          color: $header-text-color;
+        }
         .role {
           font-weight: 700;
           font-size: 17px;
