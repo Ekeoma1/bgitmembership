@@ -38,8 +38,10 @@ const Navbar = () => {
     setShowDropdown(false);
   };
   useEffect(() => {
-    dispatch(triggerGetMyProfile());
-  }, []);
+    if (isLoggedIn) {
+      dispatch(triggerGetMyProfile());
+    }
+  }, [isLoggedIn]);
   return (
     <nav className=''>
       <div className='container'>

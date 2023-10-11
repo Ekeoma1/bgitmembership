@@ -11,6 +11,7 @@ import {
 import MainButton from '../Molecules/MainButton';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import { renderToast } from '../Molecules/CustomToastify';
 
 const PrivacyOption = ({ title, selectedValue, onRadioChange }) => {
   return (
@@ -85,25 +86,17 @@ const Privacy = () => {
       dispatch(triggerUpdatePrivacySettings(values));
     }
   };
-  // const notify = () => toast('Privacy settings successfully updated');
   useEffect(() => {
     if (updatePrivacySettings.status === 'successful') {
-      // notify();
+      renderToast({
+        status: 'success',
+        message: 'Privacy settings successfully updated',
+      });
       dispatch(resetUpdatePrivacySettings());
       dispatch(triggerGetPrivacySettings());
     }
   }, [updatePrivacySettings.status]);
-  // useEffect(() => {
-  //   if (getPrivacySettings.status === 'successful') {
-  //     const getPrivacySettingsTemp = { ...getPrivacySettings.data };
-  //     const array = privacySettings.map((item) => {
-  //       const x = getPrivacySettingsTemp[item.tag];
-  //       const y = { ...item, selectedValue: x };
-  //       return y;
-  //     });
-  //     setPrivacySettings(array);
-  //   }
-  // }, [getPrivacySettings, privacySettings]);
+
   useEffect(() => {
     if (getPrivacySettings.status === 'successful') {
       const getPrivacySettingsTemp = { ...getPrivacySettings.data };

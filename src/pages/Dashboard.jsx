@@ -46,7 +46,6 @@ const Dashboard = () => {
                   <Link className="" to="#">
                     <div className="other-pages-btn mb-0">
                       <div>settings</div>
-
                       <Icon icon="chevronRightBig" />
                     </div>
                   </Link>

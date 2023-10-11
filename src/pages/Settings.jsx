@@ -24,7 +24,7 @@ const Settings = () => {
   // const [seed, setSeed] = useState(1);
 
   useEffect(() => {
-    dispatch(triggerGetMyProfile());
+    // dispatch(triggerGetMyProfile());
   }, []);
 
   useEffect(() => {
