@@ -10,8 +10,7 @@ import {
   triggerGetMyProfile,
   triggerUpdateMyProfile,
 } from '../../Features/users/users_slice';
-import { ToastContainer, toast } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
+
 import { renderToast } from '../Molecules/CustomToastify';
 import MainButton from '../Molecules/MainButton';
 
@@ -22,23 +21,22 @@ const PersonalInfo = () => {
   const [formData2, setFormData2] = useState({});
   const [save, setSave] = useState(false);
 
-  // const validationSchema = Yup.object().shape({
-  //   firstName: Yup.string().notRequired('Required'),
-  //   secondName: Yup.string().notRequired('Required'),
-  //   additionalName: Yup.string().notRequired('Required'),
-  //   biography: Yup.string().notRequired('Required'),
-  // });
-
   const handleSubmit = (values) => {
     if (save) {
       console.log('values login', values);
       let { tags, skills } = values;
       let tagsFinal, skillsFinal;
-      console.log(typeof skills);
       console.log(typeof tags);
       if (typeof tags === 'string') {
         const tagsTemp = tags.split(/[ .:;?!~,`"&|()<>{}[\]\r\n/\\]+/);
+        console.log('tags Temp', tagsTemp);
         tagsFinal = tagsTemp.map((tag) => {
+          return { name: tag };
+        });
+        console.log('tagsFinal', tagsFinal);
+        tags = tagsFinal;
+      } else if (typeof tags === 'object') {
+        tagsFinal = tags.map((tag) => {
           return { name: tag };
         });
         tags = tagsFinal;
@@ -49,91 +47,111 @@ const PersonalInfo = () => {
           return { name: skill };
         });
         skills = skillsFinal;
-      }
-      if (typeof tags === 'object') {
-        tagsFinal = tags.map((tag) => {
-          return { name: tag };
-        });
-        tags = tagsFinal;
-      }
-      if (typeof skills === 'object') {
+      } else if (typeof skills === 'object') {
         skillsFinal = skills.map((skill) => {
           return { name: skill };
         });
         skills = skillsFinal;
       }
       const valuesToDispatch = { ...values, tags, skills };
-      // console.log('valuestodis', valuesToDispatch);
-      // console.log('getmyprofile', getMyProfile.data);
-      // dispatch(triggerUpdateMyProfile(valuesToDispatch));
+      dispatch(triggerUpdateMyProfile(valuesToDispatch));
     }
   };
   const handleChange = (name, value) => {
-    // console.log(name, value);
-    console.log(formData);
-
     setFormData2({ ...formData2, [name]: value });
     let object1 = {
       ...formData,
       dob: formData.dob.split('T')[0],
-      // skills: JSON.stringify(formData.skills),
-      // tags: JSON.stringify(formData.tags),
-      // skills: JSON.stringify({ name: formData.skills.join(' ') }),
-      tags: JSON.stringify({ name: formData.tags.join(' ') }),
     };
     console.log('object1', object1);
     let object2;
     if (name === 'skills') {
-      const skillsTemp = value
-        .split(/[ .:;?!~,`"&|()<>{}[\]\r\n/\\]+/)
-        .join(',')
-        .split(',');
-      console.log('skillsTemp', skillsTemp);
-      // skillsFinal = skillsTemp.map((skill) => {
-      //   return { name: skill };
-      // });
-      // skills = skillsFinal;
-
-      const skillsFinal = formData.skills.map((skill) => {
-        return { name: skill };
-      });
-      object2 = { ...formData2, skills: skillsFinal };
-      // console.log(name);
-    } else {
-      object2 = { ...formData2, [name]: value };
-    }
-    console.log('object2', object2);
-    function haveSameValuesForCommonKeys(obj1, obj2) {
-      for (const key in obj1) {
-        if (
-          obj1.hasOwnProperty(key) &&
-          obj2.hasOwnProperty(key) &&
-          obj1[key] !== obj2[key]
-        ) {
-          setSave(true);
+      const skillsTemp = value.split(',');
+      const skillsTemp2 = skillsTemp
+        .map((item) => item.trim())
+        .filter((item) => item !== '');
+      function arraysHaveSameValues(arr1, arr2) {
+        if (arr1.length !== arr2.length) {
           return false;
         }
+        const sortedArr1 = [...arr1].sort();
+        const sortedArr2 = [...arr2].sort();
+        for (let i = 0; i < sortedArr1.length; i++) {
+          if (sortedArr1[i] !== sortedArr2[i]) {
+            setSave(true);
+            return false;
+          }
+        }
+        setSave(false);
+        return true;
       }
-      setSave(false);
-      return true;
+      arraysHaveSameValues(skillsTemp2, formData.skills);
+    } else if (name === 'tags') {
+      const tagsTemp = value.split(',');
+      const tagsTemp2 = tagsTemp
+        .map((item) => item.trim())
+        .filter((item) => item !== '');
+      console.log(tagsTemp2);
+      function arraysHaveSameValues(arr1, arr2) {
+        if (arr1.length !== arr2.length) {
+          return false;
+        }
+        const sortedArr1 = [...arr1].sort();
+        const sortedArr2 = [...arr2].sort();
+        for (let i = 0; i < sortedArr1.length; i++) {
+          if (sortedArr1[i] !== sortedArr2[i]) {
+            setSave(true);
+            return false;
+          }
+        }
+        setSave(false);
+        return true;
+      }
+      arraysHaveSameValues(tagsTemp2, formData.tags);
+    } else {
+      object2 = { ...formData2, [name]: value };
+      function haveSameValuesForCommonKeys(obj1, obj2) {
+        for (const key in obj1) {
+          if (
+            obj1.hasOwnProperty(key) &&
+            obj2.hasOwnProperty(key) &&
+            obj1[key] !== obj2[key]
+          ) {
+            setSave(true);
+            return false;
+          }
+        }
+        setSave(false);
+        return true;
+      }
+      haveSameValuesForCommonKeys(object1, object2);
     }
-    haveSameValuesForCommonKeys(object1, object2);
-    // console.log();
-
-    // if (!haveSameValuesForCommonKeys(object1, object2)) {
-    //   setSave(true);
-    // } else {
-    //   setSave(false);
-    // }
   };
   useEffect(() => {
     if (updateMyProfile.status === 'successful') {
-      renderToast({
-        status: 'success',
-        message: 'You have successfully updated your profile',
-      });
+      if (updateMyProfile.data.user.userId) {
+        renderToast({
+          status: 'success',
+          message: 'You have successfully updated your profile',
+        });
+        dispatch(triggerGetMyProfile());
+        setSave(false);
+      } else if (
+        updateMyProfile.data === 'Maximum of 5 tags allowed per user.'
+      ) {
+        renderToast({
+          status: 'error',
+          message: 'Maximum of 5 tags allowed per user. ',
+        });
+      } else if (
+        updateMyProfile.data === 'Maximum of 5 skills allowed per user.'
+      ) {
+        renderToast({
+          status: 'error',
+          message: 'Maximum of 5 skills allowed per user.',
+        });
+      }
       dispatch(resetUpdateMyProfile());
-      dispatch(triggerGetMyProfile());
     }
   }, [updateMyProfile.status]);
 
@@ -143,7 +161,6 @@ const PersonalInfo = () => {
     }
   }, [getMyProfile.status]);
 
-  console.log('save', save);
   return (
     <div className='settings-card shadow'>
       <div className='header'>Personal Info</div>
