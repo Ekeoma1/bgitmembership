@@ -25,7 +25,6 @@ const Dashboard = () => {
     const data = { queryParams: { pageNumber, pageSize } };
     dispatch(triggerGetAllPosts(data));
   }, []);
-  console.log("getAllPosts", getAllPosts);
   return (
     <div className="user-dashboard">
       <div className="container">

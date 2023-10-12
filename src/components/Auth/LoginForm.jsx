@@ -18,7 +18,7 @@ import { renderToast } from '../Molecules/CustomToastify';
 
 const LoginForm = ({ forLogin, regFirstStep }) => {
   const dispatch = useDispatch();
-  const { auth } = useSelector((state) => state);
+  const { signin } = useSelector((state) => state.auth);
 
   const validationSchema = Yup.object().shape({
     Email: Yup.string().email('Invalid email address').required('Required'),
@@ -39,18 +39,24 @@ const LoginForm = ({ forLogin, regFirstStep }) => {
     }
   };
   useEffect(() => {
-    if (auth.signin.status === 'successful') {
-      if (auth.signin.data?.token) {
+    if (signin.status === 'successful') {
+      if (signin.data?.token) {
         dispatch(login(true));
       } else {
         renderToast({
           status: 'error',
-          message: auth.signin?.data,
+          message: signin?.data,
         });
         dispatch(resetSignIn());
       }
+    } else if (signin.status === 'error') {
+      renderToast({
+        status: 'error',
+        message: 'Something went wrong. Check your internet and try again',
+      });
+      dispatch(resetSignIn());
     }
-  }, [auth.signin.data, auth.signin.status]);
+  }, [signin.data, signin.status]);
 
   return (
     <>
@@ -108,13 +114,13 @@ const LoginForm = ({ forLogin, regFirstStep }) => {
                 <MainButton
                   text={'Log in'}
                   width={'25.5rem'}
-                  loading={auth.signin.status === 'loading'}
+                  loading={signin?.status === 'loading'}
                 />
               ) : (
                 <MainButton
                   text={'Sign up'}
                   width={'25.5rem'}
-                  loading={auth.signin.status === 'loading'}
+                  loading={signin?.status === 'loading'}
                 />
               )}
             </div>

@@ -9,8 +9,6 @@ import {
   triggerUpdatePrivacySettings,
 } from '../../Features/users/users_slice';
 import MainButton from '../Molecules/MainButton';
-import { ToastContainer } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
 import { renderToast } from '../Molecules/CustomToastify';
 
 const PrivacyOption = ({ title, selectedValue, onRadioChange }) => {
@@ -82,7 +80,6 @@ const Privacy = () => {
       privacySettingsTemp.forEach((item) => {
         values[item.tag] = item.selectedValue;
       });
-      console.log(values);
       dispatch(triggerUpdatePrivacySettings(values));
     }
   };
@@ -178,12 +175,10 @@ const Privacy = () => {
           text={'Save'}
           size={'small'}
           onClick={handleSubmit}
-          width={'17.5rem'}
           disabled={!save}
           loading={updatePrivacySettings.status === 'loading'}
         />
       </div>
-      <ToastContainer />
     </div>
   );
 };

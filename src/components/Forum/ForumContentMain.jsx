@@ -2,7 +2,7 @@ import React from 'react';
 import '../../assets/scss/forum.scss';
 import Resources from '../home/Resources';
 import Post from '../home/Post';
-import CommunityForums from '../home/CommunityForums';
+import CommunityForums from '../home/CommunityForumsComponent';
 import Info from './Info';
 
 const ForumContentMain = ({ forum }) => {

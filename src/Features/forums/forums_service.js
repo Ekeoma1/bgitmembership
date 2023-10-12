@@ -10,6 +10,13 @@ export default class ForumsService {
     });
     return response;
   }
+  static async joinForum(data) {
+    const response = await post({
+      url: apiRoutes.joinForum,
+      data: { ...data },
+    });
+    return response;
+  }
 
   static _getToken() {
     const token = JSON.parse(localStorage.getItem('token'));

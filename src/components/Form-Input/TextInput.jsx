@@ -2,7 +2,7 @@ import React from 'react';
 import { useField } from 'formik';
 import Icon from '../Icon';
 
-const TextInput = ({ handlechange, label, ...props }) => {
+const TextInput = ({ label, ...props }) => {
   // console.log('props', props);
   const [field, meta, helpers] = useField(props);
   // console.log(field, meta, helpers);
@@ -19,11 +19,6 @@ const TextInput = ({ handlechange, label, ...props }) => {
           {...field}
           {...props}
           onBlur={handleBlur}
-          onInput={(e) => {
-            if (handlechange) {
-              handlechange(e.target.name, e.target.value);
-            }
-          }}
         />
         <div className='input-icon'>
           {meta.touched && meta.error && <Icon icon='error' />}

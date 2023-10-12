@@ -1,130 +1,135 @@
-import "./assets/scss/index.scss";
-import "bootstrap/dist/css/bootstrap.min.css";
-import { createBrowserRouter, RouterProvider, Navigate, Outlet } from "react-router-dom";
-import Layout from "./Layout";
-import ErrorPage from "./pages/ErrorPage";
-import LandingPage from "./pages/LandingPage";
-import Home from "./pages/Home";
-import Updates from "./pages/Updates";
-import Login from "./pages/Login";
-import SignUp from "./pages/SignUp";
-import ForgotPassword from "./pages/ForgotPassword";
-import { useSelector } from "react-redux";
-import Dashboard from "./pages/Dashboard";
-import ViewOtherUsers from "./pages/ViewOtherUsers";
-import Settings from "./pages/Settings";
-import JobBoard from "./pages/JobBoard";
-import Resources from "./pages/Resources";
-import EventsAndNews from "./pages/EventsAndNews";
-import Event from "./pages/Event";
-import CommunityForums from "./pages/CommunityForums";
-import CommunityForumsAllForums from "./pages/CommunityForumsAllForums";
-import Forum from "./pages/Forum";
-import User from "./pages/User";
-import { ThemeProvider } from "styled-components";
-import { useContext } from "react";
-import { AppContext } from "./context/Context";
-import { darkTheme, lightTheme } from "./utils/themes/themes";
-import { GlobalStyles } from "./utils/themes/themes";
-import { ToastContainer } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
+import './assets/scss/index.scss';
+import 'bootstrap/dist/css/bootstrap.min.css';
+import {
+  createBrowserRouter,
+  RouterProvider,
+  Navigate,
+  Outlet,
+} from 'react-router-dom';
+import Layout from './Layout';
+import ErrorPage from './pages/ErrorPage';
+import LandingPage from './pages/LandingPage';
+import Home from './pages/Home';
+import Updates from './pages/Updates';
+import Login from './pages/Login';
+import SignUp from './pages/SignUp';
+import ForgotPassword from './pages/ForgotPassword';
+import { useSelector } from 'react-redux';
+import Dashboard from './pages/Dashboard';
+import ViewOtherUsers from './pages/ViewOtherUsers';
+import Settings from './pages/Settings';
+import JobBoard from './pages/JobBoard';
+import Resources from './pages/Resources';
+import EventsAndNews from './pages/EventsAndNews';
+import Event from './pages/Event';
+import CommunityForums from './pages/CommunityForums';
+import CommunityForumsAllForums from './pages/CommunityForumsAllForums';
+import Forum from './pages/Forum';
+import User from './pages/User';
+import { ThemeProvider } from 'styled-components';
+import { useContext } from 'react';
+import { AppContext } from './context/Context';
+import { darkTheme, lightTheme } from './utils/themes/themes';
+import { GlobalStyles } from './utils/themes/themes';
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 function App() {
   const isLoggedIn = useSelector((state) => state.auth.isLoggedIn);
   const { theme } = useContext(AppContext);
-  const themeMode = theme === "light" ? lightTheme : darkTheme;
+  const themeMode = theme === 'light' ? lightTheme : darkTheme;
   const PrivateRoute = () => {
-    return isLoggedIn ? <Outlet /> : <Navigate to="/landing" />;
+    return isLoggedIn ? <Outlet /> : <Navigate to='/landing' />;
   };
 
   const AuthRoute = () => {
-    return !isLoggedIn ? <Outlet /> : <Navigate to="/" />;
+    return !isLoggedIn ? <Outlet /> : <Navigate to='/' />;
   };
 
   const router = createBrowserRouter([
     {
-      path: "/",
+      path: '/',
       element: <Layout />,
       errorElement: <ErrorPage />,
       children: [
         {
-          path: "",
+          path: '',
           element: <PrivateRoute />,
 
           children: [
             {
-              path: "",
+              path: '',
               element: <Home />,
             },
             {
-              path: ":user",
+              path: ':user',
               element: <User />,
             },
             {
-              path: "updates",
+              path: 'updates',
               element: <Updates />,
             },
             {
-              path: "dashboard",
+              path: 'dashboard',
               element: <Dashboard />,
             },
             {
-              path: "other-users/:id",
+              path: 'other-users/:id',
               element: <ViewOtherUsers />,
             },
             {
-              path: "settings",
+              path: 'settings',
               element: <Settings />,
             },
             {
-              path: "community-forums",
+              path: 'community-forums',
               element: <CommunityForums />,
             },
             {
-              path: "community-forums/all",
+              path: 'community-forums/all',
               element: <CommunityForumsAllForums />,
             },
             {
-              path: "community-forums/forum/:forumId",
+              path: 'community-forums/forum/:forumId',
               element: <Forum />,
             },
             {
-              path: "events-and-news",
+              path: 'events-and-news',
               element: <EventsAndNews />,
             },
             {
-              path: "events-and-news/event",
+              path: 'events-and-news/event',
               element: <Event />,
             },
             {
-              path: "job-board",
+              path: 'job-board',
               element: <JobBoard />,
             },
             {
-              path: "resources",
+              path: 'resources',
               element: <Resources />,
             },
           ],
         },
 
         {
-          path: "",
+          path: '',
           element: <AuthRoute />,
           children: [
             {
-              path: "landing",
+              path: 'landing',
               element: <LandingPage />,
             },
             {
-              path: "login",
+              path: 'login',
               element: <Login />,
             },
             {
-              path: "register",
+              path: 'register',
               element: <SignUp />,
             },
             {
-              path: "forgot-password",
+              path: 'forgot-password',
               element: <ForgotPassword />,
             },
           ],
@@ -135,7 +140,11 @@ function App() {
 
   return (
     <ThemeProvider theme={themeMode}>
-      <ToastContainer className={"custom-toastify"} position="top-center" autoClose={2000} />
+      <ToastContainer
+        className={'custom-toastify'}
+        position='top-center'
+        autoClose={2000}
+      />
       <GlobalStyles />
       <RouterProvider router={router} />
     </ThemeProvider>

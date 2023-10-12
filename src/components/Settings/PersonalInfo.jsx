@@ -20,10 +20,8 @@ const PersonalInfo = () => {
   const [formData, setFormData] = useState({});
 
   const handleSubmit = (values) => {
-    // console.log('values login', values);
     let { tags, skills } = values;
     let tagsFinal, skillsFinal;
-    console.log(typeof tags);
     if (typeof tags === 'string') {
       const tagsTemp = tags.split(/[ .:;?!~,`"&|()<>{}[\]\r\n/\\]+/);
       tagsFinal = tagsTemp.map((tag) => {
@@ -54,7 +52,7 @@ const PersonalInfo = () => {
 
   useEffect(() => {
     if (updateMyProfile.status === 'successful') {
-      if (updateMyProfile.data.user.userId) {
+      if (updateMyProfile.data?.user?.userId) {
         renderToast({
           status: 'success',
           message: 'You have successfully updated your profile',
@@ -65,7 +63,7 @@ const PersonalInfo = () => {
       ) {
         renderToast({
           status: 'error',
-          message: 'Maximum of 5 tags allowed per user. ',
+          message: 'Maximum of 5 tags allowed per user.',
         });
       } else if (
         updateMyProfile.data === 'Maximum of 5 skills allowed per user.'

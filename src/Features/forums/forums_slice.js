@@ -7,6 +7,10 @@ const initialState = {
     status: states.BASE,
     data: {},
   },
+  joinForum: {
+    status: states.BASE,
+    data: {},
+  },
 };
 
 // get all forums
@@ -20,11 +24,26 @@ export const triggerGetAllForums = createAsyncThunk(
     }
   }
 );
+// join forum
+export const triggerJoinForum = createAsyncThunk(
+  'join-forum',
+  async (params, thunkAPI) => {
+    try {
+      return await ForumsService.joinForum(params);
+    } catch (e) {
+      return thunkAPI.rejectWithValue(e.message);
+    }
+  }
+);
 
 const forumsSlice = createSlice({
   name: 'forums',
   initialState,
-  reducers: {},
+  reducers: {
+    resetJoinForum: (state) => {
+      state.joinForum = initialState.joinForum;
+    },
+  },
   extraReducers: (builder) => {
     // get all forums
     builder.addCase(triggerGetAllForums.pending, (state) => {
@@ -39,8 +58,21 @@ const forumsSlice = createSlice({
       state.getAllForums.status = states.ERROR;
       state.getAllForums.data = action.payload;
     });
+    // Join forum
+    builder.addCase(triggerJoinForum.pending, (state) => {
+      state.joinForum.status = states.LOADING;
+      state.joinForum.data = {};
+    });
+    builder.addCase(triggerJoinForum.fulfilled, (state, action) => {
+      state.joinForum.status = states.SUCCESSFUL;
+      state.joinForum.data = action.payload;
+    });
+    builder.addCase(triggerJoinForum.rejected, (state, action) => {
+      state.joinForum.status = states.ERROR;
+      state.joinForum.data = action.payload;
+    });
   },
 });
 
 export default forumsSlice.reducer;
-
+export const { resetJoinForum } = forumsSlice.actions;

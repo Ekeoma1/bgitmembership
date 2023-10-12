@@ -59,9 +59,9 @@ const apiRoutes = {
   updatePrivacySettings: '/Users/UpdatePrivacySettings',
   closeAccount: '/Users/CloseAccount',
 
-  // users
+  // forums
   getAllForums: '/Forums/GetAllForums',
-
+  joinForum: '/Forums/JoinForum',
 };
 
 export default apiRoutes;

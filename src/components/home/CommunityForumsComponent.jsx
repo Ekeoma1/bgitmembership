@@ -5,8 +5,9 @@ import { useSelector } from 'react-redux';
 import ForumCardsLoader from '../Atoms/skeleton-loaders/ForumCardsLoader';
 import { useDispatch } from 'react-redux';
 import { triggerGetAllForums } from '../../Features/forums/forums_slice';
+import ForumCard from '../Molecules/ForumCard';
 
-const CommunityForums = () => {
+const CommunityForumsComponent = () => {
   const { getAllForums } = useSelector((state) => state.forums);
   const [pageNumber] = useState(1);
   const [pageSize] = useState(10);
@@ -31,7 +32,7 @@ const CommunityForums = () => {
               </>
             ) : (
               <>
-                {getAllForums?.data?.slice(0, 3).map((forum, key) => {
+                {/* {getAllForums?.data?.slice(0, 3).map((forum, key) => {
                   return (
                     <div key={key} className='community-forum-card'>
                       <h4 className='mt-3'>{forum.forumName}</h4>
@@ -43,7 +44,10 @@ const CommunityForums = () => {
                       </div>
                     </div>
                   );
-                })}
+                })} */}
+                {getAllForums.data.slice(0, 3).map((forum, index) => (
+                  <ForumCard key={index} forum={forum} />
+                ))}
               </>
             )}
           </>
@@ -64,4 +68,4 @@ const CommunityForums = () => {
   );
 };
 
-export default CommunityForums;
+export default CommunityForumsComponent;

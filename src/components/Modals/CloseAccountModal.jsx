@@ -7,25 +7,29 @@ import {
   resetCloseAccount,
   triggerCloseAccount,
 } from '../../Features/users/users_slice';
-import { ToastContainer, toast } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
-import { logout } from '../../Features/auth/auth_slice';
+import { logout, resetSignIn } from '../../Features/auth/auth_slice';
+import { renderToast } from '../Molecules/CustomToastify';
 
 const CloseAccountModal = ({ show, hide }) => {
   const { closeAccount } = useSelector((state) => state.users);
   const dispatch = useDispatch();
   const handleSubmit = () => {
     dispatch(triggerCloseAccount());
-    hide();
   };
-  const notify = () => toast('You have successfully disabled your account');
 
   useEffect(() => {
     if (closeAccount.status === 'successful') {
       if (closeAccount.data.user.status === 'Inactive') {
-        notify();
-        dispatch(logout());
+        renderToast({
+          status: 'success',
+          message: 'You have successfully disabled your account',
+        });
+        setTimeout(() => {
+          dispatch(logout());
+          dispatch(resetSignIn());
+        }, 3000);
       }
+      hide();
       dispatch(resetCloseAccount());
     }
   }, [closeAccount.data?.user?.status, closeAccount?.status]);
@@ -46,8 +50,8 @@ const CloseAccountModal = ({ show, hide }) => {
             size={'small'}
             onClick={handleSubmit}
             width={'17.5rem'}
+            loading={closeAccount.status === 'loading'}
           />
-
           <MainButton
             text={'No'}
             size={'small'}
@@ -57,7 +61,6 @@ const CloseAccountModal = ({ show, hide }) => {
           />
         </div>
       </div>
-      <ToastContainer />
     </OutsideClickHandler>
   );
 };

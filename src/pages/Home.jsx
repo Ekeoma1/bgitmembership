@@ -1,15 +1,12 @@
 import React from 'react';
 import '../assets/scss/home.scss';
 import Post from '../components/home/Post';
-import CommunityForums from '../components/home/CommunityForums';
+import CommunityForums from '../components/home/CommunityForumsComponent';
 import MyUpdates from '../components/home/MyUpdates';
 import Icon from '../components/Icon';
 import Resources from '../components/home/Resources';
 
-
 const Home = () => {
-
-
   return (
     <div className='home-wrapper'>
       <div className='container'>

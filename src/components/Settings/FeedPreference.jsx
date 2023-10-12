@@ -5,9 +5,8 @@ import {
   resetUpdateFeedPreference,
   triggerUpdateFeedPreference,
 } from '../../Features/users/users_slice';
-import { ToastContainer, toast } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
 import MainButton from '../Molecules/MainButton';
+import { renderToast } from '../Molecules/CustomToastify';
 const FeedPreference = () => {
   const dispatch = useDispatch();
   const { updateFeedPreference } = useSelector((state) => state.users);
@@ -21,17 +20,25 @@ const FeedPreference = () => {
     const values = { FeedPreference: selectedValue };
     dispatch(triggerUpdateFeedPreference(values));
   };
-  const notify = (toastText) => toast(toastText);
   useEffect(() => {
     if (updateFeedPreference.status === 'successful') {
       if (updateFeedPreference.data.user.feedPreference === 0) {
-        notify('Preference set to most relevant posts');
+        renderToast({
+          status: 'success',
+          message: 'Preference set to most relevant posts',
+        });
       } else if (updateFeedPreference.data.user.feedPreference === 1) {
-        notify('Preference set to most recent posts');
+        renderToast({
+          status: 'success',
+          message: 'Preference set to most recent posts',
+        });
       }
       dispatch(resetUpdateFeedPreference());
     }
-  }, [ updateFeedPreference.data.user?.feedPreference, updateFeedPreference.status]);
+  }, [
+    updateFeedPreference.data.user?.feedPreference,
+    updateFeedPreference.status,
+  ]);
   return (
     <div className='settings-card shadow'>
       <div className='header'>Feed Preference</div>
@@ -56,11 +63,10 @@ const FeedPreference = () => {
             text={'Save'}
             size={'small'}
             onClick={handleSubmit}
-            width={'17.5rem'}
+            loading={updateFeedPreference.status==='loading'}
           />
         </div>
       </div>
-      <ToastContainer />
     </div>
   );
 };

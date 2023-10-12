@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Formik, Form } from 'formik';
 import * as Yup from 'yup';
 import PasswordInput from '../Form-Input/PasswordInput';
@@ -9,12 +9,12 @@ import {
   triggerChangePassword,
 } from '../../Features/users/users_slice';
 import MainButton from '../Molecules/MainButton';
-import { ToastContainer, toast } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
+import { renderToast } from '../Molecules/CustomToastify';
 
 const ChangePassword = () => {
   const dispatch = useDispatch();
   const { changePassword } = useSelector((state) => state.users);
+  const [formData, setFormData] = useState({});
   const validationSchema = Yup.object().shape({
     currentPassword: Yup.string().required('Required'),
     newPassword: Yup.string()
@@ -39,54 +39,76 @@ const ChangePassword = () => {
     valuesTemp = Object.fromEntries(valuesTemp);
     dispatch(triggerChangePassword(valuesTemp));
   };
-  const notify = (toastText) => toast(toastText);
   useEffect(() => {
     if (changePassword.status === 'successful') {
-      notify(changePassword.data);
+      renderToast({
+        status: 'success',
+        message: changePassword.data,
+      });
+      setFormData({
+        currentPassword: '',
+        newPassword: '',
+        confirmNewPassword: '',
+      });
       dispatch(resetChangePassword());
     }
   }, [changePassword.data, changePassword.status]);
+  useEffect(() => {
+    console.log('useeffect');
+    setFormData({
+      currentPassword: '',
+      newPassword: '',
+      confirmNewPassword: '',
+    });
+  }, []);
+  console.log(formData);
+
   return (
     <div className='settings-card shadow'>
       <div className='header'>Change Your Password</div>
+      {Object.keys(formData).length > 0 && (
+        <Formik
+          initialValues={{
+            currentPassword: formData.currentPassword,
+            newPassword: formData.newPassword,
+            confirmNewPassword: formData.confirmNewPassword,
+          }}
+          validationSchema={validationSchema}
+          onSubmit={handleSubmit}
+        >
+          <Form>
+            <div>
+              <PasswordInput
+                label='Current Password *'
+                name='currentPassword'
+              />
+              <Link className='link' to='/forgot-password'>
+                Forgot Password?
+              </Link>
+            </div>
+            <PasswordInput label='New Password *' name='newPassword' />
+            <PasswordInput
+              label='Confirm New Password *'
+              name='confirmNewPassword'
+            />
+            <div className='note mt-2'>
+              <span>Note:</span> Changing your password will log you out of all
+              active BGIT Membership Portal on connected devices
+            </div>
 
-      <Formik
-        initialValues={{
-          currentPassword: '',
-          newPassword: '',
-          confirmNewPassword: '',
-        }}
-        validationSchema={validationSchema}
-        onSubmit={handleSubmit}
-      >
-        <Form>
-          <div>
-            <PasswordInput label='Current Password *' name='currentPassword' />
-            <Link className='link' to='/forgot-password'>
-              Forgot Password?
-            </Link>
-          </div>
-          <PasswordInput label='New Password *' name='newPassword' />
-
-          <PasswordInput
-            label='Confirm New Password *'
-            name='confirmNewPassword'
-          />
-
-          <div className='note mt-2'>
-            <span>Note:</span> Changing your password will log you out of all
-            active BGIT Membership Portal on connected devices
-          </div>
-
-          <div className='mt-3 text-end'>
-            {/* <button className='primary-btn small-btn' type='submit'>
+            <div className='mt-3 text-end'>
+              {/* <button className='primary-btn small-btn' type='submit'>
               Save
             </button> */}
-            <MainButton text={'Save'} size={'small'} />
-          </div>
-        </Form>
-      </Formik>
-      <ToastContainer />
+              <MainButton
+                text={'Save'}
+                size={'small'}
+                loading={changePassword.status === 'loading'}
+              />
+            </div>
+          </Form>
+        </Formik>
+      )}
     </div>
   );
 };

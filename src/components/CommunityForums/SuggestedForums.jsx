@@ -7,7 +7,7 @@ import Carousel from 'react-multi-carousel';
 import 'react-multi-carousel/lib/styles.css';
 import { useDispatch, useSelector } from 'react-redux';
 import { triggerGetAllForums } from '../../Features/forums/forums_slice';
-import ForumCardsLoader, { ForumCardsLoader2 } from '../Atoms/skeleton-loaders/ForumCardsLoader';
+import { ForumCardsLoader2 } from '../Atoms/skeleton-loaders/ForumCardsLoader';
 const SuggestedForums = () => {
   const navigate = useNavigate();
   const { getAllForums } = useSelector((state) => state.forums);
