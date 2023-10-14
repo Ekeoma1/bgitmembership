@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState, useEffect } from "react";
 import "../assets/scss/loginRegister.scss";
 import PersonalDetailsForm from "../components/Auth/PersonalDetailsForm";
 import ProfileDetails from "../components/Auth/ProfileDetails";
@@ -13,6 +13,9 @@ const CompleteRegistration = () => {
   const changeTab = (num) => {
     setCurrentTab(num);
   };
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
   return (
     <div className="registration-page">
       <div className="register-wrapper">

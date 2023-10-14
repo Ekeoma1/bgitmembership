@@ -1,10 +1,13 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import LoginImage from "../assets/images/login-image.png";
 import "../assets/scss/loginRegister.scss";
 import LoginForm from "../components/Auth/LoginForm";
 import CompleteRegistration from "./CompleteRegistration";
 const SignUp = () => {
   const [step1, setStep1] = useState(false);
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
   return (
     <div className="login-register-wrapper">
       <div className="container">

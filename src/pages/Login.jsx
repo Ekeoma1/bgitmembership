@@ -1,9 +1,12 @@
-import React from "react";
+import { useEffect } from "react";
 import "../assets/scss/loginRegister.scss";
 import LoginForm from "../components/Auth/LoginForm";
 import LoginImage from "../assets/images/login-image.png";
 
 const Login = () => {
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
   return (
     <div className="login-register-wrapper">
       <div className="container">
