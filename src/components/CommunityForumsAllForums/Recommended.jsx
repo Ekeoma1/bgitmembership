@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import '../../../src/assets/scss/communityForums.scss';
 import ForumCard from '../Molecules/ForumCard';
 import forumImg1 from '../../../src/assets/images/forumcard1.svg';
@@ -7,34 +7,26 @@ import forumImg3 from '../../../src/assets/images/forumcard3.svg';
 import forumImg4 from '../../../src/assets/images/forumcard4.svg';
 import Carousel from 'react-multi-carousel';
 import 'react-multi-carousel/lib/styles.css';
+import { useDispatch, useSelector } from 'react-redux';
+import { ForumCardsLoader2 } from '../Atoms/skeleton-loaders/ForumCardsLoader';
+import {
+  triggerGetAllForums,
+  triggerGetAllForumsByIndustry,
+  triggerGetAllForumsByLocation,
+} from '../../Features/forums/forums_slice';
+import EmptyState from '../Molecules/EmptyState';
 const Recommended = ({ basedOn }) => {
-  const communities = [
-    {
-      community_img: forumImg1,
-      community_name: 'UX/UI Design',
-      info: 'Dorem ipsum dolor sit amet consectetur. Urus fringilla mi. Lorem ipsu consectetur. Urus fringilla mi. Lorem ipsu Urus fringilla mi. Lorem ipsu consectetur. Urus fringilla mi. Lorem ipsu Urus fringilla mi. Lorem ipsu consectetur. Urus fringilla mi. Lorem ipsu',
-    },
-    {
-      community_img: forumImg2,
-      community_name: 'Engineer Girls',
-      info: 'Lorem ipsum dolor sit amet consectetur. Urus fringilla mi. Lorem ipsu consectetur. Urus fringilla mi. Lorem ipsu Urus fringilla mi. Lorem ipsu consectetur. Urus fringilla mi. Lorem ipsu Urus fringilla mi. Lorem ipsu consectetur. Urus fringilla mi. Lorem ipsu',
-    },
-    {
-      community_img: forumImg3,
-      community_name: 'Data Babes 😍👩🏾‍💻',
-      info: 'Lorem ipsum dolor sit amet consectetur. Urus fringilla mi. Lorem ipsu consectetur. Urus fringilla mi. Lorem ipsu Urus fringilla mi. Lorem ipsu consectetur. Urus fringilla mi. Lorem ipsu Urus fringilla mi. Lorem ipsu consectetur. Urus fringilla mi. Lorem ipsu',
-    },
-    {
-      community_img: forumImg4,
-      community_name: 'Data Babes 😍👩🏾‍💻',
-      info: 'Lorem ipsum dolor sit amet consectetur. Urus fringilla mi. Lorem ipsu consectetur. Urus fringilla mi. Lorem ipsu Urus fringilla mi. Lorem ipsu consectetur. Urus fringilla mi. Lorem ipsu Urus fringilla mi. Lorem ipsu consectetur. Urus fringilla mi. Lorem ipsu',
-    },
-    {
-      community_img: forumImg1,
-      community_name: 'Data Babes 😍👩🏾‍💻',
-      info: 'Lorem ipsum dolor sit amet consectetur. Urus fringilla mi. Lorem ipsu consectetur. Urus fringilla mi. Lorem ipsu Urus fringilla mi. Lorem ipsu consectetur. Urus fringilla mi. Lorem ipsu Urus fringilla mi. Lorem ipsu consectetur. Urus fringilla mi. Lorem ipsu',
-    },
-  ];
+  const { getAllForumsByIndustry, getAllForumsByLocation } = useSelector(
+    (state) => state.forums
+  );
+  const dispatch = useDispatch();
+  const [pageNumber] = useState(1);
+  const [pageSize] = useState(10);
+  useEffect(() => {
+    const data = { queryParams: { pageNumber, pageSize } };
+    dispatch(triggerGetAllForumsByIndustry(data));
+    dispatch(triggerGetAllForumsByLocation(data));
+  }, []);
   const responsive = {
     desktop: {
       breakpoint: { max: 4000, min: 1024 },
@@ -58,20 +50,68 @@ const Recommended = ({ basedOn }) => {
           </div>
           {basedOn === 'industry' && (
             <div className='forums-cards-wrapper'>
-              <Carousel responsive={responsive}>
-                {communities.map((forum, index) => (
-                  <ForumCard forum={forum} key={index} />
-                ))}
-              </Carousel>
+              {getAllForumsByIndustry.status === 'base' ||
+              getAllForumsByIndustry.status === 'loading' ? (
+                <>
+                  <ForumCardsLoader2 />
+                </>
+              ) : getAllForumsByIndustry.status === 'successful' ? (
+                <>
+                  {getAllForumsByIndustry.data.length === 0 ? (
+                    <>
+                      <EmptyState
+                        title={'No forums found based on your industry'}
+                        height={'50rem'}
+                      />
+                    </>
+                  ) : (
+                    <>
+                      <Carousel responsive={responsive}>
+                        {getAllForumsByIndustry.data.map((forum, index) => (
+                          <ForumCard key={index} forum={forum} />
+                        ))}
+                      </Carousel>
+                    </>
+                  )}
+                </>
+              ) : getAllForumsByIndustry.status === 'error' ? (
+                <></>
+              ) : (
+                <></>
+              )}
             </div>
           )}
           {basedOn === 'location' && (
             <div className='forums-cards-wrapper'>
-              <Carousel responsive={responsive}>
-                {communities.map((forum, index) => (
-                  <ForumCard forum={forum} key={index} />
-                ))}
-              </Carousel>
+              {getAllForumsByLocation.status === 'base' ||
+              getAllForumsByLocation.status === 'loading' ? (
+                <>
+                  <ForumCardsLoader2 />
+                </>
+              ) : getAllForumsByLocation.status === 'successful' ? (
+                <>
+                  {getAllForumsByLocation.data.length === 0 ? (
+                    <>
+                      <EmptyState
+                        title={'No forums found based on your Location'}
+                        height={'20rem'}
+                      />
+                    </>
+                  ) : (
+                    <>
+                      <Carousel responsive={responsive}>
+                        {getAllForumsByLocation.data.map((forum, index) => (
+                          <ForumCard key={index} forum={forum} />
+                        ))}
+                      </Carousel>
+                    </>
+                  )}
+                </>
+              ) : getAllForumsByLocation.status === 'error' ? (
+                <></>
+              ) : (
+                <></>
+              )}
             </div>
           )}
         </div>

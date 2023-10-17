@@ -28,7 +28,6 @@ const Forum = () => {
       );
     }
   }, [getAllForums.status]);
-  console.log('forum', forum);
   return (
     <div className='forum-wrapper'>
       <Banner

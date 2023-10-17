@@ -10,6 +10,22 @@ export default class ForumsService {
     });
     return response;
   }
+  static async getAllForumsByIndustry(data) {
+    const response = await get({
+      url: apiRoutes.getAllForumsByIndustry,
+      data: { ...data },
+      queryParams: data.queryParams,
+    });
+    return response;
+  }
+  static async getAllForumsByLocation(data) {
+    const response = await get({
+      url: apiRoutes.getAllForumsByLocation,
+      data: { ...data },
+      queryParams: data.queryParams,
+    });
+    return response;
+  }
   static async joinForum(data) {
     const response = await post({
       url: apiRoutes.joinForum,

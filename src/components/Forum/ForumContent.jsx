@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { CgLock } from 'react-icons/cg';
 import { TbClockHour9 } from 'react-icons/tb';
 import adminImg from '../../assets/images/admin.svg';
-import ForumCard from '../Molecules/ForumCard';
+import ForumCard, { ForumCard2 } from '../Molecules/ForumCard';
 import forumImg1 from '../../../src/assets/images/forumcard1.svg';
 import forumImg2 from '../../../src/assets/images/forumcard2.svg';
 import { useDispatch, useSelector } from 'react-redux';
@@ -15,9 +15,11 @@ import { triggerGetAllForums } from '../../Features/forums/forums_slice';
 import ForumCardsLoader from '../Atoms/skeleton-loaders/ForumCardsLoader';
 import { Link, useParams } from 'react-router-dom';
 import Icon from '../Icon';
+import moment from 'moment';
+import { PiUsersThreeFill } from 'react-icons/pi';
 
 const ForumContent = ({ forum }) => {
-   const params = useParams();
+  const params = useParams();
   const { getAllForums } = useSelector((state) => state.forums);
   const [relatedGroups, setRelatedGroups] = useState([]);
   useEffect(() => {
@@ -57,31 +59,47 @@ const ForumContent = ({ forum }) => {
                   </div>
                   <div className='section-bottom'>
                     <div className='content'>
-                      <div className='private'>
-                        {/* <PiLockSimpleBold /> */}
-                        <CgLock className='icon' />
-                        <div className=''>
-                          <h5>Private</h5>
-                          <p>Only members can see the posts</p>
+                      {forum?.visibility !== 'Private' ? (
+                        <div className='private'>
+                          <CgLock className='icon' />
+                          <div className=''>
+                            <h5>Private</h5>
+                            <p>Only members can see the posts</p>
+                          </div>
                         </div>
-                      </div>
-                      <div className='history'>
-                        <TbClockHour9 className='icon' />
-                        <div className=''>
-                          <h5>Private</h5>
-                          <p>Only members can see the posts</p>
+                      ) : (
+                        <div className='private'>
+                          <PiUsersThreeFill className='icon' />
+                          <div className=''>
+                            <h5>Public</h5>
+                            <p>Everyone can see the posts</p>
+                          </div>
                         </div>
-                      </div>
+                      )}
+                      {forum?.dateCreated && (
+                        <div className='history'>
+                          <TbClockHour9 className='icon' />
+                          <div className=''>
+                            <h5>History</h5>
+                            <p>
+                              Created on{' '}
+                              {moment(forum?.dateCreated).format(
+                                'dddd, MMMM Do YYYY'
+                              )}
+                            </p>
+                          </div>
+                        </div>
+                      )}
                     </div>
                   </div>
                 </div>
                 <div className='admin-section'>
                   <h3>Admin</h3>
                   <div className='content'>
-                    <img src={adminImg} alt='admin' />
+                    <img src={forum?.forumAdmin?.imageUrl} alt='admin' />
                     <div className=''>
-                      <h5>Jenny Smith</h5>
-                      <p>UX Design Enthusiast</p>
+                      <h5>{`${forum?.forumAdmin?.firstName} ${forum?.forumAdmin?.secondName}`}</h5>
+                      <p>{forum?.forumAdmin?.profession}</p>
                     </div>
                   </div>
                 </div>
@@ -106,7 +124,7 @@ const ForumContent = ({ forum }) => {
                   ) : (
                     <>
                       {relatedGroups?.slice(0, 2).map((forum, index) => {
-                        return <ForumCard key={index} forum={forum} />;
+                        return <ForumCard2 key={index} forum={forum} />;
                       })}
                     </>
                   )}
