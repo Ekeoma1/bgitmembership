@@ -28,7 +28,6 @@ const Forum = () => {
       setForum(getAllForums.data?.find((item) => item.forumId === params.forumId));
     }
   }, [getAllForums.status]);
-  console.log("forum", forum);
   return (
     <div className="forum-wrapper">
       <Banner forum={forum} setJoinForumRequestSuccessful={setJoinForumRequestSuccessful} joinForumRequestSuccessful={joinForumRequestSuccessful} />

@@ -262,6 +262,36 @@
     }
   }
 }
+.forum-card-2 {
+  max-width: 285px;
+  padding: 20px 30px;
+  border: 0.78px solid #9d8dd8;
+  border-radius: 30px;
+  margin-top: 20px;
+  cursor: pointer;
+  .community-forum-content {
+    margin: 15px 0;
+    color: #6f6c90;
+    font-size: 14px;
+    line-height: 23px;
+  }
+  .text-center {
+    display: flex;
+    justify-content: center;
+    .community-forum-btn {
+      padding: 10px 21px;
+      border: 0.69px solid #7a6d9f;
+      background-color: #fff;
+      border-radius: 30px;
+      font-size: 12px;
+      font-weight: 700;
+      font-family: $thic700;
+      display: flex;
+      align-items: center;
+      column-gap: 0.2rem;
+    }
+  }
+}
 .post-card {
   max-width: 634px;
   max-width: 886px;

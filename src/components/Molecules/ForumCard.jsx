@@ -11,6 +11,7 @@ import {
   triggerJoinForum,
 } from '../../Features/forums/forums_slice';
 import { renderToast } from './CustomToastify';
+import { HiPlus } from 'react-icons/hi';
 
 const ForumCard = ({ forum }) => {
   const { isMobile } = useWindowSize();
@@ -95,6 +96,49 @@ const ForumCard = ({ forum }) => {
           </button>
         </>
       )}
+    </div>
+  );
+};
+export const ForumCard2 = ({ forum }) => {
+  const navigate = useNavigate();
+  const dispatch=useDispatch()
+  const handleClick = (e, id) => {
+    console.log(e.currentTarget);
+    if (e.currentTarget.classList.contains('join')) {
+      const values = { forumId: id };
+      dispatch(triggerJoinForum(values));
+    } else if (e.currentTarget.classList.contains('joined')) {
+    }
+  };
+  return (
+    <div
+      className='forum-card-2'
+      onClick={(e) => {
+        if (!e.target.classList.contains('forum-card-btn')) {
+          navigate(`/community-forums/forum/${forum.forumId}`);
+        }
+      }}
+    >
+      <h4 className='mt-3'>{forum.forumName}</h4>
+      <div className='community-forum-content'>{forum.details}</div>
+      <div className='text-center'>
+        {forum.isCurrentUserMember ? (
+          <button
+            className=' smaller-text community-forum-btn forum-card-btn joined'
+            onClick={(e) => handleClick(e, forum.id)}
+          >
+            Leave Forum
+          </button>
+        ) : (
+          <button
+            className=' smaller-text community-forum-btn forum-card-btn join'
+            onClick={(e) => handleClick(e)}
+          >
+            <HiPlus className='join' />
+            Join
+          </button>
+        )}
+      </div>
     </div>
   );
 };

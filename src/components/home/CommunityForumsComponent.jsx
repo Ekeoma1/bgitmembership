@@ -1,17 +1,22 @@
-import React, { useEffect, useState } from "react";
-import Icon from "../Icon";
-import { Link } from "react-router-dom";
-import { useSelector } from "react-redux";
-import ForumCardsLoader from "../Atoms/skeleton-loaders/ForumCardsLoader";
-import { useDispatch } from "react-redux";
-import { triggerGetAllForums } from "../../Features/forums/forums_slice";
-import ForumCard from "../Molecules/ForumCard";
+import React, { useEffect, useState } from 'react';
+import Icon from '../Icon';
+import { Link, useNavigate } from 'react-router-dom';
+import { useSelector } from 'react-redux';
+import ForumCardsLoader from '../Atoms/skeleton-loaders/ForumCardsLoader';
+import { useDispatch } from 'react-redux';
+import {
+  triggerGetAllForums,
+  triggerJoinForum,
+} from '../../Features/forums/forums_slice';
+import ForumCard, { ForumCard2 } from '../Molecules/ForumCard';
+import { HiPlus } from 'react-icons/hi';
 
 const CommunityForumsComponent = () => {
   const { getAllForums } = useSelector((state) => state.forums);
   const [pageNumber] = useState(1);
   const [pageSize] = useState(10);
   const dispatch = useDispatch();
+
   useEffect(() => {
     const data = { queryParams: { pageNumber, pageSize } };
     dispatch(triggerGetAllForums(data));
@@ -33,22 +38,9 @@ const CommunityForumsComponent = () => {
               </>
             ) : (
               <>
-                {/* {getAllForums?.data?.slice(0, 3).map((forum, key) => {
-                  return (
-                    <div key={key} className='community-forum-card'>
-                      <h4 className='mt-3'>{forum.forumName}</h4>
-                      <div className='community-forum-content'>
-                        {forum.details}
-                      </div>
-                      <div className='text-center'>
-                        <button className='sec-btn smaller-text'>Join</button>
-                      </div>
-                    </div>
-                  );
-                })} */}
-                {getAllForums.data.slice(0, 3).map((forum, index) => (
-                  <ForumCard key={index} forum={forum} />
-                ))}
+                {getAllForums?.data?.slice(0, 3).map((forum, key) => {
+                  return <ForumCard2 key={key} forum={forum} />;
+                })}
               </>
             )}
           </>

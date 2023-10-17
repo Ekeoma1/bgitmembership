@@ -1,6 +1,6 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import React, { useEffect, useState } from "react";
-import "../../../src/assets/scss/communityForums.scss";
+import "../../../src/assets/scss/communityForumsAllForums.scss";
 import { HiArrowLeft } from "react-icons/hi";
 
 import SearchBox from "../Molecules/SearchBox";
@@ -8,10 +8,6 @@ import FilterBtn from "../Molecules/FilterBtn";
 import MainButton from "../Molecules/MainButton";
 import FilterBtn2 from "../Molecules/FilterBtn2";
 import { useNavigate } from "react-router-dom";
-import forumImg1 from "../../../src/assets/images/forumcard1.svg";
-import forumImg2 from "../../../src/assets/images/forumcard2.svg";
-import forumImg3 from "../../../src/assets/images/forumcard3.svg";
-import forumImg4 from "../../../src/assets/images/forumcard4.svg";
 import ForumCard from "../Molecules/ForumCard";
 import EmptyState from "../Molecules/EmptyState";
 import Carousel from "react-multi-carousel";
@@ -19,43 +15,6 @@ import "react-multi-carousel/lib/styles.css";
 
 const AllForums = ({ setSearchMain }) => {
   const navigate = useNavigate();
-  const communities = [
-    {
-      community_img: forumImg1,
-      community_name: "UX/UI Design",
-      info: "Dorem ipsum dolor sit amet consectetur. Urus fringilla mi. Lorem ipsu consectetur. Urus fringilla mi. Lorem ipsu Urus fringilla mi. Lorem ipsu consectetur. Urus fringilla mi. Lorem ipsu Urus fringilla mi. Lorem ipsu consectetur. Urus fringilla mi. Lorem ipsu",
-    },
-    {
-      community_img: forumImg2,
-      community_name: "Engineer Girls",
-      info: "Lorem ipsum dolor sit amet consectetur. Urus fringilla mi. Lorem ipsu consectetur. Urus fringilla mi. Lorem ipsu Urus fringilla mi. Lorem ipsu consectetur. Urus fringilla mi. Lorem ipsu Urus fringilla mi. Lorem ipsu consectetur. Urus fringilla mi. Lorem ipsu",
-    },
-    {
-      community_img: forumImg3,
-      community_name: "Data Babes 😍👩🏾‍💻",
-      info: "Lorem ipsum dolor sit amet consectetur. Urus fringilla mi. Lorem ipsu consectetur. Urus fringilla mi. Lorem ipsu Urus fringilla mi. Lorem ipsu consectetur. Urus fringilla mi. Lorem ipsu Urus fringilla mi. Lorem ipsu consectetur. Urus fringilla mi. Lorem ipsu",
-    },
-    {
-      community_img: forumImg4,
-      community_name: "Data Babes 😍👩🏾‍💻",
-      info: "Lorem ipsum dolor sit amet consectetur. Urus fringilla mi. Lorem ipsu consectetur. Urus fringilla mi. Lorem ipsu Urus fringilla mi. Lorem ipsu consectetur. Urus fringilla mi. Lorem ipsu Urus fringilla mi. Lorem ipsu consectetur. Urus fringilla mi. Lorem ipsu",
-    },
-    {
-      community_img: forumImg1,
-      community_name: "Data Babes 😍👩🏾‍💻",
-      info: "Lorem ipsum dolor sit amet consectetur. Urus fringilla mi. Lorem ipsu consectetur. Urus fringilla mi. Lorem ipsu Urus fringilla mi. Lorem ipsu consectetur. Urus fringilla mi. Lorem ipsu Urus fringilla mi. Lorem ipsu consectetur. Urus fringilla mi. Lorem ipsu",
-    },
-    {
-      community_img: forumImg1,
-      community_name: "Data Babes 😍👩🏾‍💻",
-      info: "Lorem ipsum dolor sit amet consectetur. Urus fringilla mi. Lorem ipsu consectetur. Urus fringilla mi. Lorem ipsu Urus fringilla mi. Lorem ipsu consectetur. Urus fringilla mi. Lorem ipsu Urus fringilla mi. Lorem ipsu consectetur. Urus fringilla mi. Lorem ipsu",
-    },
-    {
-      community_img: forumImg1,
-      community_name: "Data Babes 😍👩🏾‍💻",
-      info: "Lorem ipsum dolor sit amet consectetur. Urus fringilla mi. Lorem ipsu consectetur. Urus fringilla mi. Lorem ipsu Urus fringilla mi. Lorem ipsu consectetur. Urus fringilla mi. Lorem ipsu Urus fringilla mi. Lorem ipsu consectetur. Urus fringilla mi. Lorem ipsu",
-    },
-  ];
   const responsive = {
     desktop: {
       breakpoint: { max: 4000, min: 1024 },
@@ -92,7 +51,6 @@ const AllForums = ({ setSearchMain }) => {
   };
   const [search, setSearch] = useState(false);
   const [searchValue, setSearchValue] = useState("");
-  const [dispatchSearch, setDispatchSearch] = useState(false);
   const [searchedCommunities, setSearchedCommunities] = useState([]);
   const [showSearchEmptyState, setShowSearchEmptyState] = useState(false);
 
@@ -100,30 +58,12 @@ const AllForums = ({ setSearchMain }) => {
     setSearchValue(e.target.value);
   };
   const handleSearch = () => {
-    // console.log('search', searchValue);
+    console.log("search", searchValue);
   };
-  useEffect(() => {
-    if (dispatchSearch) {
-      handleSearch();
-      console.log("search", searchValue);
-    }
-    if (searchValue) {
-      let communitiesTemp = [...communities];
-      communitiesTemp = communitiesTemp.filter((item) => item.community_name.toLowerCase().includes(searchValue.toLowerCase()));
-      setSearchedCommunities(communitiesTemp);
-      setSearch(true);
-      setSearchMain(true);
-      if (communitiesTemp.length === 0) {
-        setShowSearchEmptyState(true);
-      } else {
-        setShowSearchEmptyState(false);
-      }
-    } else {
-      setSearch(false);
-      setSearchMain(false);
-    }
-    handleSearch();
-  }, [communities, dispatchSearch, searchValue, setSearchMain]);
+  const handleFilterBoxSearch = () => {
+    setShowFilterBoxSection(false);
+    console.log("filterData", filterData);
+  };
   // console.log('empty', showSearchEmptyState);
   return (
     <div className="all-forums-section">
@@ -142,8 +82,8 @@ const AllForums = ({ setSearchMain }) => {
               onChange={onChange}
               value={searchValue}
               placeholder="Search posts"
-              enterKeyPressed={() => setDispatchSearch(true)}
-              otherKeysPressed={() => setDispatchSearch(false)}
+              // enterKeyPressed={() => setDispatchSearch(true)}
+              // otherKeysPressed={() => setDispatchSearch(false)}
             />
           </div>
           <div className="btn">
@@ -219,13 +159,7 @@ const AllForums = ({ setSearchMain }) => {
                 </div>
               </div>
               <div className="btn-wrapper">
-                <MainButton
-                  text={"apply filters"}
-                  onClick={() => {
-                    setShowFilterBoxSection(false);
-                  }}
-                  size={"small"}
-                />
+                <MainButton text={"Apply filters"} onClick={handleFilterBoxSearch} size={"small"} />
               </div>
             </div>
           </div>

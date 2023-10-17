@@ -61,6 +61,8 @@ const apiRoutes = {
 
   // forums
   getAllForums: '/Forums/GetAllForums',
+  getAllForumsByIndustry: '/Forums/GetAllForumsByIndustry',
+  getAllForumsByLocation: '/Forums/GetAllForumsByLocation',
   joinForum: '/Forums/JoinForum',
 };
 
