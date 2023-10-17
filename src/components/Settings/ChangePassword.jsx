@@ -22,14 +22,6 @@ const ChangePassword = () => {
       .matches(/^(?=.*\d)(?=.*[A-Z])(?=.*[^A-Za-z0-9]).*$/, "Must contain at least one number, one uppercase letter, and one special character")
       .oneOf([Yup.ref("newPassword")], "Passwords do not match"),
   });
-  // const handleSubmit = (values) => {
-  //   const objEntries = Object.entries(values);
-  //   let valuesTemp = objEntries.filter(
-  //     (value) => value[0] === 'currentPassword' || value[0] === 'newPassword'
-  //   );
-  //   valuesTemp = Object.fromEntries(valuesTemp);
-  //   dispatch(triggerChangePassword(valuesTemp));
-  // };
 
   const handleSubmit = (values, { resetForm }) => {
     const objEntries = Object.entries(values);

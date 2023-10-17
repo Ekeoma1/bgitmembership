@@ -1,13 +1,13 @@
-import React, { useEffect, useState } from 'react';
-import '../../../src/assets/scss/communityForums.scss';
+import React, { useEffect, useState } from "react";
+import "../../../src/assets/scss/communityForums.scss";
 
-import { useNavigate } from 'react-router-dom';
-import ForumCard from '../Molecules/ForumCard';
-import Carousel from 'react-multi-carousel';
-import 'react-multi-carousel/lib/styles.css';
-import { useDispatch, useSelector } from 'react-redux';
-import { triggerGetAllForums } from '../../Features/forums/forums_slice';
-import { ForumCardsLoader2 } from '../Atoms/skeleton-loaders/ForumCardsLoader';
+import { useNavigate } from "react-router-dom";
+import ForumCard from "../Molecules/ForumCard";
+import Carousel from "react-multi-carousel";
+import "react-multi-carousel/lib/styles.css";
+import { useDispatch, useSelector } from "react-redux";
+import { triggerGetAllForums } from "../../Features/forums/forums_slice";
+import { ForumCardsLoader2 } from "../Atoms/skeleton-loaders/ForumCardsLoader";
 const SuggestedForums = () => {
   const navigate = useNavigate();
   const { getAllForums } = useSelector((state) => state.forums);
@@ -25,30 +25,27 @@ const SuggestedForums = () => {
     },
     tablet: {
       breakpoint: { max: 1024, min: 600 },
-      items: 3,
+      items: 2.4,
     },
     mobile: {
       breakpoint: { max: 600, min: 0 },
-      items: 2,
+      items: 1.4,
     },
   };
   return (
-    <div className='suggested-forums-wrapper'>
-      <div className='container'>
-        <div className='content-wrapper'>
-          <h3 className='section-title text-color'> Suggested Forums </h3>
-          <div className='view-all'>
-            <button onClick={() => navigate('/community-forums/all')}>
-              View all
-            </button>
+    <div className="suggested-forums-wrapper">
+      <div className="container">
+        <div className="content-wrapper">
+          <h3 className="section-title text-color"> Suggested Forums </h3>
+          <div className="view-all">
+            <button onClick={() => navigate("/community-forums/all")}>View all</button>
           </div>
-          <div className='forums-cards-wrapper'>
-            {getAllForums.status === 'base' ||
-            getAllForums.status === 'loading' ? (
+          <div className="forums-cards-wrapper">
+            {getAllForums.status === "base" || getAllForums.status === "loading" ? (
               <>
                 <ForumCardsLoader2 />
               </>
-            ) : getAllForums.status === 'successful' ? (
+            ) : getAllForums.status === "successful" ? (
               <>
                 {getAllForums.data.length === 0 ? (
                   <></>
@@ -62,7 +59,7 @@ const SuggestedForums = () => {
                   </>
                 )}
               </>
-            ) : getAllForums.status === 'error' ? (
+            ) : getAllForums.status === "error" ? (
               <></>
             ) : (
               <></>
