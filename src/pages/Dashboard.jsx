@@ -21,6 +21,9 @@ const Dashboard = () => {
   const [pageNumber] = useState(1);
   const [pageSize] = useState(10);
   useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
+  useEffect(() => {
     dispatch(triggerGetMyProfile());
     const data = { queryParams: { pageNumber, pageSize } };
     dispatch(triggerGetAllPosts(data));

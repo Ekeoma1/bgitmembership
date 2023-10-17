@@ -1,9 +1,12 @@
-import React from "react";
+import { useEffect } from "react";
 import LoginImage from "../assets/images/login-image.png";
 import "../assets/scss/loginRegister.scss";
 import PasswordResetForm from "../components/Auth/PasswordResetForm";
 
 const ForgotPassword = () => {
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
   return (
     <div className="login-register-wrapper">
       <div className="container">
