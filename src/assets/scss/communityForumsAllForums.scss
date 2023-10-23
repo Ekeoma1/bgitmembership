@@ -1,5 +1,5 @@
-@import 'colors';
-@import 'index';
+@import "colors";
+@import "index";
 
 .all-forums-wrapper {
   background-color: $body-bg;
@@ -9,7 +9,7 @@
     .page-title-wrapper {
       height: 23.8rem;
       padding: 12rem 0 7.1rem;
-      @media screen and (max-width: '500px') {
+      @media screen and (max-width: "500px") {
         padding: 2.6rem 0 2.6rem;
         height: 18.3rem;
       }
@@ -17,9 +17,9 @@
         display: flex;
         align-items: center;
         column-gap: 3.2rem;
-        @media screen and (max-width: '500px') {
+        @media screen and (max-width: "500px") {
           flex-direction: column;
-          row-gap: 4.8rem;
+          row-gap: 2.8rem;
           align-items: flex-start;
         }
         .icon {
@@ -35,7 +35,7 @@
           line-height: 117%;
           margin: auto 0;
 
-          @media screen and (max-width: '500px') {
+          @media screen and (max-width: "500px") {
             font-size: 2.4rem;
           }
         }
@@ -44,7 +44,7 @@
     .search-box {
       .search-box-wrapper {
         width: 30rem;
-        @media screen and (max-width: '500px') {
+        @media screen and (max-width: "500px") {
           width: 100%;
         }
       }
@@ -62,19 +62,19 @@
       &.search {
         margin-bottom: 0;
       }
-      @media screen and (max-width: '500px') {
+      @media screen and (max-width: "500px") {
         justify-content: center;
         margin-bottom: 5.1rem;
         padding: 0rem;
       }
       .search-box-component-wrapper {
         width: 30rem;
-        @media screen and (max-width: '500px') {
+        @media screen and (max-width: "500px") {
           width: 100%;
         }
       }
       .btn {
-        @media screen and (max-width: '500px') {
+        @media screen and (max-width: "500px") {
           display: none;
         }
       }
@@ -83,15 +83,17 @@
       display: flex;
       padding: 0 6.2rem;
       justify-content: flex-end;
-      margin-bottom: -3rem;
+      @media screen and (max-width: "800px") {
+        padding: 0 !important;
+      }
       .filter-btn {
-        @media screen and (max-width: '500px') {
+        @media screen and (max-width: "500px") {
           display: none;
         }
       }
       .filter-btn-mobile {
         display: none;
-        @media screen and (max-width: '500px') {
+        @media screen and (max-width: "500px") {
           display: block;
         }
       }
@@ -100,9 +102,9 @@
       margin-bottom: .8rem;
     }
     .filter-box-wrapper {
-      margin-bottom: 8.4rem;
+      margin: 20px 0;
       padding: 0 6.2rem;
-      @media screen and (max-width: '800px') {
+      @media screen and (max-width: "800px") {
         padding: 0;
       }
       .filter-box {
@@ -112,10 +114,10 @@
         border-radius: 30px;
         background: #fff;
         padding: 4rem;
-        @media screen and (max-width: '900px') {
+        @media screen and (max-width: "900px") {
           padding: 4rem 1rem;
         }
-        @media screen and (max-width: '500px') {
+        @media screen and (max-width: "500px") {
           border-radius: 0;
           height: auto;
           padding: 1rem;
@@ -124,7 +126,7 @@
           display: grid;
           grid-template-columns: repeat(3, 1fr);
           margin-bottom: 7rem;
-          @media screen and (max-width: '500px') {
+          @media screen and (max-width: "500px") {
             grid-template-columns: repeat(1, 1fr);
           }
           input {
@@ -132,8 +134,8 @@
             height: 2rem;
             flex-shrink: 0;
           }
-          input[type='checkbox'],
-          input[type='radio'] {
+          input[type="checkbox"],
+          input[type="radio"] {
             accent-color: #6f6c90;
           }
           .group {
@@ -161,10 +163,10 @@
           .group-1 {
             border-right: 3px solid #d8d1ef;
             padding: 0 7rem 0 0;
-            @media screen and (max-width: '1100px') {
+            @media screen and (max-width: "1100px") {
               padding: 0 2rem 0 0;
             }
-            @media screen and (max-width: '500px') {
+            @media screen and (max-width: "500px") {
               padding: 3rem 0;
               border-right: 0;
               border-bottom: 3px solid #d8d1ef;
@@ -173,10 +175,10 @@
           .group-2 {
             border-right: 3px solid #d8d1ef;
             padding: 0 7rem;
-            @media screen and (max-width: '1100px') {
+            @media screen and (max-width: "1100px") {
               padding: 0 2rem;
             }
-            @media screen and (max-width: '500px') {
+            @media screen and (max-width: "500px") {
               padding: 3rem 0;
               border-right: 0;
               border-bottom: 3px solid #d8d1ef;
@@ -184,10 +186,10 @@
           }
           .group-3 {
             padding: 0 0 0 7rem;
-            @media screen and (max-width: '1100px') {
+            @media screen and (max-width: "1100px") {
               padding: 0 0 0 2rem;
             }
-            @media screen and (max-width: '500px') {
+            @media screen and (max-width: "500px") {
               padding: 3rem 0;
             }
           }
@@ -213,7 +215,7 @@
   .recommended-section {
     .recommended-section-content {
       padding: 0 6.2rem 6.6rem;
-      @media screen and (max-width: '800px') {
+      @media screen and (max-width: "800px") {
         padding: 0 0 6.6rem;
       }
       .section-title-wrapper {
@@ -221,7 +223,7 @@
         align-items: center;
         column-gap: 3rem;
         margin-bottom: 6.5rem;
-        @media screen and (max-width: '500px') {
+        @media screen and (max-width: "500px") {
           margin-bottom: 4rem;
         }
         h5 {
@@ -229,7 +231,7 @@
           font-size: 2rem;
           line-height: 117%;
           width: 60%;
-          @media screen and (max-width: '800px') {
+          @media screen and (max-width: "800px") {
             font-size: 1.8rem;
           }
         }
