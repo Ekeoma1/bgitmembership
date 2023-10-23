@@ -28,7 +28,6 @@ const ProfileBanner = ({ othersView, data }) => {
   const hideIndividualAcctModal = () => {
     setIndividualAcctModal(false);
   };
-  console.log('data', data);
   return (
     <div className='profile-banner-wrapper'>
       <div className='banner-image'></div>

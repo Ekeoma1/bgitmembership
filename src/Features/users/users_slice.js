@@ -3,7 +3,7 @@ import UsersService from './users_service';
 import * as states from '../../utils/strings';
 
 const initialState = {
-  getUserByProfileId: {
+  getUserProfileById: {
     status: states.BASE,
     data: {},
   },
@@ -36,6 +36,18 @@ const initialState = {
     data: {},
   },
   closeAccount: {
+    status: states.BASE,
+    data: {},
+  },
+  updateProfilePicture: {
+    status: states.BASE,
+    data: {},
+  },
+  updateBackgroundPicture: {
+    status: states.BASE,
+    data: {},
+  },
+  getUsers: {
     status: states.BASE,
     data: {},
   },
@@ -149,6 +161,42 @@ export const triggerCloseAccount = createAsyncThunk(
   }
 );
 
+// update profile picture
+export const triggerUpdateProfilePicture = createAsyncThunk(
+  'update-profile-picture',
+  async (params, thunkAPI) => {
+    try {
+      return await UsersService.updateProfilePicture(params);
+    } catch (e) {
+      return thunkAPI.rejectWithValue(e.message);
+    }
+  }
+);
+
+// update background picture
+export const triggerUpdateBackgroundPicture = createAsyncThunk(
+  'update-background-picture',
+  async (params, thunkAPI) => {
+    try {
+      return await UsersService.updateBackgroundPicture(params);
+    } catch (e) {
+      return thunkAPI.rejectWithValue(e.message);
+    }
+  }
+);
+
+// get users
+export const triggerGetUsers = createAsyncThunk(
+  'get-users',
+  async (params, thunkAPI) => {
+    try {
+      return await UsersService.getUsers(params);
+    } catch (e) {
+      return thunkAPI.rejectWithValue(e.message);
+    }
+  }
+);
+
 const usersSlice = createSlice({
   name: 'users',
   initialState,
@@ -172,16 +220,16 @@ const usersSlice = createSlice({
   extraReducers: (builder) => {
     // get user profile by id
     builder.addCase(triggerGetUserProfileById.pending, (state) => {
-      state.getUserByProfileId.status = states.LOADING;
-      state.getUserByProfileId.data = {};
+      state.getUserProfileById.status = states.LOADING;
+      state.getUserProfileById.data = {};
     });
     builder.addCase(triggerGetUserProfileById.fulfilled, (state, action) => {
-      state.getUserByProfileId.status = states.SUCCESSFUL;
-      state.getUserByProfileId.data = action.payload;
+      state.getUserProfileById.status = states.SUCCESSFUL;
+      state.getUserProfileById.data = action.payload;
     });
     builder.addCase(triggerGetUserProfileById.rejected, (state, action) => {
-      state.getUserByProfileId.status = states.ERROR;
-      state.getUserByProfileId.data = {};
+      state.getUserProfileById.status = states.ERROR;
+      state.getUserProfileById.data = {};
     });
 
     // get my profile
@@ -294,6 +342,48 @@ const usersSlice = createSlice({
     builder.addCase(triggerCloseAccount.rejected, (state) => {
       state.closeAccount.status = states.ERROR;
       state.closeAccount.data = {};
+    });
+
+    // update profile picture
+    builder.addCase(triggerUpdateProfilePicture.pending, (state) => {
+      state.updateProfilePicture.status = states.LOADING;
+      state.updateProfilePicture.data = {};
+    });
+    builder.addCase(triggerUpdateProfilePicture.fulfilled, (state, action) => {
+      state.updateProfilePicture.status = states.SUCCESSFUL;
+      state.updateProfilePicture.data = action.payload;
+    });
+    builder.addCase(triggerUpdateProfilePicture.rejected, (state) => {
+      state.updateProfilePicture.status = states.ERROR;
+      state.updateProfilePicture.data = {};
+    });
+
+    // update background picture
+    builder.addCase(triggerUpdateBackgroundPicture.pending, (state) => {
+      state.updateBackgroundPicture.status = states.LOADING;
+      state.updateBackgroundPicture.data = {};
+    });
+    builder.addCase(triggerUpdateBackgroundPicture.fulfilled, (state, action) => {
+      state.updateBackgroundPicture.status = states.SUCCESSFUL;
+      state.updateBackgroundPicture.data = action.payload;
+    });
+    builder.addCase(triggerUpdateBackgroundPicture.rejected, (state) => {
+      state.updateBackgroundPicture.status = states.ERROR;
+      state.updateBackgroundPicture.data = {};
+    });
+
+    // get users
+    builder.addCase(triggerGetUsers.pending, (state) => {
+      state.getUsers.status = states.LOADING;
+      state.getUsers.data = {};
+    });
+    builder.addCase(triggerGetUsers.fulfilled, (state, action) => {
+      state.getUsers.status = states.SUCCESSFUL;
+      state.getUsers.data = action.payload;
+    });
+    builder.addCase(triggerGetUsers.rejected, (state) => {
+      state.getUsers.status = states.ERROR;
+      state.getUsers.data = {};
     });
   },
 });

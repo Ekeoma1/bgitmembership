@@ -1,5 +1,5 @@
-@import "colors";
-@import "index";
+@import 'colors';
+@import 'index';
 
 .user-dashboard {
   padding: 20px 0 50px 0;
@@ -270,7 +270,9 @@
         box-shadow: 0px 3.9095799922943115px 10.94682502746582px 0px #080f340a;
         padding: 20px;
         box-sizing: border-box;
-
+        .details {
+          margin-bottom: 2rem;
+        }
         .member-img {
           width: 70px;
           height: 70px;

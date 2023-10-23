@@ -6,13 +6,17 @@ async function ajax({ method = 'GET', url, data, queryParams }) {
   // console.log('data ', data);
   // console.log('query ', queryParams);
   let result, contentType;
-  if (data?.photo || data?.postImageUrl || data?.postVideoUrl || data?.content || data?.resume) {
+  if (
+    data?.photo ||
+    data?.postImageUrl ||
+    data?.postVideoUrl ||
+    data?.content ||
+    data?.resume
+  ) {
     contentType = 'multipart/form-data';
   } else {
     contentType = 'application/json';
   }
-  // console.log('two');
-
   if (url === '/Auth/Login' || url === '/Auth/SignUp') {
     // console.log('login in or signing up requests');
     const axiosInstance = axios.create({
@@ -67,7 +71,7 @@ async function ajax({ method = 'GET', url, data, queryParams }) {
         })
         .catch((err) => {
           console.log('axios errp', err);
-         result = err.response?.data;
+          result = err.response?.data;
         });
       return result;
     }

@@ -41,7 +41,16 @@ const LoginForm = ({ forLogin, regFirstStep }) => {
   useEffect(() => {
     if (signin.status === 'successful') {
       if (signin.data?.token) {
-        dispatch(login(true));
+        // we have the token now, but we want to check for the account role
+        if (signin.data.user.role === 'User') {
+          dispatch(login(true));
+        } else {
+          renderToast({
+            status: 'error',
+            message: 'You are not a user',
+          });
+          dispatch(resetSignIn());
+        }
       } else {
         renderToast({
           status: 'error',

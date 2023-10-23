@@ -58,6 +58,9 @@ const apiRoutes = {
   getPrivacySettings: '/Users/GetPrivacySettings',
   updatePrivacySettings: '/Users/UpdatePrivacySettings',
   closeAccount: '/Users/CloseAccount',
+  updateProfilePicture: '/Users/UpdateProfilePicture',
+  updateBackgroundPicture: '/Users/UpdateBackgroundPicture',
+  getUsers: '/Users/GetUsers',
 
   // forums
   getAllForums: '/Forums/GetAllForums',

@@ -74,6 +74,28 @@ export default class UsersService {
     });
     return response;
   }
+  static async updateProfilePicture(data) {
+    const response = await post({
+      url: apiRoutes.updateProfilePicture,
+      data: { ...data },
+    });
+    return response;
+  }
+  static async updateBackgroundPicture(data) {
+    const response = await post({
+      url: apiRoutes.updateBackgroundPicture,
+      data: { ...data },
+    });
+    return response;
+  }
+  static async getUsers(data) {
+    const response = await get({
+      url: apiRoutes.getUsers,
+      data: { ...data },
+      queryParams: data.queryParams,
+    });
+    return response;
+  }
 
   static _getToken() {
     const token = JSON.parse(localStorage.getItem('token'));
