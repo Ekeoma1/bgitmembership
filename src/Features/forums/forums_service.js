@@ -2,9 +2,39 @@ import apiRoutes from '../../routes/api_routes';
 import { get, post, put } from '../../network/https';
 
 export default class ForumsService {
+  static async joinForum(data) {
+    const response = await post({
+      url: apiRoutes.joinForum,
+      data: { ...data },
+    });
+    return response;
+  }
+  static async leaveForum(data) {
+    const response = await post({
+      url: apiRoutes.leaveForum,
+      data: { ...data },
+    });
+    return response;
+  }
+  static async createForum(data) {
+    const response = await post({
+      url: apiRoutes.createForum,
+      data: { ...data },
+    });
+    return response;
+  }
+
   static async getAllForums(data) {
     const response = await get({
       url: apiRoutes.getAllForums,
+      data: { ...data },
+      queryParams: data.queryParams,
+    });
+    return response;
+  }
+  static async getForumById(data) {
+    const response = await get({
+      url: apiRoutes.getForumById,
       data: { ...data },
       queryParams: data.queryParams,
     });
@@ -23,13 +53,6 @@ export default class ForumsService {
       url: apiRoutes.getAllForumsByLocation,
       data: { ...data },
       queryParams: data.queryParams,
-    });
-    return response;
-  }
-  static async joinForum(data) {
-    const response = await post({
-      url: apiRoutes.joinForum,
-      data: { ...data },
     });
     return response;
   }

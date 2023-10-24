@@ -63,10 +63,13 @@ const apiRoutes = {
   getUsers: '/Users/GetUsers',
 
   // forums
+  joinForum: '/Forums/JoinForum',
+  leaveForum: '/Forums/LeaveForum',
+  createForum: '/Forums/CreateForum',
   getAllForums: '/Forums/GetAllForums',
+  getForumById: '/Forums/GetForumById',
   getAllForumsByIndustry: '/Forums/GetAllForumsByIndustry',
   getAllForumsByLocation: '/Forums/GetAllForumsByLocation',
-  joinForum: '/Forums/JoinForum',
 };
 
 export default apiRoutes;

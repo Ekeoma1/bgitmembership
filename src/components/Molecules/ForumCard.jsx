@@ -7,8 +7,13 @@ import { useNavigate } from 'react-router-dom';
 import forumImg1 from '../../../src/assets/images/forumcard1.svg';
 import { useDispatch, useSelector } from 'react-redux';
 import {
+  resetActiveForumIdForOngoingRequest,
   resetJoinForum,
+  resetLeaveForum,
+  setActiveForumIdFOrOngoingRequest,
+  setActiveForumIdForOngoingRequest,
   triggerJoinForum,
+  triggerLeaveForum,
 } from '../../Features/forums/forums_slice';
 import { renderToast } from './CustomToastify';
 import { HiPlus } from 'react-icons/hi';
@@ -101,15 +106,56 @@ const ForumCard = ({ forum }) => {
 };
 export const ForumCard2 = ({ forum }) => {
   const navigate = useNavigate();
-  const dispatch=useDispatch()
+  const dispatch = useDispatch();
+  const { joinForum, leaveForum, activeForumIdForOngoingRequest } = useSelector(
+    (state) => state.forums
+  );
   const handleClick = (e, id) => {
-    console.log(e.currentTarget);
+    // console.log(e.currentTarget);
+    const values = { forumId: id };
+    console.log(values);
     if (e.currentTarget.classList.contains('join')) {
-      const values = { forumId: id };
+      dispatch(setActiveForumIdForOngoingRequest(id));
       dispatch(triggerJoinForum(values));
     } else if (e.currentTarget.classList.contains('joined')) {
+      dispatch(setActiveForumIdForOngoingRequest(id));
+      dispatch(triggerLeaveForum(values));
     }
   };
+  useEffect(() => {
+    console.log('useeffect');
+    // To avoid multiple rerenders
+    if (forum.forumId === activeForumIdForOngoingRequest) {
+      if (joinForum.status === 'successful') {
+        if (joinForum.data === 'You are the admin of the forum.') {
+          renderToast({
+            status: 'error',
+            message: joinForum.data,
+          });
+        } else {
+          renderToast({
+            status: 'success',
+            message: joinForum.data,
+          });
+        }
+        dispatch(resetJoinForum());
+        dispatch(resetActiveForumIdForOngoingRequest());
+      } else if (joinForum.status === 'error') {
+        dispatch(resetActiveForumIdForOngoingRequest());
+      }
+
+      if (leaveForum.status === 'successful') {
+        renderToast({
+          status: 'success',
+          message: leaveForum.data,
+        });
+        dispatch(resetLeaveForum());
+        dispatch(resetActiveForumIdForOngoingRequest());
+      } else if (leaveForum.status === 'error') {
+        dispatch(resetActiveForumIdForOngoingRequest());
+      }
+    }
+  }, [joinForum.status, leaveForum.status]);
   return (
     <div
       className='forum-card-2'
@@ -125,17 +171,16 @@ export const ForumCard2 = ({ forum }) => {
         {forum.isCurrentUserMember ? (
           <button
             className=' smaller-text community-forum-btn forum-card-btn joined'
-            onClick={(e) => handleClick(e, forum.id)}
+            onClick={(e) => handleClick(e, forum.forumId)}
           >
-            Leave Forum
+            Joined
           </button>
         ) : (
           <button
             className=' smaller-text community-forum-btn forum-card-btn join'
-            onClick={(e) => handleClick(e)}
+            onClick={(e) => handleClick(e, forum.forumId)}
           >
-            <HiPlus className='join' />
-            Join
+            + Join
           </button>
         )}
       </div>
