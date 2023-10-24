@@ -5,12 +5,11 @@ import { GrCheckmark } from 'react-icons/gr';
 import useWindowSize from '../../hooks/useWindowSize';
 import { useNavigate } from 'react-router-dom';
 import forumImg1 from '../../../src/assets/images/forumcard1.svg';
+import loadingDots from '../../../src/assets/images/loading_dots.gif';
 import { useDispatch, useSelector } from 'react-redux';
 import {
-  resetActiveForumIdForOngoingRequest,
   resetJoinForum,
   resetLeaveForum,
-  setActiveForumIdFOrOngoingRequest,
   setActiveForumIdForOngoingRequest,
   triggerJoinForum,
   triggerLeaveForum,
@@ -21,7 +20,9 @@ import { HiPlus } from 'react-icons/hi';
 const ForumCard = ({ forum }) => {
   const { isMobile } = useWindowSize();
   const dispatch = useDispatch();
-  const { joinForum } = useSelector((state) => state.forums);
+  const { joinForum, leaveForum, activeForumIdForOngoingRequest } = useSelector(
+    (state) => state.forums
+  );
   const [joined, setJoined] = useState(false);
   const navigate = useNavigate();
   const handleClick = (e) => {
@@ -105,15 +106,13 @@ const ForumCard = ({ forum }) => {
   );
 };
 export const ForumCard2 = ({ forum }) => {
-  const navigate = useNavigate();
-  const dispatch = useDispatch();
   const { joinForum, leaveForum, activeForumIdForOngoingRequest } = useSelector(
     (state) => state.forums
   );
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
   const handleClick = (e, id) => {
-    // console.log(e.currentTarget);
     const values = { forumId: id };
-    console.log(values);
     if (e.currentTarget.classList.contains('join')) {
       dispatch(setActiveForumIdForOngoingRequest(id));
       dispatch(triggerJoinForum(values));
@@ -122,40 +121,7 @@ export const ForumCard2 = ({ forum }) => {
       dispatch(triggerLeaveForum(values));
     }
   };
-  useEffect(() => {
-    console.log('useeffect');
-    // To avoid multiple rerenders
-    if (forum.forumId === activeForumIdForOngoingRequest) {
-      if (joinForum.status === 'successful') {
-        if (joinForum.data === 'You are the admin of the forum.') {
-          renderToast({
-            status: 'error',
-            message: joinForum.data,
-          });
-        } else {
-          renderToast({
-            status: 'success',
-            message: joinForum.data,
-          });
-        }
-        dispatch(resetJoinForum());
-        dispatch(resetActiveForumIdForOngoingRequest());
-      } else if (joinForum.status === 'error') {
-        dispatch(resetActiveForumIdForOngoingRequest());
-      }
 
-      if (leaveForum.status === 'successful') {
-        renderToast({
-          status: 'success',
-          message: leaveForum.data,
-        });
-        dispatch(resetLeaveForum());
-        dispatch(resetActiveForumIdForOngoingRequest());
-      } else if (leaveForum.status === 'error') {
-        dispatch(resetActiveForumIdForOngoingRequest());
-      }
-    }
-  }, [joinForum.status, leaveForum.status]);
   return (
     <div
       className='forum-card-2'
@@ -173,14 +139,28 @@ export const ForumCard2 = ({ forum }) => {
             className=' smaller-text community-forum-btn forum-card-btn joined'
             onClick={(e) => handleClick(e, forum.forumId)}
           >
-            Joined
+            {leaveForum.status === 'loading' &&
+            forum.forumId === activeForumIdForOngoingRequest ? (
+              <>
+                Loading <img src={loadingDots} alt='' className='' />
+              </>
+            ) : (
+              'Leave'
+            )}
           </button>
         ) : (
           <button
             className=' smaller-text community-forum-btn forum-card-btn join'
             onClick={(e) => handleClick(e, forum.forumId)}
           >
-            + Join
+            {joinForum.status === 'loading' &&
+            forum.forumId === activeForumIdForOngoingRequest ? (
+              <>
+                Loading <img src={loadingDots} alt='' className='' />
+              </>
+            ) : (
+              '+ Join'
+            )}
           </button>
         )}
       </div>
