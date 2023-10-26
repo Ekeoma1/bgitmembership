@@ -482,13 +482,13 @@
         margin-bottom: 2.5rem;
         .info {
           display: flex;
-          align-items: center;
+          align-items: flex-start;
           column-gap: 0.64rem;
           margin-bottom: 1.4rem;
           span {
             display: flex;
-            width: 20.022px;
-            height: 19.554px;
+            min-width: 20.022px;
+            min-height: 19.554px;
             justify-content: center;
             align-items: center;
             gap: 4.888px;

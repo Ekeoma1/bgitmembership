@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import '../../assets/scss/molecules.scss';
 import { LuPlus } from 'react-icons/lu';
 import { GrCheckmark } from 'react-icons/gr';
@@ -15,9 +15,9 @@ import {
   triggerLeaveForum,
 } from '../../Features/forums/forums_slice';
 import { renderToast } from './CustomToastify';
-import { HiPlus } from 'react-icons/hi';
 
 const ForumCard = ({ forum }) => {
+  const buttonContainer = useRef(null);
   const { isMobile } = useWindowSize();
   const dispatch = useDispatch();
   const { joinForum, leaveForum, activeForumIdForOngoingRequest } = useSelector(
@@ -25,41 +25,36 @@ const ForumCard = ({ forum }) => {
   );
   const [joined, setJoined] = useState(false);
   const navigate = useNavigate();
+  const [loading, setLoading] = useState(false);
+
   const handleClick = (e) => {
-    console.log(e.currentTarget);
-    if (e.currentTarget.classList.contains('join')) {
+    if (!loading) {
       const values = { forumId: forum.forumId };
-      dispatch(triggerJoinForum(values));
-      // setJoined(true);
-    } else if (e.currentTarget.classList.contains('joined')) {
-      // setJoined(false);
+      if (e.target.closest('.join')) {
+        dispatch(triggerJoinForum(values));
+        dispatch(setActiveForumIdForOngoingRequest(forum.forumId));
+      } else if (e.target.closest('.joined')) {
+        dispatch(triggerLeaveForum(values));
+        dispatch(setActiveForumIdForOngoingRequest(forum.forumId));
+      } else {
+        navigate(`/community-forums/forum/${forum.forumId}`);
+      }
     }
   };
+
   useEffect(() => {
-    if (joinForum.status === 'successful') {
-      if (joinForum.data === 'You are the admin of the forum.') {
-        renderToast({
-          status: 'error',
-          message: joinForum.data,
-        });
-      } else {
-        renderToast({
-          status: 'success',
-          message: joinForum.data,
-        });
-      }
-      dispatch(resetJoinForum());
+    if (
+      (joinForum.status === 'loading' || leaveForum.status === 'loading') &&
+      activeForumIdForOngoingRequest === forum.forumId
+    ) {
+      setLoading(true);
+    } else {
+      setLoading(false);
     }
-  }, [joinForum.status]);
+  }, [joinForum.status, leaveForum.status]);
+
   return (
-    <div
-      className='forum-card mb-4 bg-color-card'
-      onClick={(e) => {
-        if (!e.target.classList.contains('forum-card-btn')) {
-          navigate(`/community-forums/forum/${forum.forumId}`);
-        }
-      }}
-    >
+    <div className='forum-card mb-4 bg-color-card' onClick={handleClick}>
       <img src={forumImg1} alt='forum-img' className='' />
       <h3 className='text-color-secondary-bold'>
         {forum.forumName?.length > 15
@@ -83,22 +78,46 @@ const ForumCard = ({ forum }) => {
           </span>
         )}
       </p>
-      {joined ? (
+      {forum.isCurrentUserMember ? (
         <button
-          className='bg-color text-color forum-card-btn joined'
+          className={`bg-color text-color forum-card-btn joined ${
+            loading && 'loading'
+          }`}
           onClick={(e) => handleClick(e)}
+          ref={buttonContainer}
         >
-          <GrCheckmark className='icon forum-card-btn' />
-          Joined
+          {leaveForum.status === 'loading' &&
+          forum.forumId === activeForumIdForOngoingRequest ? (
+            <>
+              Loading <img src={loadingDots} alt='' className='' />
+            </>
+          ) : (
+            'Leave'
+          )}
         </button>
       ) : (
         <>
           <button
-            className='bg-color text-color forum-card-btn join'
+            className={` smaller-text  bg-color text-color forum-card-btn join community-forum-btn ${
+              loading && 'loading'
+            }`}
             onClick={(e) => handleClick(e)}
+            ref={buttonContainer}
           >
-            <LuPlus className='icon forum-card-btn' />
-            Join
+            {joinForum.status === 'loading' &&
+            forum.forumId === activeForumIdForOngoingRequest ? (
+              <>
+                Loading{' '}
+                <div className='img-wrapper'>
+                  <img src={loadingDots} alt='' className='img-loader' />
+                </div>
+              </>
+            ) : (
+              <>
+                <LuPlus className='icon forum-card-btn' />
+                Join
+              </>
+            )}
           </button>
         </>
       )}
@@ -111,17 +130,30 @@ export const ForumCard2 = ({ forum }) => {
   );
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const handleClick = (e, id) => {
-    const values = { forumId: id };
-    if (e.currentTarget.classList.contains('join')) {
-      dispatch(setActiveForumIdForOngoingRequest(id));
-      dispatch(triggerJoinForum(values));
-    } else if (e.currentTarget.classList.contains('joined')) {
-      dispatch(setActiveForumIdForOngoingRequest(id));
-      dispatch(triggerLeaveForum(values));
+  const [loading, setLoading] = useState(false);
+  const handleClick = (e) => {
+    if (!loading) {
+      const values = { forumId: forum.forumId };
+      if (e.currentTarget.classList.contains('join')) {
+        dispatch(setActiveForumIdForOngoingRequest(forum.forumId));
+        dispatch(triggerJoinForum(values));
+      } else if (e.currentTarget.classList.contains('joined')) {
+        dispatch(setActiveForumIdForOngoingRequest(forum.forumId));
+        dispatch(triggerLeaveForum(values));
+      }
     }
   };
 
+  useEffect(() => {
+    if (
+      (joinForum.status === 'loading' || leaveForum.status === 'loading') &&
+      activeForumIdForOngoingRequest === forum.forumId
+    ) {
+      setLoading(true);
+    } else {
+      setLoading(false);
+    }
+  }, [joinForum.status, leaveForum.status]);
   return (
     <div
       className='forum-card-2'
@@ -136,7 +168,9 @@ export const ForumCard2 = ({ forum }) => {
       <div className='text-center'>
         {forum.isCurrentUserMember ? (
           <button
-            className=' smaller-text community-forum-btn forum-card-btn joined'
+            className={`smaller-text community-forum-btn forum-card-btn joined ${
+              loading && 'loading'
+            }`}
             onClick={(e) => handleClick(e, forum.forumId)}
           >
             {leaveForum.status === 'loading' &&
@@ -150,13 +184,16 @@ export const ForumCard2 = ({ forum }) => {
           </button>
         ) : (
           <button
-            className=' smaller-text community-forum-btn forum-card-btn join'
+            className={`smaller-text community-forum-btn forum-card-btn join ${
+              loading && 'loading'
+            }`}
             onClick={(e) => handleClick(e, forum.forumId)}
           >
             {joinForum.status === 'loading' &&
             forum.forumId === activeForumIdForOngoingRequest ? (
               <>
-                Loading <img src={loadingDots} alt='' className='' />
+                Loading{' '}
+                <img src={loadingDots} alt='' className='forum-card-btn' />
               </>
             ) : (
               '+ Join'

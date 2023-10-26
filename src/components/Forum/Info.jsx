@@ -13,12 +13,12 @@ const infoData = [
   },
 ];
 
-const Info = () => {
+const Info = ({ forum }) => {
   return (
     <div className='info-wrapper shadow-sm'>
       <h3 className='mt-3 title'>Info</h3>
       <div className='info-content'>
-        {infoData.map((item, index) => {
+        {forum.info.map((item, index) => {
           const backgroundColors = colors;
           const color =
             backgroundColors[index] ??
@@ -29,7 +29,7 @@ const Info = () => {
               <span style={{ backgroundColor: color }}>
                 <h3>{index + 1}</h3>
               </span>
-              <h5>{item.text}</h5>
+              <h5>{item}</h5>
             </div>
           );
         })}

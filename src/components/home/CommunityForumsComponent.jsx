@@ -16,11 +16,12 @@ import { HiPlus } from 'react-icons/hi';
 import { renderToast } from '../Molecules/CustomToastify';
 
 const CommunityForumsComponent = () => {
-  const { getAllForums } = useSelector((state) => state.forums);
+  const { getAllForums, joinForum, leaveForum } = useSelector(
+    (state) => state.forums
+  );
   const [pageNumber] = useState(1);
   const [pageSize] = useState(10);
   const dispatch = useDispatch();
-  const { joinForum, leaveForum } = useSelector((state) => state.forums);
   useEffect(() => {
     const data = { queryParams: { pageNumber, pageSize } };
     dispatch(triggerGetAllForums(data));
@@ -39,7 +40,12 @@ const CommunityForumsComponent = () => {
         });
       }
       dispatch(resetJoinForum());
+      dispatch(resetActiveForumIdForOngoingRequest());
+    } else if (joinForum.status === 'error') {
+      dispatch(resetJoinForum());
+      dispatch(resetActiveForumIdForOngoingRequest());
     }
+    // leave forum
     if (leaveForum.status === 'successful') {
       renderToast({
         status: 'success',
@@ -48,6 +54,7 @@ const CommunityForumsComponent = () => {
       dispatch(resetLeaveForum());
       dispatch(resetActiveForumIdForOngoingRequest());
     } else if (leaveForum.status === 'error') {
+      dispatch(resetLeaveForum());
       dispatch(resetActiveForumIdForOngoingRequest());
     }
   }, [joinForum.status, leaveForum.status]);
@@ -76,14 +83,17 @@ const CommunityForumsComponent = () => {
         ) : (
           <></>
         )}
-        <div className='text-center my-4'>
-          <Link
-            to='/community-forums'
-            className='sec-btn mx-auto c-gap-5 smallert-text added-width d-flex align-items-center justify-content-center'
-          >
-            <span>View all</span> <Icon icon='arrowRight' />
-          </Link>
-        </div>
+        {getAllForums.status === 'successful' &&
+          getAllForums?.data?.length > 3 && (
+            <div className='text-center my-4'>
+              <Link
+                to='/community-forums'
+                className='sec-btn mx-auto c-gap-5 smallert-text added-width d-flex align-items-center justify-content-center'
+              >
+                <span>View all</span> <Icon icon='arrowRight' />
+              </Link>
+            </div>
+          )}
       </div>
     </div>
   );
