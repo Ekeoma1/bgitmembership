@@ -70,6 +70,15 @@ const apiRoutes = {
   getForumById: '/Forums/GetForumById',
   getAllForumsByIndustry: '/Forums/GetAllForumsByIndustry',
   getAllForumsByLocation: '/Forums/GetAllForumsByLocation',
+
+  // News
+  getAllNews: '/News/GetAllNews',
+  getNewsById: '/News/GetNewsById',
+
+  // Events
+  getAllEvents: '/Events/GetAllEvents',
+  getEventById: '/Events/GetEventById',
+  applyForEvent: '/Events/ApplyForEvent',
 };
 
 export default apiRoutes;

@@ -85,9 +85,7 @@ const SuggestedForums = () => {
           <div className='forums-cards-wrapper'>
             {getAllForums.status === 'base' ||
             getAllForums.status === 'loading' ? (
-              <>
-                <ForumCardsLoader2 />
-              </>
+              <ForumCardsLoader2 />
             ) : getAllForums.status === 'successful' ? (
               <>
                 {getAllForums.data?.length === 0 ? (

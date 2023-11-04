@@ -125,6 +125,16 @@
 
     .section-list-wrapper {
       margin-top: 20px;
+      .loader {
+        margin-bottom: 20px;
+        display: flex;
+        flex-direction: column;
+        row-gap: 1.6rem;
+        .single-line-loader-wrapper {
+          width: 100%;
+          height: 2.4rem;
+        }
+      }
       .section-list {
         margin-bottom: 16px;
         .circle {

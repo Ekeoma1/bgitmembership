@@ -1,78 +1,125 @@
-import React from "react";
-import Icon from "../Icon";
-import { Link } from "react-router-dom";
-
-const recentlyViewed = [
-  {
-    text: "Tech Talks with Tasha",
-  },
-  {
-    text: "Introduction to UX Design",
-  },
-];
-
-const upcomingEvent = [
-  {
-    text: "Staycation Retreat",
-  },
-  {
-    text: "Bonfire night & Vibez (TBC)",
-  },
-];
-
+import React, { useEffect, useState } from 'react';
+import Icon from '../Icon';
+import { Link } from 'react-router-dom';
+import { useDispatch, useSelector } from 'react-redux';
+import { triggerGetAllNews } from '../../Features/news/news_slice';
+import { triggerGetAllEvents } from '../../Features/events/events_slice';
+import SingleLineLoader from '../Atoms/skeleton-loaders/SingleLineLoader';
 const MyUpdates = () => {
+  const dispatch = useDispatch();
+  const { getAllNews } = useSelector((state) => state.news);
+  const { getAllEvents } = useSelector((state) => state.events);
+  const [pageNumber] = useState(1);
+  const [pageSize] = useState(10);
+
+  useEffect(() => {
+    const data = { queryParams: { pageNumber, pageSize } };
+    dispatch(triggerGetAllNews(data));
+    dispatch(triggerGetAllEvents(data));
+  }, []);
+
+  console.log('data', getAllEvents, getAllNews);
   return (
-    <div className="my-updates-wrapper shadow-sm">
-      <h3 className="mt-3">My updates</h3>
-
+    <div className='my-updates-wrapper shadow-sm'>
+      <h3 className='mt-3'>My updates</h3>
       <div>
-        <div className="section-header mt-4">Recently Viewed</div>
-        <div className="section-list-wrapper">
-          {recentlyViewed.map((list, key) => {
-            return (
-              <div key={key} className="section-list d-flex align-items-center c-gap-10">
-                <div className="circle"></div>
-                <div className="text">{list.text} </div>
+        <div className='section-header mt-4'>Recently Viewed</div>
+        <div className='section-list-wrapper'>
+          {getAllNews.status === 'loading' ? (
+            <div className='loader'>
+              <div className='single-line-loader-wrapper'>
+                <SingleLineLoader />
               </div>
-            );
-          })}
+              <div className='single-line-loader-wrapper'>
+                <SingleLineLoader />
+              </div>
+            </div>
+          ) : getAllNews.status === 'successful' ? (
+            <>
+              {getAllNews.data.length === 0 ? (
+                <></>
+              ) : (
+                <>
+                  {getAllNews?.data?.news?.slice(0, 2).map((news, key) => {
+                    return (
+                      <div
+                        key={key}
+                        className='section-list d-flex align-items-center c-gap-10'
+                      >
+                        <div className='circle'></div>
+                        <div className='text'>{news.title} </div>
+                      </div>
+                    );
+                  })}
+                </>
+              )}
+            </>
+          ) : (
+            <></>
+          )}
+        </div>
+      </div>
+      <div>
+        <div className='section-header mt-4'>Upcoming Events</div>
+        <div className='section-list-wrapper'>
+          {getAllEvents.status === 'loading' ? (
+            <div className='loader'>
+              <div className='single-line-loader-wrapper'>
+                <SingleLineLoader />
+              </div>
+              <div className='single-line-loader-wrapper'>
+                <SingleLineLoader />
+              </div>
+            </div>
+          ) : getAllEvents.status === 'successful' ? (
+            <>
+              {getAllEvents.data.length === 0 ? (
+                <></>
+              ) : (
+                <>
+                  {getAllEvents?.data?.slice(0, 2)?.map((event, key) => {
+                    return (
+                      <div
+                        key={key}
+                        className='section-list d-flex align-items-center c-gap-10'
+                      >
+                        <div className='circle'></div>
+                        <div className='text'>{event.title} </div>
+                      </div>
+                    );
+                  })}
+                </>
+              )}
+            </>
+          ) : (
+            <></>
+          )}
         </div>
       </div>
 
       <div>
-        <div className="section-header mt-4">Upcoming Events</div>
-        <div className="section-list-wrapper">
-          {upcomingEvent.map((list, key) => {
-            return (
-              <div key={key} className="section-list d-flex align-items-center c-gap-10">
-                <div className="circle"></div>
-                <div className="text">{list.text} </div>
-              </div>
-            );
-          })}
-        </div>
-      </div>
-
-      <div>
-        <div className="section-header">New</div>
-        <div className="section-list-wrapper">
-          <div className="big-text">
-            <Link to="#">
+        <div className='section-header'>New</div>
+        <div className='section-list-wrapper'>
+          <div className='big-text'>
+            <Link to='#'>
               <span>Request</span> (4)
             </Link>
           </div>
 
-          <div className="big-text">
-            <Link to="#">
+          <div className='big-text'>
+            <Link to='#'>
               <span>Comments</span> (1)
             </Link>
           </div>
         </div>
       </div>
 
-      <div className=" my-4">
-        <Link to="/updates" className="sec-btn mx-auto c-gap-5 smallert-text added-width d-flex align-items-center justify-content-center">
-          <span>View all</span> <Icon icon="arrowRight" />
+      <div className=' my-4'>
+        <Link
+          to='/updates'
+          className='sec-btn mx-auto c-gap-5 smallert-text added-width d-flex align-items-center justify-content-center'
+        >
+          <span>View all</span> <Icon icon='arrowRight' />
         </Link>
       </div>
     </div>

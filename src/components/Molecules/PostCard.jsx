@@ -68,7 +68,7 @@ const PostCard = ({ post }) => {
     }
   }, [
     getMyProfile.data.userId,
-    post.postId,
+    post?.postId,
     toggleLikePost.data.postId,
     toggleLikePost.data.postLiked,
     toggleLikePost.status,
@@ -85,11 +85,11 @@ const PostCard = ({ post }) => {
     }
   }, [getMyProfile.data.userId, idsOfUsersWhoHaveLikedThePost]);
   useEffect(() => {
-    const idsOfUsersWhoHaveLikedThePostTemp = post.likedUsers.map(
+    const idsOfUsersWhoHaveLikedThePostTemp = post?.likedUsers.map(
       (item) => item.userId
     );
     setIdsOfUsersWhoHaveLikedThePost(idsOfUsersWhoHaveLikedThePostTemp);
-  }, [post.likedUsers]);
+  }, [post?.likedUsers]);
   // console.log('idslikedusers', idsOfUsersWhoHaveLikedThePost);
   // console.log('getMyProfile.data.userId', getMyProfile.data.userId);
   // console.log('toggleLikePost', toggleLikePost);
@@ -138,7 +138,7 @@ const PostCard = ({ post }) => {
 
       <div className='post-content-wrapper'>
         <div className='post-content'>{post?.content}</div>
-        {(post.postImageUrl || post.postVideoUrl) && (
+        {(post?.postImageUrl || post?.postVideoUrl) && (
           <>
             {post.postImageUrl ? (
               <div className='post-image'>
