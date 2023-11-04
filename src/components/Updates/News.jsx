@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import news1 from '../../assets/images/news1.svg';
 import news2 from '../../assets/images/news2.svg';
 import news3 from '../../assets/images/news3.svg';
-import NewsCard from '../Molecules/NewsCard';
+import NewsCard, { EventsCard } from '../Molecules/NewsCard';
 import Carousel from 'react-multi-carousel';
 import 'react-multi-carousel/lib/styles.css';
 import { useDispatch, useSelector } from 'react-redux';
@@ -70,7 +70,6 @@ const News = () => {
       <div className='container'>
         <div className='section-content'>
           <h5 className='title'>
-            {/* News and Events <span>{getAllNews.data?.news?.length}</span> */}
             News <span>{getAllNews.data?.news?.length}</span>
           </h5>
           <p className='info'>
@@ -106,7 +105,6 @@ const News = () => {
                 <></>
               )}
             </div>
-            {/* For events. Not in the original design. Remove if you want. News and events are coming from different endpoints so I had to do it this way */}
             <h5 className='title'>
               Events <span>{getAllEvents.data?.length}</span>
             </h5>
@@ -124,7 +122,7 @@ const News = () => {
                       {getAllEvents.data && (
                         <Carousel responsive={responsive}>
                           {getAllEvents?.data?.map((item, index) => (
-                            <NewsCard news={item} key={index} />
+                            <EventsCard event={item} key={index} />
                           ))}
                         </Carousel>
                       )}

@@ -166,39 +166,61 @@ export const ForumCard2 = ({ forum }) => {
       <h4 className='mt-3'>{forum.forumName}</h4>
       <div className='community-forum-content'>{forum.details}</div>
       <div className='text-center'>
-        {forum.isCurrentUserMember ? (
-          <button
-            className={`smaller-text community-forum-btn forum-card-btn joined ${
-              loading && 'loading'
-            }`}
-            onClick={(e) => handleClick(e, forum.forumId)}
-          >
-            {leaveForum.status === 'loading' &&
-            forum.forumId === activeForumIdForOngoingRequest ? (
-              <>
-                Loading <img src={loadingDots} alt='' className='' />
-              </>
-            ) : (
-              'Leave'
-            )}
-          </button>
+        {forum.hasPendingJoinRequest ? (
+          <>
+            <button
+              className={`smaller-text community-forum-btn forum-card-btn joined ${
+                loading && 'loading'
+              }`}
+              onClick={(e) => handleClick(e, forum.forumId)}
+            >
+              {leaveForum.status === 'loading' &&
+              forum.forumId === activeForumIdForOngoingRequest ? (
+                <>
+                  Loading <img src={loadingDots} alt='' className='' />
+                </>
+              ) : (
+                'Cancel request'
+              )}
+            </button>
+          </>
         ) : (
-          <button
-            className={`smaller-text community-forum-btn forum-card-btn join ${
-              loading && 'loading'
-            }`}
-            onClick={(e) => handleClick(e, forum.forumId)}
-          >
-            {joinForum.status === 'loading' &&
-            forum.forumId === activeForumIdForOngoingRequest ? (
-              <>
-                Loading{' '}
-                <img src={loadingDots} alt='' className='forum-card-btn' />
-              </>
+          <>
+            {forum.isCurrentUserMember ? (
+              <button
+                className={`smaller-text community-forum-btn forum-card-btn joined ${
+                  loading && 'loading'
+                }`}
+                onClick={(e) => handleClick(e, forum.forumId)}
+              >
+                {leaveForum.status === 'loading' &&
+                forum.forumId === activeForumIdForOngoingRequest ? (
+                  <>
+                    Loading <img src={loadingDots} alt='' className='' />
+                  </>
+                ) : (
+                  'Leave'
+                )}
+              </button>
             ) : (
-              '+ Join'
+              <button
+                className={`smaller-text community-forum-btn forum-card-btn join ${
+                  loading && 'loading'
+                }`}
+                onClick={(e) => handleClick(e, forum.forumId)}
+              >
+                {joinForum.status === 'loading' &&
+                forum.forumId === activeForumIdForOngoingRequest ? (
+                  <>
+                    Loading{' '}
+                    <img src={loadingDots} alt='' className='forum-card-btn' />
+                  </>
+                ) : (
+                  '+ Join'
+                )}
+              </button>
             )}
-          </button>
+          </>
         )}
       </div>
     </div>

@@ -423,3 +423,122 @@
     }
   }
 }
+.event-loader {
+  // background-color: rgba(0, 128, 0, 0.118);
+
+  .con {
+    width: 90%;
+    margin: 0 auto;
+    .wrapper {
+      width: 70%;
+      // background-color: rgba(0, 128, 0, 0.09);
+      .details {
+        width: 70%;
+        height: 200px;
+        padding: 40px 30px;
+        border-radius: 30px;
+        // border: 0.78px solid #9d8dd8;
+        box-shadow: 0px 5.969581604003906px 16.714828491210938px 0px
+          rgba(8, 15, 52, 0.04);
+        margin-bottom: 4rem;
+        .title {
+          height: 3rem;
+          width: 70%;
+          margin-bottom: 3rem;
+        }
+        .info {
+          width: 100%;
+          display: flex;
+
+          .box {
+            width: 50%;
+            .top {
+              width: 30%;
+              height: 2rem;
+              margin-bottom: 1rem;
+            }
+            .bottom {
+              width: 70%;
+              height: 2rem;
+              margin-bottom: 1rem;
+            }
+          }
+        }
+      }
+      .about {
+        box-shadow: 0px 5.969581604003906px 16.714828491210938px 0px
+          rgba(8, 15, 52, 0.04);
+        padding: 40px 30px;
+        border-radius: 30px;
+        margin-bottom: 3rem;
+        .title {
+          width: 10rem;
+          height: 3rem;
+          margin-bottom: 3rem;
+        }
+        .info {
+          margin-bottom: 4rem;
+          .long {
+            width: 90%;
+            height: 2rem;
+            margin-bottom: 0.5rem;
+          }
+          .short {
+            width: 60%;
+            height: 2rem;
+            margin-bottom: 0.5rem;
+          }
+          .short-2 {
+            width: 30%;
+            height: 2rem;
+            margin-bottom: 0.5rem;
+          }
+        }
+      }
+      .tags {
+        box-shadow: 0px 5.969581604003906px 16.714828491210938px 0px
+          rgba(8, 15, 52, 0.04);
+        padding: 40px 30px;
+        border-radius: 30px;
+        margin-bottom: 3rem;
+        .title {
+          width: 10rem;
+          height: 3rem;
+          margin-bottom: 3rem;
+        }
+        .tags-con {
+          display: flex;
+          column-gap: 3rem;
+          width: 100%;
+
+          .item {
+            width: 14rem;
+            height: 3rem;
+          }
+        }
+      }
+      .event-creator {
+        box-shadow: 0px 5.969581604003906px 16.714828491210938px 0px
+          rgba(8, 15, 52, 0.04);
+        padding: 40px 30px;
+        border-radius: 30px;
+        margin-bottom: 5rem;
+        background-color: #fff;
+        .title {
+          width: 10rem;
+          height: 3rem;
+          margin-bottom: 3rem;
+        }
+        .info{
+          display: flex;
+          column-gap: 2rem;
+          align-items: center;
+        }
+        .name{
+          width: 30%;
+          height: 2.4rem;
+        }
+      }
+    }
+  }
+}

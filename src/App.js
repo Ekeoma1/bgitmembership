@@ -98,7 +98,7 @@ function App() {
               element: <EventsAndNews />,
             },
             {
-              path: 'events-and-news/event',
+              path: 'events-and-news/event/:id',
               element: <Event />,
             },
             {
