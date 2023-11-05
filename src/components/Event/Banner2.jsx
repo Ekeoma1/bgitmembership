@@ -7,27 +7,27 @@ import { useNavigate } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import UserProfilePhotoLoader from '../Atoms/skeleton-loaders/dashboard-page/UserProfilePhotoLoader';
 
-const Banner = ({ tab }) => {
+const Banner2 = ({ tab }) => {
   const navigate = useNavigate();
-  const { getEventById } = useSelector((state) => state.events);
+  const { getNewsById } = useSelector((state) => state.news);
   return (
     <>
       {tab !== 'order-success' && (
         <>
-          {getEventById.status === 'base' ||
-          getEventById.status === 'loading' ? (
+          {getNewsById.status === 'base' ||
+          getNewsById.status === 'loading' ? (
             <div className='banner-wrapper'>
               <UserProfilePhotoLoader />
             </div>
-          ) : getEventById.status === 'successful' ? (
+          ) : getNewsById.status === 'successful' ? (
             <div
               style={{
                 backgroundSize: 'cover',
                 backgroundRepeat: 'no-repeat',
                 // background: `${
-                //   getEventById?.data.imageUrl ?? `url(${backgroundImage1})`
+                //   getNewsById?.data.imageUrl ?? `url(${backgroundImage1})`
                 // }`,
-                background: `${getEventById?.data.imageUrl ?? `#bdc3c7`}`,
+                background: `${getNewsById?.data.imageUrl ?? `#bdc3c7`}`,
               }}
               className='banner-wrapper'
             >
@@ -44,10 +44,10 @@ const Banner = ({ tab }) => {
             <></>
           )}
 
-          {getEventById.status === 'base' ||
-          getEventById.status === 'loading' ? (
+          {getNewsById.status === 'base' ||
+          getNewsById.status === 'loading' ? (
             <div className='bookmark-share-wrapper-loader'></div>
-          ) : getEventById.status === 'successful' ? (
+          ) : getNewsById.status === 'successful' ? (
             <>
               {tab === 'about' && (
                 <div className='bookmark-share-wrapper'>
@@ -71,4 +71,4 @@ const Banner = ({ tab }) => {
   );
 };
 
-export default Banner;
+export default Banner2;

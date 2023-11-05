@@ -9,7 +9,8 @@ import { useDispatch, useSelector } from 'react-redux';
 import { triggerGetUserProfileById } from '../../Features/users/users_slice';
 import ForumCardsLoader from '../Atoms/skeleton-loaders/ForumCardsLoader';
 import EventLoader from '../Atoms/skeleton-loaders/events-page/EventLoader';
-const EventDetails = ({ tab, setTab }) => {
+import About2 from './About2';
+const EventDetails2 = ({ tab, setTab, data }) => {
   const { getEventById } = useSelector((state) => state.events);
   const { getNewsById } = useSelector((state) => state.news);
   const { getUserProfileById } = useSelector((state) => state.users);
@@ -21,16 +22,16 @@ const EventDetails = ({ tab, setTab }) => {
   }, [getEventById]);
   return (
     <>
-      {getEventById.status === 'base' ||
-      getEventById.status === 'loading' ||
-      getUserProfileById.status === 'loading' ||
+      {getNewsById.status === 'base' ||
+      getNewsById.status === 'loading' ||
+      getUserProfileById.status === 'base' ||
       getUserProfileById.status === 'loading' ? (
         <div className='loading-state'>
           <EventLoader />
         </div>
       ) : getEventById.status === 'successful' ? (
         <>
-          {tab === 'about' && <About setTab={setTab} />}
+          {tab === 'about' && <About2 setTab={setTab} />}
           {/* {tab === 'booking' && <Booking setTab={setTab} />}
           {tab === 'checkout' && <Checkout setTab={setTab} />} */}
           {tab === 'order-success' && <OrderSuccess />}
@@ -42,4 +43,4 @@ const EventDetails = ({ tab, setTab }) => {
   );
 };
 
-export default EventDetails;
+export default EventDetails2;

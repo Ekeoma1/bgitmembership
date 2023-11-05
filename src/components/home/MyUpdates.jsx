@@ -1,12 +1,13 @@
 import React, { useEffect, useState } from 'react';
 import Icon from '../Icon';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { triggerGetAllNews } from '../../Features/news/news_slice';
 import { triggerGetAllEvents } from '../../Features/events/events_slice';
 import SingleLineLoader from '../Atoms/skeleton-loaders/SingleLineLoader';
 const MyUpdates = () => {
   const dispatch = useDispatch();
+  const navigate = useNavigate();
   const { getAllNews } = useSelector((state) => state.news);
   const { getAllEvents } = useSelector((state) => state.events);
   const [pageNumber] = useState(1);
@@ -45,6 +46,9 @@ const MyUpdates = () => {
                       <div
                         key={key}
                         className='section-list d-flex align-items-center c-gap-10'
+                        onClick={() => {
+                          navigate(`/events-and-news/news/${news.newsId}`);
+                        }}
                       >
                         <div className='circle'></div>
                         <div className='text'>{news.title} </div>
@@ -82,6 +86,9 @@ const MyUpdates = () => {
                       <div
                         key={key}
                         className='section-list d-flex align-items-center c-gap-10'
+                        onClick={() => {
+                          navigate(`/events-and-news/event/${event.eventId}`);
+                        }}
                       >
                         <div className='circle'></div>
                         <div className='text'>{event.title} </div>

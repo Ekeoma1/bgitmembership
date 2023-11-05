@@ -1,14 +1,24 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import '../../assets/scss/event.scss';
 import { SlCheck } from 'react-icons/sl';
 import { FaChevronLeft } from 'react-icons/fa';
 import { useNavigate } from 'react-router-dom';
+import { useDispatch } from 'react-redux';
+import { resetApplyForEvent } from '../../Features/events/events_slice';
 const OrderSuccess = ({ setTab }) => {
   const navigate = useNavigate();
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
   return (
     <div className='order-success-wrapper'>
       <div className='order-success-content-wrapper'>
-        <div className='back' onClick={() => navigate('/events-and-news')}>
+        <div
+          className='back'
+          onClick={() => {
+            navigate('/events-and-news');
+          }}
+        >
           <FaChevronLeft className='icon' />
           <p>Back to Events</p>
         </div>

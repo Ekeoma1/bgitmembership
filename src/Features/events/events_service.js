@@ -19,6 +19,7 @@ export default class ForumsService {
     return response;
   }
   static async applyForEvent(data) {
+    console.log('data event slice', data);
     const response = await post({
       url: apiRoutes.applyForEvent,
       data: { ...data },

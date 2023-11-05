@@ -3,12 +3,19 @@ import '../../src/assets/scss/event.scss';
 import Banner from '../components/Event/Banner';
 import EventDetails from '../components/Event/EventDetails';
 import { useParams } from 'react-router-dom';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { triggerGetEventByID } from '../Features/events/events_slice';
+import { triggerGetNewsByID } from '../Features/news/news_slice';
+import Banner2 from '../components/Event/Banner2';
+import EventDetails2 from '../components/Event/EventDetails2';
 
 const Event = () => {
   const params = useParams();
   const dispatch = useDispatch();
+  const [data, setData] = useState({});
+  const [dataType, setDataType] = useState('');
+  const { getEventById } = useSelector((state) => state.events);
+  const { getNewsById } = useSelector((state) => state.news);
   console.log('params', params);
 
   const [tab, setTab] = useState('about');
@@ -17,13 +24,36 @@ const Event = () => {
   }, []);
 
   useEffect(() => {
-    const data = { queryParams: { eventId: params.id } };
-    dispatch(triggerGetEventByID(data));
+    const url = window.location.href;
+    const urls = url.split('/');
+    const event = urls.find((item) => item === 'event');
+    const news = urls.find((item) => item === 'news');
+    let data;
+    if (event) {
+      data = { queryParams: { eventId: params.id } };
+      dispatch(triggerGetEventByID(data));
+      setDataType('event');
+    } else if (news) {
+      data = { queryParams: { newsId: params.id } };
+      dispatch(triggerGetNewsByID(data));
+      setDataType('news');
+    }
   }, []);
+
   return (
     <div className='event-wrapper'>
-      <Banner tab={tab} />
-      <EventDetails tab={tab} setTab={setTab} />
+      {dataType === 'event' && (
+        <>
+          <Banner tab={tab} />
+          <EventDetails tab={tab} setTab={setTab} />
+        </>
+      )}
+      {dataType === 'news' && (
+        <>
+          <Banner2 tab={tab} />
+          <EventDetails2 tab={tab} setTab={setTab} />
+        </>
+      )}
     </div>
   );
 };

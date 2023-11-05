@@ -43,6 +43,7 @@ export const triggerApplyForEvent = createAsyncThunk(
   'apply-for-event',
   async (params, thunkAPI) => {
     try {
+      console.log('params', params);
       return await EventsService.applyForEvent(params);
     } catch (e) {
       return thunkAPI.rejectWithValue(e.message);

@@ -90,15 +90,6 @@ const EventLoader = () => {
               </div>
             </div>
           </div>
-          {/* <div className='event-loader-wrapper'>
-          <div className='forum-name skeleton-loader'></div>
-          <div className='details'>
-            <div className='detail skeleton-loader'></div>
-            <div className='detail skeleton-loader'></div>
-            <div className='detail skeleton-loader'></div>
-          </div>
-          <div className='join skeleton-loader'></div>
-        </div> */}
         </div>
       </div>
     </div>

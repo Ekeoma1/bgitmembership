@@ -14,10 +14,9 @@ import {
   triggerApplyForEvent,
 } from '../../Features/events/events_slice';
 import { renderToast } from '../Molecules/CustomToastify';
-const About = ({ setTab }) => {
+const About2 = ({ setTab }) => {
   const dispatch = useDispatch();
 
-  const { getEventById } = useSelector((state) => state.events);
   const { getNewsById } = useSelector((state) => state.news);
   const { getUserProfileById } = useSelector((state) => state.users);
   const { applyForEvent } = useSelector((state) => state.events);
@@ -25,18 +24,18 @@ const About = ({ setTab }) => {
 
   const apply = () => {
     if (applyForEvent.status === 'base') {
-      dispatch(triggerApplyForEvent({ eventId: getEventById?.data?.eventId }));
+      dispatch(triggerApplyForEvent({ eventId: getNewsById?.data?.eventId }));
     }
   };
   // useEffect(() => {
-  //   if (getEventById.status === 'successful') {
-  //     setData(getEventById.data);
+  //   if (getNewsById.status === 'successful') {
+  //     setData(getNewsById.data);
   //     setDataType('event');
   //   } else if (getNewsById.status === 'successful') {
   //     setData(getNewsById.data);
   //     setDataType('news');
   //   }
-  // }, [getEventById, getNewsById]);
+  // }, [getNewsById, getNewsById]);
   useEffect(() => {
     if (applyForEvent.status === 'successful') {
       if (applyForEvent.data === 'Event not found.') {
@@ -60,14 +59,14 @@ const About = ({ setTab }) => {
           <div className='about-content-wrapper'>
             <div className='details'>
               <div className='event-details-card'>
-                <h3 className='title'>{getEventById?.data?.title}</h3>
+                <h3 className='title'>{getNewsById?.data?.title}</h3>
                 <div className='info'>
                   <div className='date-wrapper'>
                     <LuCalendarDays className='icon' />
                     <div className=''>
                       <h5 className=''>Date</h5>
                       <p className=''>
-                        {moment(getEventById?.data?.eventDate).format(
+                        {moment(getNewsById?.data?.eventDate).format(
                           'dddd, MMMM Do YYYY, h:mm:ss a'
                         )}
                       </p>
@@ -77,12 +76,12 @@ const About = ({ setTab }) => {
                     <MdOutlineLocationOn className='icon' />
                     <div className=''>
                       <h5 className=''>Location</h5>
-                      <p className=''>{getEventById?.data?.location} </p>
+                      <p className=''>{getNewsById?.data?.location} </p>
                     </div>
                   </div>
                 </div>
               </div>
-              <div className='price-mobile'>
+              {/* <div className='price-mobile'>
                 <button
                   onClick={apply}
                   className={` ${
@@ -93,17 +92,17 @@ const About = ({ setTab }) => {
                     ? 'Loading...'
                     : 'Get tickets'}
                 </button>
-              </div>
+              </div> */}
               <div className='about'>
                 <h3 className='title'>About</h3>
                 <div className='info'>
-                  <p>{getEventById?.data?.description}</p>
+                  <p>{getNewsById?.data?.content}</p>
                 </div>
               </div>
               <div className='tags'>
                 <h3 className='title'>Tags</h3>
                 <div className='tags-wrapper'>
-                  {getEventById?.data?.tag?.split(',').map((item, index) => (
+                  {getNewsById?.data?.tag?.split(',').map((item, index) => (
                     <Tag key={index} text={item} />
                   ))}
                 </div>
@@ -147,7 +146,7 @@ const About = ({ setTab }) => {
                 </div>
               </div>
             </div>
-            <div className='price'>
+            {/* <div className='price'>
               <div className='price-card'>
                 <button
                   onClick={apply}
@@ -160,7 +159,7 @@ const About = ({ setTab }) => {
                     : 'Get tickets'}
                 </button>
               </div>
-            </div>
+            </div> */}
           </div>
         </div>
       ) : (
@@ -170,4 +169,4 @@ const About = ({ setTab }) => {
   );
 };
 
-export default About;
+export default About2;

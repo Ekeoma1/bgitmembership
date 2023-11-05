@@ -102,6 +102,10 @@ function App() {
               element: <Event />,
             },
             {
+              path: 'events-and-news/news/:id',
+              element: <Event />,
+            },
+            {
               path: 'job-board',
               element: <JobBoard />,
             },
