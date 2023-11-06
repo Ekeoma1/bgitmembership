@@ -63,10 +63,14 @@ export const triggerDeleteSocialLink = createAsyncThunk(
   }
 );
 
-const reportsSlice = createSlice({
+const socialLinksSlice = createSlice({
   name: 'social-links',
   initialState,
-  reducers: {},
+  reducers: {
+    resetAddSocialLinks: (state) => {
+      state.addSocialLinks = initialState.addSocialLinks;
+    },
+  },
   extraReducers: (builder) => {
     // add social links
     builder.addCase(triggerAddSocialLink.pending, (state) => {
@@ -126,4 +130,5 @@ const reportsSlice = createSlice({
   },
 });
 
-export default reportsSlice.reducer;
+export default socialLinksSlice.reducer;
+export const { resetAddSocialLinks } = socialLinksSlice.actions;

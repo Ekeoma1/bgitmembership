@@ -28,15 +28,20 @@ const EventDetails = ({ tab, setTab }) => {
         <div className='loading-state'>
           <EventLoader />
         </div>
-      ) : getEventById.status === 'successful' ? (
+      ) : getEventById.status === 'successful' &&
+        getUserProfileById.status === 'successful' ? (
         <>
           {tab === 'about' && <About setTab={setTab} />}
+          {tab === 'order-success' && <OrderSuccess />}
           {/* {tab === 'booking' && <Booking setTab={setTab} />}
           {tab === 'checkout' && <Checkout setTab={setTab} />} */}
-          {tab === 'order-success' && <OrderSuccess />}
         </>
       ) : (
-        <></>
+        <>
+          <div className='loading-state'>
+            <EventLoader />
+          </div>
+        </>
       )}
     </>
   );

@@ -12,39 +12,30 @@ const Banner2 = ({ tab }) => {
   const { getNewsById } = useSelector((state) => state.news);
   return (
     <>
-      {tab !== 'order-success' && (
-        <>
-          {getNewsById.status === 'base' ||
-          getNewsById.status === 'loading' ? (
-            <div className='banner-wrapper'>
-              <UserProfilePhotoLoader />
+      {getNewsById.status === 'base' || getNewsById.status === 'loading' ? (
+        <div className='banner-wrapper'>
+          <UserProfilePhotoLoader />
+        </div>
+      ) : getNewsById.status === 'successful' ? (
+        <div
+          style={{
+            backgroundSize: 'cover',
+            backgroundRepeat: 'no-repeat',
+            background: `${getNewsById?.data.imageUrl ?? `#bdc3c7`}`,
+          }}
+          className='banner-wrapper'
+        >
+          <div className='banner-content'>
+            <div className='arrow' onClick={() => navigate('/events-and-news')}>
+              <HiArrowLeft />
             </div>
-          ) : getNewsById.status === 'successful' ? (
-            <div
-              style={{
-                backgroundSize: 'cover',
-                backgroundRepeat: 'no-repeat',
-                // background: `${
-                //   getNewsById?.data.imageUrl ?? `url(${backgroundImage1})`
-                // }`,
-                background: `${getNewsById?.data.imageUrl ?? `#bdc3c7`}`,
-              }}
-              className='banner-wrapper'
-            >
-              <div className='banner-content'>
-                <div
-                  className='arrow'
-                  onClick={() => navigate('/events-and-news')}
-                >
-                  <HiArrowLeft />
-                </div>
-              </div>
-            </div>
-          ) : (
-            <></>
-          )}
+          </div>
+        </div>
+      ) : (
+        <></>
+      )}
 
-          {getNewsById.status === 'base' ||
+      {/* {getNewsById.status === 'base' ||
           getNewsById.status === 'loading' ? (
             <div className='bookmark-share-wrapper-loader'></div>
           ) : getNewsById.status === 'successful' ? (
@@ -64,9 +55,7 @@ const Banner2 = ({ tab }) => {
             </>
           ) : (
             <></>
-          )}
-        </>
-      )}
+          )} */}
     </>
   );
 };

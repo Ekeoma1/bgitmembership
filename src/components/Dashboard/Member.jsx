@@ -67,11 +67,11 @@ const Member = () => {
             <></>
           ) : getUsers.status === 'successful' ? (
             <>
-              {getUsers.data.users.length === 0 ? (
+              {getUsers.data?.users?.length === 0 ? (
                 <></>
               ) : (
                 <>
-                  {getUsers.data.users
+                  {getUsers?.data?.users
                     .slice(0, numberOfUsersToDisplay - 1)
                     .map((user, key) => {
                       return (

@@ -37,7 +37,7 @@ const MyUpdates = () => {
             </div>
           ) : getAllNews.status === 'successful' ? (
             <>
-              {getAllNews.data.length === 0 ? (
+              {getAllNews.data?.length === 0 ? (
                 <></>
               ) : (
                 <>
@@ -77,7 +77,7 @@ const MyUpdates = () => {
             </div>
           ) : getAllEvents.status === 'successful' ? (
             <>
-              {getAllEvents.data.length === 0 ? (
+              {getAllEvents.data?.length === 0 ? (
                 <></>
               ) : (
                 <>

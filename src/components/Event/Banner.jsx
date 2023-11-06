@@ -12,61 +12,49 @@ const Banner = ({ tab }) => {
   const { getEventById } = useSelector((state) => state.events);
   return (
     <>
-      {tab !== 'order-success' && (
-        <>
-          {getEventById.status === 'base' ||
-          getEventById.status === 'loading' ? (
-            <div className='banner-wrapper'>
-              <UserProfilePhotoLoader />
+      {getEventById.status === 'base' || getEventById.status === 'loading' ? (
+        <div className='banner-wrapper'>
+          <UserProfilePhotoLoader />
+        </div>
+      ) : getEventById.status === 'successful' ? (
+        <div
+          style={{
+            backgroundSize: 'cover',
+            backgroundRepeat: 'no-repeat',
+            background: `${getEventById?.data.imageUrl ?? `#bdc3c7`}`,
+          }}
+          className='banner-wrapper'
+        >
+          <div className='banner-content'>
+            <div className='arrow' onClick={() => navigate('/events-and-news')}>
+              <HiArrowLeft />
             </div>
-          ) : getEventById.status === 'successful' ? (
-            <div
-              style={{
-                backgroundSize: 'cover',
-                backgroundRepeat: 'no-repeat',
-                // background: `${
-                //   getEventById?.data.imageUrl ?? `url(${backgroundImage1})`
-                // }`,
-                background: `${getEventById?.data.imageUrl ?? `#bdc3c7`}`,
-              }}
-              className='banner-wrapper'
-            >
-              <div className='banner-content'>
-                <div
-                  className='arrow'
-                  onClick={() => navigate('/events-and-news')}
-                >
-                  <HiArrowLeft />
-                </div>
+          </div>
+        </div>
+      ) : (
+        <></>
+      )}
+      {/* 
+      {getEventById.status === 'base' || getEventById.status === 'loading' ? (
+        <div className='bookmark-share-wrapper-loader'></div>
+      ) : getEventById.status === 'successful' ? (
+        <>
+          {tab === 'about' && (
+            <div className='bookmark-share-wrapper'>
+              <div className='bookmark'>
+                <FaRegBookmark />
+                <p>Bookmark</p>
+              </div>
+              <div className='share'>
+                <MdIosShare />
+                <p>share</p>
               </div>
             </div>
-          ) : (
-            <></>
-          )}
-
-          {getEventById.status === 'base' ||
-          getEventById.status === 'loading' ? (
-            <div className='bookmark-share-wrapper-loader'></div>
-          ) : getEventById.status === 'successful' ? (
-            <>
-              {tab === 'about' && (
-                <div className='bookmark-share-wrapper'>
-                  <div className='bookmark'>
-                    <FaRegBookmark />
-                    <p>Bookmark</p>
-                  </div>
-                  <div className='share'>
-                    <MdIosShare />
-                    <p>share</p>
-                  </div>
-                </div>
-              )}
-            </>
-          ) : (
-            <></>
           )}
         </>
-      )}
+      ) : (
+        <></>
+      )} */}
     </>
   );
 };

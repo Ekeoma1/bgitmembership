@@ -14,6 +14,7 @@ import {
   triggerApplyForEvent,
 } from '../../Features/events/events_slice';
 import { renderToast } from '../Molecules/CustomToastify';
+import SingleLineLoader from '../Atoms/skeleton-loaders/SingleLineLoader';
 const About = ({ setTab }) => {
   const dispatch = useDispatch();
 
@@ -143,7 +144,14 @@ const About = ({ setTab }) => {
                       <></>
                     )}
                   </div>
-                  <h5>{`${getUserProfileById?.data?.firstName} ${getUserProfileById?.data?.secondName}`}</h5>
+                  {getUserProfileById?.data?.firstName &&
+                  getUserProfileById?.data?.secondName ? (
+                    <h5>{`${getUserProfileById?.data?.firstName} ${getUserProfileById?.data?.secondName}`}</h5>
+                  ) : (
+                    <div className='loading-state'>
+                      <SingleLineLoader />
+                    </div>
+                  )}
                 </div>
               </div>
             </div>

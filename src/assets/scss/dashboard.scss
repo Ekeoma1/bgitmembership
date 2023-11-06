@@ -134,12 +134,17 @@
       color: $alt-text-color;
       font-weight: 400;
     }
-
+    .add-text-btn-wrapper {
+      display: flex;
+      justify-content: center;
+    }
     .add-text-btn {
       font-weight: 700;
       font-family: $thic700;
       font-size: 12.44px;
       color: #40496b;
+      cursor: pointer;
+      z-index: 1;
     }
   }
 

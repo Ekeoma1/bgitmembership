@@ -1,39 +1,23 @@
 import React, { useEffect } from 'react';
 
 import '../../assets/scss/event.scss';
-import About from './About';
-import Booking from './Booking';
-import Checkout from './Checkout';
+
 import OrderSuccess from './OrderSuccess';
-import { useDispatch, useSelector } from 'react-redux';
-import { triggerGetUserProfileById } from '../../Features/users/users_slice';
-import ForumCardsLoader from '../Atoms/skeleton-loaders/ForumCardsLoader';
+import { useSelector } from 'react-redux';
 import EventLoader from '../Atoms/skeleton-loaders/events-page/EventLoader';
 import About2 from './About2';
 const EventDetails2 = ({ tab, setTab, data }) => {
-  const { getEventById } = useSelector((state) => state.events);
   const { getNewsById } = useSelector((state) => state.news);
-  const { getUserProfileById } = useSelector((state) => state.users);
-  const { applyForEvent } = useSelector((state) => state.events);
-  const dispatch = useDispatch();
-  useEffect(() => {
-    const data = { queryParams: { userId: getEventById?.data?.createdBy } };
-    dispatch(triggerGetUserProfileById(data));
-  }, [getEventById]);
+
   return (
     <>
-      {getNewsById.status === 'base' ||
-      getNewsById.status === 'loading' ||
-      getUserProfileById.status === 'base' ||
-      getUserProfileById.status === 'loading' ? (
+      {getNewsById.status === 'base' || getNewsById.status === 'loading' ? (
         <div className='loading-state'>
           <EventLoader />
         </div>
-      ) : getEventById.status === 'successful' ? (
+      ) : getNewsById.status === 'successful' ? (
         <>
           {tab === 'about' && <About2 setTab={setTab} />}
-          {/* {tab === 'booking' && <Booking setTab={setTab} />}
-          {tab === 'checkout' && <Checkout setTab={setTab} />} */}
           {tab === 'order-success' && <OrderSuccess />}
         </>
       ) : (

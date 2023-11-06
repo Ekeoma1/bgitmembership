@@ -1,0 +1,142 @@
+.modal {
+  position: fixed;
+  left: 0;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  background: #1c2127;
+  backdrop-filter: blur(8px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  transition: all 0.3s ease-in-out;
+  pointer-events: none;
+  z-index: 0;
+  overflow: scroll;
+  background-color: transparent;
+
+}
+
+.modal-content {
+  width: 30%;
+  transform: translateY(-200px);
+  transition: all 0.3s ease-in-out;
+  display: flex;
+  justify-content: center;
+  background-color: #fff;
+  border-radius: 0.8rem;
+
+}
+.modal-body {
+}
+.modal.show {
+  opacity: 1;
+  pointer-events: visible;
+  z-index: 2;
+}
+.modal.show .modal-content {
+  transform: translateY(0);
+}
+
+/*  Right Modal */
+.modal-right {
+  position: fixed;
+  left: 0;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  /* background: #1c2127; */
+  backdrop-filter: blur(8px);
+  display: flex;
+  opacity: 0;
+  transition: all 0.3s ease-in-out;
+  pointer-events: none;
+  z-index: 3;
+}
+
+.modal-content-right {
+  width: 30%;
+  /* background: #fff; */
+  transition: all 0.3s ease-in-out;
+  margin-left: auto;
+  transform: translateX(30%);
+}
+
+.modal-right.show {
+  opacity: 1;
+  pointer-events: visible;
+}
+
+.modal-right.show .modal-content-right {
+  transform: translateX(0);
+}
+
+/*  Left Modal */
+.modal-left {
+  position: fixed;
+  left: 0;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  /* background: rgba(0, 0, 0, 0.25); */
+  backdrop-filter: blur(8px);
+  display: flex;
+  /* align-items: center; */
+  /* justify-content: ; */
+  opacity: 0;
+  transition: all 0.3s ease-in-out;
+  pointer-events: none;
+  z-index: 3;
+}
+
+.modal-content-left {
+  width: 30%;
+  /* background: #fff; */
+  transition: all 0.3s ease-in-out;
+  margin-right: auto;
+  transform: translateX(-30%);
+}
+
+.modal-left.show {
+  opacity: 1;
+  pointer-events: visible;
+}
+
+.modal-left.show .modal-content-left {
+  transform: translateX(0);
+}
+
+/* Responsiveness Mobile device */
+
+@media screen and (max-width: 900px) {
+  .modal-content,
+  .modal-content-left,
+  .modal-content-right {
+    width: 40%;
+  }
+}
+
+@media screen and (max-width: 600px) {
+  .modal-content,
+  .modal-content-left,
+  .modal-content-right {
+    width: 40%;
+  }
+}
+
+@media screen and (max-width: 470px) {
+  .modal-content,
+  .modal-content-left,
+  .modal-content-right {
+    width: 60%;
+  }
+}
+
+@media screen and (max-width: 390px) {
+  .modal-content,
+  .modal-content-left,
+  .modal-content-right {
+    width: 70%;
+  }
+}

@@ -28,6 +28,8 @@ const Event = () => {
     const urls = url.split('/');
     const event = urls.find((item) => item === 'event');
     const news = urls.find((item) => item === 'news');
+    console.log('event', event);
+    console.log('news', news);
     let data;
     if (event) {
       data = { queryParams: { eventId: params.id } };
@@ -39,7 +41,7 @@ const Event = () => {
       setDataType('news');
     }
   }, []);
-
+  console.log('datatype', dataType);
   return (
     <div className='event-wrapper'>
       {dataType === 'event' && (
