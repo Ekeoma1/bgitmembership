@@ -61,6 +61,7 @@ const Dashboard = () => {
                     </div>
                   </Link>
                 </div>
+                
               </div>
             </div>
             <BioCard data={getMyProfile} />
@@ -79,7 +80,6 @@ const Dashboard = () => {
             <Link className="" to="#">
               <div className="other-pages-btn">
                 <div>settings</div>
-
                 <Icon icon="chevronRightBig" />
               </div>
             </Link>

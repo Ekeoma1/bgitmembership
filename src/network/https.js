@@ -31,11 +31,12 @@ async function ajax({ method = 'GET', url, data, queryParams }) {
       data,
     })
       .then((response) => {
+        console.log('response http', response);
         const { data } = response;
         result = data;
       })
       .catch((err) => {
-        console.log('error here');
+        console.log('error here', err);
         result = err.response?.data;
       });
     return result;

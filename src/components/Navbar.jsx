@@ -8,7 +8,7 @@ import MobileNav from './MobileNav';
 import { FiChevronDown } from 'react-icons/fi';
 // import { AppContext } from '../context/Context';
 // import { BsFillMoonFill, BsFillSunFill } from 'react-icons/bs';
-import { logout, resetSignIn } from '../Features/auth/auth_slice';
+import { logout, resetSignIn, resetSignUp } from '../Features/auth/auth_slice';
 import OutsideClickHandler from 'react-outside-click-handler';
 import { UserProfilePhotoLoader2 } from './Atoms/skeleton-loaders/dashboard-page/UserProfilePhotoLoader';
 import { triggerGetMyProfile } from '../Features/users/users_slice';
@@ -171,6 +171,7 @@ const Navbar = () => {
                           onClick={() => {
                             dispatch(logout());
                             dispatch(resetSignIn());
+                            dispatch(resetSignUp());
                             setShowDropdown(false);
                           }}
                         >

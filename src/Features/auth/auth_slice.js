@@ -46,8 +46,12 @@ export const triggerSignin = createAsyncThunk(
   'sign-in',
   async (params, thunkAPI) => {
     try {
-      return await AuthService.signin(params);
+      console.log('try');
+      const data = await AuthService.signin(params);
+      console.log('data slice', data);
+      return data;
     } catch (e) {
+      console.log('catch', e.message);
       return thunkAPI.rejectWithValue(e.message);
     }
   }

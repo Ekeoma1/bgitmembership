@@ -22,8 +22,6 @@ const PostCard = ({ post }) => {
   const [idsOfUsersWhoHaveLikedThePost, setIdsOfUsersWhoHaveLikedThePost] =
     useState([]);
   const [liked, setLiked] = useState(false);
-  const timeago = moment(post?.createdDate).fromNow();
-
   const handleLike = () => {
     setLiked(!liked);
     const data = { queryParams: { postId: post.postId } };
@@ -67,7 +65,7 @@ const PostCard = ({ post }) => {
       }
     }
   }, [
-    getMyProfile.data.userId,
+    getMyProfile.data?.userId,
     post?.postId,
     toggleLikePost.data.postId,
     toggleLikePost.data.postLiked,
@@ -77,13 +75,13 @@ const PostCard = ({ post }) => {
   useEffect(() => {
     if (
       Array.isArray(idsOfUsersWhoHaveLikedThePost) &&
-      idsOfUsersWhoHaveLikedThePost?.includes(getMyProfile.data.userId)
+      idsOfUsersWhoHaveLikedThePost?.includes(getMyProfile?.data?.userId)
     ) {
       setLiked(true);
     } else {
       setLiked(false);
     }
-  }, [getMyProfile.data.userId, idsOfUsersWhoHaveLikedThePost]);
+  }, [getMyProfile.data?.userId, idsOfUsersWhoHaveLikedThePost]);
   useEffect(() => {
     const idsOfUsersWhoHaveLikedThePostTemp = post?.likedUsers.map(
       (item) => item.userId
@@ -92,7 +90,10 @@ const PostCard = ({ post }) => {
   }, [post?.likedUsers]);
   // console.log('idslikedusers', idsOfUsersWhoHaveLikedThePost);
   // console.log('getMyProfile.data.userId', getMyProfile.data.userId);
-  // console.log('toggleLikePost', toggleLikePost);
+  // console.log('post', post.createdDate);
+  // console.log('date', new Date(post.createdDate).getTime() + 3600000);
+  // console.log('moment', moment(new Date(post.createdDate).getTime() + 3600000).fromNow());
+
   return (
     <div className='post-card shadow-sm mx-auto'>
       <div className='post-card-header'>
@@ -129,7 +130,9 @@ const PostCard = ({ post }) => {
               </span>
             </div>
             <div className='job-role'>{post?.userProfession}</div>
-            <div className='post-time'>{timeago}</div>
+            <div className='post-time'>
+              {moment(new Date(post.createdDate).getTime() + 3600000).fromNow()}
+            </div>
           </div>
         </div>
 

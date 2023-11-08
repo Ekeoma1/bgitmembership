@@ -39,16 +39,16 @@ const Post = () => {
       </div>
       <div className='post-card-wrapper'>
         {getAllPosts.status === 'base' || getAllPosts.status === 'loading' ? (
-          <>
-            <PostsLoader />
-          </>
+          <PostsLoader />
         ) : getAllPosts.status === 'successful' ? (
           <>
             {getAllPostsRender.data ? (
               <>
-                {getAllPostsRender.data?.length === 0 ? (
+                {getAllPostsRender.data?.posts.length === 0 ? (
                   <>
-                    <div className='no-data'>No posts to show</div>
+                    <div className='empty-state'>
+                      <p>No posts to show...</p>
+                    </div>
                   </>
                 ) : (
                   <>
@@ -68,7 +68,7 @@ const Post = () => {
             ) : (
               <>
                 <div className='internet-error-state'>
-                  Check your internet and try again...
+                  <p> Check your internet and try again...</p>
                 </div>
               </>
             )}

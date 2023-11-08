@@ -22,7 +22,7 @@ const MyUpdates = () => {
   console.log('data', getAllEvents, getAllNews);
   return (
     <div className='my-updates-wrapper shadow-sm'>
-      <h3 className='mt-3'>My updates</h3>
+      <h3 className=''>My updates</h3>
       <div>
         <div className='section-header mt-4'>Recently Viewed</div>
         <div className='section-list-wrapper'>
@@ -37,8 +37,8 @@ const MyUpdates = () => {
             </div>
           ) : getAllNews.status === 'successful' ? (
             <>
-              {getAllNews.data?.length === 0 ? (
-                <></>
+              {getAllNews.data?.news.length === 0 ? (
+                <p className='no-data-yet'>No news yet...</p>
               ) : (
                 <>
                   {getAllNews?.data?.news?.slice(0, 2).map((news, key) => {
@@ -78,7 +78,7 @@ const MyUpdates = () => {
           ) : getAllEvents.status === 'successful' ? (
             <>
               {getAllEvents.data?.length === 0 ? (
-                <></>
+                <p className='no-data-yet'>No upcoming event yet...</p>
               ) : (
                 <>
                   {getAllEvents?.data?.slice(0, 2)?.map((event, key) => {
@@ -120,15 +120,17 @@ const MyUpdates = () => {
           </div>
         </div>
       </div>
-
-      <div className=' my-4'>
-        <Link
-          to='/updates'
-          className='sec-btn mx-auto c-gap-5 smallert-text added-width d-flex align-items-center justify-content-center'
-        >
-          <span>View all</span> <Icon icon='arrowRight' />
-        </Link>
-      </div>
+      {getAllNews.data?.news?.length > 2 ||
+        (getAllEvents.data?.length > 2 && (
+          <div className=' my-4'>
+            <Link
+              to='/updates'
+              className='sec-btn mx-auto c-gap-5 smallert-text added-width d-flex align-items-center justify-content-center'
+            >
+              <span>View all</span> <Icon icon='arrowRight' />
+            </Link>
+          </div>
+        ))}
     </div>
   );
 };

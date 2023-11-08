@@ -8,6 +8,16 @@ import { useDispatch, useSelector } from 'react-redux';
 import { triggerGetMyProfile } from '../../Features/users/users_slice';
 import UserProfilePhotoLoader from '../Atoms/skeleton-loaders/dashboard-page/UserProfilePhotoLoader';
 import DetailsLoader from '../Atoms/skeleton-loaders/dashboard-page/DetailsLoader';
+// import defaultImg from '../../assets/images/default-photo.jpeg';
+import defaultImg from '../../assets/images/main2.png';
+import bg from '../../assets/images/people1.svg';
+import { FaChevronRight } from 'react-icons/fa';
+import { FaCamera } from 'react-icons/fa6';
+import { GoPencil } from 'react-icons/go';
+import SingleLineLoader from '../Atoms/skeleton-loaders/SingleLineLoader';
+import { HiCamera } from 'react-icons/hi';
+import { BsImage } from 'react-icons/bs';
+import OutsideClickHandler from 'react-outside-click-handler/build/OutsideClickHandler';
 
 const ProfileBanner = ({ othersView, data }) => {
   const [actionAcctModal, setActionAcctModal] = useState(false);
@@ -15,6 +25,10 @@ const ProfileBanner = ({ othersView, data }) => {
   const [contentToShow, setContentToShow] = useState(null);
   const [reportModal, setReportModal] = useState(false);
   const [profileImgOnLoadStatus, setProfileImgOnLoadStatus] = useState('base');
+  const [coverImgOnLoadStatus, setCoverImgOnLoadStatus] = useState('base');
+  const [showDropdowm, setShowDropdown] = useState(false);
+  const [uploadProfilePicture, setUploadProfilePicture] = useState({});
+  const [uploadCoverPicture, setUploadCoverPicture] = useState({});
 
   const toggleAcctModal = () => {
     setActionAcctModal(!actionAcctModal);
@@ -28,30 +42,145 @@ const ProfileBanner = ({ othersView, data }) => {
   const hideIndividualAcctModal = () => {
     setIndividualAcctModal(false);
   };
+  const handleChangeProfilePhoto = (event) => {
+    const file = event.target.files[0];
+    if (file) {
+      setUploadProfilePicture({ profilePicture: file });
+    }
+  };
+  const handleChangeCoverPhoto = (event) => {
+    const file = event.target.files[0];
+    if (file) {
+      setUploadCoverPicture({ backgroundImage: file });
+    }
+    setShowDropdown(false);
+  };
+  console.log(uploadProfilePicture);
+  console.log(uploadCoverPicture);
   return (
     <div className='profile-banner-wrapper'>
-      <div className='banner-image'></div>
+      <div className='banner-image'>
+        {data?.status === 'base' || data?.status === 'loading' ? (
+          <div className='loading-state'>
+            <SingleLineLoader />
+          </div>
+        ) : data.status === 'successful' ? (
+          <>
+            <div className='cover-img-wrapper'>
+              <img
+                // src={data?.data?.imageUrl}
+                src={bg}
+                alt={`${data?.data?.firstName} ${data?.data?.secondName}`}
+                className={`${
+                  coverImgOnLoadStatus === 'success' ? 'd-block' : 'd-none'
+                }`}
+                onLoad={() => setCoverImgOnLoadStatus('success')}
+                onError={() => setCoverImgOnLoadStatus('error')}
+              />
+              <div className='dropdown-box-wrapper'>
+                <div
+                  className='icon-wrapper'
+                  onClick={() => setShowDropdown(!showDropdowm)}
+                >
+                  <GoPencil className='icon' />
+                </div>
+                {showDropdowm && (
+                  <OutsideClickHandler
+                    onOutsideClick={() => {
+                      setShowDropdown(false);
+                      console.log('outside click');
+                    }}
+                  >
+                    <div className='dropdown-box'>
+                      <h5>Add photo</h5>
+                      <div className='btn-group-wrapper'>
+                        <label htmlFor='take-photo' className='btn-con'>
+                          <div className='text-wrapper'>
+                            <FaCamera className='icon' />
+                            <p>Take a photo</p>
+                          </div>
+                          <FaChevronRight />
+                          <input
+                            name='take-photo'
+                            type='file'
+                            capture='user'
+                            accept='image/*'
+                            id='take-photo'
+                            onChange={handleChangeCoverPhoto}
+                          />
+                        </label>
+                        <label htmlFor='upload' className='btn-con'>
+                          <div className='text-wrapper'>
+                            <BsImage className='icon' />
+                            <p>Upload from photos</p>
+                          </div>
+                          <FaChevronRight />
+                          <input
+                            name='upload'
+                            type='file'
+                            capture='user'
+                            accept='image/*'
+                            id='upload'
+                            onChange={handleChangeCoverPhoto}
+                          />
+                        </label>
+                      </div>
+                    </div>
+                  </OutsideClickHandler>
+                )}
+              </div>
+            </div>
+          </>
+        ) : (
+          <></>
+        )}
+      </div>
       <div className='profile-image-wrapper'>
         <div className='profile-image'>
           {data?.status === 'base' || data?.status === 'loading' ? (
-            <>
-              <UserProfilePhotoLoader />
-            </>
+            <UserProfilePhotoLoader />
           ) : (
             <>
-              <img
-                src={data?.data?.imageUrl}
-                alt={`${data?.data?.firstName} ${data?.data?.secondName}`}
-                className={`${
-                  profileImgOnLoadStatus === 'success' ? 'd-block' : 'd-none'
-                }`}
-                onLoad={() => setProfileImgOnLoadStatus('success')}
-                onError={() => setProfileImgOnLoadStatus('error')}
-              />
-              {profileImgOnLoadStatus === 'base' && <UserProfilePhotoLoader />}
-              {profileImgOnLoadStatus === 'error' && (
-                <div className='error-img'>couldn't load img</div>
-              )}
+              <div className='img-wrapper'>
+                <img
+                  // src={data?.data?.imageUrl}
+                  src={defaultImg}
+                  alt={`${data?.data?.firstName} ${data?.data?.secondName}`}
+                  className={`${
+                    profileImgOnLoadStatus === 'success' ? 'd-block' : 'd-none'
+                  }`}
+                  onLoad={() => setProfileImgOnLoadStatus('success')}
+                  onError={() => setProfileImgOnLoadStatus('error')}
+                />
+                {profileImgOnLoadStatus === 'base' && (
+                  <div className='single-line-loader-wrapper'>
+                    <SingleLineLoader />
+                  </div>
+                )}
+                {profileImgOnLoadStatus === 'error' && (
+                  <img
+                    src={defaultImg}
+                    alt={`${data?.data?.firstName} ${data?.data?.secondName}`}
+                  />
+                )}
+                {(profileImgOnLoadStatus === 'success' ||
+                  profileImgOnLoadStatus === 'error') && (
+                  <label
+                    className='icon-wrapper'
+                    htmlFor='upload-profile-photo'
+                  >
+                    <FaCamera />
+                    <input
+                      name='upload-profile-photo'
+                      type='file'
+                      capture='user'
+                      accept='image/*'
+                      id='upload-profile-photo'
+                      onChange={handleChangeProfilePhoto}
+                    />
+                  </label>
+                )}
+              </div>
             </>
           )}
         </div>
