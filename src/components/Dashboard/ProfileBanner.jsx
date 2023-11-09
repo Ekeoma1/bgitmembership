@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import Icon from '../Icon';
 import AccountActionModal from '../Modals/AccountActionModal';
 import IndividualActionModal from '../Modals/IndividualActionModal';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import ReportModal from '../Modals/ReportModal';
 import { useDispatch, useSelector } from 'react-redux';
 import { triggerGetMyProfile } from '../../Features/users/users_slice';
@@ -20,8 +20,10 @@ import SingleLineLoader, {
 import { HiCamera } from 'react-icons/hi';
 import { BsCameraFill, BsImage } from 'react-icons/bs';
 import OutsideClickHandler from 'react-outside-click-handler/build/OutsideClickHandler';
+import { LuMoreVertical } from 'react-icons/lu';
 
 const ProfileBanner = ({ othersView, data }) => {
+  const navigate = useNavigate();
   const [actionAcctModal, setActionAcctModal] = useState(false);
   const [individalAcctModal, setIndividualAcctModal] = useState(false);
   const [contentToShow, setContentToShow] = useState(null);
@@ -173,7 +175,7 @@ const ProfileBanner = ({ othersView, data }) => {
                     className='icon-wrapper'
                     htmlFor='upload-profile-photo'
                   >
-                    <FaCamera className='icon'/>
+                    <FaCamera className='icon' />
                     <input
                       name='upload-profile-photo'
                       type='file'
@@ -191,7 +193,7 @@ const ProfileBanner = ({ othersView, data }) => {
       </div>
       <div className='profile-details-card'>
         <div className='row'>
-          {data?.status === 'loading' ? (
+          {data?.status === 'base' || data?.status === 'loading' ? (
             <DetailsLoader />
           ) : (
             <>
@@ -203,8 +205,8 @@ const ProfileBanner = ({ othersView, data }) => {
                     </h2>
                     {/* Added  this so users can see their emails as well. It's not on the original design. Remove if it's not okay*/}
                     <div className='email'>{data?.data?.email}</div>
-                    <div className='job'>{data?.data?.niche}</div>
-                    <div className='job'>{data?.data?.profession}</div>
+                    <div className='detail'>{data?.data?.niche}</div>
+                    <div className='detail'>{data?.data?.profession}</div>
                     <div className='other-details location'>
                       {data?.data?.city}
                     </div>
@@ -221,12 +223,12 @@ const ProfileBanner = ({ othersView, data }) => {
                         ))
                       ) : (
                         <div className='other-details tag-names'>
-                          You have no tags
+                          No tags
                         </div>
                       )}
                       {!othersView && data.data?.tags?.length > 3 && (
                         <div className='see-more-btn d-lg-flex d-none'>
-                          see 2 more
+                          see more
                         </div>
                       )}
                     </div>
@@ -240,23 +242,24 @@ const ProfileBanner = ({ othersView, data }) => {
                         ))
                       ) : (
                         <div className='other-details tag-names'>
-                          No skills added yet
+                          No skills
                         </div>
                       )}
                     </div>
                   </div>
                 </div>
               </div>
-              <div className='col-md-1 col-2'>
+              <div className='col-md-1 col-2 more'>
                 {othersView ? (
                   <button onClick={toggleAcctModal}>
-                    <Icon icon='elipse' />
+                    {/* <Icon icon='elipse' /> */}
+                    <LuMoreVertical className='icon'/>
                   </button>
                 ) : (
                   <button>
-                    <Link to={'/settings'}>
-                      <Icon icon='edit' />
-                    </Link>
+                    <div onClick={() => navigate('/settings')}>
+                      <GoPencil className='icon' />
+                    </div>
                   </button>
                 )}
               </div>

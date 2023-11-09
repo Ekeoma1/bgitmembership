@@ -85,7 +85,7 @@ const SocialLinksCard = ({ othersView }) => {
       ) : (
         <></>
       )}
-      <ModalBox
+      {/* <ModalBox
         show={showSocialLinksModal}
         width={isMobile ? '100%' : ''}
         onClose={() => {
@@ -97,7 +97,7 @@ const SocialLinksCard = ({ othersView }) => {
             setShowSocialLinksModal(false);
           }}
         />
-      </ModalBox>
+      </ModalBox> */}
     </div>
   );
 };
