@@ -35,6 +35,18 @@ const initialState = {
     status: states.BASE,
     data: {},
   },
+  toggleLikeUnlikeComment: {
+    status: states.BASE,
+    data: {},
+  },
+  getAllCommentsByPostId: {
+    status: states.BASE,
+    data: {},
+  },
+  toggleSaveUnsavePost: {
+    status: states.BASE,
+    data: {},
+  },
 };
 export const triggerCreatePost = createAsyncThunk(
   'create-post',
@@ -108,6 +120,37 @@ export const triggerCreateComment = createAsyncThunk(
     }
   }
 );
+export const triggerToggleLikeUnlikeComment = createAsyncThunk(
+  'toggle-like-unlike-comment',
+  async (params, thunkAPI) => {
+    try {
+      return await PostsService.toggleLikeUnlikeComment(params);
+    } catch (e) {
+      return thunkAPI.rejectWithValue(e.message);
+    }
+  }
+);
+export const triggerGetAllCommentsByPostId = createAsyncThunk(
+  'get-all-comments-by-post-id',
+  async (params, thunkAPI) => {
+    try {
+      return await PostsService.getAllCommentsByPostId(params);
+    } catch (e) {
+      return thunkAPI.rejectWithValue(e.message);
+    }
+  }
+);
+export const triggerToggleSaveUnsavePost= createAsyncThunk(
+  'toggle-save-unsave-post',
+  async (params, thunkAPI) => {
+    try {
+      return await PostsService.toggleSaveUnsavePost(params);
+    } catch (e) {
+      return thunkAPI.rejectWithValue(e.message);
+    }
+  }
+);
+
 
 const postsSlice = createSlice({
   name: 'posts',
@@ -222,6 +265,49 @@ const postsSlice = createSlice({
       state.createComment.status = states.ERROR;
       state.createComment.data = {};
     });
+
+    // toggle like unlike comment
+    builder.addCase(triggerToggleLikeUnlikeComment.pending, (state) => {
+      state.toggleLikeUnlikeComment.status = states.LOADING;
+      state.toggleLikeUnlikeComment.data = {};
+    });
+    builder.addCase(triggerToggleLikeUnlikeComment.fulfilled, (state, action) => {
+      state.toggleLikeUnlikeComment.status = states.SUCCESSFUL;
+      state.toggleLikeUnlikeComment.data = action.payload;
+    });
+    builder.addCase(triggerToggleLikeUnlikeComment.rejected, (state,action) => {
+      state.toggleLikeUnlikeComment.status = states.ERROR;
+      state.toggleLikeUnlikeComment.data = action.payload;
+    });
+
+    // get all comments by post id
+    builder.addCase(triggerGetAllCommentsByPostId.pending, (state) => {
+      state.getAllCommentsByPostId.status = states.LOADING;
+      state.getAllCommentsByPostId.data = {};
+    });
+    builder.addCase(triggerGetAllCommentsByPostId.fulfilled, (state, action) => {
+      state.getAllCommentsByPostId.status = states.SUCCESSFUL;
+      state.getAllCommentsByPostId.data = action.payload;
+    });
+    builder.addCase(triggerGetAllCommentsByPostId.rejected, (state,action) => {
+      state.getAllCommentsByPostId.status = states.ERROR;
+      state.getAllCommentsByPostId.data = action.payload;
+    });
+
+    // toggle save unsave post
+    builder.addCase(triggerToggleSaveUnsavePost.pending, (state) => {
+      state.toggleSaveUnsavePost.status = states.LOADING;
+      state.toggleSaveUnsavePost.data = {};
+    });
+    builder.addCase(triggerToggleSaveUnsavePost.fulfilled, (state, action) => {
+      state.toggleSaveUnsavePost.status = states.SUCCESSFUL;
+      state.toggleSaveUnsavePost.data = action.payload;
+    });
+    builder.addCase(triggerToggleSaveUnsavePost.rejected, (state,action) => {
+      state.toggleSaveUnsavePost.status = states.ERROR;
+      state.toggleSaveUnsavePost.data = action.payload;
+    });
+
   },
 });
 

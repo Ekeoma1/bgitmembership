@@ -468,6 +468,10 @@
           }
         }
       }
+      .active {
+        color: $pri-color2;
+        background-color: green;
+      }
     }
   }
 }

@@ -63,4 +63,31 @@ export default class PostsService {
     });
     return response;
   }
+
+  //toggle like unlike comment
+  static async toggleLikeUnlikeComment(data) {
+    const response = await post({
+      url: apiRoutes.toggleLikeUnlikeComment,
+      data: { ...data },
+    });
+    return response;
+  }
+
+  //get all comments by post id
+  static async getAllCommentsByPostId(data) {
+    const response = await post({
+      url: apiRoutes.getAllCommentsByPostId,
+      data: { ...data },
+    });
+    return response;
+  }
+
+  //toggle save unsave posts
+  static async toggleSaveUnsavePost(data) {
+    const response = await post({
+      url: apiRoutes.toggleSaveUnsavePost,
+      data: { ...data },
+    });
+    return response;
+  }
 }

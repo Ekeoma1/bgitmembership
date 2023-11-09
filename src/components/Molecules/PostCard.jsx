@@ -10,6 +10,8 @@ import {
   triggerToggleLikePost,
 } from '../../Features/posts/posts_slice';
 import { useDispatch, useSelector } from 'react-redux';
+import { FaRegBookmark, FaBookmark } from 'react-icons/fa';
+
 const PostCard = ({ post }) => {
   // console.log('postsss', post);
   const navigate = useNavigate();
@@ -26,6 +28,10 @@ const PostCard = ({ post }) => {
     setLiked(!liked);
     const data = { queryParams: { postId: post.postId } };
     dispatch(triggerToggleLikePost(data));
+  };
+  const handleSaveUnsavePost = () => {
+    console.log('hi');
+    // dispatch(triggerToggleLikePost(data));
   };
 
   useEffect(() => {
@@ -204,8 +210,9 @@ const PostCard = ({ post }) => {
           </div>
 
           <div className='d-flex align-items-center c-gap-10'>
-            <button>
-              <Icon icon='bookmark' />
+            <button className='bookmark active' onClick={handleSaveUnsavePost}>
+              {/* <FaRegBookmark /> */}
+              <FaBookmark />
             </button>
             <span>5</span>
           </div>

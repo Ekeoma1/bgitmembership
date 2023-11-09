@@ -14,9 +14,11 @@ import bg from '../../assets/images/people1.svg';
 import { FaChevronRight } from 'react-icons/fa';
 import { FaCamera } from 'react-icons/fa6';
 import { GoPencil } from 'react-icons/go';
-import SingleLineLoader from '../Atoms/skeleton-loaders/SingleLineLoader';
+import SingleLineLoader, {
+  SingleLineLoader2,
+} from '../Atoms/skeleton-loaders/SingleLineLoader';
 import { HiCamera } from 'react-icons/hi';
-import { BsImage } from 'react-icons/bs';
+import { BsCameraFill, BsImage } from 'react-icons/bs';
 import OutsideClickHandler from 'react-outside-click-handler/build/OutsideClickHandler';
 
 const ProfileBanner = ({ othersView, data }) => {
@@ -62,7 +64,7 @@ const ProfileBanner = ({ othersView, data }) => {
       <div className='banner-image'>
         {data?.status === 'base' || data?.status === 'loading' ? (
           <div className='loading-state'>
-            <SingleLineLoader />
+            <SingleLineLoader2 />
           </div>
         ) : data.status === 'successful' ? (
           <>
@@ -99,7 +101,7 @@ const ProfileBanner = ({ othersView, data }) => {
                             <FaCamera className='icon' />
                             <p>Take a photo</p>
                           </div>
-                          <FaChevronRight />
+                          <FaChevronRight className='icon' />
                           <input
                             name='take-photo'
                             type='file'
@@ -114,7 +116,7 @@ const ProfileBanner = ({ othersView, data }) => {
                             <BsImage className='icon' />
                             <p>Upload from photos</p>
                           </div>
-                          <FaChevronRight />
+                          <FaChevronRight className='icon' />
                           <input
                             name='upload'
                             type='file'
@@ -138,7 +140,9 @@ const ProfileBanner = ({ othersView, data }) => {
       <div className='profile-image-wrapper'>
         <div className='profile-image'>
           {data?.status === 'base' || data?.status === 'loading' ? (
-            <UserProfilePhotoLoader />
+            <div className='user-profile-loader-wrapper'>
+              <UserProfilePhotoLoader />
+            </div>
           ) : (
             <>
               <div className='img-wrapper'>
@@ -153,8 +157,8 @@ const ProfileBanner = ({ othersView, data }) => {
                   onError={() => setProfileImgOnLoadStatus('error')}
                 />
                 {profileImgOnLoadStatus === 'base' && (
-                  <div className='single-line-loader-wrapper'>
-                    <SingleLineLoader />
+                  <div className='user-profile-loader-wrapper'>
+                    <UserProfilePhotoLoader />
                   </div>
                 )}
                 {profileImgOnLoadStatus === 'error' && (
@@ -169,7 +173,7 @@ const ProfileBanner = ({ othersView, data }) => {
                     className='icon-wrapper'
                     htmlFor='upload-profile-photo'
                   >
-                    <FaCamera />
+                    <FaCamera className='icon'/>
                     <input
                       name='upload-profile-photo'
                       type='file'
