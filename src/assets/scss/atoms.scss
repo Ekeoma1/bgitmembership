@@ -47,10 +47,11 @@
 .details-loader {
   display: flex;
   padding: 2rem 0;
-  //  background-color: rgba(0, 128, 0, 0.57);
   .left-content {
     width: 50%;
-
+    @media screen and (max-width: '600px') {
+      width: 100%;
+    }
     .name {
       width: 70%;
       height: 5rem;
@@ -67,6 +68,9 @@
   }
   .right-content {
     width: 50%;
+    @media screen and (max-width: '600px') {
+   display: none;
+    }
     .tags,
     .skills {
       width: 50%;

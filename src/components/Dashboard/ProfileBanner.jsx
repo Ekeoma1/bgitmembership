@@ -17,13 +17,13 @@ import { GoPencil } from 'react-icons/go';
 import SingleLineLoader, {
   SingleLineLoader2,
 } from '../Atoms/skeleton-loaders/SingleLineLoader';
-import { HiCamera } from 'react-icons/hi';
-import { BsCameraFill, BsImage } from 'react-icons/bs';
+import { BsImage } from 'react-icons/bs';
 import OutsideClickHandler from 'react-outside-click-handler/build/OutsideClickHandler';
 import { LuMoreVertical } from 'react-icons/lu';
 
 const ProfileBanner = ({ othersView, data }) => {
   const navigate = useNavigate();
+  const { getMyProfile } = useSelector((state) => state.users);
   const [actionAcctModal, setActionAcctModal] = useState(false);
   const [individalAcctModal, setIndividualAcctModal] = useState(false);
   const [contentToShow, setContentToShow] = useState(null);
@@ -59,8 +59,10 @@ const ProfileBanner = ({ othersView, data }) => {
     }
     setShowDropdown(false);
   };
-  console.log(uploadProfilePicture);
-  console.log(uploadCoverPicture);
+  // console.log(uploadProfilePicture);
+  // console.log(uploadCoverPicture);
+  console.log('data', data);
+  console.log('getMyProfile', getMyProfile);
   return (
     <div className='profile-banner-wrapper'>
       <div className='banner-image'>
@@ -72,8 +74,7 @@ const ProfileBanner = ({ othersView, data }) => {
           <>
             <div className='cover-img-wrapper'>
               <img
-                // src={data?.data?.imageUrl}
-                src={bg}
+                src={data?.data?.imageUrl}
                 alt={`${data?.data?.firstName} ${data?.data?.secondName}`}
                 className={`${
                   coverImgOnLoadStatus === 'success' ? 'd-block' : 'd-none'
@@ -149,8 +150,7 @@ const ProfileBanner = ({ othersView, data }) => {
             <>
               <div className='img-wrapper'>
                 <img
-                  // src={data?.data?.imageUrl}
-                  src={defaultImg}
+                  src={data?.data?.imageUrl}
                   alt={`${data?.data?.firstName} ${data?.data?.secondName}`}
                   className={`${
                     profileImgOnLoadStatus === 'success' ? 'd-block' : 'd-none'
@@ -222,9 +222,7 @@ const ProfileBanner = ({ othersView, data }) => {
                           </div>
                         ))
                       ) : (
-                        <div className='other-details tag-names'>
-                          No tags
-                        </div>
+                        <div className='other-details tag-names'>No tags</div>
                       )}
                       {!othersView && data.data?.tags?.length > 3 && (
                         <div className='see-more-btn d-lg-flex d-none'>
@@ -241,19 +239,19 @@ const ProfileBanner = ({ othersView, data }) => {
                           </div>
                         ))
                       ) : (
-                        <div className='other-details tag-names'>
-                          No skills
-                        </div>
+                        <div className='other-details tag-names'>No skills</div>
                       )}
                     </div>
                   </div>
                 </div>
               </div>
               <div className='col-md-1 col-2 more'>
-                {othersView ? (
+                {/* <button onClick={toggleAcctModal}>
+                  <LuMoreVertical className='icon' />
+                </button> */}
+                {othersView || true ? (
                   <button onClick={toggleAcctModal}>
-                    {/* <Icon icon='elipse' /> */}
-                    <LuMoreVertical className='icon'/>
+                    <LuMoreVertical className='icon' />
                   </button>
                 ) : (
                   <button>
@@ -262,29 +260,57 @@ const ProfileBanner = ({ othersView, data }) => {
                     </div>
                   </button>
                 )}
+                {othersView && (
+                  <OutsideClickHandler
+                    onOutsideClick={() => {
+                    setActionAcctModal(false)
+                    }}
+                  >
+                    <AccountActionModal
+                      reportAction={setReportModal}
+                      show={actionAcctModal}
+                      action={showIndividualAcctModal}
+                    />
+                  </OutsideClickHandler>
+
+                  // <div className='modal-wrapper'>
+                  // </div>
+                )}
               </div>
             </>
           )}
         </div>
 
-        {othersView && (
+        {othersView && data?.status === 'successful' && (
           <div className='d-flex c-gap-10 flex-wrap mt-3'>
-            <button className='reach-btn'>+ Connect</button>
+            <button
+              onClick={() => {
+                console.log('connect');
+              }}
+              className='reach-btn'
+            >
+              + Connect
+            </button>
 
-            <Link className='reach-btn' to='#'>
+            <button
+              onClick={() => {
+                console.log('message');
+              }}
+              className='reach-btn'
+            >
               Message
-            </Link>
+            </button>
           </div>
         )}
       </div>
 
-      {othersView && (
+      {/* {othersView && (
         <AccountActionModal
           reportAction={setReportModal}
           show={actionAcctModal}
           action={showIndividualAcctModal}
         />
-      )}
+      )} */}
       {othersView && (
         <IndividualActionModal
           show={individalAcctModal}

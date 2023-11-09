@@ -1,5 +1,5 @@
-@import "index";
-@import "colors";
+@import 'index';
+@import 'colors';
 
 .account-action-modal {
   padding: 0 40px 40px 40px;
@@ -8,7 +8,9 @@
   position: absolute;
   z-index: 1000;
   right: 0;
-  top: 70%;
+  top: 3rem;
+  width: 302px;
+  height: 249px;
 
   .acct-btn {
     margin-top: 40px;
@@ -210,7 +212,8 @@
 @media screen and (max-width: 800px) {
   .account-action-modal {
     padding: 0 20px 20px 20px !important;
-    top: 50% !important;
+    width: 202px;
+    height: 149px;
 
     .acct-btn {
       margin-top: 20px !important;

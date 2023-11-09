@@ -106,7 +106,13 @@ const PostCard = ({ post }) => {
         <div className='post-owner-details'>
           <div
             className='img-circle'
-            onClick={() => navigate(`other-users/${post?.userId}`)}
+            onClick={() =>
+              navigate(
+                getMyProfile.data?.userId === post?.userId
+                  ? 'dashboard'
+                  : `other-users/${post?.userId}`
+              )
+            }
           >
             <img
               src={post?.userProfilePicture}
@@ -126,7 +132,13 @@ const PostCard = ({ post }) => {
             <div className='d-flex align-items-center'>
               <span
                 className='name'
-                onClick={() => navigate(`other-users/${post?.userId}`)}
+                onClick={() =>
+                  navigate(
+                    getMyProfile.data?.userId === post?.userId
+                      ? 'dashboard'
+                      : `other-users/${post?.userId}`
+                  )
+                }
               >
                 {post?.firstName} {post?.secondName}
               </span>
