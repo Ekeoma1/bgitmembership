@@ -1,11 +1,13 @@
 import { useEffect, useState } from 'react';
-import Icon from '../Icon';
 import AccountActionModal from '../Modals/AccountActionModal';
 import IndividualActionModal from '../Modals/IndividualActionModal';
-import { Link, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import ReportModal from '../Modals/ReportModal';
 import { useDispatch, useSelector } from 'react-redux';
-import { triggerGetMyProfile } from '../../Features/users/users_slice';
+import {
+  triggerUpdateBackgroundPicture,
+  triggerUpdateProfilePicture,
+} from '../../Features/users/users_slice';
 import UserProfilePhotoLoader from '../Atoms/skeleton-loaders/dashboard-page/UserProfilePhotoLoader';
 import DetailsLoader from '../Atoms/skeleton-loaders/dashboard-page/DetailsLoader';
 // import defaultImg from '../../assets/images/default-photo.jpeg';
@@ -14,16 +16,16 @@ import bg from '../../assets/images/people1.svg';
 import { FaChevronRight } from 'react-icons/fa';
 import { FaCamera } from 'react-icons/fa6';
 import { GoPencil } from 'react-icons/go';
-import SingleLineLoader, {
-  SingleLineLoader2,
-} from '../Atoms/skeleton-loaders/SingleLineLoader';
+import { SingleLineLoader2 } from '../Atoms/skeleton-loaders/SingleLineLoader';
 import { BsImage } from 'react-icons/bs';
 import OutsideClickHandler from 'react-outside-click-handler/build/OutsideClickHandler';
 import { LuMoreVertical } from 'react-icons/lu';
 
 const ProfileBanner = ({ othersView, data }) => {
   const navigate = useNavigate();
-  const { getMyProfile } = useSelector((state) => state.users);
+  const dispatch = useDispatch();
+  const { getMyProfile, updateProfilePicture, updateBackgroundPicture } =
+    useSelector((state) => state.users);
   const [actionAcctModal, setActionAcctModal] = useState(false);
   const [individalAcctModal, setIndividualAcctModal] = useState(false);
   const [contentToShow, setContentToShow] = useState(null);
@@ -31,8 +33,14 @@ const ProfileBanner = ({ othersView, data }) => {
   const [profileImgOnLoadStatus, setProfileImgOnLoadStatus] = useState('base');
   const [coverImgOnLoadStatus, setCoverImgOnLoadStatus] = useState('base');
   const [showDropdowm, setShowDropdown] = useState(false);
-  const [uploadProfilePicture, setUploadProfilePicture] = useState({});
-  const [uploadCoverPicture, setUploadCoverPicture] = useState({});
+  const [uploadProfilePicture, setUploadProfilePicture] = useState({
+    profilePicture: '',
+  });
+  const [uploadCoverPicture, setUploadCoverPicture] = useState({
+    backgroundImage: '',
+  });
+  const [uploadedProfilePicture, setUploadedprofilePicture] = useState(false);
+  const [uploadedCoverPicture, setUploadedCoverPicture] = useState(false);
 
   const toggleAcctModal = () => {
     setActionAcctModal(!actionAcctModal);
@@ -59,10 +67,36 @@ const ProfileBanner = ({ othersView, data }) => {
     }
     setShowDropdown(false);
   };
-  // console.log(uploadProfilePicture);
-  // console.log(uploadCoverPicture);
-  console.log('data', data);
-  console.log('getMyProfile', getMyProfile);
+  useEffect(() => {
+    if (uploadProfilePicture.profilePicture) {
+      setUploadedprofilePicture(true);
+      setProfileImgOnLoadStatus('base');
+      dispatch(triggerUpdateProfilePicture(uploadProfilePicture));
+    }
+  }, [uploadProfilePicture]);
+  useEffect(() => {
+    if (uploadCoverPicture.backgroundImage) {
+      setUploadedCoverPicture(true);
+      setCoverImgOnLoadStatus('base');
+      dispatch(triggerUpdateBackgroundPicture(uploadCoverPicture));
+    }
+  }, [uploadCoverPicture]);
+
+  useEffect(() => {
+    if (updateProfilePicture.status === 'successful') {
+      setUploadProfilePicture({ profilePicture: '' });
+    }
+  }, [updateProfilePicture]);
+  useEffect(() => {
+    if (updateBackgroundPicture.status === 'successful') {
+      setUploadCoverPicture({ backgroundImage: '' });
+    }
+  }, [updateBackgroundPicture]);
+
+  // console.log('data', data);
+  // console.log('getMyProfile', getMyProfile);
+  // console.log('uploadedProfilePicture', uploadedProfilePicture);
+  // console.log('onload', coverImgOnLoadStatus);
   return (
     <div className='profile-banner-wrapper'>
       <div className='banner-image'>
@@ -73,67 +107,117 @@ const ProfileBanner = ({ othersView, data }) => {
         ) : data.status === 'successful' ? (
           <>
             <div className='cover-img-wrapper'>
-              <img
-                src={data?.data?.imageUrl}
-                alt={`${data?.data?.firstName} ${data?.data?.secondName}`}
-                className={`${
-                  coverImgOnLoadStatus === 'success' ? 'd-block' : 'd-none'
-                }`}
-                onLoad={() => setCoverImgOnLoadStatus('success')}
-                onError={() => setCoverImgOnLoadStatus('error')}
-              />
-              <div className='dropdown-box-wrapper'>
-                <div
-                  className='icon-wrapper'
-                  onClick={() => setShowDropdown(!showDropdowm)}
-                >
-                  <GoPencil className='icon' />
-                </div>
-                {showDropdowm && (
-                  <OutsideClickHandler
-                    onOutsideClick={() => {
-                      setShowDropdown(false);
-                      console.log('outside click');
-                    }}
-                  >
-                    <div className='dropdown-box'>
-                      <h5>Add photo</h5>
-                      <div className='btn-group-wrapper'>
-                        <label htmlFor='take-photo' className='btn-con'>
-                          <div className='text-wrapper'>
-                            <FaCamera className='icon' />
-                            <p>Take a photo</p>
-                          </div>
-                          <FaChevronRight className='icon' />
-                          <input
-                            name='take-photo'
-                            type='file'
-                            capture='user'
-                            accept='image/*'
-                            id='take-photo'
-                            onChange={handleChangeCoverPhoto}
-                          />
-                        </label>
-                        <label htmlFor='upload' className='btn-con'>
-                          <div className='text-wrapper'>
-                            <BsImage className='icon' />
-                            <p>Upload from photos</p>
-                          </div>
-                          <FaChevronRight className='icon' />
-                          <input
-                            name='upload'
-                            type='file'
-                            capture='user'
-                            accept='image/*'
-                            id='upload'
-                            onChange={handleChangeCoverPhoto}
-                          />
-                        </label>
-                      </div>
+              {uploadedCoverPicture ? (
+                <>
+                  {updateBackgroundPicture.status === 'successful' && (
+                    <img
+                      src={updateBackgroundPicture?.data?.backgroundImageUrl}
+                      alt={`${updateBackgroundPicture?.data?.firstName} ${updateBackgroundPicture?.data?.secondName}`}
+                      className={`${
+                        coverImgOnLoadStatus === 'success'
+                          ? 'd-block'
+                          : 'd-none'
+                      }`}
+                      onLoad={() => setCoverImgOnLoadStatus('success')}
+                      onError={() => setCoverImgOnLoadStatus('error')}
+                    />
+                  )}
+                  {(coverImgOnLoadStatus === 'base' ||
+                    updateBackgroundPicture.status === 'base' ||
+                    updateBackgroundPicture.status === 'loading') && (
+                    <div className='cover-img-loader-wrapper'>
+                      <SingleLineLoader2 />
                     </div>
-                  </OutsideClickHandler>
+                  )}
+                  {coverImgOnLoadStatus === 'error' && (
+                    <img
+                      src={defaultImg}
+                      alt={`${data?.data?.firstName} ${data?.data?.secondName}`}
+                    />
+                  )}
+                </>
+              ) : (
+                <>
+                  <img
+                    src={data?.data?.backgroundImageUrl}
+                    alt={`${data?.data?.firstName} ${data?.data?.secondName}`}
+                    className={`${
+                      coverImgOnLoadStatus === 'success' ? 'd-block' : 'd-none'
+                    }`}
+                    onLoad={() => setCoverImgOnLoadStatus('success')}
+                    onError={() => setCoverImgOnLoadStatus('error')}
+                  />
+                  {coverImgOnLoadStatus === 'base' && (
+                    <div className='cover-img-loader-wrapper'>
+                      <SingleLineLoader2 />
+                    </div>
+                  )}
+                  {coverImgOnLoadStatus === 'error' && (
+                    <img
+                      src={defaultImg}
+                      alt={`${data?.data?.firstName} ${data?.data?.secondName}`}
+                    />
+                  )}
+                </>
+              )}
+
+              {data.data?.userId === getMyProfile.data?.userId &&
+                data.status === 'successful' &&
+                (coverImgOnLoadStatus === 'success' ||
+                  coverImgOnLoadStatus === 'error') && (
+                  <div className='dropdown-box-wrapper'>
+                    <div
+                      className='icon-wrapper'
+                      onClick={() => setShowDropdown(!showDropdowm)}
+                    >
+                      <GoPencil className='icon' />
+                    </div>
+                    {showDropdowm && (
+                      <OutsideClickHandler
+                        onOutsideClick={() => {
+                          setShowDropdown(false);
+                          console.log('outside click');
+                        }}
+                      >
+                        <div className='dropdown-box'>
+                          <h5>Add photo</h5>
+                          <div className='btn-group-wrapper'>
+                            <label htmlFor='take-photo' className='btn-con'>
+                              <div className='text-wrapper'>
+                                <FaCamera className='icon' />
+                                <p>Take a photo</p>
+                              </div>
+                              <FaChevronRight className='icon' />
+                              <input
+                                name='take-photo'
+                                type='file'
+                                capture='user'
+                                accept='image/png'
+                                id='take-photo'
+                                onChange={handleChangeCoverPhoto}
+                              />
+                            </label>
+                            <label htmlFor='upload' className='btn-con'>
+                              <div className='text-wrapper'>
+                                <BsImage className='icon' />
+                                <p>Upload from photos</p>
+                              </div>
+                              <FaChevronRight className='icon' />
+                              <input
+                                name='upload'
+                                type='file'
+                                capture='user'
+                                accept='image/*'
+                                id='upload'
+                                onChange={handleChangeCoverPhoto}
+                              />
+                            </label>
+                          </div>
+                        </div>
+                      </OutsideClickHandler>
+                    )}
+                  </div>
                 )}
-              </div>
             </div>
           </>
         ) : (
@@ -149,42 +233,97 @@ const ProfileBanner = ({ othersView, data }) => {
           ) : (
             <>
               <div className='img-wrapper'>
-                <img
-                  src={data?.data?.imageUrl}
-                  alt={`${data?.data?.firstName} ${data?.data?.secondName}`}
-                  className={`${
-                    profileImgOnLoadStatus === 'success' ? 'd-block' : 'd-none'
-                  }`}
-                  onLoad={() => setProfileImgOnLoadStatus('success')}
-                  onError={() => setProfileImgOnLoadStatus('error')}
-                />
-                {profileImgOnLoadStatus === 'base' && (
-                  <div className='user-profile-loader-wrapper'>
-                    <UserProfilePhotoLoader />
-                  </div>
-                )}
-                {profileImgOnLoadStatus === 'error' && (
-                  <img
-                    src={defaultImg}
-                    alt={`${data?.data?.firstName} ${data?.data?.secondName}`}
-                  />
-                )}
-                {(profileImgOnLoadStatus === 'success' ||
-                  profileImgOnLoadStatus === 'error') && (
-                  <label
-                    className='icon-wrapper'
-                    htmlFor='upload-profile-photo'
-                  >
-                    <FaCamera className='icon' />
-                    <input
-                      name='upload-profile-photo'
-                      type='file'
-                      capture='user'
-                      accept='image/*'
-                      id='upload-profile-photo'
-                      onChange={handleChangeProfilePhoto}
+                {uploadedProfilePicture ? (
+                  <>
+                    {updateProfilePicture.status === 'successful' && (
+                      <img
+                        src={updateProfilePicture.data?.imageUrl}
+                        alt={`${updateProfilePicture.data?.firstName} ${updateProfilePicture.data?.secondName}`}
+                        className={`${
+                          profileImgOnLoadStatus === 'success'
+                            ? 'd-block'
+                            : 'd-none'
+                        }`}
+                        onLoad={() => setProfileImgOnLoadStatus('success')}
+                        onError={() => setProfileImgOnLoadStatus('error')}
+                      />
+                    )}
+                    {(profileImgOnLoadStatus === 'base' ||
+                      updateProfilePicture.status === 'base' ||
+                      updateProfilePicture.status === 'loading') && (
+                      <div className='user-profile-loader-wrapper'>
+                        <UserProfilePhotoLoader />
+                      </div>
+                    )}
+                    {profileImgOnLoadStatus === 'error' && (
+                      <img
+                        src={defaultImg}
+                        alt={`${data?.data?.firstName} ${data?.data?.secondName}`}
+                      />
+                    )}
+                    {(profileImgOnLoadStatus === 'success' ||
+                      profileImgOnLoadStatus === 'error') &&
+                      updateProfilePicture.data?.userId ===
+                        getMyProfile.data?.userId && (
+                        <label
+                          className='icon-wrapper'
+                          htmlFor='upload-profile-photo'
+                        >
+                          <FaCamera className='icon' />
+                          <input
+                            name='upload-profile-photo'
+                            type='file'
+                            capture='user'
+                            accept='image/png'
+                            id='upload-profile-photo'
+                            onChange={handleChangeProfilePhoto}
+                          />
+                        </label>
+                      )}
+                  </>
+                ) : (
+                  <>
+                    <img
+                      src={data?.data?.imageUrl}
+                      alt={`${data?.data?.firstName} ${data?.data?.secondName}`}
+                      className={`${
+                        profileImgOnLoadStatus === 'success'
+                          ? 'd-block'
+                          : 'd-none'
+                      }`}
+                      onLoad={() => setProfileImgOnLoadStatus('success')}
+                      onError={() => setProfileImgOnLoadStatus('error')}
                     />
-                  </label>
+                    {profileImgOnLoadStatus === 'base' && (
+                      <div className='user-profile-loader-wrapper'>
+                        <UserProfilePhotoLoader />
+                      </div>
+                    )}
+                    {profileImgOnLoadStatus === 'error' && (
+                      <img
+                        src={defaultImg}
+                        alt={`${data?.data?.firstName} ${data?.data?.secondName}`}
+                      />
+                    )}
+                    {(profileImgOnLoadStatus === 'success' ||
+                      profileImgOnLoadStatus === 'error') &&
+                      data.data?.userId === getMyProfile.data?.userId && (
+                        <label
+                          className='icon-wrapper'
+                          htmlFor='upload-profile-photo'
+                        >
+                          <FaCamera className='icon' />
+                          <input
+                            name='upload-profile-photo'
+                            type='file'
+                            capture='user'
+                            accept='image/png'
+                            id='upload-profile-photo'
+                            onChange={handleChangeProfilePhoto}
+                          />
+                        </label>
+                      )}
+                  </>
                 )}
               </div>
             </>
@@ -246,10 +385,7 @@ const ProfileBanner = ({ othersView, data }) => {
                 </div>
               </div>
               <div className='col-md-1 col-2 more'>
-                {/* <button onClick={toggleAcctModal}>
-                  <LuMoreVertical className='icon' />
-                </button> */}
-                {othersView || true ? (
+                {othersView ? (
                   <button onClick={toggleAcctModal}>
                     <LuMoreVertical className='icon' />
                   </button>
@@ -263,7 +399,7 @@ const ProfileBanner = ({ othersView, data }) => {
                 {othersView && (
                   <OutsideClickHandler
                     onOutsideClick={() => {
-                    setActionAcctModal(false)
+                      setActionAcctModal(false);
                     }}
                   >
                     <AccountActionModal
@@ -273,8 +409,7 @@ const ProfileBanner = ({ othersView, data }) => {
                     />
                   </OutsideClickHandler>
 
-                  // <div className='modal-wrapper'>
-                  // </div>
+            
                 )}
               </div>
             </>
@@ -303,14 +438,6 @@ const ProfileBanner = ({ othersView, data }) => {
           </div>
         )}
       </div>
-
-      {/* {othersView && (
-        <AccountActionModal
-          reportAction={setReportModal}
-          show={actionAcctModal}
-          action={showIndividualAcctModal}
-        />
-      )} */}
       {othersView && (
         <IndividualActionModal
           show={individalAcctModal}

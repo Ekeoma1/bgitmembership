@@ -37,7 +37,7 @@ const MyUpdates = () => {
             </div>
           ) : getAllNews.status === 'successful' ? (
             <>
-              {getAllNews.data?.news.length === 0 ? (
+              {getAllNews.data?.news?.length === 0 ? (
                 <p className='no-data-yet'>No news yet...</p>
               ) : (
                 <>

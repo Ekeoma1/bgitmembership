@@ -216,6 +216,12 @@ const usersSlice = createSlice({
     resetCloseAccount: (state) => {
       state.closeAccount = initialState.closeAccount;
     },
+    resetUpdateProfilePicture: (state) => {
+      state.updateProfilePicture = initialState.updateProfilePicture;
+    },
+    resetUpdateBackgroundPicture: (state) => {
+      state.updateBackgroundPicture = initialState.updateBackgroundPicture;
+    },
   },
   extraReducers: (builder) => {
     // get user profile by id
@@ -363,10 +369,13 @@ const usersSlice = createSlice({
       state.updateBackgroundPicture.status = states.LOADING;
       state.updateBackgroundPicture.data = {};
     });
-    builder.addCase(triggerUpdateBackgroundPicture.fulfilled, (state, action) => {
-      state.updateBackgroundPicture.status = states.SUCCESSFUL;
-      state.updateBackgroundPicture.data = action.payload;
-    });
+    builder.addCase(
+      triggerUpdateBackgroundPicture.fulfilled,
+      (state, action) => {
+        state.updateBackgroundPicture.status = states.SUCCESSFUL;
+        state.updateBackgroundPicture.data = action.payload;
+      }
+    );
     builder.addCase(triggerUpdateBackgroundPicture.rejected, (state) => {
       state.updateBackgroundPicture.status = states.ERROR;
       state.updateBackgroundPicture.data = {};
@@ -395,4 +404,6 @@ export const {
   resetUpdateFeedPreference,
   resetUpdatePrivacySettings,
   resetCloseAccount,
+  resetUpdateProfilePicture,
+  resetUpdateBackgroundPicture,
 } = usersSlice.actions;

@@ -72,7 +72,7 @@ const Member = () => {
               ) : (
                 <>
                   {getUsers?.data?.users
-                    .slice(0, numberOfUsersToDisplay - 1)
+                    ?.slice(0, numberOfUsersToDisplay - 1)
                     .map((user, key) => {
                       return (
                         <div

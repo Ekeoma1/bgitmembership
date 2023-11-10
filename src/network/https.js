@@ -11,7 +11,9 @@ async function ajax({ method = 'GET', url, data, queryParams }) {
     data?.postImageUrl ||
     data?.postVideoUrl ||
     data?.content ||
-    data?.resume
+    data?.resume ||
+    data?.profilePicture ||
+    data?.backgroundImage
   ) {
     contentType = 'multipart/form-data';
   } else {
