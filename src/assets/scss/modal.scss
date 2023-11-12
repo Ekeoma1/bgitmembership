@@ -28,6 +28,44 @@
     }
   }
 }
+.share-box-modal {
+  left: 0;
+  width: 260px;
+  height: 231px;
+  padding: 2.5rem 3.4rem;
+  display: flex;
+  flex-direction: column;
+  row-gap: 2.7rem;
+
+  background-color: #fff;
+  border-radius: 30px;
+  position: absolute;
+  z-index: 1000;
+  right: 0;
+  top: 3rem;
+  // left: 50%;
+  // transform: translateX(-50%);
+
+  .acct-btn {
+    // margin-top: 2.7rem;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    column-gap: 1.4rem;
+    color: #807c8b;
+    span {
+      // font-weight: 700;
+      // font-size: 18px;
+      // line-height: 21.89px;
+      // color: $alt-text-color;
+
+      font-size: 16px;
+      font-style: normal;
+      font-weight: 400;
+      line-height: 23.457px;
+    }
+  }
+}
 
 .individual-action-modal {
   padding: 35px;
@@ -37,14 +75,21 @@
   right: 5%;
   z-index: 2000;
   max-width: 300px;
-
-  .modal-content {
+  top: 13rem;
+  @media screen and (max-width: 800px) {
+    padding: 2rem;
+  }
+  .modal-content-con {
     .header {
       font-size: 18px;
       font-weight: 700;
       color: $alt-text-color;
       margin-bottom: 10px;
       line-height: 21.89px;
+
+      @media screen and (max-width: 800px) {
+        font-size: 14px !important;
+      }
     }
 
     .content {
@@ -52,6 +97,9 @@
       font-size: 13.19px;
       font-weight: 400;
       line-height: 23.5px;
+      @media screen and (max-width: 800px) {
+        font-size: 12px !important;
+      }
     }
 
     .btn-wrapper {
@@ -66,6 +114,9 @@
         border: 2px solid #33246a;
         color: $pri-color1;
         margin-top: 20px;
+        @media screen and (max-width: 800px) {
+          margin-top: 1rem;
+        }
       }
 
       .regular-btn {
@@ -81,6 +132,10 @@
         font-family: $thic700;
         font-weight: 700;
         font-size: 16px;
+        @media screen and (max-width: 800px) {
+          height: 40px;
+          width: 16rem;
+        }
       }
     }
   }

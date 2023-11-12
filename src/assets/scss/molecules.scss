@@ -388,7 +388,7 @@
 
       .follow-btn,
       .job-role {
-        font-size: 17px;
+        font-size: 15.463px;
         color: #807c8b;
         font-family: $thic500;
         font-weight: 500;
@@ -480,6 +480,135 @@
         color: $pri-color2;
         // background-color: green;
       }
+      .share-wrapper {
+        position: relative;
+        .share-modal {
+          background-color: blue;
+          width: 10rem;
+          height: 10rem;
+          position: absolute;
+          top: 2rem;
+          left: 0;
+        }
+      }
+    }
+    .comments-sec {
+      padding: 1rem 0;
+      .comment-input-box-component {
+        // background-color: green;
+        .input-box {
+          display: flex;
+          align-items: center;
+          column-gap: 1rem;
+          @media screen and (max-width: '600px') {
+            column-gap: 0.5rem;
+          }
+          img {
+            min-width: 5.5226rem;
+            min-height: 5.5226rem;
+            width: 5.5226rem;
+            height: 5.5226rem;
+            border-radius: 50%;
+            overflow: hidden;
+            object-fit: cover;
+            @media screen and (max-width: '600px') {
+              min-width: 4rem;
+              min-height: 4rem;
+              width: 4rem;
+              height: 4rem;
+            }
+            &.reply {
+              min-width: 4.2rem;
+              min-height: 4.2rem;
+              width: 4.2rem;
+              height: 4.2rem;
+
+              min-width: 55.226px;
+              min-height: 55.226px;
+              width: 55.226px;
+              height: 55.226px;
+              @media screen and (max-width: '600px') {
+                min-width: 3.2rem;
+                min-height: 3.2rem;
+                width: 3.2rem;
+                height: 3.2rem;
+              }
+            }
+          }
+
+          .input-wrapper {
+            display: flex;
+            height: 4.5rem;
+            justify-content: center;
+            align-items: center;
+            flex: 1 1 0%;
+            border-radius: 30px;
+            border: 0.691px solid #7a6d9f;
+            background: #fff;
+            overflow: hidden;
+            padding: 0 2rem;
+            input {
+              width: 100%;
+              height: 100%;
+              border: none;
+            }
+            input:focus {
+              outline: none;
+            }
+            .actions {
+              column-gap: 0.2rem;
+              display: flex;
+              label {
+                cursor: pointer;
+              }
+              input {
+                display: none;
+              }
+            }
+          }
+        }
+        .btn-wrapper {
+          margin-left: 6.6rem;
+          @media screen and (max-width: '600px') {
+            margin-left: 4.5rem;
+            &.reply {
+              margin-left: 3.5rem;
+            }
+          }
+          button {
+            background-color: #33246a;
+            padding: 0.7rem 1rem;
+            border-radius: 1.6rem;
+            color: #fff;
+            margin: 1.2rem 0;
+
+            font-size: 13.761px;
+            font-style: normal;
+            font-weight: 700;
+            line-height: 12.474px;
+            letter-spacing: 1.72px;
+          }
+        }
+      }
+
+      .comments-box {
+        margin: 4.8rem 0;
+        .child-comments-wrapper {
+          display: flex;
+          .hidden {
+            width: 9.1rem;
+            // background-color: pink;
+            visibility: hidden;
+            @media screen and (max-width: '600px') {
+              min-width: 3.8rem;
+              width: 3.8rem;
+            }
+          }
+          .con {
+            flex: 1 1 0%;
+          }
+        }
+      }
     }
   }
 }
@@ -502,6 +631,139 @@
       }
       .rsvp-btn {
         padding: 10px 20px !important;
+      }
+    }
+  }
+}
+.comment {
+  display: flex;
+  // column-gap: 1.5rem;
+  &.comment-2 {
+  }
+  .img-con {
+    min-width: 9.1rem;
+    width: 9.1rem;
+    @media screen and (max-width: '600px') {
+      min-width: 3.8rem;
+      width: 3.8rem;
+    }
+    // background-color: green;
+    &.img-con-2 {
+      min-width: 6.1rem;
+      width: 6.1rem;
+      @media screen and (max-width: '600px') {
+        min-width: 3.8rem;
+        width: 3.8rem;
+      }
+    }
+    .commenter-img {
+      min-width: 7.6rem;
+      min-height: 7.6rem;
+      width: 7.6rem;
+      height: 7.6rem;
+      border-radius: 50%;
+      overflow: hidden;
+      object-fit: cover;
+      // margin-right: 2rem;
+      // background-color: blue;
+      @media screen and (max-width: '600px') {
+        min-width: 3.2rem;
+        min-height: 3.2rem;
+        width: 3.2rem;
+        height: 3.2rem;
+        margin-right: 1rem;
+      }
+    }
+    .commenter-img-2 {
+      min-width: 5.6rem;
+      min-height: 5.6rem;
+      width: 5.6rem;
+      height: 5.6rem;
+      border-radius: 50%;
+      overflow: hidden;
+      object-fit: cover;
+      @media screen and (max-width: '600px') {
+        min-width: 3.2rem;
+        min-height: 3.2rem;
+        width: 3.2rem;
+        height: 3.2rem;
+      }
+    }
+  }
+  .details-box {
+    flex: 1 1 0%;
+    .details {
+      width: 100%;
+      min-height: 106px;
+      border-radius: 10px;
+      background: rgba(160, 157, 168, 0.16);
+      padding: 1.1rem 1.2rem;
+      .name {
+        color: #000;
+        font-weight: 600;
+        line-height: 100%;
+        margin-bottom: 0.2;
+        font-family: $thic600;
+        font-size: 17px;
+        // line-height: 20px;
+        cursor: pointer;
+      }
+      .role {
+        color: #807c8b;
+        font-size: 15.463px;
+        line-height: 100%;
+        color: #807c8b;
+        font-family: $thic500;
+        font-weight: 500;
+        // line-height: 17px;
+        @media screen and (max-width: '800px') {
+          font-size: 1.4rem;
+        }
+      }
+      .comment-text {
+        color: #000;
+        font-size: 14.863px;
+        font-weight: 400;
+        line-height: 100%;
+        margin: 1.5rem 0;
+      }
+    }
+    .comment-actions {
+      display: flex;
+      column-gap: 1.5rem;
+      margin: 0.7rem 0 1rem;
+      height: 2rem;
+      button {
+        color: #807c8b;
+        font-size: 14.863px;
+        font-weight: 600;
+        line-height: 100%;
+      }
+      .like,
+      .reply {
+        display: flex;
+        align-items: center;
+        column-gap: 0.5rem;
+        p {
+          line-height: 100%;
+          margin: auto 0;
+        }
+        .no-of-likes-wrapper {
+          display: flex;
+          align-items: center;
+          .icon {
+            color: #ff66c4;
+          }
+          .no-of-likes {
+            margin: auto 0;
+            line-height: 100%;
+          }
+        }
+      }
+      .line-border {
+        height: 100%;
+        width: 1px;
+        background-color: rgba(128, 124, 139, 0.38);
       }
     }
   }

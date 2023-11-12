@@ -24,6 +24,7 @@ const Home = () => {
           </div>
           <div className="col-lg-6 col-12">
             <Post />
+            {/* <div className="post">hello</div> */}
           </div>
           <div className="col-3 d-lg-block d-none">
             <CommunityForums />

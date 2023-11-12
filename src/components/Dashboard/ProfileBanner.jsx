@@ -96,7 +96,7 @@ const ProfileBanner = ({ othersView, data }) => {
   // console.log('data', data);
   // console.log('getMyProfile', getMyProfile);
   // console.log('uploadedProfilePicture', uploadedProfilePicture);
-  // console.log('onload', coverImgOnLoadStatus);
+  console.log('onload', coverImgOnLoadStatus);
   return (
     <div className='profile-banner-wrapper'>
       <div className='banner-image'>
@@ -147,12 +147,14 @@ const ProfileBanner = ({ othersView, data }) => {
                     onLoad={() => setCoverImgOnLoadStatus('success')}
                     onError={() => setCoverImgOnLoadStatus('error')}
                   />
-                  {coverImgOnLoadStatus === 'base' && (
-                    <div className='cover-img-loader-wrapper'>
-                      <SingleLineLoader2 />
-                    </div>
-                  )}
-                  {coverImgOnLoadStatus === 'error' && (
+                  {coverImgOnLoadStatus === 'base' &&
+                    data?.data?.backgroundImageUrl && (
+                      <div className='cover-img-loader-wrapper'>
+                        <SingleLineLoader2 />
+                      </div>
+                    )}
+                  {(coverImgOnLoadStatus === 'error' ||
+                    !data?.data?.backgroundImageUrl) && (
                     <img
                       src={defaultImg}
                       alt={`${data?.data?.firstName} ${data?.data?.secondName}`}
@@ -408,8 +410,19 @@ const ProfileBanner = ({ othersView, data }) => {
                       action={showIndividualAcctModal}
                     />
                   </OutsideClickHandler>
-
-            
+                )}
+                {othersView && (
+                  <OutsideClickHandler
+                    onOutsideClick={() => {
+                      setIndividualAcctModal(false);
+                    }}
+                  >
+                    <IndividualActionModal
+                      show={individalAcctModal}
+                      tab={contentToShow}
+                      close={hideIndividualAcctModal}
+                    />
+                  </OutsideClickHandler>
                 )}
               </div>
             </>
@@ -438,13 +451,7 @@ const ProfileBanner = ({ othersView, data }) => {
           </div>
         )}
       </div>
-      {othersView && (
-        <IndividualActionModal
-          show={individalAcctModal}
-          tab={contentToShow}
-          close={hideIndividualAcctModal}
-        />
-      )}
+
       {othersView && (
         <ReportModal showReport={reportModal} reportAction={setReportModal} />
       )}

@@ -10,14 +10,21 @@ import {
   triggerToggleLikePost,
 } from '../../Features/posts/posts_slice';
 import { useDispatch, useSelector } from 'react-redux';
-import { FaRegBookmark, FaBookmark } from 'react-icons/fa';
-
+import { FaRegBookmark, FaBookmark, FaRegSmile } from 'react-icons/fa';
+import { TbPhoto } from 'react-icons/tb';
+import { AiFillHeart } from 'react-icons/ai';
+import AccountActionModal from '../Modals/AccountActionModal';
+import OutsideClickHandler from 'react-outside-click-handler';
+import ShareModal from '../Modals/ShareModal';
+import user from '../../assets/images/author1.png';
+import SingleComment from './SingleComment';
 const PostCard = ({ post }) => {
   // console.log('postsss', post);
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const { toggleLikePost } = useSelector((state) => state.posts);
   const { getMyProfile } = useSelector((state) => state.users);
+  const [actionAcctModal, setActionAcctModal] = useState(false);
   const [profileImgOnLoadStatus, setProfileImgOnLoadStatus] = useState('base');
   const [postImgOnLoadStatus, setPostImgOnLoadStatus] = useState('base');
   const [postVideoOnLoadStatus, setPostVideoOnLoadStatus] = useState('base');
@@ -32,6 +39,12 @@ const PostCard = ({ post }) => {
   const handleSaveUnsavePost = () => {
     console.log('hi');
     // dispatch(triggerToggleLikePost(data));
+  };
+  const handleCommentEmoji = () => {
+    console.log('emoji');
+  };
+  const handleCommentFile = () => {
+    console.log('file');
   };
 
   useEffect(() => {
@@ -153,10 +166,8 @@ const PostCard = ({ post }) => {
             </div>
           </div>
         </div>
-
         <div>{post?.event && <div className='rsvp-btn'>RSVP</div>}</div>
       </div>
-
       <div className='post-content-wrapper'>
         <div className='post-content'>{post?.content}</div>
         {(post?.postImageUrl || post?.postVideoUrl) && (
@@ -229,11 +240,86 @@ const PostCard = ({ post }) => {
             <span>5</span>
           </div>
 
-          <div className='d-flex align-items-center c-gap-10'>
-            <button>
+          <div className='d-flex align-items-center c-gap-10 share-wrapper'>
+            <button onClick={() => setActionAcctModal(true)}>
               <Icon icon='share' />
             </button>
-            <span>5</span>
+            <OutsideClickHandler
+              onOutsideClick={() => {
+                setActionAcctModal(false);
+              }}
+            >
+              <ShareModal show={actionAcctModal} />
+            </OutsideClickHandler>
+          </div>
+        </div>
+        <div className='comments-sec'>
+          {/* comment input box, convert to component */}
+          <div className='comment-input-box-component'>
+            <div className='input-box'>
+              <img src={user} alt='user-img' className='' />
+              <div className='input-wrapper'>
+                <input type='text' placeholder='Leave your thoughts here ' />
+                <div className='actions'>
+                  <label htmlFor='emoji'>
+                    <FaRegSmile />
+                    <input
+                      id='emoji'
+                      type='file'
+                      onChange={handleCommentEmoji}
+                    />
+                  </label>
+                  <label htmlFor='file'>
+                    <TbPhoto />
+                    <input id='file' type='file' onChange={handleCommentFile} />
+                  </label>
+                </div>
+              </div>
+            </div>
+            <div className='btn-wrapper'>
+              <button>Post</button>
+            </div>
+          </div>
+          <div className='comments-box'>
+            <SingleComment />
+            <div className='child-comments-wrapper'>
+              <div className='hidden'></div>
+              <div className='con'>
+                <SingleComment childComment />
+                <SingleComment childComment />
+                <SingleComment childComment />
+                {/* comment input box, convert to component */}
+                <div className='comment-input-box-component'>
+                  <div className='input-box'>
+                    <img src={user} alt='user-img' className='reply' />
+                    <div className='input-wrapper'>
+                      <input type='text' placeholder='Reply' />
+                      <div className='actions'>
+                        <label htmlFor='emoji'>
+                          <FaRegSmile />
+                          <input
+                            id='emoji'
+                            type='file'
+                            onChange={handleCommentEmoji}
+                          />
+                        </label>
+                        <label htmlFor='file'>
+                          <TbPhoto />
+                          <input
+                            id='file'
+                            type='file'
+                            onChange={handleCommentFile}
+                          />
+                        </label>
+                      </div>
+                    </div>
+                  </div>
+                  <div className='btn-wrapper reply'>
+                    <button>Reply</button>
+                  </div>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
       </div>
