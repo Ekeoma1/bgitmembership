@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import Icon from '../Icon';
 import '../../assets/scss/molecules.scss';
 import { useNavigate } from 'react-router-dom';
@@ -12,14 +12,13 @@ import {
 import { useDispatch, useSelector } from 'react-redux';
 import { FaRegBookmark, FaBookmark, FaRegSmile } from 'react-icons/fa';
 import { TbPhoto } from 'react-icons/tb';
-import { AiFillHeart } from 'react-icons/ai';
-import AccountActionModal from '../Modals/AccountActionModal';
+
 import OutsideClickHandler from 'react-outside-click-handler';
 import ShareModal from '../Modals/ShareModal';
 import user from '../../assets/images/author1.png';
 import SingleComment from './SingleComment';
 const PostCard = ({ post }) => {
-  // console.log('postsss', post);
+  const textInput = useRef(null);
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const { toggleLikePost } = useSelector((state) => state.posts);
@@ -31,6 +30,7 @@ const PostCard = ({ post }) => {
   const [idsOfUsersWhoHaveLikedThePost, setIdsOfUsersWhoHaveLikedThePost] =
     useState([]);
   const [liked, setLiked] = useState(false);
+  const [replyComment, setReplyComment] = useState(false);
   const handleLike = () => {
     setLiked(!liked);
     const data = { queryParams: { postId: post.postId } };
@@ -107,11 +107,12 @@ const PostCard = ({ post }) => {
     );
     setIdsOfUsersWhoHaveLikedThePost(idsOfUsersWhoHaveLikedThePostTemp);
   }, [post?.likedUsers]);
-  // console.log('idslikedusers', idsOfUsersWhoHaveLikedThePost);
-  // console.log('getMyProfile.data.userId', getMyProfile.data.userId);
-  // console.log('post', post.createdDate);
-  // console.log('date', new Date(post.createdDate).getTime() + 3600000);
-  // console.log('moment', moment(new Date(post.createdDate).getTime() + 3600000).fromNow());
+
+  useEffect(() => {
+    if (replyComment) {
+      textInput.current?.focus();
+    }
+  }, [replyComment]);
 
   return (
     <div className='post-card shadow-sm mx-auto'>
@@ -281,43 +282,77 @@ const PostCard = ({ post }) => {
             </div>
           </div>
           <div className='comments-box'>
-            <SingleComment />
+            <SingleComment
+              img={user}
+              name={'Chidiebere Ezeokwelume'}
+              role={'UX Design Enthusiast'}
+              comment={'So excited, can’t wait!'}
+              setReplyComment={setReplyComment}
+            />
             <div className='child-comments-wrapper'>
               <div className='hidden'></div>
               <div className='con'>
-                <SingleComment childComment />
-                <SingleComment childComment />
-                <SingleComment childComment />
+                <SingleComment
+                  img={user}
+                  name={'Chidiebere Ezeokwelume'}
+                  role={'UX Design Enthusiast'}
+                  comment={'So excited, can’t wait!'}
+                  childComment
+                  setReplyComment={setReplyComment}
+                />
+                <SingleComment
+                  img={user}
+                  name={'Chidiebere Ezeokwelume'}
+                  role={'UX Design Enthusiast'}
+                  comment={'So excited, can’t wait!'}
+                  childComment
+                  setReplyComment={setReplyComment}
+                />
+                <SingleComment
+                  img={user}
+                  name={'Chidiebere Ezeokwelume'}
+                  role={'UX Design Enthusiast'}
+                  comment={'So excited, can’t wait!'}
+                  childComment
+                  setReplyComment={setReplyComment}
+                />
+
                 {/* comment input box, convert to component */}
-                <div className='comment-input-box-component'>
-                  <div className='input-box'>
-                    <img src={user} alt='user-img' className='reply' />
-                    <div className='input-wrapper'>
-                      <input type='text' placeholder='Reply' />
-                      <div className='actions'>
-                        <label htmlFor='emoji'>
-                          <FaRegSmile />
-                          <input
-                            id='emoji'
-                            type='file'
-                            onChange={handleCommentEmoji}
-                          />
-                        </label>
-                        <label htmlFor='file'>
-                          <TbPhoto />
-                          <input
-                            id='file'
-                            type='file'
-                            onChange={handleCommentFile}
-                          />
-                        </label>
+                {replyComment && (
+                  <div className='comment-input-box-component'>
+                    <div className='input-box'>
+                      <img src={user} alt='user-img' className='reply' />
+                      <div className='input-wrapper'>
+                        <input
+                          type='text'
+                          placeholder='Reply'
+                          ref={textInput}
+                        />
+                        <div className='actions'>
+                          <label htmlFor='emoji'>
+                            <FaRegSmile />
+                            <input
+                              id='emoji'
+                              type='file'
+                              onChange={handleCommentEmoji}
+                            />
+                          </label>
+                          <label htmlFor='file'>
+                            <TbPhoto />
+                            <input
+                              id='file'
+                              type='file'
+                              onChange={handleCommentFile}
+                            />
+                          </label>
+                        </div>
                       </div>
                     </div>
+                    <div className='btn-wrapper reply'>
+                      <button>Reply</button>
+                    </div>
                   </div>
-                  <div className='btn-wrapper reply'>
-                    <button>Reply</button>
-                  </div>
-                </div>
+                )}
               </div>
             </div>
           </div>
