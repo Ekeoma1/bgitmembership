@@ -4,6 +4,7 @@ import Icon from '../Icon';
 import { FiLink2 } from 'react-icons/fi';
 import { FaInstagram, FaLink, FaLinkedin, FaTwitter } from 'react-icons/fa';
 import { Link, useNavigate } from 'react-router-dom';
+import { renderToast } from '../Molecules/CustomToastify';
 
 const ShareModal = ({ reportAction, show, action }) => {
   const navigate = useNavigate();
@@ -11,7 +12,11 @@ const ShareModal = ({ reportAction, show, action }) => {
     <div className={`share-box-modal shadow-sm ${!show && 'd-none'}`}>
       <button
         onClick={() => {
-          console.log('hello');
+          navigator.clipboard.writeText('baseurl with post id');
+          renderToast({
+            status: 'success',
+            message: 'Link copied!',
+          });
         }}
         className='acct-btn'
       >
@@ -32,10 +37,7 @@ const ShareModal = ({ reportAction, show, action }) => {
           <span>Share on Twitter </span>
         </button>
       </Link>
-      <Link
-        to='https://twitter.com/intent/tweet?text=Hello%20world'
-        target='_blank'
-      >
+      <Link to='https://www.instagram.com/' target='_blank'>
         <button
           onClick={() => {
             // console.log('hello');
@@ -46,16 +48,8 @@ const ShareModal = ({ reportAction, show, action }) => {
           <span>Share on Instagram </span>
         </button>
       </Link>
-      <Link
-        to='https://twitter.com/intent/tweet?text=Hello%20world'
-        target='_blank'
-      >
-        <button
-          onClick={() => {
-            // console.log('hello');
-          }}
-          className='acct-btn'
-        >
+      <Link to='https://www.linkedin.com/feed/' target='_blank'>
+        <button onClick={() => {}} className='acct-btn'>
           <FaLinkedin />
           <span>Share on LinkedIn</span>
         </button>
