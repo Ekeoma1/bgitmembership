@@ -161,7 +161,7 @@ const Navbar = () => {
                           !showDropdown && 'd-none'
                         }`}
                       >
-                        <Link onClick={hideDropdown} to='/dashboard'>
+                        <Link onClick={hideDropdown} to={`user/${getMyProfile.data.userId}`}>
                           My Dashboard
                         </Link>
                         <Link onClick={hideDropdown} to='/settings'>

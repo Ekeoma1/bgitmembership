@@ -40,9 +40,11 @@ export default class PostsService {
   }
 
   // get posts by user id
-  static async getAllPostsByUserId() {
+  static async getAllPostsByUserId(data) {
     const response = await get({
       url: apiRoutes.getAllPostsByUserId,
+      data: { ...data },
+      queryParams: data.queryParams,
     });
     return response;
   }

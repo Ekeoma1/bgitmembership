@@ -397,7 +397,10 @@
   @media screen and (max-width: 600px) {
     width: 260px;
     height: 150px;
-    padding: 0 1.6rem;
+    padding: 0 2rem;
+  }
+  @media screen and (max-width: 500px) {
+    transform: translateX(-50%);
   }
   .top-card {
     display: flex;
@@ -411,27 +414,29 @@
       font-style: normal;
       font-weight: 400;
       line-height: 100%;
+      @media screen and (max-width: 600px) {
+        font-size: 1.4rem;
+      }
     }
     h5 {
       color: #170f49;
       font-size: 18px;
       font-weight: 600;
       line-height: 23.457px;
-      // margin-bottom: 2.7rem;
       @media screen and (max-width: 600px) {
-        // margin-bottom: 1.7rem;
         font-size: 1.6rem;
       }
     }
   }
   .form {
-    // background-color: yellow;
     .input-con {
       display: flex;
       align-items: flex-end;
-      column-gap: 3.4rem;
+      column-gap: 2.4rem;
       height: 6.5rem;
-      // background-color: green;
+      @media screen and (max-width: 600px) {
+        height: 4rem;
+      }
       p {
         color: #000;
         font-size: 14px;
@@ -446,9 +451,16 @@
         display: flex;
         border-bottom: 1px solid rgba(119, 117, 117, 1);
         input {
-          // background-color: green;
           border: none;
           flex: 1 1 0%;
+          @media screen and (max-width: 600px) {
+            max-width: 15rem;
+          }
+        }
+        .input-2 {
+          @media screen and (max-width: 600px) {
+            max-width: 15rem;
+          }
         }
         input:focus {
           outline: none;

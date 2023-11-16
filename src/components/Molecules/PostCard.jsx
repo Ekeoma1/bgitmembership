@@ -192,11 +192,6 @@ const PostCard = ({ post, getAllPostsLocal, setGetAllPostsLocal }) => {
     );
     setIdsOfUsersWhoHaveLikedThePost(idsOfUsersWhoHaveLikedThePostTemp);
   }, [post?.likedUsers]);
-
-  // console.log(
-  //   'toggleSaveUnsavePost.data.postSaved',
-  //   toggleSaveUnsavePost.data.postSaved
-  // );
   // console.log('saved', saved);
   return (
     <div className='post-card shadow-sm mx-auto'>
@@ -204,13 +199,7 @@ const PostCard = ({ post, getAllPostsLocal, setGetAllPostsLocal }) => {
         <div className='post-owner-details'>
           <div
             className='img-circle'
-            onClick={() =>
-              navigate(
-                getMyProfile.data?.userId === post?.userId
-                  ? 'dashboard'
-                  : `other-users/${post?.userId}`
-              )
-            }
+            onClick={() => navigate(`user/${post?.userId}`)}
           >
             <img
               src={post?.userProfilePicture}
@@ -230,13 +219,7 @@ const PostCard = ({ post, getAllPostsLocal, setGetAllPostsLocal }) => {
             <div className='d-flex align-items-center'>
               <span
                 className='name'
-                onClick={() =>
-                  navigate(
-                    getMyProfile.data?.userId === post?.userId
-                      ? 'dashboard'
-                      : `other-users/${post?.userId}`
-                  )
-                }
+                onClick={() => navigate(`user/${post?.userId}`)}
               >
                 {post?.firstName} {post?.secondName}
               </span>

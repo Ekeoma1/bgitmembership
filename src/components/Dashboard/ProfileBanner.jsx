@@ -5,6 +5,7 @@ import { useNavigate } from 'react-router-dom';
 import ReportModal from '../Modals/ReportModal';
 import { useDispatch, useSelector } from 'react-redux';
 import {
+  triggerGetMyProfile,
   triggerUpdateBackgroundPicture,
   triggerUpdateProfilePicture,
 } from '../../Features/users/users_slice';
@@ -22,7 +23,7 @@ import OutsideClickHandler from 'react-outside-click-handler/build/OutsideClickH
 import { LuMoreVertical } from 'react-icons/lu';
 import UpdateCoverPhotoModal from '../Modals/UpdateCoverPhotoModal';
 
-const ProfileBanner = ({ othersView, data }) => {
+const ProfileBanner = ({ data }) => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const { getMyProfile, updateProfilePicture, updateBackgroundPicture } =
@@ -93,6 +94,7 @@ const ProfileBanner = ({ othersView, data }) => {
 
   useEffect(() => {
     if (updateProfilePicture.status === 'successful') {
+      dispatch(triggerGetMyProfile());
       setUploadProfilePicture({ profilePicture: '' });
     }
   }, [updateProfilePicture]);
@@ -102,9 +104,9 @@ const ProfileBanner = ({ othersView, data }) => {
     }
   }, [updateBackgroundPicture]);
 
-  console.log('onload', coverImgOnLoadStatus);
   return (
     <div className='profile-banner-wrapper'>
+      {/* cover photo */}
       <div className='banner-image'>
         {data?.status === 'base' || data?.status === 'loading' ? (
           <div className='loading-state'>
@@ -199,6 +201,7 @@ const ProfileBanner = ({ othersView, data }) => {
           <></>
         )}
       </div>
+      {/* profile photo */}
       <div className='profile-image-wrapper'>
         <div className='profile-image'>
           {data?.status === 'base' || data?.status === 'loading' ? (
@@ -305,6 +308,7 @@ const ProfileBanner = ({ othersView, data }) => {
           )}
         </div>
       </div>
+      {/* details */}
       <div className='profile-details-card'>
         <div className='row'>
           {data?.status === 'base' || data?.status === 'loading' ? (
@@ -324,7 +328,9 @@ const ProfileBanner = ({ othersView, data }) => {
                     <div className='other-details location'>
                       {data?.data?.city}
                     </div>
-                    <div className='other-details connect'>21 connections</div>
+                    <div className='other-details connect'>
+                      {data?.data?.connectionCount} connections
+                    </div>
                   </div>
                   <div className='col-md-6'>
                     <div className='tag-header'>Tags</div>
@@ -338,7 +344,7 @@ const ProfileBanner = ({ othersView, data }) => {
                       ) : (
                         <div className='other-details tag-names'>No tags</div>
                       )}
-                      {!othersView && data.data?.tags?.length > 3 && (
+                      {data.data?.tags?.length > 3 && (
                         <div className='see-more-btn d-lg-flex d-none'>
                           see more
                         </div>
@@ -360,18 +366,18 @@ const ProfileBanner = ({ othersView, data }) => {
                 </div>
               </div>
               <div className='col-md-1 col-2 more'>
-                {othersView ? (
-                  <button onClick={toggleAcctModal}>
-                    <LuMoreVertical className='icon' />
-                  </button>
-                ) : (
+                {data.data?.userId === getMyProfile.data?.userId ? (
                   <button>
                     <div onClick={() => navigate('/settings')}>
                       <GoPencil className='icon' />
                     </div>
                   </button>
+                ) : (
+                  <button onClick={toggleAcctModal}>
+                    <LuMoreVertical className='icon' />
+                  </button>
                 )}
-                {othersView && (
+                {data.data?.userId !== getMyProfile.data?.userId && (
                   <OutsideClickHandler
                     onOutsideClick={() => {
                       setActionAcctModal(false);
@@ -384,7 +390,7 @@ const ProfileBanner = ({ othersView, data }) => {
                     />
                   </OutsideClickHandler>
                 )}
-                {othersView && (
+                {data.data?.userId !== getMyProfile.data?.userId && (
                   <OutsideClickHandler
                     onOutsideClick={() => {
                       setIndividualAcctModal(false);
@@ -402,30 +408,31 @@ const ProfileBanner = ({ othersView, data }) => {
           )}
         </div>
 
-        {othersView && data?.status === 'successful' && (
-          <div className='d-flex c-gap-10 flex-wrap mt-3'>
-            <button
-              onClick={() => {
-                console.log('connect');
-              }}
-              className='reach-btn'
-            >
-              + Connect
-            </button>
+        {data.data?.userId !== getMyProfile.data?.userId &&
+          data?.status === 'successful' && (
+            <div className='d-flex c-gap-10 flex-wrap mt-3'>
+              <button
+                onClick={() => {
+                  console.log('connect');
+                }}
+                className='reach-btn'
+              >
+                + Connect
+              </button>
 
-            <button
-              onClick={() => {
-                console.log('message');
-              }}
-              className='reach-btn'
-            >
-              Message
-            </button>
-          </div>
-        )}
+              <button
+                onClick={() => {
+                  console.log('message');
+                }}
+                className='reach-btn'
+              >
+                Message
+              </button>
+            </div>
+          )}
       </div>
-
-      {othersView && (
+      {/* Adjust this later */}
+      {data.data?.userId !== getMyProfile.data?.userId && (
         <ReportModal showReport={reportModal} reportAction={setReportModal} />
       )}
     </div>

@@ -1,21 +1,30 @@
 import React from 'react';
 import '../../assets/scss/modal.scss';
 
-import { FaCamera, FaChevronRight, FaTimes } from 'react-icons/fa';
-import { BsImage } from 'react-icons/bs';
+import { FaTimes } from 'react-icons/fa';
+import { useDispatch } from 'react-redux';
+import { triggerAddSocialLink } from '../../Features/social-links/social_links_slice';
 
 const AddSocialLinksModalModal = ({
   onChange,
   onCancel,
   onClearValues,
-  data,
+  formData,
+  setFormData,
 }) => {
+  const dispatch = useDispatch();
+  const handleSubmit = () => {
+    console.log({ formData });
+    dispatch(triggerAddSocialLink(formData));
+    onCancel();
+    setFormData({ url: '', title: '' });
+  };
   return (
     <div className='add-social-links-modal'>
       <div className='top-card'>
         <p onClick={onCancel}>Cancel</p>
         <h5>Social link</h5>
-        <p onClick={onCancel}>Done</p>
+        <p onClick={handleSubmit}>Done</p>
       </div>
       <div className='form'>
         <div className='input-con'>
@@ -25,7 +34,8 @@ const AddSocialLinksModalModal = ({
               type='text'
               name='url'
               onChange={onChange}
-              value={data.url}
+              value={formData.url}
+              className='input-2'
             />
             <div className='icon-wrapper' onClick={onClearValues}>
               <FaTimes />
@@ -39,7 +49,7 @@ const AddSocialLinksModalModal = ({
               type='text'
               name='title'
               onChange={onChange}
-              value={data.title}
+              value={formData.title}
             />
           </div>
         </div>

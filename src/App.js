@@ -70,13 +70,13 @@ function App() {
               element: <Updates />,
             },
             {
-              path: 'dashboard',
+              path: 'user/:id',
               element: <Dashboard />,
             },
-            {
-              path: 'other-users/:id',
-              element: <ViewOtherUsers />,
-            },
+            // {
+            //   path: 'other-users/:id',
+            //   element: <ViewOtherUsers />,
+            // },
             {
               path: 'settings',
               element: <Settings />,

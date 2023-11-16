@@ -3,21 +3,21 @@ import Icon from '../Icon';
 import { useSelector } from 'react-redux';
 import BioLoader from '../Atoms/skeleton-loaders/dashboard-page/BioLoader';
 
-const BioCard = ({ othersView, data }) => {
+const BioCard = ({ data }) => {
   const { getMyProfile } = useSelector((state) => state.users);
   return (
     <div className='dashboard-card'>
-      {getMyProfile.status === 'loading' ? (
+      {data.status === 'loading' ? (
         <>
           <BioLoader />
         </>
-      ) : getMyProfile.status === 'successful' ? (
+      ) : data.status === 'successful' ? (
         <>
           <div className='row'>
             <div className='col-md-11 col-12'>
               <div className='dashboard-header d-flex justify-content-between'>
                 <span>Bio</span>
-                {!othersView && (
+                {data.data?.userId === getMyProfile.data?.userId && (
                   <span className='d-md-none'>
                     <button>
                       <Icon icon='edit' />
@@ -28,22 +28,16 @@ const BioCard = ({ othersView, data }) => {
               <div className='dashboard-text'>{data?.data?.biography}</div>
 
               <div className='dashboard-header mt-1'>
-                What best desribe you?
+                {/* What best desribe you? */}
+                Description
               </div>
               <div className='dashboard-text'>{data?.data?.purpose}</div>
               <div className='dashboard-header mt-1'>
-                What your experience level?
+                {/* What your experience level? */}
+                Experience level
               </div>
               <div className='dashboard-text'>{data?.data?.experience}</div>
             </div>
-            {/* Not sure if we need this here anymore since we have it on the profile banner section */}
-            {/* {!othersView && (
-          <div className='col-md-1 d-md-block d-none'>
-            <button>
-              <Icon icon='edit' />
-            </button>
-          </div>
-        )} */}
           </div>
         </>
       ) : (

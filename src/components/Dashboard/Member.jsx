@@ -59,6 +59,9 @@ const Member = () => {
   // console.log('get users', getUsers);
   return (
     <div className='members-you-may-know-wrapper'>
+      <div className='text-end mb-2'>
+        <Link className='see-more-btn'>See more members</Link>
+      </div>
       <div className='header text-center'>Members you may know</div>
 
       <div className='member-card-wrapper'>

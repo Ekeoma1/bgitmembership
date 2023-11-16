@@ -2,13 +2,15 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import postImg from '../../assets/images/author1.png';
 import Icon from '../Icon';
+import { useSelector } from 'react-redux';
 
-const Posts = ({ data }) => {
+const Posts = () => {
+  const { getAllPostsByUserId } = useSelector((state) => state.posts);
   return (
     <div className='dashboard-card post-wrapper'>
       <div className='d-flex justify-content-between align-items-center'>
-        <div className='dashboard-header'>Post</div>
-        {data?.data?.posts?.length !== 0 && (
+        <div className='dashboard-header'>Posts</div>
+        {getAllPostsByUserId?.data?.posts?.length > 2 && (
           <div>
             <Link to='#' className='dashboard-text'>
               See more
@@ -18,17 +20,17 @@ const Posts = ({ data }) => {
       </div>
 
       <div className='row mt-3 gap-md-0 gap-3'>
-        {data?.status === 'loading' ? (
+        {getAllPostsByUserId?.status === 'loading' ? (
           <></>
-        ) : data?.status === 'successful' ? (
+        ) : getAllPostsByUserId?.status === 'successful' ? (
           <>
-            {data?.data?.posts?.length === 0 ? (
+            {getAllPostsByUserId?.data?.posts?.length === 0 ? (
               <>
                 <div className='empty'>No posts...</div>
               </>
             ) : (
               <>
-                {data?.data?.posts?.slice(0, 2).map((post) => (
+                {getAllPostsByUserId?.data?.posts?.slice(0, 2).map((post) => (
                   <div className='col-md'>
                     <div className='post-card'>
                       <div className='d-flex flex-wrap gap-2'>
