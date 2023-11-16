@@ -1,12 +1,54 @@
-import React from 'react';
-import { useSelector } from 'react-redux';
+import React, { useEffect, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import SocialLinksLoader from '../Atoms/skeleton-loaders/dashboard-page/SocialLinksLoader';
 import GroupLoader from '../Atoms/skeleton-loaders/dashboard-page/GroupLoader';
+import {
+  resetActiveForumIdForOngoingRequest,
+  resetJoinForum,
+  resetLeaveForum,
+  triggerGetAllForums,
+  triggerJoinForum,
+} from '../../Features/forums/forums_slice';
+import { renderToast } from '../Molecules/CustomToastify';
 
 const Group = () => {
+  const dispatch = useDispatch();
   const { getAllForums, joinForum, leaveForum } = useSelector(
     (state) => state.forums
   );
+  const [pageNumber] = useState(1);
+  const [pageSize] = useState(10);
+  const handleJoinForum = (forum) => {
+    if (forum?.hasPendingJoinRequest) {
+      console.log('cancel');
+    } else if (!forum?.isCurrentUserMember) {
+      const values = { forumId: forum.forumId };
+      dispatch(triggerJoinForum(values));
+    }
+  };
+
+  useEffect(() => {
+    if (joinForum.status === 'successful') {
+      if (joinForum.data === 'You are the admin of the forum.') {
+        renderToast({
+          status: 'error',
+          message: joinForum.data,
+        });
+      } else {
+        renderToast({
+          status: 'success',
+          message: joinForum.data,
+        });
+        const data2 = { queryParams: { pageNumber, pageSize } };
+        dispatch(triggerGetAllForums(data2));
+      }
+      dispatch(resetJoinForum());
+      dispatch(resetActiveForumIdForOngoingRequest());
+    } else if (joinForum.status === 'error') {
+      dispatch(resetJoinForum());
+      dispatch(resetActiveForumIdForOngoingRequest());
+    }
+  }, [joinForum.status]);
   return (
     <div className='dashboard-card group-wrapper'>
       {getAllForums.status === 'base' || getAllForums.status === 'loading' ? (
@@ -35,13 +77,38 @@ const Group = () => {
                         {group.userCount}{' '}
                         {`Member${group.userCount > 0 ? 's' : ''}`}
                       </div>
+                      {}
                       <div className='d-xl-none'>
-                        <button className='join-btn '>+Joined</button>
+                        <button
+                          className='join-btn '
+                          onClick={() =>
+                            !group.isCurrentUserMember && handleJoinForum(group)
+                          }
+                        >
+                          {group.isCurrentUserMember ? '+ Joined' : 'Join'}
+                        </button>
                       </div>
                     </div>
                   </div>
                   <div className='d-xl-block d-none'>
-                    <button className='join-btn'>+Joined</button>
+                    {joinForum.status === 'loading' ? (
+                      <button className='join-btn join-btn-2'>
+                        Loading...
+                      </button>
+                    ) : (
+                      <button
+                        className={`join-btn ${
+                          group.isCurrentUserMember && 'join-btn-2'
+                        } `}
+                        onClick={() => handleJoinForum(group)}
+                      >
+                        {group.hasPendingJoinRequest
+                          ? 'Cancel request'
+                          : group.isCurrentUserMember
+                          ? '+ Joined'
+                          : '+ Join'}
+                      </button>
+                    )}
                   </div>
                 </div>
               </div>
