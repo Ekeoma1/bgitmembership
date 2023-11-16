@@ -10,22 +10,15 @@ import Posts from '../components/Dashboard/Posts';
 import { Link, useNavigate, useParams } from 'react-router-dom';
 import Member from '../components/Dashboard/Member';
 import { useDispatch, useSelector } from 'react-redux';
-import {
-  triggerGetMyProfile,
-  triggerGetUserProfileById,
-} from '../Features/users/users_slice';
-import {
-  triggerGetAllPosts,
-  triggerGetAllPostsByUserId,
-} from '../Features/posts/posts_slice';
+import { triggerGetUserProfileById } from '../Features/users/users_slice';
+import { triggerGetAllPostsByUserId } from '../Features/posts/posts_slice';
+import { triggerGetAllForums } from '../Features/forums/forums_slice';
 
 const Dashboard = () => {
   const param = useParams();
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const { getMyProfile, getUserProfileById } = useSelector(
-    (state) => state.users
-  );
+  const { getUserProfileById } = useSelector((state) => state.users);
 
   const [pageNumber] = useState(1);
   const [pageSize] = useState(10);
@@ -35,6 +28,8 @@ const Dashboard = () => {
   useEffect(() => {
     const data = { queryParams: { userId: param?.id } };
     dispatch(triggerGetUserProfileById(data));
+    const data2 = { queryParams: { pageNumber, pageSize } };
+    dispatch(triggerGetAllForums(data2));
   }, []);
 
   useEffect(() => {

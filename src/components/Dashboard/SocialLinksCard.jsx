@@ -59,9 +59,7 @@ const SocialLinksCard = ({ othersView, data }) => {
   return (
     <div className='dashboard-card'>
       {data.status === 'loading' ? (
-        <>
-          <SocialLinksLoader />
-        </>
+        <SocialLinksLoader />
       ) : data.status === 'successful' ? (
         <>
           <div className='dashboard-header'>Social Links</div>
@@ -81,9 +79,7 @@ const SocialLinksCard = ({ othersView, data }) => {
             </>
           ) : (
             <>
-              <div className='dashboard-text'>
-                You have not added any social link yet
-              </div>
+              <div className='dashboard-text'>No social links</div>
             </>
           )}
           {data.data?.userId === getMyProfile.data?.userId && (
