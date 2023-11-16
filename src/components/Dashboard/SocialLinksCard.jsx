@@ -2,18 +2,33 @@ import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import SocialLinksLoader from '../Atoms/skeleton-loaders/dashboard-page/SocialLinksLoader';
 import useWindowSize from '../../hooks/useWindowSize';
-import SocialLinkslModal from './social-links-modal/SocialLinksModal';
-import ModalBox from '../Molecules/modal/Modal';
 import { renderToast } from '../Molecules/CustomToastify';
 import { resetAddSocialLinks } from '../../Features/social-links/social_links_slice';
 import { triggerGetMyProfile } from '../../Features/users/users_slice';
+import OutsideClickHandler from 'react-outside-click-handler';
+import AddSocialLinksModalModal from '../Modals/AddSocialLinksModal';
 
 const SocialLinksCard = ({ othersView }) => {
   const { isMobile } = useWindowSize();
   const dispatch = useDispatch();
   const { getMyProfile } = useSelector((state) => state.users);
   const { addSocialLinks } = useSelector((state) => state.socialLinks);
-  const [showSocialLinksModal, setShowSocialLinksModal] = useState(false);
+  const [showSocialLinksModal, setShowSocialLinksModal] = useState(true);
+
+  const [formData, setFormData] = useState({
+    url: '',
+    title: '',
+  });
+  const handleChange = (e) => {
+    setFormData({
+      ...formData,
+      [e.target.name]: e.target.value,
+    });
+  };
+  const handleClearValues = () => {
+    setFormData({ ...formData, url: '' });
+  };
+
   useEffect(() => {
     if (addSocialLinks.status === 'successful') {
       if (addSocialLinks.data.status === 400) {
@@ -77,6 +92,22 @@ const SocialLinksCard = ({ othersView }) => {
                   className='add-text-btn'
                 >
                   + Add Social Links
+                  <div className='social-links-modal-wrapper'>
+                    {showSocialLinksModal && (
+                      <OutsideClickHandler
+                        onOutsideClick={() => {
+                          setShowSocialLinksModal(false);
+                        }}
+                      >
+                        <AddSocialLinksModalModal
+                          onChange={handleChange}
+                          onCancel={() => showSocialLinksModal(false)}
+                          onClearValues={handleClearValues}
+                          data={formData}
+                        />
+                      </OutsideClickHandler>
+                    )}
+                  </div>
                 </button>
               )}
             </div>
@@ -85,19 +116,7 @@ const SocialLinksCard = ({ othersView }) => {
       ) : (
         <></>
       )}
-      {/* <ModalBox
-        show={showSocialLinksModal}
-        width={isMobile ? '100%' : ''}
-        onClose={() => {
-          setShowSocialLinksModal(false);
-        }}
-      >
-        <SocialLinkslModal
-          close={() => {
-            setShowSocialLinksModal(false);
-          }}
-        />
-      </ModalBox> */}
+     
     </div>
   );
 };

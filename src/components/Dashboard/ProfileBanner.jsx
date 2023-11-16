@@ -20,6 +20,7 @@ import { SingleLineLoader2 } from '../Atoms/skeleton-loaders/SingleLineLoader';
 import { BsImage } from 'react-icons/bs';
 import OutsideClickHandler from 'react-outside-click-handler/build/OutsideClickHandler';
 import { LuMoreVertical } from 'react-icons/lu';
+import UpdateCoverPhotoModal from '../Modals/UpdateCoverPhotoModal';
 
 const ProfileBanner = ({ othersView, data }) => {
   const navigate = useNavigate();
@@ -61,9 +62,17 @@ const ProfileBanner = ({ othersView, data }) => {
     }
   };
   const handleChangeCoverPhoto = (event) => {
-    const file = event.target.files[0];
-    if (file) {
-      setUploadCoverPicture({ backgroundImage: file });
+    const name = event.target.name;
+    if (name === 'take-photo') {
+      const file = event.target.files[0];
+      if (file) {
+        setUploadCoverPicture({ backgroundImage: file });
+      }
+    } else {
+      const file = event.target.files[0];
+      if (file) {
+        setUploadCoverPicture({ backgroundImage: file });
+      }
     }
     setShowDropdown(false);
   };
@@ -93,9 +102,6 @@ const ProfileBanner = ({ othersView, data }) => {
     }
   }, [updateBackgroundPicture]);
 
-  // console.log('data', data);
-  // console.log('getMyProfile', getMyProfile);
-  // console.log('uploadedProfilePicture', uploadedProfilePicture);
   console.log('onload', coverImgOnLoadStatus);
   return (
     <div className='profile-banner-wrapper'>
@@ -166,7 +172,7 @@ const ProfileBanner = ({ othersView, data }) => {
               {data.data?.userId === getMyProfile.data?.userId &&
                 data.status === 'successful' &&
                 (coverImgOnLoadStatus === 'success' ||
-                  coverImgOnLoadStatus === 'error') && (
+                  coverImgOnLoadStatus === 'base') && (
                   <div className='dropdown-box-wrapper'>
                     <div
                       className='icon-wrapper'
@@ -178,44 +184,11 @@ const ProfileBanner = ({ othersView, data }) => {
                       <OutsideClickHandler
                         onOutsideClick={() => {
                           setShowDropdown(false);
-                          console.log('outside click');
                         }}
                       >
-                        <div className='dropdown-box'>
-                          <h5>Add photo</h5>
-                          <div className='btn-group-wrapper'>
-                            <label htmlFor='take-photo' className='btn-con'>
-                              <div className='text-wrapper'>
-                                <FaCamera className='icon' />
-                                <p>Take a photo</p>
-                              </div>
-                              <FaChevronRight className='icon' />
-                              <input
-                                name='take-photo'
-                                type='file'
-                                capture='user'
-                                accept='image/png'
-                                id='take-photo'
-                                onChange={handleChangeCoverPhoto}
-                              />
-                            </label>
-                            <label htmlFor='upload' className='btn-con'>
-                              <div className='text-wrapper'>
-                                <BsImage className='icon' />
-                                <p>Upload from photos</p>
-                              </div>
-                              <FaChevronRight className='icon' />
-                              <input
-                                name='upload'
-                                type='file'
-                                capture='user'
-                                accept='image/*'
-                                id='upload'
-                                onChange={handleChangeCoverPhoto}
-                              />
-                            </label>
-                          </div>
-                        </div>
+                        <UpdateCoverPhotoModal
+                          onChangeCoverPhoto={handleChangeCoverPhoto}
+                        />
                       </OutsideClickHandler>
                     )}
                   </div>
