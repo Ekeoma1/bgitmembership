@@ -19,10 +19,7 @@ const initialState = {
     status: states.BASE,
     data: {},
   },
-  getAllPostsRender: {
-    status: states.BASE,
-    data: {},
-  },
+
   getAllPostsByUserId: {
     status: states.BASE,
     data: {},
@@ -47,6 +44,7 @@ const initialState = {
     status: states.BASE,
     data: {},
   },
+  activePostIdForOngoingRequest: '',
 };
 export const triggerCreatePost = createAsyncThunk(
   'create-post',
@@ -140,7 +138,7 @@ export const triggerGetAllCommentsByPostId = createAsyncThunk(
     }
   }
 );
-export const triggerToggleSaveUnsavePost= createAsyncThunk(
+export const triggerToggleSaveUnsavePost = createAsyncThunk(
   'toggle-save-unsave-post',
   async (params, thunkAPI) => {
     try {
@@ -150,7 +148,6 @@ export const triggerToggleSaveUnsavePost= createAsyncThunk(
     }
   }
 );
-
 
 const postsSlice = createSlice({
   name: 'posts',
@@ -162,9 +159,13 @@ const postsSlice = createSlice({
     resetToggleLikePost: (state) => {
       state.toggleLikePost = initialState.toggleLikePost;
     },
-    updateGetAllPosts: (state, action) => {
-      state.getAllPosts = action.payload;
+    setActivePostIdForOngoingRequest: (state, action) => {
+      state.activePostIdForOngoingRequest = action.payload;
     },
+    resetActivePostIdForOngoingRequest: (state) => {
+      state.activePostIdForOngoingRequest = '';
+    },
+  
   },
   extraReducers: (builder) => {
     //create post
@@ -217,7 +218,6 @@ const postsSlice = createSlice({
     builder.addCase(triggerGetAllPosts.fulfilled, (state, action) => {
       state.getAllPosts.status = states.SUCCESSFUL;
       state.getAllPosts.data = action.payload;
-      state.getAllPostsRender.data = action.payload;
     });
     builder.addCase(triggerGetAllPosts.rejected, (state) => {
       state.getAllPosts.status = states.ERROR;
@@ -271,25 +271,34 @@ const postsSlice = createSlice({
       state.toggleLikeUnlikeComment.status = states.LOADING;
       state.toggleLikeUnlikeComment.data = {};
     });
-    builder.addCase(triggerToggleLikeUnlikeComment.fulfilled, (state, action) => {
-      state.toggleLikeUnlikeComment.status = states.SUCCESSFUL;
-      state.toggleLikeUnlikeComment.data = action.payload;
-    });
-    builder.addCase(triggerToggleLikeUnlikeComment.rejected, (state,action) => {
-      state.toggleLikeUnlikeComment.status = states.ERROR;
-      state.toggleLikeUnlikeComment.data = action.payload;
-    });
+    builder.addCase(
+      triggerToggleLikeUnlikeComment.fulfilled,
+      (state, action) => {
+        state.toggleLikeUnlikeComment.status = states.SUCCESSFUL;
+        state.toggleLikeUnlikeComment.data = action.payload;
+      }
+    );
+    builder.addCase(
+      triggerToggleLikeUnlikeComment.rejected,
+      (state, action) => {
+        state.toggleLikeUnlikeComment.status = states.ERROR;
+        state.toggleLikeUnlikeComment.data = action.payload;
+      }
+    );
 
     // get all comments by post id
     builder.addCase(triggerGetAllCommentsByPostId.pending, (state) => {
       state.getAllCommentsByPostId.status = states.LOADING;
       state.getAllCommentsByPostId.data = {};
     });
-    builder.addCase(triggerGetAllCommentsByPostId.fulfilled, (state, action) => {
-      state.getAllCommentsByPostId.status = states.SUCCESSFUL;
-      state.getAllCommentsByPostId.data = action.payload;
-    });
-    builder.addCase(triggerGetAllCommentsByPostId.rejected, (state,action) => {
+    builder.addCase(
+      triggerGetAllCommentsByPostId.fulfilled,
+      (state, action) => {
+        state.getAllCommentsByPostId.status = states.SUCCESSFUL;
+        state.getAllCommentsByPostId.data = action.payload;
+      }
+    );
+    builder.addCase(triggerGetAllCommentsByPostId.rejected, (state, action) => {
       state.getAllCommentsByPostId.status = states.ERROR;
       state.getAllCommentsByPostId.data = action.payload;
     });
@@ -303,14 +312,17 @@ const postsSlice = createSlice({
       state.toggleSaveUnsavePost.status = states.SUCCESSFUL;
       state.toggleSaveUnsavePost.data = action.payload;
     });
-    builder.addCase(triggerToggleSaveUnsavePost.rejected, (state,action) => {
+    builder.addCase(triggerToggleSaveUnsavePost.rejected, (state, action) => {
       state.toggleSaveUnsavePost.status = states.ERROR;
       state.toggleSaveUnsavePost.data = action.payload;
     });
-
   },
 });
 
 export default postsSlice.reducer;
-export const { resetCreatePost, resetToggleLikePost, updateGetAllPosts } =
-  postsSlice.actions;
+export const {
+  resetCreatePost,
+  resetToggleLikePost,
+  setActivePostIdForOngoingRequest,
+  resetActivePostIdForOngoingRequest,
+} = postsSlice.actions;

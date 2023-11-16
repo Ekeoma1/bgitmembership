@@ -3,8 +3,8 @@ const URL = process.env.REACT_APP_URL || '';
 // console.log('axios');
 
 async function ajax({ method = 'GET', url, data, queryParams }) {
+  console.log('query##### ', queryParams);
   console.log('data ', data);
-  // console.log('query ', queryParams);
   let result, contentType;
   if (
     data?.photo ||

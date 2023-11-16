@@ -1,4 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
+import _ from 'lodash';
 import Icon from '../Icon';
 import '../../assets/scss/molecules.scss';
 import { useNavigate } from 'react-router-dom';
@@ -6,8 +7,13 @@ import moment from 'moment';
 import { UserProfilePhotoLoader2 } from '../Atoms/skeleton-loaders/dashboard-page/UserProfilePhotoLoader';
 import MediaLoader from '../Atoms/skeleton-loaders/home-page/MediaLoader';
 import {
+  resetActivePostIdForOngoingRequest,
+  resetSaveCurrentPost,
   resetToggleLikePost,
+  setActivePostIdForOngoingRequest,
+  setSaveCurrentPost,
   triggerToggleLikePost,
+  triggerToggleSaveUnsavePost,
 } from '../../Features/posts/posts_slice';
 import { useDispatch, useSelector } from 'react-redux';
 import { FaRegBookmark, FaBookmark, FaRegSmile } from 'react-icons/fa';
@@ -17,36 +23,115 @@ import OutsideClickHandler from 'react-outside-click-handler';
 import ShareModal from '../Modals/ShareModal';
 import user from '../../assets/images/author1.png';
 import SingleComment from './SingleComment';
-const PostCard = ({ post }) => {
-  const textInput = useRef(null);
+import CommentInput from './CommentInput';
+const PostCard = ({ post, getAllPostsLocal, setGetAllPostsLocal }) => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const { toggleLikePost } = useSelector((state) => state.posts);
+  const {
+    toggleLikePost,
+    toggleSaveUnsavePost,
+    activePostIdForOngoingRequest,
+  } = useSelector((state) => state.posts);
   const { getMyProfile } = useSelector((state) => state.users);
+  const [liked, setLiked] = useState(false);
+  const [saved, setSaved] = useState(false);
+  const [comment, setComment] = useState('');
+  const [reply, setReply] = useState('');
+  const [replyComment, setReplyComment] = useState(false);
+
   const [actionAcctModal, setActionAcctModal] = useState(false);
   const [profileImgOnLoadStatus, setProfileImgOnLoadStatus] = useState('base');
   const [postImgOnLoadStatus, setPostImgOnLoadStatus] = useState('base');
   const [postVideoOnLoadStatus, setPostVideoOnLoadStatus] = useState('base');
   const [idsOfUsersWhoHaveLikedThePost, setIdsOfUsersWhoHaveLikedThePost] =
     useState([]);
-  const [liked, setLiked] = useState(false);
-  const [replyComment, setReplyComment] = useState(false);
+
   const handleLike = () => {
     setLiked(!liked);
     const data = { queryParams: { postId: post.postId } };
     dispatch(triggerToggleLikePost(data));
   };
+  const [saveCurrentPost, setSaveCurrentPost] = useState(
+    post.isSavedByCurrentUser
+  );
+
+  const timeoutIdRef = useRef(null);
   const handleSaveUnsavePost = () => {
-    console.log('hi');
-    // dispatch(triggerToggleLikePost(data));
+    const startTimeout = () => {
+      timeoutIdRef.current = setTimeout(() => {
+        const data = { queryParams: { postId: post.postId } };
+        dispatch(triggerToggleSaveUnsavePost(data));
+      }, 5000);
+    };
+    const clearTimeoutIfNeeded = () => {
+      if (timeoutIdRef.current) {
+        clearTimeout(timeoutIdRef.current);
+      }
+    };
+    clearTimeoutIfNeeded();
+    startTimeout();
+    setSaveCurrentPost(!saveCurrentPost);
+    dispatch(setActivePostIdForOngoingRequest(post.postId));
   };
-  const handleCommentEmoji = () => {
-    console.log('emoji');
+  useEffect(() => {
+    // const data = [...getAllPostsLocal];
+    const data = _.cloneDeep(getAllPostsLocal);
+    if (saveCurrentPost) {
+      data.forEach((item) => {
+        if (item.postId === post.postId) {
+          item.isSavedByCurrentUser = true;
+        }
+      });
+    } else {
+      data.forEach((item) => {
+        if (item.postId === post.postId) {
+          item.isSavedByCurrentUser = false;
+        }
+      });
+    }
+    setGetAllPostsLocal(data);
+  }, [saveCurrentPost]);
+
+  console.log('saveCurrentPost', saveCurrentPost);
+  useEffect(() => {
+    if (
+      toggleSaveUnsavePost.status === 'successful' &&
+      activePostIdForOngoingRequest === post.postId
+    ) {
+      const data = _.cloneDeep(getAllPostsLocal);
+      if (toggleSaveUnsavePost.data.postSaved) {
+        data.forEach((item) => {
+          if (item.postId === toggleSaveUnsavePost.data.postId) {
+            item.isSavedByCurrentUser = true;
+          }
+        });
+      } else {
+        data.forEach((item) => {
+          if (item.postId === toggleSaveUnsavePost.data.postId) {
+            item.isSavedByCurrentUser = false;
+          }
+        });
+      }
+      setGetAllPostsLocal(data);
+    }
+  }, [toggleSaveUnsavePost]);
+
+  const handleChange = (e) => {
+    if (e.target.name === 'comment') {
+      setComment(e.target.value);
+    } else if (e.target.name === 'reply') {
+      setReply(e.target.value);
+    }
   };
-  const handleCommentFile = () => {
-    console.log('file');
+  const handleSubmit = (name) => {
+    if (name === 'comment') {
+      setComment('');
+    } else if (name === 'reply') {
+      setReply('');
+    }
   };
 
+  // like post
   useEffect(() => {
     if (toggleLikePost.status === 'successful') {
       if (
@@ -108,12 +193,11 @@ const PostCard = ({ post }) => {
     setIdsOfUsersWhoHaveLikedThePost(idsOfUsersWhoHaveLikedThePostTemp);
   }, [post?.likedUsers]);
 
-  useEffect(() => {
-    if (replyComment) {
-      textInput.current?.focus();
-    }
-  }, [replyComment]);
-
+  // console.log(
+  //   'toggleSaveUnsavePost.data.postSaved',
+  //   toggleSaveUnsavePost.data.postSaved
+  // );
+  // console.log('saved', saved);
   return (
     <div className='post-card shadow-sm mx-auto'>
       <div className='post-card-header'>
@@ -234,9 +318,12 @@ const PostCard = ({ post }) => {
           </div>
 
           <div className='d-flex align-items-center c-gap-10'>
-            <button className='bookmark active' onClick={handleSaveUnsavePost}>
-              {/* <FaRegBookmark /> */}
-              <FaBookmark />
+            <button className='bookmark ' onClick={handleSaveUnsavePost}>
+              {post.isSavedByCurrentUser ? (
+                <FaBookmark className='active' />
+              ) : (
+                <FaRegBookmark />
+              )}
             </button>
             <span>5</span>
           </div>
@@ -254,33 +341,13 @@ const PostCard = ({ post }) => {
             </OutsideClickHandler>
           </div>
         </div>
-        <div className='comments-sec'>
-          {/* comment input box, convert to component */}
-          <div className='comment-input-box-component'>
-            <div className='input-box'>
-              <img src={user} alt='user-img' className='' />
-              <div className='input-wrapper'>
-                <input type='text' placeholder='Leave your thoughts here ' />
-                <div className='actions'>
-                  <label htmlFor='emoji'>
-                    <FaRegSmile />
-                    <input
-                      id='emoji'
-                      type='file'
-                      onChange={handleCommentEmoji}
-                    />
-                  </label>
-                  <label htmlFor='file'>
-                    <TbPhoto />
-                    <input id='file' type='file' onChange={handleCommentFile} />
-                  </label>
-                </div>
-              </div>
-            </div>
-            <div className='btn-wrapper'>
-              <button>Post</button>
-            </div>
-          </div>
+        {/* <div className='comments-sec'>
+          <CommentInput
+            name={'comment'}
+            onChange={handleChange}
+            onSubmit={handleSubmit}
+            value={comment}
+          />
           <div className='comments-box'>
             <SingleComment
               img={user}
@@ -316,47 +383,19 @@ const PostCard = ({ post }) => {
                   childComment
                   setReplyComment={setReplyComment}
                 />
-
-                {/* comment input box, convert to component */}
                 {replyComment && (
-                  <div className='comment-input-box-component'>
-                    <div className='input-box'>
-                      <img src={user} alt='user-img' className='reply' />
-                      <div className='input-wrapper'>
-                        <input
-                          type='text'
-                          placeholder='Reply'
-                          ref={textInput}
-                        />
-                        <div className='actions'>
-                          <label htmlFor='emoji'>
-                            <FaRegSmile />
-                            <input
-                              id='emoji'
-                              type='file'
-                              onChange={handleCommentEmoji}
-                            />
-                          </label>
-                          <label htmlFor='file'>
-                            <TbPhoto />
-                            <input
-                              id='file'
-                              type='file'
-                              onChange={handleCommentFile}
-                            />
-                          </label>
-                        </div>
-                      </div>
-                    </div>
-                    <div className='btn-wrapper reply'>
-                      <button>Reply</button>
-                    </div>
-                  </div>
+                  <CommentInput
+                    name={'reply'}
+                    onChange={handleChange}
+                    onSubmit={handleSubmit}
+                    value={reply}
+                    focus={replyComment}
+                  />
                 )}
               </div>
             </div>
           </div>
-        </div>
+        </div> */}
       </div>
     </div>
   );

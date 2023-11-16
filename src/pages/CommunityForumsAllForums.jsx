@@ -9,7 +9,7 @@ const CommunityForumsAllForums = () => {
     window.scrollTo(0, 0);
   }, []);
   return (
-    <div className="all-forums-wrapper bg-color2">
+    <div className="all-forums-wrapper bg-color22">
       <AllForums setSearchMain={setSearchMain} />
       {!searchMain && (
         <>
