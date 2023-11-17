@@ -70,7 +70,7 @@ const AllForums = ({ setSearchMain }) => {
       <div className="container">
         <div className="page-title-wrapper">
           <div className="title-wrapper">
-            <div className="icon" onClick={() => navigate("/community-forums")}>
+            <div className="icon" onClick={() => navigate("/forums")}>
               <HiArrowLeft className="text-color22" />
             </div>
             <h3 className="text-color22">All forums</h3>

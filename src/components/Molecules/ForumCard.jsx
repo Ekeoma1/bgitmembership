@@ -37,7 +37,7 @@ const ForumCard = ({ forum }) => {
         dispatch(triggerLeaveForum(values));
         dispatch(setActiveForumIdForOngoingRequest(forum.forumId));
       } else {
-        navigate(`/community-forums/forum/${forum.forumId}`);
+        navigate(`/forums/${forum.forumId}`);
       }
     }
   };
@@ -70,7 +70,7 @@ const ForumCard = ({ forum }) => {
         {forum.details?.length > 105 && (
           <span
             onClick={() => {
-              navigate(`/community-forums/forum/${forum.forumId}`);
+              navigate(`/forums/${forum.forumId}`);
             }}
             className='text-color-secondary-normal'
           >
@@ -159,7 +159,7 @@ export const ForumCard2 = ({ forum }) => {
       className='forum-card-2'
       onClick={(e) => {
         if (!e.target.classList.contains('forum-card-btn')) {
-          navigate(`/community-forums/forum/${forum.forumId}`);
+          navigate(`/forums/${forum.forumId}`);
         }
       }}
     >

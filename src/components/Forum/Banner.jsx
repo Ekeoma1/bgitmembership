@@ -6,6 +6,7 @@ import member2 from '../../../src/assets/images/member2.svg';
 import member3 from '../../../src/assets/images/member3.svg';
 import member4 from '../../../src/assets/images/member4.svg';
 import member5 from '../../../src/assets/images/member5.svg';
+import forumDefault from '../../../src/assets/images/forumDefault.jpeg';
 import loadingDots from '../../../src/assets/images/loading_dots.gif';
 import { HiArrowLeft } from 'react-icons/hi';
 import { FiPlus } from 'react-icons/fi';
@@ -24,6 +25,9 @@ import {
 import { useDispatch, useSelector } from 'react-redux';
 import { renderToast } from '../Molecules/CustomToastify';
 import { LuPlus } from 'react-icons/lu';
+import SingleLineLoader, {
+  SingleLineLoader2,
+} from '../Atoms/skeleton-loaders/SingleLineLoader';
 
 const Banner = ({
   setJoinForumRequestSuccessful,
@@ -33,11 +37,12 @@ const Banner = ({
   const params = useParams();
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const { getAllForums, joinForum, leaveForum } = useSelector(
+  const { getForumById, joinForum, leaveForum } = useSelector(
     (state) => state.forums
   );
   const [requestSent, setRequestSent] = useState(false);
   const [loading, setLoading] = useState(false);
+
   const handleClick = (e) => {
     const values = { forumId: params?.forumId };
     if (e.currentTarget.classList.contains('join')) {
@@ -82,52 +87,61 @@ const Banner = ({
       dispatch(resetActiveForumIdForOngoingRequest());
     }
   }, [joinForum.status, leaveForum.status]);
+
   return (
-    <div
-      style={{
-        backgroundImage: `url(${backgroundImage1})`,
-        // backgroundPosition: 'center',
-        backgroundSize: 'cover',
-        backgroundRepeat: 'no-repeat',
-      }}
-      className='banner-wrapper'
-    >
-      <div className='banner-gradient'>
-        <div className='banner-content'>
-          <div className='arrow' onClick={() => navigate('/community-forums')}>
-            <HiArrowLeft />
-          </div>
-          <h2>
-            {forum?.forumName ?? ''}
-            <img src={msg} alt='message-icon' className='icon-color2' />
-          </h2>
-          <div className='banner-bottom'>
-            <div className='members-wrapper'>
-              <div className='members-img'>
-                <div className='image-con'>
-                  <img src={member1} alt='community-img-sm' />
+    <>
+      {getForumById.status === 'base' || getForumById.status === 'loading' ? (
+        <div className='banner-loader'>
+          <SingleLineLoader2 />
+        </div>
+      ) : getForumById.status === 'successful' ? (
+        <>
+          <div
+            style={{
+              backgroundImage: `url(${
+                getForumById?.data?.forumBackgroundImageUrl ?? forumDefault
+              })`,
+              backgroundSize: 'cover',
+              backgroundRepeat: 'no-repeat',
+            }}
+            className='banner-wrapper'
+          >
+            <div className='banner-gradient'>
+              <div className='banner-content'>
+                <div className='arrow' onClick={() => navigate('/forums')}>
+                  <HiArrowLeft />
                 </div>
-                <div className='image-con'>
-                  <img src={member2} alt='community-img-sm' />
-                </div>
-                <div className='image-con'>
-                  <img src={member3} alt='community-img-sm' />
-                </div>
-                <div className='image-con'>
-                  <img src={member4} alt='community-img-sm' />
-                </div>
-                <div className='image-con'>
-                  <img src={member5} alt='community-img-sm' />
-                </div>
-              </div>
-              <div className='members-amount'>
-                {/* <p>{community.community_members}</p> */}
-                <p>{'100'}</p>
-                <p>Members</p>
-              </div>
-            </div>
-            <div className='btns'>
-              {/* {!requestSent && !joinForumRequestSuccessful && (
+                <h2>
+                  {getForumById?.data[0]?.forumName}
+                  <img src={msg} alt='message-icon' className='icon-color2' />
+                </h2>
+                <div className='banner-bottom'>
+                  <div className='members-wrapper'>
+                    <div className='members-img'>
+                      <div className='image-con'>
+                        <img src={member1} alt='community-img-sm' />
+                      </div>
+                      <div className='image-con'>
+                        <img src={member2} alt='community-img-sm' />
+                      </div>
+                      <div className='image-con'>
+                        <img src={member3} alt='community-img-sm' />
+                      </div>
+                      <div className='image-con'>
+                        <img src={member4} alt='community-img-sm' />
+                      </div>
+                      <div className='image-con'>
+                        <img src={member5} alt='community-img-sm' />
+                      </div>
+                    </div>
+                    <div className='members-amount'>
+                      {/* <p>{community.community_members}</p> */}
+                      <p>{getForumById?.data[0]?.userCount}</p>
+                      <p>Members</p>
+                    </div>
+                  </div>
+                  <div className='btns'>
+                    {/* {!requestSent && !joinForumRequestSuccessful && (
                 <button className='join' onClick={(e) => handleClick(e)}>
                   <FiPlus className='icon' />
                   Join
@@ -149,24 +163,35 @@ const Banner = ({
                 </button>
               )} */}
 
-              {forum.isCurrentUserMember ? (
-                <button className='leave-forum' onClick={(e) => handleClick(e)}>
-                  <ImCancelCircle className='icon' />
-                  Leave Forum
-                </button>
-              ) : (
-                <>
-                  <button className='join' onClick={(e) => handleClick(e)}>
-                    <FiPlus className='icon' />
-                    Join
-                  </button>
-                </>
-              )}
+                    {getForumById?.data[0]?.isCurrentUserMember ? (
+                      <button
+                        className='leave-forum'
+                        onClick={(e) => handleClick(e)}
+                      >
+                        <ImCancelCircle className='icon' />
+                        Leave Forum
+                      </button>
+                    ) : (
+                      <>
+                        <button
+                          className='join'
+                          onClick={(e) => handleClick(e)}
+                        >
+                          <FiPlus className='icon' />
+                          Join
+                        </button>
+                      </>
+                    )}
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
-        </div>
-      </div>
-    </div>
+        </>
+      ) : (
+        <></>
+      )}
+    </>
   );
 };
 

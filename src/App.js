@@ -82,15 +82,15 @@ function App() {
               element: <Settings />,
             },
             {
-              path: 'community-forums',
+              path: 'forums',
               element: <CommunityForums />,
             },
             {
-              path: 'community-forums/all',
+              path: 'forums/all',
               element: <CommunityForumsAllForums />,
             },
             {
-              path: 'community-forums/forum/:forumId',
+              path: '/forums/:forumId',
               element: <Forum />,
             },
             {
