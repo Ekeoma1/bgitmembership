@@ -199,7 +199,7 @@ const PostCard = ({ post, getAllPostsLocal, setGetAllPostsLocal }) => {
         <div className='post-owner-details'>
           <div
             className='img-circle'
-            onClick={() => navigate(`user/${post?.userId}`)}
+            onClick={() => navigate(`users/${post?.userId}`)}
           >
             <img
               src={post?.userProfilePicture}
@@ -219,7 +219,7 @@ const PostCard = ({ post, getAllPostsLocal, setGetAllPostsLocal }) => {
             <div className='d-flex align-items-center'>
               <span
                 className='name'
-                onClick={() => navigate(`user/${post?.userId}`)}
+                onClick={() => navigate(`users/${post?.userId}`)}
               >
                 {post?.firstName} {post?.secondName}
               </span>

@@ -70,7 +70,7 @@ function App() {
               element: <Updates />,
             },
             {
-              path: 'user/:id',
+              path: 'users/:id',
               element: <Dashboard />,
             },
             // {

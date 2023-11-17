@@ -26,11 +26,14 @@ const Dashboard = () => {
     window.scrollTo(0, 0);
   }, []);
   useEffect(() => {
+    console.log('useeffect');
     const data = { queryParams: { userId: param?.id } };
     dispatch(triggerGetUserProfileById(data));
+
     const data2 = { queryParams: { pageNumber, pageSize } };
     dispatch(triggerGetAllForums(data2));
-  }, []);
+  }, [param?.id]);
+  console.log('param?.id', param?.id);
 
   useEffect(() => {
     if (getUserProfileById.status === 'successful') {

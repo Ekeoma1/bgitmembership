@@ -53,8 +53,6 @@ const Post = () => {
                         <PostCard
                           key={key}
                           post={post}
-                          pageNumber={pageNumber}
-                          pageSize={pageSize}
                           getAllPostsLocal={getAllPostsLocal}
                           setGetAllPostsLocal={setGetAllPostsLocal}
                         />

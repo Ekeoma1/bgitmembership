@@ -1,5 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
+// import forumDefault from '../../../src/assets/images/forumDefault.png';
+import forumDefault from '../../../src/assets/images/forumDefault.svg';
 import SocialLinksLoader from '../Atoms/skeleton-loaders/dashboard-page/SocialLinksLoader';
 import GroupLoader from '../Atoms/skeleton-loaders/dashboard-page/GroupLoader';
 import {
@@ -10,9 +12,11 @@ import {
   triggerJoinForum,
 } from '../../Features/forums/forums_slice';
 import { renderToast } from '../Molecules/CustomToastify';
+import { useNavigate } from 'react-router-dom';
 
 const Group = () => {
   const dispatch = useDispatch();
+  const navigate = useNavigate();
   const { getAllForums, joinForum, leaveForum } = useSelector(
     (state) => state.forums
   );
@@ -69,15 +73,28 @@ const Group = () => {
             {getAllForums.data.slice(0, 2)?.map((group, index) => (
               <div key={index} className='col-md'>
                 <div className='d-flex gap-3 flex-wrap align-items-start'>
-                  <div className='group-image'></div>
+                  <div
+                    className='group-image'
+                    onClick={() => navigate(`/forums/${group.forumId}`)}
+                  >
+                    <img
+                      src={group.imageUrl ?? forumDefault}
+                      alt='group-img'
+                      className=''
+                    />
+                  </div>
                   <div>
-                    <div className='dashboard-header'>{group.forumName}</div>
+                    <div
+                      onClick={() => navigate(`/forums/${group.forumId}`)}
+                      className='dashboard-header forum-name'
+                    >
+                      {group.forumName}
+                    </div>
                     <div className='d-flex justify-content-between'>
                       <div className='dashboard-text'>
                         {group.userCount}{' '}
                         {`Member${group.userCount > 0 ? 's' : ''}`}
                       </div>
-                      {}
                       <div className='d-xl-none'>
                         <button
                           className='join-btn '
