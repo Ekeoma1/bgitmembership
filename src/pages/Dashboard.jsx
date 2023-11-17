@@ -58,21 +58,17 @@ const Dashboard = () => {
             {/* show mobile */}
             <div className='dashboard-card d-lg-none'>
               <div className='row gap-md-0 gap-3'>
-                <div className='col-md'>
-                  <Link className='' to='#'>
-                    <div className='other-pages-btn mb-0'>
-                      <div>settings</div>
-                      <Icon icon='chevronRightBig' />
-                    </div>
-                  </Link>
+                <div className='col-md' onClick={() => navigate('/settings')}>
+                  <div className='other-pages-btn mb-0'>
+                    <div>settings</div>
+                    <Icon icon='chevronRightBig' />
+                  </div>
                 </div>
                 <div className='col-md'>
-                  <Link to='#'>
-                    <div className='other-pages-btn mb-0'>
-                      <div>Event Tickets</div>
-                      <Icon icon='chevronRightBig' />
-                    </div>
-                  </Link>
+                  <div className='other-pages-btn mb-0'>
+                    <div>Event Tickets</div>
+                    <Icon icon='chevronRightBig' />
+                  </div>
                 </div>
               </div>
             </div>
@@ -89,7 +85,10 @@ const Dashboard = () => {
           {/* show desktop */}
           <div className='col-lg-3 d-lg-block d-none'>
             <Link className='' to='#'>
-              <div className='other-pages-btn'>
+              <div
+                className='other-pages-btn'
+                onClick={() => navigate('/settings')}
+              >
                 <div>settings</div>
                 <Icon icon='chevronRightBig' />
               </div>
