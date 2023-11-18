@@ -64,8 +64,6 @@ const Home = () => {
       setShowSearchModal(false);
     }
   }, [searchTerm]);
-  console.log('getUsers', getUsers);
-  console.log('getforums', getAllForums);
   return (
     <div className='home-wrapper'>
       <div className='container'>
