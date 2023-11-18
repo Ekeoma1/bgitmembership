@@ -176,7 +176,7 @@ const SeeMore = () => {
             )}
 
             {active === 'posts' && (
-              <div className='post-cards-wrapper'>
+              <div className='post-cards-wrapper '>
                 {getAllPostsByUserId?.status === 'base' ||
                 getAllPostsByUserId?.status === 'loading' ? (
                   <>
