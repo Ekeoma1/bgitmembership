@@ -20,7 +20,7 @@ const AddSocialLinksModalModal = ({
     setFormData({ url: '', title: '' });
   };
   return (
-    <div className='add-social-links-modal'>
+    <div className='add-social-links-modal shadow'>
       <div className='top-card'>
         <p onClick={onCancel}>Cancel</p>
         <h5>Social link</h5>

@@ -414,74 +414,28 @@
       font-size: 17px;
     }
   }
-
-  .post-wrapper {
-    .post-card {
-      max-width: 409px;
-      padding: 20px;
-      box-sizing: border-box;
-      background-color: #fff;
-      border: 0.41px solid #f0f0f6;
-      box-shadow: 0px 1.6401607990264893px 4.920482635498047px 0px #0d0a2c0f;
-      border-radius: 30px;
-
-      .post-image {
-        width: 56px;
-        height: 56px;
-        border-radius: 50%;
-        background-position: center;
-        background-size: cover;
-      }
-
-      .author-name {
-        font-weight: 600;
-        font-family: $thic600;
-        color: #000;
-        font-size: 15px;
-      }
-
-      .post-time {
-        font-family: $thic500;
-        font-size: 12px;
-        font-weight: 500;
-        line-height: 14px;
-        color: #807c8b;
-      }
-
-      .post-text {
-        font-size: 13px;
-        font-weight: 400;
-        line-height: 24px;
-        color: #6f6c90;
-      }
-      .interaction-icon-wrapper {
-        border-top: 0.98px solid #9e9e9e24;
-        svg {
-          path {
-            stroke: #6f6c90;
-          }
-        }
-      }
-    }
-  }
   .post-cards-wrapper {
     display: flex;
     justify-content: flex-start;
-    // background-color: red;
     width: 100%;
     .post-cards-con {
       width: 100%;
+      margin-top: 2rem;
+      column-gap: 4rem;
       display: flex;
       justify-content: flex-start;
       align-items: flex-start;
-      margin-top: 2rem;
-      column-gap: 4rem;
-      // background-color: green;
+
+      @media screen and (max-width: 600px) {
+        flex-direction: column;
+        row-gap: 4rem;
+        align-items: flex-start;
+      }
       .post-card-con {
         width: 40.9rem;
-        // display: flex;
-        // justify-content: flex-end;
-        // background-color: blue;
+        @media screen and (max-width: 600px) {
+          width: 100%;
+        }
       }
     }
   }

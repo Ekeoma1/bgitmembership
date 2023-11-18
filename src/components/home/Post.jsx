@@ -22,6 +22,7 @@ const Post = () => {
     dispatch(triggerGetAllPosts(data));
   }, [dispatch, pageNumber, pageSize]);
   const [getAllPostsLocal, setGetAllPostsLocal] = useState([]);
+
   useEffect(() => {
     if (getAllPosts?.status === 'successful') {
       setGetAllPostsLocal([...getAllPosts.data?.posts]);

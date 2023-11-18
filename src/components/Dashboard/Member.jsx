@@ -52,7 +52,6 @@ const Member = () => {
   };
 
   useEffect(() => {
-    console.log('use effect');
     const data = { queryParams: { pageNumber, pageSize } };
     dispatch(triggerGetUsers(data));
   }, []);

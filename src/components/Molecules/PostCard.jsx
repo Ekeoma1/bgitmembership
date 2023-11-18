@@ -52,7 +52,7 @@ const PostCard = ({ post, getAllPostsLocal, setGetAllPostsLocal }) => {
     dispatch(triggerToggleLikePost(data));
   };
   const [saveCurrentPost, setSaveCurrentPost] = useState(
-    post.isSavedByCurrentUser
+    post?.isSavedByCurrentUser
   );
 
   const timeoutIdRef = useRef(null);
@@ -83,7 +83,7 @@ const PostCard = ({ post, getAllPostsLocal, setGetAllPostsLocal }) => {
         }
       });
     } else {
-      data.forEach((item) => {
+      data?.forEach((item) => {
         if (item.postId === post.postId) {
           item.isSavedByCurrentUser = false;
         }
@@ -199,7 +199,7 @@ const PostCard = ({ post, getAllPostsLocal, setGetAllPostsLocal }) => {
         <div className='post-owner-details'>
           <div
             className='img-circle'
-            onClick={() => navigate(`users/${post?.userId}`)}
+            onClick={() => navigate(`/users/${post?.userId}`)}
           >
             <img
               src={post?.userProfilePicture}
@@ -219,7 +219,7 @@ const PostCard = ({ post, getAllPostsLocal, setGetAllPostsLocal }) => {
             <div className='d-flex align-items-center'>
               <span
                 className='name'
-                onClick={() => navigate(`users/${post?.userId}`)}
+                onClick={() => navigate(`/users/${post?.userId}`)}
               >
                 {post?.firstName} {post?.secondName}
               </span>
@@ -230,7 +230,7 @@ const PostCard = ({ post, getAllPostsLocal, setGetAllPostsLocal }) => {
             </div>
             <div className='job-role'>{post?.userProfession}</div>
             <div className='post-time'>
-              {moment(new Date(post.createdDate).getTime() + 3600000).fromNow()}
+              {moment(new Date(post?.createdDate).getTime() + 3600000).fromNow()}
             </div>
           </div>
         </div>
@@ -302,7 +302,7 @@ const PostCard = ({ post, getAllPostsLocal, setGetAllPostsLocal }) => {
 
           <div className='d-flex align-items-center c-gap-10'>
             <button className='bookmark ' onClick={handleSaveUnsavePost}>
-              {post.isSavedByCurrentUser ? (
+              {post?.isSavedByCurrentUser ? (
                 <FaBookmark className='active' />
               ) : (
                 <FaRegBookmark />
