@@ -418,6 +418,9 @@
     display: flex;
     justify-content: flex-start;
     width: 100%;
+    .loading-state {
+      width: 100%;
+    }
     .post-cards-con {
       width: 100%;
       margin-top: 2rem;
@@ -449,6 +452,9 @@
     }
 
     .member-card-wrapper {
+      .loading-state{
+        width: 100%;
+      }
       .member-card {
         max-width: 280px;
         min-height: 181px;
@@ -484,6 +490,7 @@
         }
       }
     }
+    
 
     .see-more-btn {
       color: $alt-text-color;

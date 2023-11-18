@@ -6,6 +6,7 @@ import Icon from '../Icon';
 import { useSelector } from 'react-redux';
 import moment from 'moment';
 import PostCard from '../Molecules/PostCard';
+import PostsLoader, { PostsLoader2 } from '../Atoms/skeleton-loaders/home-page/PostsLoader';
 
 const Posts = () => {
   const { getAllPostsByUserId } = useSelector((state) => state.posts);
@@ -33,8 +34,11 @@ const Posts = () => {
       </div>
 
       <div className='post-cards-wrapper'>
-        {getAllPostsByUserId?.status === 'loading' ? (
-          <></>
+        {getAllPostsByUserId?.status === 'base' ||
+        getAllPostsByUserId?.status === 'loading' ? (
+          <div className='loading-state'> 
+            <PostsLoader2 />
+          </div>
         ) : getAllPostsByUserId?.status === 'successful' ? (
           <>
             {getAllPostsByUserId?.data?.posts?.length === 0 ? (

@@ -3,6 +3,7 @@ import Image from '../../assets/images/author1.png';
 import { Link, useNavigate } from 'react-router-dom';
 import { triggerGetUsers } from '../../Features/users/users_slice';
 import { useDispatch, useSelector } from 'react-redux';
+import ForumCardsLoader from '../Atoms/skeleton-loaders/ForumCardsLoader';
 
 const memberData = [
   {
@@ -58,19 +59,17 @@ const Member = () => {
   // console.log('get users', getUsers);
   return (
     <div className='members-you-may-know-wrapper'>
-      <div className='text-end mb-2'>
-        <Link className='see-more-btn'>See more members</Link>
-      </div>
       <div className='header text-center'>Members you may know</div>
-
       <div className='member-card-wrapper'>
         <div className='row'>
           {getUsers.status === 'loading' ? (
-            <></>
+            <div className='loading-state'>
+              <ForumCardsLoader />
+            </div>
           ) : getUsers.status === 'successful' ? (
             <>
               {getUsers.data?.users?.length === 0 ? (
-                <></>
+                <p>No members...</p>
               ) : (
                 <>
                   {getUsers?.data?.users
