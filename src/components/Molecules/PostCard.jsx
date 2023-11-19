@@ -15,6 +15,7 @@ import {
   triggerLikePost,
   triggerSavePost,
   triggerUnsavePost,
+  triggerUnlikePost,
 } from '../../Features/posts/posts_slice';
 import { useDispatch, useSelector } from 'react-redux';
 import { FaRegBookmark, FaBookmark, FaRegSmile } from 'react-icons/fa';
@@ -31,8 +32,6 @@ const PostCard = ({ post, getAllPostsLocal, setGetAllPostsLocal }) => {
   const { likePost, savePost, unsavePost, activePostIdForOngoingRequest } =
     useSelector((state) => state.posts);
   const { getMyProfile } = useSelector((state) => state.users);
-  const [liked, setLiked] = useState(false);
-  const [saved, setSaved] = useState(false);
   const [comment, setComment] = useState('');
   const [reply, setReply] = useState('');
   const [replyComment, setReplyComment] = useState(false);
@@ -41,21 +40,58 @@ const PostCard = ({ post, getAllPostsLocal, setGetAllPostsLocal }) => {
   const [profileImgOnLoadStatus, setProfileImgOnLoadStatus] = useState('base');
   const [postImgOnLoadStatus, setPostImgOnLoadStatus] = useState('base');
   const [postVideoOnLoadStatus, setPostVideoOnLoadStatus] = useState('base');
-  const [idsOfUsersWhoHaveLikedThePost, setIdsOfUsersWhoHaveLikedThePost] =
-    useState([]);
 
-  const handleLike = () => {
-    setLiked(!liked);
-    const data = { queryParams: { postId: post.postId } };
-    dispatch(triggerLikePost(data));
-  };
+  // Like unlike post
   const [likeCurrentPost, setLikeCurrentPost] = useState(
-    post?.isSavedByCurrentUser
+    post?.isLikedByCurrentUser
   );
+  const timeoutIdRef = useRef(null);
+  const timeoutIdRef2 = useRef(null);
+  const handleLikeUnlikePost = () => {
+    const startTimeout = () => {
+      timeoutIdRef2.current = setTimeout(() => {
+        const data = { queryParams: { postId: post.postId } };
+        if (!likeCurrentPost) {
+          dispatch(triggerLikePost(data));
+        } else {
+          dispatch(triggerUnlikePost(data));
+        }
+      }, 5000);
+    };
+    const clearTimeoutIfNeeded = () => {
+      if (timeoutIdRef2.current) {
+        clearTimeout(timeoutIdRef2.current);
+      }
+    };
+    clearTimeoutIfNeeded();
+    startTimeout();
+    setLikeCurrentPost(!likeCurrentPost);
+  };
+  useEffect(() => {
+    // const data = [...getAllPostsLocal];
+    const data = _.cloneDeep(getAllPostsLocal);
+    if (likeCurrentPost) {
+      data?.forEach((item) => {
+        if (item.postId === post.postId) {
+          item.isLikedByCurrentUser = true;
+          item.likeCount = item.saveCount + 1;
+        }
+      });
+    } else {
+      data?.forEach((item) => {
+        if (item.postId === post.postId) {
+          item.isLikedByCurrentUser = false;
+          item.likeCount = item.likeCount - 1;
+        }
+      });
+    }
+    setGetAllPostsLocal(data);
+  }, [likeCurrentPost]);
+
+  // Save unsave post
   const [saveCurrentPost, setSaveCurrentPost] = useState(
     post?.isSavedByCurrentUser
   );
-  const timeoutIdRef = useRef(null);
   const handleSaveUnsavePost = () => {
     const startTimeout = () => {
       timeoutIdRef.current = setTimeout(() => {
@@ -77,8 +113,8 @@ const PostCard = ({ post, getAllPostsLocal, setGetAllPostsLocal }) => {
     clearTimeoutIfNeeded();
     startTimeout();
     setSaveCurrentPost(!saveCurrentPost);
-    dispatch(setActivePostIdForOngoingRequest(post.postId));
   };
+
   useEffect(() => {
     // const data = [...getAllPostsLocal];
     const data = _.cloneDeep(getAllPostsLocal);
@@ -115,68 +151,6 @@ const PostCard = ({ post, getAllPostsLocal, setGetAllPostsLocal }) => {
     }
   };
 
-  // like post
-  useEffect(() => {
-    if (likePost.status === 'successful') {
-      if (
-        likePost.data.postLiked === true &&
-        likePost.data.postId === post.postId &&
-        Array.isArray(idsOfUsersWhoHaveLikedThePost)
-      ) {
-        let idsOfUsersWhoHaveLikedThePostTemp = [
-          ...idsOfUsersWhoHaveLikedThePost,
-        ];
-        const filter = idsOfUsersWhoHaveLikedThePostTemp.filter(
-          (item) => item.postId !== getMyProfile.data.userId
-        );
-        let idsOfUsersWhoHaveLikedThePostTemp2 = [
-          ...filter,
-          getMyProfile.data.userId,
-        ];
-        setIdsOfUsersWhoHaveLikedThePost(idsOfUsersWhoHaveLikedThePostTemp2);
-        dispatch(resetLikePost());
-      } else if (
-        likePost.data.postLiked === false &&
-        likePost.data.postId === post.postId &&
-        Array.isArray(idsOfUsersWhoHaveLikedThePost)
-      ) {
-        let idsOfUsersWhoHaveLikedThePostTemp = [
-          ...idsOfUsersWhoHaveLikedThePost,
-        ];
-
-        const idsOfUsersWhoHaveLikedThePostTemp2 =
-          idsOfUsersWhoHaveLikedThePostTemp.filter(
-            (item) => item !== getMyProfile.data.userId
-          );
-        setIdsOfUsersWhoHaveLikedThePost(idsOfUsersWhoHaveLikedThePostTemp2);
-        dispatch(resetLikePost());
-      }
-    }
-  }, [
-    getMyProfile.data?.userId,
-    post?.postId,
-    likePost.data.postId,
-    likePost.data.postLiked,
-    likePost.status,
-  ]);
-
-  useEffect(() => {
-    if (
-      Array.isArray(idsOfUsersWhoHaveLikedThePost) &&
-      idsOfUsersWhoHaveLikedThePost?.includes(getMyProfile?.data?.userId)
-    ) {
-      setLiked(true);
-    } else {
-      setLiked(false);
-    }
-  }, [getMyProfile.data?.userId, idsOfUsersWhoHaveLikedThePost]);
-  useEffect(() => {
-    const idsOfUsersWhoHaveLikedThePostTemp = post?.likedUsers.map(
-      (item) => item.userId
-    );
-    setIdsOfUsersWhoHaveLikedThePost(idsOfUsersWhoHaveLikedThePostTemp);
-  }, [post?.likedUsers]);
-  console.log('savePost', saveCurrentPost);
   return (
     <div className='post-card shadow-sm mx-auto'>
       <div className='post-card-header'>
@@ -268,15 +242,12 @@ const PostCard = ({ post, getAllPostsLocal, setGetAllPostsLocal }) => {
         <div className='post-card-footer-content'>
           <div className='d-flex align-items-center c-gap-10'>
             <button
-              onClick={handleLike}
-              className={`heart-icon ${liked && 'active'}`}
+              onClick={handleLikeUnlikePost}
+              className={`heart-icon ${post.isLikedByCurrentUser && 'active'}`}
             >
               <Icon icon='heart' />
             </button>
-            <span>
-              {Array.isArray(idsOfUsersWhoHaveLikedThePost) &&
-                idsOfUsersWhoHaveLikedThePost?.length}
-            </span>
+            <span>{post.likeCount}</span>
           </div>
 
           <div className='d-flex align-items-center c-gap-10'>
