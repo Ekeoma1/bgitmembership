@@ -19,7 +19,7 @@ const MyUpdates = () => {
     dispatch(triggerGetAllEvents(data));
   }, []);
 
-  console.log('data', getAllEvents, getAllNews);
+  // console.log('data', getAllEvents, getAllNews);
   return (
     <div className='my-updates-wrapper shadow-sm'>
       <h3 className=''>My updates</h3>

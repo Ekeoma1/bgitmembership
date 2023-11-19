@@ -11,10 +11,19 @@ export default class PostsService {
     return response;
   }
 
-  // toggle like post
-  static async toggleLikePost(data) {
+  // like post
+  static async likePost(data) {
     const response = await post({
-      url: apiRoutes.toggleLikePost,
+      url: apiRoutes.likePost,
+      data: { ...data },
+      queryParams: data.queryParams,
+    });
+    return response;
+  }
+  // unlike post
+  static async unlikePost(data) {
+    const response = await post({
+      url: apiRoutes.unlikePost,
       data: { ...data },
       queryParams: data.queryParams,
     });
@@ -66,10 +75,19 @@ export default class PostsService {
     return response;
   }
 
-  //toggle like unlike comment
-  static async toggleLikeUnlikeComment(data) {
+  //like comment
+  static async likeComment(data) {
     const response = await post({
-      url: apiRoutes.toggleLikeUnlikeComment,
+      url: apiRoutes.likeComment,
+      data: { ...data },
+    });
+    return response;
+  }
+
+  //unlike comment
+  static async unlikeComment(data) {
+    const response = await post({
+      url: apiRoutes.unlikeComment,
       data: { ...data },
     });
     return response;
@@ -84,10 +102,20 @@ export default class PostsService {
     return response;
   }
 
-  //toggle save unsave posts
-  static async toggleSaveUnsavePost(data) {
+  //save posts
+  static async savePost(data) {
     const response = await post({
-      url: apiRoutes.toggleSaveUnsavePost,
+      url: apiRoutes.savePost,
+      data: { ...data },
+      queryParams: data.queryParams,
+    });
+    return response;
+  }
+
+  // unsave posts
+  static async unsavePost(data) {
+    const response = await post({
+      url: apiRoutes.unsavePost,
       data: { ...data },
       queryParams: data.queryParams,
     });

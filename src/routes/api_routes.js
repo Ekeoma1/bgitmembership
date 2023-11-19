@@ -30,15 +30,18 @@ const apiRoutes = {
 
   // posts
   createPost: '/Posts/CreatePost',
-  toggleLikePost: '/Posts/ToggleLikeUnlikePost',
+  likePost: '/Posts/LikePost',
+  unlikePost: '/Posts/UnlikePost',
   getPostLikedUsers: '/Posts/GetPostLikedUsers',
   getAllPosts: '/Posts/GetAllPosts',
   getAllPostsByUserId: '/Posts/GetPostsByUserId',
   getMyPosts: '/Posts/GetMyPosts',
   createComment: '/Posts/CreateComment',
-  toggleLikeUnlikeComment: '/Posts/ToggleLikeUnlikeComment',
+  likeComment: '/Posts/LikeComment',
+  unlikeComment: '/Posts/UnlikeComment',
   getAllCommentsByPostId: '/Posts/GetAllCommentsByPostId',
-  toggleSaveUnsavePost: '/Posts/ToggleSaveUnsavePost',
+  savePost: '/Posts/SavePost',
+  unsavePost: '/Posts/UnsavePost',
 
   // reports
   reportUser: '/Reports/ReportUser',

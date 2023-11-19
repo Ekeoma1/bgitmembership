@@ -7,7 +7,11 @@ const initialState = {
     status: states.BASE,
     data: {},
   },
-  toggleLikePost: {
+  likePost: {
+    status: states.BASE,
+    data: {},
+  },
+  unLikePost: {
     status: states.BASE,
     data: {},
   },
@@ -32,7 +36,11 @@ const initialState = {
     status: states.BASE,
     data: {},
   },
-  toggleLikeUnlikeComment: {
+  likeComment: {
+    status: states.BASE,
+    data: {},
+  },
+  unlikeComment: {
     status: states.BASE,
     data: {},
   },
@@ -40,7 +48,11 @@ const initialState = {
     status: states.BASE,
     data: {},
   },
-  toggleSaveUnsavePost: {
+  savePost: {
+    status: states.BASE,
+    data: {},
+  },
+  unsavePost: {
     status: states.BASE,
     data: {},
   },
@@ -57,11 +69,21 @@ export const triggerCreatePost = createAsyncThunk(
   }
 );
 
-export const triggerToggleLikePost = createAsyncThunk(
-  'toggle-like-post',
+export const triggerLikePost = createAsyncThunk(
+  'like-post',
   async (params, thunkAPI) => {
     try {
-      return await PostsService.toggleLikePost(params);
+      return await PostsService.likePost(params);
+    } catch (e) {
+      return thunkAPI.rejectWithValue(e.message);
+    }
+  }
+);
+export const triggerUnlikePost = createAsyncThunk(
+  'unlike-post',
+  async (params, thunkAPI) => {
+    try {
+      return await PostsService.unlikePost(params);
     } catch (e) {
       return thunkAPI.rejectWithValue(e.message);
     }
@@ -118,11 +140,21 @@ export const triggerCreateComment = createAsyncThunk(
     }
   }
 );
-export const triggerToggleLikeUnlikeComment = createAsyncThunk(
-  'toggle-like-unlike-comment',
+export const triggerLikeComment = createAsyncThunk(
+  'like-comment',
   async (params, thunkAPI) => {
     try {
-      return await PostsService.toggleLikeUnlikeComment(params);
+      return await PostsService.likeComment(params);
+    } catch (e) {
+      return thunkAPI.rejectWithValue(e.message);
+    }
+  }
+);
+export const triggerUnlikeComment = createAsyncThunk(
+  'unlike-comment',
+  async (params, thunkAPI) => {
+    try {
+      return await PostsService.unlikeComment(params);
     } catch (e) {
       return thunkAPI.rejectWithValue(e.message);
     }
@@ -138,11 +170,21 @@ export const triggerGetAllCommentsByPostId = createAsyncThunk(
     }
   }
 );
-export const triggerToggleSaveUnsavePost = createAsyncThunk(
-  'toggle-save-unsave-post',
+export const triggerSavePost = createAsyncThunk(
+  'save-post',
   async (params, thunkAPI) => {
     try {
-      return await PostsService.toggleSaveUnsavePost(params);
+      return await PostsService.savePost(params);
+    } catch (e) {
+      return thunkAPI.rejectWithValue(e.message);
+    }
+  }
+);
+export const triggerUnsavePost = createAsyncThunk(
+  'unsave-post',
+  async (params, thunkAPI) => {
+    try {
+      return await PostsService.unsavePost(params);
     } catch (e) {
       return thunkAPI.rejectWithValue(e.message);
     }
@@ -156,8 +198,23 @@ const postsSlice = createSlice({
     resetCreatePost: (state) => {
       state.createPost = initialState.createPost;
     },
-    resetToggleLikePost: (state) => {
-      state.toggleLikePost = initialState.toggleLikePost;
+    resetLikePost: (state) => {
+      state.likePost = initialState.likePost;
+    },
+    resetUnlikePost: (state) => {
+      state.unLikePost = initialState.unLikePost;
+    },
+    resetSavePost: (state) => {
+      state.savePost = initialState.savePost;
+    },
+    resteUnsavePost: (state) => {
+      state.unsavePost = initialState.unsavePost;
+    },
+    resetLikeComment: (state) => {
+      state.likeComment = initialState.likeComment;
+    },
+    resetUnlikeComment: (state) => {
+      state.unlikeComment = initialState.unlikeComment;
     },
     setActivePostIdForOngoingRequest: (state, action) => {
       state.activePostIdForOngoingRequest = action.payload;
@@ -165,7 +222,6 @@ const postsSlice = createSlice({
     resetActivePostIdForOngoingRequest: (state) => {
       state.activePostIdForOngoingRequest = '';
     },
-  
   },
   extraReducers: (builder) => {
     //create post
@@ -182,18 +238,32 @@ const postsSlice = createSlice({
       state.createPost.data = {};
     });
 
-    // toggle like  post
-    builder.addCase(triggerToggleLikePost.pending, (state) => {
-      state.toggleLikePost.status = states.LOADING;
-      state.toggleLikePost.data = {};
+    // like  post
+    builder.addCase(triggerLikePost.pending, (state) => {
+      state.likePost.status = states.LOADING;
+      state.likePost.data = {};
     });
-    builder.addCase(triggerToggleLikePost.fulfilled, (state, action) => {
-      state.toggleLikePost.status = states.SUCCESSFUL;
-      state.toggleLikePost.data = action.payload;
+    builder.addCase(triggerLikePost.fulfilled, (state, action) => {
+      state.likePost.status = states.SUCCESSFUL;
+      state.likePost.data = action.payload;
     });
-    builder.addCase(triggerToggleLikePost.rejected, (state) => {
-      state.toggleLikePost.status = states.ERROR;
-      state.toggleLikePost.data = {};
+    builder.addCase(triggerLikePost.rejected, (state) => {
+      state.likePost.status = states.ERROR;
+      state.likePost.data = {};
+    });
+
+    //  unlike  post
+    builder.addCase(triggerUnlikePost.pending, (state) => {
+      state.unLikePost.status = states.LOADING;
+      state.unLikePost.data = {};
+    });
+    builder.addCase(triggerUnlikePost.fulfilled, (state, action) => {
+      state.unLikePost.status = states.SUCCESSFUL;
+      state.unLikePost.data = action.payload;
+    });
+    builder.addCase(triggerUnlikePost.rejected, (state) => {
+      state.unLikePost.status = states.ERROR;
+      state.unLikePost.data = {};
     });
 
     // get posts liked by users
@@ -266,25 +336,33 @@ const postsSlice = createSlice({
       state.createComment.data = {};
     });
 
-    // toggle like unlike comment
-    builder.addCase(triggerToggleLikeUnlikeComment.pending, (state) => {
-      state.toggleLikeUnlikeComment.status = states.LOADING;
-      state.toggleLikeUnlikeComment.data = {};
+    // like comment
+    builder.addCase(triggerLikeComment.pending, (state) => {
+      state.likeComment.status = states.LOADING;
+      state.likeComment.data = {};
     });
-    builder.addCase(
-      triggerToggleLikeUnlikeComment.fulfilled,
-      (state, action) => {
-        state.toggleLikeUnlikeComment.status = states.SUCCESSFUL;
-        state.toggleLikeUnlikeComment.data = action.payload;
-      }
-    );
-    builder.addCase(
-      triggerToggleLikeUnlikeComment.rejected,
-      (state, action) => {
-        state.toggleLikeUnlikeComment.status = states.ERROR;
-        state.toggleLikeUnlikeComment.data = action.payload;
-      }
-    );
+    builder.addCase(triggerLikeComment.fulfilled, (state, action) => {
+      state.likeComment.status = states.SUCCESSFUL;
+      state.likeComment.data = action.payload;
+    });
+    builder.addCase(triggerLikeComment.rejected, (state, action) => {
+      state.likeComment.status = states.ERROR;
+      state.likeComment.data = action.payload;
+    });
+
+    // unlike comment
+    builder.addCase(triggerUnlikeComment.pending, (state) => {
+      state.unlikeComment.status = states.LOADING;
+      state.unlikeComment.data = {};
+    });
+    builder.addCase(triggerUnlikeComment.fulfilled, (state, action) => {
+      state.unlikeComment.status = states.SUCCESSFUL;
+      state.unlikeComment.data = action.payload;
+    });
+    builder.addCase(triggerUnlikeComment.rejected, (state, action) => {
+      state.unlikeComment.status = states.ERROR;
+      state.unlikeComment.data = action.payload;
+    });
 
     // get all comments by post id
     builder.addCase(triggerGetAllCommentsByPostId.pending, (state) => {
@@ -303,18 +381,32 @@ const postsSlice = createSlice({
       state.getAllCommentsByPostId.data = action.payload;
     });
 
-    // toggle save unsave post
-    builder.addCase(triggerToggleSaveUnsavePost.pending, (state) => {
-      state.toggleSaveUnsavePost.status = states.LOADING;
-      state.toggleSaveUnsavePost.data = {};
+    // save post
+    builder.addCase(triggerSavePost.pending, (state) => {
+      state.savePost.status = states.LOADING;
+      state.savePost.data = {};
     });
-    builder.addCase(triggerToggleSaveUnsavePost.fulfilled, (state, action) => {
-      state.toggleSaveUnsavePost.status = states.SUCCESSFUL;
-      state.toggleSaveUnsavePost.data = action.payload;
+    builder.addCase(triggerSavePost.fulfilled, (state, action) => {
+      state.savePost.status = states.SUCCESSFUL;
+      state.savePost.data = action.payload;
     });
-    builder.addCase(triggerToggleSaveUnsavePost.rejected, (state, action) => {
-      state.toggleSaveUnsavePost.status = states.ERROR;
-      state.toggleSaveUnsavePost.data = action.payload;
+    builder.addCase(triggerSavePost.rejected, (state, action) => {
+      state.savePost.status = states.ERROR;
+      state.savePost.data = action.payload;
+    });
+
+    //  unsave post
+    builder.addCase(triggerUnsavePost.pending, (state) => {
+      state.unsavePost.status = states.LOADING;
+      state.unsavePost.data = {};
+    });
+    builder.addCase(triggerUnsavePost.fulfilled, (state, action) => {
+      state.unsavePost.status = states.SUCCESSFUL;
+      state.unsavePost.data = action.payload;
+    });
+    builder.addCase(triggerUnsavePost.rejected, (state, action) => {
+      state.unsavePost.status = states.ERROR;
+      state.unsavePost.data = action.payload;
     });
   },
 });
@@ -322,7 +414,12 @@ const postsSlice = createSlice({
 export default postsSlice.reducer;
 export const {
   resetCreatePost,
-  resetToggleLikePost,
+  resetLikePost,
+  resetUnlikePost,
+  resetLikeComment,
+  resetUnlikeComment,
+  resetSavePost,
+  resteUnsavePost,
   setActivePostIdForOngoingRequest,
   resetActivePostIdForOngoingRequest,
 } = postsSlice.actions;

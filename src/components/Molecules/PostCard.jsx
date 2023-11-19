@@ -9,11 +9,12 @@ import MediaLoader from '../Atoms/skeleton-loaders/home-page/MediaLoader';
 import {
   resetActivePostIdForOngoingRequest,
   resetSaveCurrentPost,
-  resetToggleLikePost,
+  resetLikePost,
   setActivePostIdForOngoingRequest,
   setSaveCurrentPost,
-  triggerToggleLikePost,
-  triggerToggleSaveUnsavePost,
+  triggerLikePost,
+  triggerSavePost,
+  triggerUnsavePost,
 } from '../../Features/posts/posts_slice';
 import { useDispatch, useSelector } from 'react-redux';
 import { FaRegBookmark, FaBookmark, FaRegSmile } from 'react-icons/fa';
@@ -27,11 +28,8 @@ import CommentInput from './CommentInput';
 const PostCard = ({ post, getAllPostsLocal, setGetAllPostsLocal }) => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const {
-    toggleLikePost,
-    toggleSaveUnsavePost,
-    activePostIdForOngoingRequest,
-  } = useSelector((state) => state.posts);
+  const { likePost, savePost, unsavePost, activePostIdForOngoingRequest } =
+    useSelector((state) => state.posts);
   const { getMyProfile } = useSelector((state) => state.users);
   const [liked, setLiked] = useState(false);
   const [saved, setSaved] = useState(false);
@@ -49,18 +47,26 @@ const PostCard = ({ post, getAllPostsLocal, setGetAllPostsLocal }) => {
   const handleLike = () => {
     setLiked(!liked);
     const data = { queryParams: { postId: post.postId } };
-    dispatch(triggerToggleLikePost(data));
+    dispatch(triggerLikePost(data));
   };
+  const [likeCurrentPost, setLikeCurrentPost] = useState(
+    post?.isSavedByCurrentUser
+  );
   const [saveCurrentPost, setSaveCurrentPost] = useState(
     post?.isSavedByCurrentUser
   );
-
   const timeoutIdRef = useRef(null);
   const handleSaveUnsavePost = () => {
     const startTimeout = () => {
       timeoutIdRef.current = setTimeout(() => {
         const data = { queryParams: { postId: post.postId } };
-        dispatch(triggerToggleSaveUnsavePost(data));
+        if (!saveCurrentPost) {
+          console.log('save post');
+          dispatch(triggerSavePost(data));
+        } else {
+          console.log('unsave post');
+          dispatch(triggerUnsavePost(data));
+        }
       }, 5000);
     };
     const clearTimeoutIfNeeded = () => {
@@ -77,44 +83,22 @@ const PostCard = ({ post, getAllPostsLocal, setGetAllPostsLocal }) => {
     // const data = [...getAllPostsLocal];
     const data = _.cloneDeep(getAllPostsLocal);
     if (saveCurrentPost) {
-      data.forEach((item) => {
+      data?.forEach((item) => {
         if (item.postId === post.postId) {
           item.isSavedByCurrentUser = true;
+          item.saveCount = item.saveCount + 1;
         }
       });
     } else {
       data?.forEach((item) => {
         if (item.postId === post.postId) {
           item.isSavedByCurrentUser = false;
+          item.saveCount = item.saveCount - 1;
         }
       });
     }
     setGetAllPostsLocal(data);
   }, [saveCurrentPost]);
-
-  console.log('saveCurrentPost', saveCurrentPost);
-  useEffect(() => {
-    if (
-      toggleSaveUnsavePost.status === 'successful' &&
-      activePostIdForOngoingRequest === post.postId
-    ) {
-      const data = _.cloneDeep(getAllPostsLocal);
-      if (toggleSaveUnsavePost.data.postSaved) {
-        data.forEach((item) => {
-          if (item.postId === toggleSaveUnsavePost.data.postId) {
-            item.isSavedByCurrentUser = true;
-          }
-        });
-      } else {
-        data.forEach((item) => {
-          if (item.postId === toggleSaveUnsavePost.data.postId) {
-            item.isSavedByCurrentUser = false;
-          }
-        });
-      }
-      setGetAllPostsLocal(data);
-    }
-  }, [toggleSaveUnsavePost]);
 
   const handleChange = (e) => {
     if (e.target.name === 'comment') {
@@ -133,10 +117,10 @@ const PostCard = ({ post, getAllPostsLocal, setGetAllPostsLocal }) => {
 
   // like post
   useEffect(() => {
-    if (toggleLikePost.status === 'successful') {
+    if (likePost.status === 'successful') {
       if (
-        toggleLikePost.data.postLiked === true &&
-        toggleLikePost.data.postId === post.postId &&
+        likePost.data.postLiked === true &&
+        likePost.data.postId === post.postId &&
         Array.isArray(idsOfUsersWhoHaveLikedThePost)
       ) {
         let idsOfUsersWhoHaveLikedThePostTemp = [
@@ -150,10 +134,10 @@ const PostCard = ({ post, getAllPostsLocal, setGetAllPostsLocal }) => {
           getMyProfile.data.userId,
         ];
         setIdsOfUsersWhoHaveLikedThePost(idsOfUsersWhoHaveLikedThePostTemp2);
-        dispatch(resetToggleLikePost());
+        dispatch(resetLikePost());
       } else if (
-        toggleLikePost.data.postLiked === false &&
-        toggleLikePost.data.postId === post.postId &&
+        likePost.data.postLiked === false &&
+        likePost.data.postId === post.postId &&
         Array.isArray(idsOfUsersWhoHaveLikedThePost)
       ) {
         let idsOfUsersWhoHaveLikedThePostTemp = [
@@ -165,15 +149,15 @@ const PostCard = ({ post, getAllPostsLocal, setGetAllPostsLocal }) => {
             (item) => item !== getMyProfile.data.userId
           );
         setIdsOfUsersWhoHaveLikedThePost(idsOfUsersWhoHaveLikedThePostTemp2);
-        dispatch(resetToggleLikePost());
+        dispatch(resetLikePost());
       }
     }
   }, [
     getMyProfile.data?.userId,
     post?.postId,
-    toggleLikePost.data.postId,
-    toggleLikePost.data.postLiked,
-    toggleLikePost.status,
+    likePost.data.postId,
+    likePost.data.postLiked,
+    likePost.status,
   ]);
 
   useEffect(() => {
@@ -192,7 +176,7 @@ const PostCard = ({ post, getAllPostsLocal, setGetAllPostsLocal }) => {
     );
     setIdsOfUsersWhoHaveLikedThePost(idsOfUsersWhoHaveLikedThePostTemp);
   }, [post?.likedUsers]);
-  // console.log('saved', saved);
+  console.log('savePost', saveCurrentPost);
   return (
     <div className='post-card shadow-sm mx-auto'>
       <div className='post-card-header'>
@@ -230,7 +214,9 @@ const PostCard = ({ post, getAllPostsLocal, setGetAllPostsLocal }) => {
             </div>
             <div className='job-role'>{post?.userProfession}</div>
             <div className='post-time'>
-              {moment(new Date(post?.createdDate).getTime() + 3600000).fromNow()}
+              {moment(
+                new Date(post?.createdDate).getTime() + 3600000
+              ).fromNow()}
             </div>
           </div>
         </div>
@@ -308,7 +294,7 @@ const PostCard = ({ post, getAllPostsLocal, setGetAllPostsLocal }) => {
                 <FaRegBookmark />
               )}
             </button>
-            <span>5</span>
+            <span>{post.saveCount}</span>
           </div>
 
           <div className='d-flex align-items-center c-gap-10 share-wrapper'>

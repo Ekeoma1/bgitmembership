@@ -6,14 +6,14 @@ import { renderToast } from '../Molecules/CustomToastify';
 import { resetAddSocialLinks } from '../../Features/social-links/social_links_slice';
 import { triggerGetMyProfile } from '../../Features/users/users_slice';
 import OutsideClickHandler from 'react-outside-click-handler';
-import AddSocialLinksModalModal from '../Modals/AddSocialLinksModal';
+import AddSocialLinksModalModal, { AddSocialLinksModalModal2 } from '../Modals/AddSocialLinksModal';
 
 const SocialLinksCard = ({ othersView, data }) => {
   const { isMobile } = useWindowSize();
   const dispatch = useDispatch();
   const { getMyProfile } = useSelector((state) => state.users);
   const { addSocialLinks } = useSelector((state) => state.socialLinks);
-  const [showSocialLinksModal, setShowSocialLinksModal] = useState(false);
+  const [showSocialLinksModal, setShowSocialLinksModal] = useState(true);
 
   const [formData, setFormData] = useState({
     url: '',
@@ -54,7 +54,6 @@ const SocialLinksCard = ({ othersView, data }) => {
     }
   }, [addSocialLinks.status]);
 
-  console.log({ addSocialLinks: addSocialLinks.status });
 
   return (
     <div className='dashboard-card'>
@@ -110,7 +109,6 @@ const SocialLinksCard = ({ othersView, data }) => {
                           <AddSocialLinksModalModal
                             onChange={handleChange}
                             onCancel={() => {
-                              console.log('cancel');
                               setShowSocialLinksModal(false);
                             }}
                             onClearValues={handleClearValues}
