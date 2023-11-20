@@ -16,6 +16,7 @@ import {
   triggerSavePost,
   triggerUnsavePost,
   triggerUnlikePost,
+  triggerCreateComment,
 } from '../../Features/posts/posts_slice';
 import { useDispatch, useSelector } from 'react-redux';
 import { FaRegBookmark, FaBookmark, FaRegSmile } from 'react-icons/fa';
@@ -32,6 +33,7 @@ const PostCard = ({ post, getAllPostsLocal, setGetAllPostsLocal }) => {
   const { likePost, savePost, unsavePost, activePostIdForOngoingRequest } =
     useSelector((state) => state.posts);
   const { getMyProfile } = useSelector((state) => state.users);
+  const [showCommentsSection, setShowCommentsSection] = useState(false);
   const [comment, setComment] = useState('');
   const [reply, setReply] = useState('');
   const [replyComment, setReplyComment] = useState(false);
@@ -45,7 +47,6 @@ const PostCard = ({ post, getAllPostsLocal, setGetAllPostsLocal }) => {
   const [likeCurrentPost, setLikeCurrentPost] = useState(
     post?.isLikedByCurrentUser
   );
-  const timeoutIdRef = useRef(null);
   const timeoutIdRef2 = useRef(null);
   const handleLikeUnlikePost = () => {
     const startTimeout = () => {
@@ -92,6 +93,7 @@ const PostCard = ({ post, getAllPostsLocal, setGetAllPostsLocal }) => {
   const [saveCurrentPost, setSaveCurrentPost] = useState(
     post?.isSavedByCurrentUser
   );
+  const timeoutIdRef = useRef(null);
   const handleSaveUnsavePost = () => {
     const startTimeout = () => {
       timeoutIdRef.current = setTimeout(() => {
@@ -114,9 +116,7 @@ const PostCard = ({ post, getAllPostsLocal, setGetAllPostsLocal }) => {
     startTimeout();
     setSaveCurrentPost(!saveCurrentPost);
   };
-
   useEffect(() => {
-    // const data = [...getAllPostsLocal];
     const data = _.cloneDeep(getAllPostsLocal);
     if (saveCurrentPost) {
       data?.forEach((item) => {
@@ -136,6 +136,52 @@ const PostCard = ({ post, getAllPostsLocal, setGetAllPostsLocal }) => {
     setGetAllPostsLocal(data);
   }, [saveCurrentPost]);
 
+  // Like unlike comment
+  const [likeComment, setLikeComment] = useState(
+    post?.isLikedByCurrentUser
+  );
+  const timeoutIdRef3 = useRef(null);
+  const handleLikeUnlikeComment = () => {
+    const startTimeout = () => {
+      timeoutIdRef3.current = setTimeout(() => {
+        const data = { queryParams: { postId: post.postId } };
+        if (!likeCurrentPost) {
+          dispatch(triggerLikePost(data));
+        } else {
+          dispatch(triggerUnlikePost(data));
+        }
+      }, 5000);
+    };
+    const clearTimeoutIfNeeded = () => {
+      if (timeoutIdRef2.current) {
+        clearTimeout(timeoutIdRef2.current);
+      }
+    };
+    clearTimeoutIfNeeded();
+    startTimeout();
+    setLikeCurrentPost(!likeCurrentPost);
+  };
+  useEffect(() => {
+    // const data = [...getAllPostsLocal];
+    const data = _.cloneDeep(getAllPostsLocal);
+    if (likeCurrentPost) {
+      data?.forEach((item) => {
+        if (item.postId === post.postId) {
+          item.isLikedByCurrentUser = true;
+          item.likeCount = item.saveCount + 1;
+        }
+      });
+    } else {
+      data?.forEach((item) => {
+        if (item.postId === post.postId) {
+          item.isLikedByCurrentUser = false;
+          item.likeCount = item.likeCount - 1;
+        }
+      });
+    }
+    setGetAllPostsLocal(data);
+  }, [likeCurrentPost]);
+// other
   const handleChange = (e) => {
     if (e.target.name === 'comment') {
       setComment(e.target.value);
@@ -145,12 +191,19 @@ const PostCard = ({ post, getAllPostsLocal, setGetAllPostsLocal }) => {
   };
   const handleSubmit = (name) => {
     if (name === 'comment') {
+      const data = {
+        postId: post.postId,
+        content: comment,
+      };
+      console.log('comment', data);
+      dispatch(triggerCreateComment(data));
       setComment('');
     } else if (name === 'reply') {
       setReply('');
     }
   };
 
+  const handleLikeComment = (id) => {};
   return (
     <div className='post-card shadow-sm mx-auto'>
       <div className='post-card-header'>
@@ -251,7 +304,7 @@ const PostCard = ({ post, getAllPostsLocal, setGetAllPostsLocal }) => {
           </div>
 
           <div className='d-flex align-items-center c-gap-10'>
-            <button>
+            <button onClick={() => setShowCommentsSection(true)}>
               <Icon icon='comment' />
             </button>
             <span>5</span>
@@ -281,61 +334,66 @@ const PostCard = ({ post, getAllPostsLocal, setGetAllPostsLocal }) => {
             </OutsideClickHandler>
           </div>
         </div>
-        {/* <div className='comments-sec'>
-          <CommentInput
-            name={'comment'}
-            onChange={handleChange}
-            onSubmit={handleSubmit}
-            value={comment}
-          />
-          <div className='comments-box'>
-            <SingleComment
-              img={user}
-              name={'Chidiebere Ezeokwelume'}
-              role={'UX Design Enthusiast'}
-              comment={'So excited, can’t wait!'}
-              setReplyComment={setReplyComment}
+        {showCommentsSection && (
+          <div className='comments-sec'>
+            <CommentInput
+              name={'comment'}
+              onChange={handleChange}
+              onSubmit={handleSubmit}
+              value={comment}
             />
-            <div className='child-comments-wrapper'>
-              <div className='hidden'></div>
-              <div className='con'>
+            <div className='comments-box'>
+              {post.commentedUsers?.map((comment, index) => (
                 <SingleComment
-                  img={user}
-                  name={'Chidiebere Ezeokwelume'}
+                  img={comment.userProfilePicture}
+                  name={comment.userName}
                   role={'UX Design Enthusiast'}
-                  comment={'So excited, can’t wait!'}
-                  childComment
+                  comment={comment.content}
+                  setLikeComment={setLikeComment}
                   setReplyComment={setReplyComment}
                 />
-                <SingleComment
-                  img={user}
-                  name={'Chidiebere Ezeokwelume'}
-                  role={'UX Design Enthusiast'}
-                  comment={'So excited, can’t wait!'}
-                  childComment
-                  setReplyComment={setReplyComment}
-                />
-                <SingleComment
-                  img={user}
-                  name={'Chidiebere Ezeokwelume'}
-                  role={'UX Design Enthusiast'}
-                  comment={'So excited, can’t wait!'}
-                  childComment
-                  setReplyComment={setReplyComment}
-                />
-                {replyComment && (
-                  <CommentInput
-                    name={'reply'}
-                    onChange={handleChange}
-                    onSubmit={handleSubmit}
-                    value={reply}
-                    focus={replyComment}
+              ))}
+              <div className='child-comments-wrapper'>
+                <div className='hidden'></div>
+                <div className='con'>
+                  <SingleComment
+                    img={user}
+                    name={'Chidiebere Ezeokwelume'}
+                    role={'UX Design Enthusiast'}
+                    comment={'So excited, can’t wait!'}
+                    childComment
+                    setReplyComment={setReplyComment}
                   />
-                )}
+                  <SingleComment
+                    img={user}
+                    name={'Chidiebere Ezeokwelume'}
+                    role={'UX Design Enthusiast'}
+                    comment={'So excited, can’t wait!'}
+                    childComment
+                    setReplyComment={setReplyComment}
+                  />
+                  <SingleComment
+                    img={user}
+                    name={'Chidiebere Ezeokwelume'}
+                    role={'UX Design Enthusiast'}
+                    comment={'So excited, can’t wait!'}
+                    childComment
+                    setReplyComment={setReplyComment}
+                  />
+                  {replyComment && (
+                    <CommentInput
+                      name={'reply'}
+                      onChange={handleChange}
+                      onSubmit={handleSubmit}
+                      value={reply}
+                      focus={replyComment}
+                    />
+                  )}
+                </div>
               </div>
             </div>
           </div>
-        </div> */}
+        )}
       </div>
     </div>
   );
