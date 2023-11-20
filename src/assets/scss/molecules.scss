@@ -1,5 +1,5 @@
-@import 'colors';
-@import 'index';
+@import "colors";
+@import "index";
 
 .search-box-component {
   position: relative;
@@ -49,7 +49,7 @@
   &.small-btn {
     height: 4rem;
     padding: 1rem 4rem;
-    @media screen and (max-width: '500px') {
+    @media screen and (max-width: "500px") {
       padding: 1rem 3rem;
       font-size: 1.2rem;
     }
@@ -188,8 +188,7 @@
   border-radius: 2.3878rem;
   border: 1.194px solid #9d8dd8;
   background: #fff;
-  box-shadow: 0px 5.969581604003906px 16.714828491210938px 0px
-    rgba(8, 15, 52, 0.04);
+  box-shadow: 0px 5.969581604003906px 16.714828491210938px 0px rgba(8, 15, 52, 0.04);
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -227,7 +226,7 @@
     color: #6f6c90;
     font-size: 1.2rem;
     font-weight: 400;
-    @media screen and (max-width: '500px') {
+    @media screen and (max-width: "500px") {
       min-height: 7rem;
     }
     span {
@@ -399,8 +398,7 @@
     .rsvp-btn {
       padding: 12px 25px;
       border: 0.83px solid #7a6d9f;
-      box-shadow: 0.8257163166999817px 0.8257163166999817px 9.90859603881836px
-        0px #33246a1f;
+      box-shadow: 0.8257163166999817px 0.8257163166999817px 9.90859603881836px 0px #33246a1f;
       background-color: #fff;
       color: #33246a;
       font-weight: 700;
@@ -471,7 +469,7 @@
     }
   }
 }
-@media screen and (max-width: '800px') {
+@media screen and (max-width: "800px") {
   .post-card {
     padding: 20px 10px !important ;
     margin-top: 0 !important;
@@ -502,14 +500,13 @@
   border-radius: 2.3878rem;
   border: 1.194px solid #9d8dd8;
   background: #fff;
-  box-shadow: 0px 5.969581604003906px 16.714828491210938px 0px
-    rgba(8, 15, 52, 0.04);
+  box-shadow: 0px 5.969581604003906px 16.714828491210938px 0px rgba(8, 15, 52, 0.04);
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
 
-  @media screen and (max-width: '500px') {
+  @media screen and (max-width: "500px") {
     width: 16.8rem;
     height: 28.9rem;
     padding: 2.2rem 1.6rem;
@@ -562,14 +559,14 @@
     }
     .reject {
       fill: #fff;
-      strokewidth: 1px;
+      stroke-width: 1px;
       stroke: #7a6d9f;
       border: 1px solid #7a6d9f;
       color: #40496b;
     }
     .accept {
       fill: #fff;
-      strokewidth: 1px;
+      stroke-width: 1px;
       stroke: #33246a;
       border: 1px solid #33246a;
       background-color: #33246a;
@@ -583,11 +580,11 @@
   height: 30.6182rem;
   border-radius: 22.662px;
   overflow: hidden;
-  @media screen and (max-width: '600px') {
+  @media screen and (max-width: "600px") {
     width: 20rem;
     height: 28.9rem;
   }
-  @media screen and (max-width: '500px') {
+  @media screen and (max-width: "500px") {
     width: 16.8rem;
     height: 28.9rem;
   }
@@ -608,7 +605,7 @@
     flex-direction: column;
     justify-content: center;
     padding: 0 1.6rem;
-    @media screen and (max-width: '500px') {
+    @media screen and (max-width: "500px") {
       justify-content: flex-start;
       padding-top: 1.23rem;
     }
@@ -619,7 +616,7 @@
       line-height: 100%;
       margin-bottom: 0.8rem;
 
-      @media screen and (max-width: '500px') {
+      @media screen and (max-width: "500px") {
         font-size: 1.0148rem;
       }
     }
@@ -629,14 +626,14 @@
       font-weight: 700;
       line-height: 117%;
       margin-bottom: 1.3rem;
-      @media screen and (max-width: '500px') {
+      @media screen and (max-width: "500px") {
         font-size: 8.457px;
       }
     }
     .btn-con {
       display: flex;
       justify-content: flex-end;
-      @media screen and (max-width: '500px') {
+      @media screen and (max-width: "500px") {
         justify-content: flex-start;
       }
       button {
@@ -650,11 +647,10 @@
         border-radius: 110.386px;
         border: 1.104px solid #7a6d9f;
         background: #fff;
-        box-shadow: 1.1038621664047241px 1.1038621664047241px
-          13.246345520019531px 0px rgba(51, 36, 106, 0.12);
+        box-shadow: 1.1038621664047241px 1.1038621664047241px 13.246345520019531px 0px rgba(51, 36, 106, 0.12);
         // justify-self: start;
 
-        @media screen and (max-width: '500px') {
+        @media screen and (max-width: "500px") {
           width: 75.267px;
           height: 23.68px;
           font-size: 10.221px;
@@ -670,10 +666,10 @@
   align-items: center;
   flex-direction: column;
   justify-content: center;
-  @media screen and (max-width: '600px') {
+  @media screen and (max-width: "600px") {
     padding: 8.9rem 0 10.9rem;
   }
-  @media screen and (max-width: '500px') {
+  @media screen and (max-width: "500px") {
     // padding: 2rem 0 2.2rem;
   }
   img {
