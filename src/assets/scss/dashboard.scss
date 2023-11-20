@@ -8,40 +8,182 @@
     width: 100%;
     margin: auto;
     border-radius: 30px;
+    // border-radius: 30px 30px 0 0;
     position: relative;
+    input {
+      display: none;
+    }
 
     .banner-image {
       height: 200px;
       width: 100%;
       border-radius: 30px 30px 0 0;
-      background-color: #bdc3c7;
+      @media screen and (max-width: 600px) {
+        height: 100px;
+      }
+      @media screen and (max-width: 500px) {
+        height: 60px;
+      }
+      .loading-state {
+        width: 100%;
+        height: 100%;
+        border-radius: 30px 30px 0 0;
+        overflow: hidden;
+      }
+      .cover-img-wrapper {
+        width: 100%;
+        height: 100%;
+        position: relative;
+        // border-radius: 30px 30px 0 0;
+        // overflow: hidden;
+        .cover-img-loader-wrapper {
+          width: 100%;
+          height: 100%;
+          border-radius: 30px 30px 0 0;
+          overflow: hidden;
+        }
+        img {
+          width: 100%;
+          height: 100%;
+          object-fit: cover;
+          overflow: hidden;
+          border-radius: 30px 30px 0 0;
+        }
+        .dropdown-box-wrapper {
+          position: absolute;
+          top: 3rem;
+          right: 2rem;
+          display: flex;
+          flex-direction: column;
+          align-items: flex-end;
+          row-gap: 1rem;
+          z-index: 1;
+          @media screen and (max-width: 600px) {
+            top: 1rem;
+          }
+          .icon-wrapper {
+            min-width: 4.4rem;
+            min-height: 4.4rem;
+            width: 4.4rem;
+            height: 4.4rem;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            column-gap: 2rem;
+            background-color: #fff;
+            cursor: pointer;
+            @media screen and (max-width: 600px) {
+              min-width: 3.4rem;
+              min-height: 3.4rem;
+              width: 3.4rem;
+              height: 3.4rem;
+            }
+            @media screen and (max-width: 500px) {
+              min-width: 2.4rem;
+              min-height: 2.4rem;
+              width: 2.4rem;
+              height: 2.4rem;
+            }
+            .icon {
+              font-size: 2rem;
+              color: rgba(111, 108, 144, 1);
+              @media screen and (max-width: 600px) {
+                font-size: 1.6rem;
+              }
+              @media screen and (max-width: 500px) {
+                font-size: 1.4rem;
+              }
+            }
+          }
+        }
+      }
     }
     .profile-image-wrapper {
       padding: 0.3rem;
       background-color: #ffffff;
       width: 205px;
       height: 205px;
-      top: 100px;
-      left: 20px;
+      top: 8rem;
+      left: 3rem;
       position: absolute;
-      overflow: hidden;
-      border-radius: 30px;
+      // overflow: hidden;
+      border-radius: 30px 30px 0 30px;
       display: flex;
       align-items: center;
       justify-content: center;
+      // background-color: yellow;
+      @media screen and (max-width: 600px) {
+        top: 4.7rem;
+        width: 12rem;
+        height: 12rem;
+        border-radius: 50%;
+      }
+      @media screen and (max-width: 500px) {
+        top: 2.7rem;
+        width: 8rem;
+        height: 8rem;
+      }
       .profile-image {
-        overflow: hidden;
-        border-radius: 30px;
         width: 100%;
         height: 100%;
-        img {
-          width: 100%;
-          height: 100%;
-          object-fit: cover;
+        background-color: #f1f1f1;
+        // overflow: hidden;
+        border-radius: 30px 30px 30px 30px;
+        @media screen and (max-width: 600px) {
+          border-radius: 50%;
         }
-        .loading-img {
+        .user-profile-loader-wrapper {
+          overflow: hidden !important;
           width: 100%;
           height: 100%;
+          border-radius: 30px 30px 30px 30px;
+          @media screen and (max-width: 600px) {
+            border-radius: 50%;
+          }
+        }
+        .img-wrapper {
+          width: 100%;
+          height: 100%;
+          position: relative;
+
+          img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            overflow: hidden;
+            border-radius: 30px;
+            @media screen and (max-width: 600px) {
+              border-radius: 50%;
+            }
+          }
+          .icon-wrapper {
+            width: 4rem;
+            height: 4rem;
+            background-color: #f1f1f1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: absolute;
+            bottom: 0;
+            right: -1rem;
+            border-radius: 50%;
+            cursor: pointer;
+            @media screen and (max-width: 600px) {
+              width: 2.4rem;
+              height: 2.4rem;
+              right: 1rem;
+            }
+            @media screen and (max-width: 500px) {
+              right: -0.5rem;
+            }
+            .icon {
+              font-size: 2rem;
+              @media screen and (max-width: 600px) {
+                font-size: 1.4rem;
+              }
+            }
+          }
         }
       }
     }
@@ -51,22 +193,32 @@
       background-color: #fff;
       border-radius: 0 0 30px 30px;
       box-shadow: 0px 4px 10.760000228881836px 0px #080f340a;
-
+      @media screen and (max-width: 600px) {
+        padding: 80px 20px 20px 25px;
+      }
+      @media screen and (max-width: 500px) {
+        padding: 55px 20px 20px 25px;
+      }
       .profile-name {
         font-weight: 700;
         font-family: $thic700;
         color: #000;
         font-size: 3.5rem;
+        @media screen and (max-width: 600px) {
+          font-size: 2.8rem;
+        }
       }
       .email {
         font-weight: 500;
         font-size: 16px;
         color: $header-text-color;
+        // margin-bottom: 0.8rem;
       }
-      .job {
+      .detail {
         font-weight: 700;
         font-size: 16px;
         color: $header-text-color;
+        // margin-bottom: 0.2rem;
       }
 
       .tag-header {
@@ -84,6 +236,10 @@
         &.connect {
           color: $pri-color2;
           font-size: 16px;
+          @media screen and (max-width: 600px) {
+            margin: 2.4rem 0;
+            line-height: 100%;
+          }
         }
         &.tag-names {
           font-size: 14px;
@@ -103,7 +259,17 @@
         justify-content: center;
         align-items: center;
       }
+      .more {
+        position: relative;
 
+        .icon {
+          font-size: 3rem;
+          z-index: 0;
+          @media screen and (max-width: 600px) {
+            font-size: 2rem;
+          }
+        }
+      }
       .reach-btn {
         padding: 10px 21px 10px 21px;
         background-color: $pri-color1;
@@ -136,7 +302,14 @@
     }
     .add-text-btn-wrapper {
       display: flex;
-      justify-content: center;
+      flex-direction: column;
+      align-items: center;
+      margin-top: 1.4rem;
+    }
+    .con {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
     }
     .add-text-btn {
       font-weight: 700;
@@ -144,7 +317,26 @@
       font-size: 12.44px;
       color: #40496b;
       cursor: pointer;
+    }
+    .add-text-btn-2 {
+      cursor: default;
+    }
+    .social-links {
       z-index: 1;
+      position: relative;
+    }
+    .social-links-modal-wrapper {
+      position: absolute;
+      top: 1rem;
+      left: 0;
+      display: flex;
+      flex-direction: column;
+      align-items: flex-end;
+      row-gap: 1rem;
+      z-index: 1;
+      @media screen and (max-width: 500px) {
+        left: 50%;
+      }
     }
   }
 
@@ -152,7 +344,19 @@
     .group-image {
       width: 70px;
       height: 70px;
-      background-color: #d9d9d9;
+      background-color: rgb(217 217 217);
+      cursor: pointer;
+      img {
+        width: 100%;
+        height: 100%;
+        min-width: 100%;
+        min-height: 100%;
+        object-fit: cover;
+        // background-color: green;
+      }
+    }
+    .forum-name {
+      cursor: pointer;
     }
 
     .join-btn {
@@ -163,6 +367,9 @@
       font-family: $thic700;
       font-size: 12.44px;
       border: 0.69px solid #9e9e9e;
+    }
+    .join-btn-2 {
+      cursor: default;
     }
   }
 
@@ -207,52 +414,30 @@
       font-size: 17px;
     }
   }
+  .post-cards-wrapper {
+    display: flex;
+    justify-content: flex-start;
+    width: 100%;
+    .loading-state {
+      width: 100%;
+    }
+    .post-cards-con {
+      width: 100%;
+      margin-top: 2rem;
+      column-gap: 4rem;
+      display: flex;
+      justify-content: flex-start;
+      align-items: flex-start;
 
-  .post-wrapper {
-    .post-card {
-      max-width: 409px;
-      padding: 20px;
-      box-sizing: border-box;
-      background-color: #fff;
-      border: 0.41px solid #f0f0f6;
-      box-shadow: 0px 1.6401607990264893px 4.920482635498047px 0px #0d0a2c0f;
-      border-radius: 30px;
-
-      .post-image {
-        width: 56px;
-        height: 56px;
-        border-radius: 50%;
-        background-position: center;
-        background-size: cover;
+      @media screen and (max-width: 600px) {
+        flex-direction: column;
+        row-gap: 4rem;
+        align-items: flex-start;
       }
-
-      .author-name {
-        font-weight: 600;
-        font-family: $thic600;
-        color: #000;
-        font-size: 15px;
-      }
-
-      .post-time {
-        font-family: $thic500;
-        font-size: 12px;
-        font-weight: 500;
-        line-height: 14px;
-        color: #807c8b;
-      }
-
-      .post-text {
-        font-size: 13px;
-        font-weight: 400;
-        line-height: 24px;
-        color: #6f6c90;
-      }
-      .interaction-icon-wrapper {
-        border-top: 0.98px solid #9e9e9e24;
-        svg {
-          path {
-            stroke: #6f6c90;
-          }
+      .post-card-con {
+        width: 40.9rem;
+        @media screen and (max-width: 600px) {
+          width: 100%;
         }
       }
     }
@@ -267,6 +452,9 @@
     }
 
     .member-card-wrapper {
+      .loading-state{
+        width: 100%;
+      }
       .member-card {
         max-width: 280px;
         min-height: 181px;
@@ -302,6 +490,7 @@
         }
       }
     }
+    
 
     .see-more-btn {
       color: $alt-text-color;
@@ -314,30 +503,5 @@
     color: $alt-text-color;
     font-size: 14px;
     font-weight: 400;
-  }
-}
-
-@media screen and (max-width: 800px) {
-  .user-dashboard {
-    .profile-banner-wrapper {
-      .banner-image {
-        height: 60px !important;
-      }
-      .profile-image {
-        width: 80px !important;
-        height: 80px !important;
-        border-radius: 50% !important;
-        top: 30px !important;
-        left: 20px;
-      }
-      .profile-details-card {
-        padding: 50px 20px 20px 25px !important;
-      }
-    }
-
-    .member-card-wrapper {
-      display: flex;
-      flex-wrap: wrap;
-    }
   }
 }

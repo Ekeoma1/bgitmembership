@@ -1,5 +1,5 @@
 import apiRoutes from '../../routes/api_routes';
-import { get, post, } from '../../network/https';
+import { get, post } from '../../network/https';
 
 export default class PostsService {
   //  create post
@@ -11,10 +11,19 @@ export default class PostsService {
     return response;
   }
 
-  // toggle like post
-  static async toggleLikePost(data) {
+  // like post
+  static async likePost(data) {
     const response = await post({
-      url: apiRoutes.toggleLikePost,
+      url: apiRoutes.likePost,
+      data: { ...data },
+      queryParams: data.queryParams,
+    });
+    return response;
+  }
+  // unlike post
+  static async unlikePost(data) {
+    const response = await post({
+      url: apiRoutes.unlikePost,
       data: { ...data },
       queryParams: data.queryParams,
     });
@@ -40,9 +49,11 @@ export default class PostsService {
   }
 
   // get posts by user id
-  static async getAllPostsByUserId() {
+  static async getAllPostsByUserId(data) {
     const response = await get({
       url: apiRoutes.getAllPostsByUserId,
+      data: { ...data },
+      queryParams: data.queryParams,
     });
     return response;
   }
@@ -60,6 +71,53 @@ export default class PostsService {
     const response = await post({
       url: apiRoutes.createComment,
       data: { ...data },
+    });
+    return response;
+  }
+
+  //like comment
+  static async likeComment(data) {
+    const response = await post({
+      url: apiRoutes.likeComment,
+      data: { ...data },
+    });
+    return response;
+  }
+
+  //unlike comment
+  static async unlikeComment(data) {
+    const response = await post({
+      url: apiRoutes.unlikeComment,
+      data: { ...data },
+    });
+    return response;
+  }
+
+  //get all comments by post id
+  static async getAllCommentsByPostId(data) {
+    const response = await post({
+      url: apiRoutes.getAllCommentsByPostId,
+      data: { ...data },
+    });
+    return response;
+  }
+
+  //save posts
+  static async savePost(data) {
+    const response = await post({
+      url: apiRoutes.savePost,
+      data: { ...data },
+      queryParams: data.queryParams,
+    });
+    return response;
+  }
+
+  // unsave posts
+  static async unsavePost(data) {
+    const response = await post({
+      url: apiRoutes.unsavePost,
+      data: { ...data },
+      queryParams: data.queryParams,
     });
     return response;
   }

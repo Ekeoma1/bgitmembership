@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from 'react';
-import bgitlogo from '../../assets/images/bgit-logo.svg';
 import { LuCalendarDays } from 'react-icons/lu';
 import { MdOutlineLocationOn } from 'react-icons/md';
 import '../../assets/scss/event.scss';
@@ -19,7 +18,6 @@ const About = ({ setTab }) => {
   const dispatch = useDispatch();
 
   const { getEventById } = useSelector((state) => state.events);
-  const { getNewsById } = useSelector((state) => state.news);
   const { getUserProfileById } = useSelector((state) => state.users);
   const { applyForEvent } = useSelector((state) => state.events);
   const [profileImgOnLoadStatus, setProfileImgOnLoadStatus] = useState('base');
@@ -29,15 +27,6 @@ const About = ({ setTab }) => {
       dispatch(triggerApplyForEvent({ eventId: getEventById?.data?.eventId }));
     }
   };
-  // useEffect(() => {
-  //   if (getEventById.status === 'successful') {
-  //     setData(getEventById.data);
-  //     setDataType('event');
-  //   } else if (getNewsById.status === 'successful') {
-  //     setData(getNewsById.data);
-  //     setDataType('news');
-  //   }
-  // }, [getEventById, getNewsById]);
   useEffect(() => {
     if (applyForEvent.status === 'successful') {
       if (applyForEvent.data === 'Event not found.') {
@@ -61,14 +50,14 @@ const About = ({ setTab }) => {
           <div className='about-content-wrapper'>
             <div className='details'>
               <div className='event-details-card'>
-                <h3 className='title'>{getEventById?.data?.title}</h3>
+                <h3 className='title'>{getEventById?.data[0]?.title}</h3>
                 <div className='info'>
                   <div className='date-wrapper'>
                     <LuCalendarDays className='icon' />
                     <div className=''>
                       <h5 className=''>Date</h5>
                       <p className=''>
-                        {moment(getEventById?.data?.eventDate).format(
+                        {moment(getEventById?.data[0]?.eventDate).format(
                           'dddd, MMMM Do YYYY, h:mm:ss a'
                         )}
                       </p>
@@ -78,14 +67,14 @@ const About = ({ setTab }) => {
                     <MdOutlineLocationOn className='icon' />
                     <div className=''>
                       <h5 className=''>Location</h5>
-                      <p className=''>{getEventById?.data?.location} </p>
+                      <p className=''>{getEventById?.data[0]?.location} </p>
                     </div>
                   </div>
                 </div>
               </div>
               <div className='price-mobile'>
                 <button
-                  onClick={apply}
+                  onClick={applyForEvent.status !=='loading' && apply}
                   className={` ${
                     applyForEvent.status === 'loading' && 'loading'
                   } `}
@@ -98,13 +87,13 @@ const About = ({ setTab }) => {
               <div className='about'>
                 <h3 className='title'>About</h3>
                 <div className='info'>
-                  <p>{getEventById?.data?.description}</p>
+                  <p>{getEventById?.data[0]?.description}</p>
                 </div>
               </div>
               <div className='tags'>
                 <h3 className='title'>Tags</h3>
                 <div className='tags-wrapper'>
-                  {getEventById?.data?.tag?.split(',').map((item, index) => (
+                  {getEventById?.data[0]?.tag?.split(',').map((item, index) => (
                     <Tag key={index} text={item} />
                   ))}
                 </div>

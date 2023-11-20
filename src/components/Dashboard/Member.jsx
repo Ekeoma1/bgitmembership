@@ -3,6 +3,7 @@ import Image from '../../assets/images/author1.png';
 import { Link, useNavigate } from 'react-router-dom';
 import { triggerGetUsers } from '../../Features/users/users_slice';
 import { useDispatch, useSelector } from 'react-redux';
+import ForumCardsLoader from '../Atoms/skeleton-loaders/ForumCardsLoader';
 
 const memberData = [
   {
@@ -52,7 +53,6 @@ const Member = () => {
   };
 
   useEffect(() => {
-    console.log('use effect');
     const data = { queryParams: { pageNumber, pageSize } };
     dispatch(triggerGetUsers(data));
   }, []);
@@ -60,19 +60,20 @@ const Member = () => {
   return (
     <div className='members-you-may-know-wrapper'>
       <div className='header text-center'>Members you may know</div>
-
       <div className='member-card-wrapper'>
         <div className='row'>
           {getUsers.status === 'loading' ? (
-            <></>
+            <div className='loading-state'>
+              <ForumCardsLoader />
+            </div>
           ) : getUsers.status === 'successful' ? (
             <>
               {getUsers.data?.users?.length === 0 ? (
-                <></>
+                <p>No members...</p>
               ) : (
                 <>
                   {getUsers?.data?.users
-                    .slice(0, numberOfUsersToDisplay - 1)
+                    ?.slice(0, numberOfUsersToDisplay - 1)
                     .map((user, key) => {
                       return (
                         <div

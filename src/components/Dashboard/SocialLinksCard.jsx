@@ -2,18 +2,34 @@ import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import SocialLinksLoader from '../Atoms/skeleton-loaders/dashboard-page/SocialLinksLoader';
 import useWindowSize from '../../hooks/useWindowSize';
-import SocialLinkslModal from './social-links-modal/SocialLinksModal';
-import ModalBox from '../Molecules/modal/Modal';
 import { renderToast } from '../Molecules/CustomToastify';
 import { resetAddSocialLinks } from '../../Features/social-links/social_links_slice';
 import { triggerGetMyProfile } from '../../Features/users/users_slice';
+import OutsideClickHandler from 'react-outside-click-handler';
+import AddSocialLinksModalModal, { AddSocialLinksModalModal2 } from '../Modals/AddSocialLinksModal';
 
-const SocialLinksCard = ({ othersView }) => {
+const SocialLinksCard = ({ othersView, data }) => {
   const { isMobile } = useWindowSize();
   const dispatch = useDispatch();
   const { getMyProfile } = useSelector((state) => state.users);
   const { addSocialLinks } = useSelector((state) => state.socialLinks);
-  const [showSocialLinksModal, setShowSocialLinksModal] = useState(false);
+  const [showSocialLinksModal, setShowSocialLinksModal] = useState(true);
+
+  const [formData, setFormData] = useState({
+    url: '',
+    title: '',
+    userId: getMyProfile.data?.userId,
+  });
+  const handleChange = (e) => {
+    setFormData({
+      ...formData,
+      [e.target.name]: e.target.value,
+    });
+  };
+  const handleClearValues = () => {
+    setFormData({ ...formData, url: '' });
+  };
+
   useEffect(() => {
     if (addSocialLinks.status === 'successful') {
       if (addSocialLinks.data.status === 400) {
@@ -37,18 +53,18 @@ const SocialLinksCard = ({ othersView }) => {
       dispatch(resetAddSocialLinks());
     }
   }, [addSocialLinks.status]);
+
+
   return (
     <div className='dashboard-card'>
-      {getMyProfile.status === 'loading' ? (
-        <>
-          <SocialLinksLoader />
-        </>
-      ) : getMyProfile.status === 'successful' ? (
+      {data.status === 'loading' ? (
+        <SocialLinksLoader />
+      ) : data.status === 'successful' ? (
         <>
           <div className='dashboard-header'>Social Links</div>
-          {getMyProfile.data?.socials?.length > 0 ? (
+          {data.data?.socials?.length > 0 ? (
             <>
-              {getMyProfile.data?.socials?.map((link, key) => {
+              {data.data?.socials?.map((link, key) => {
                 return (
                   <div
                     key={key}
@@ -62,22 +78,48 @@ const SocialLinksCard = ({ othersView }) => {
             </>
           ) : (
             <>
-              <div className='dashboard-text'>
-                You have not added any social link yet
-              </div>
+              <div className='dashboard-text'>No social links</div>
             </>
           )}
-          {!othersView && (
+          {data.data?.userId === getMyProfile.data?.userId && (
             <div className='add-text-btn-wrapper'>
-              {getMyProfile?.data?.userId && (
-                <button
-                  onClick={() => {
-                    setShowSocialLinksModal(true);
-                  }}
-                  className='add-text-btn'
-                >
-                  + Add Social Links
-                </button>
+              {data?.data?.userId && (
+                <div className='con'>
+                  <button
+                    onClick={() => {
+                      addSocialLinks.status !== 'loading' &&
+                        setShowSocialLinksModal(true);
+                    }}
+                    className={`add-text-btn ${
+                      addSocialLinks.status === 'loading' && 'add-text-btn-2'
+                    } `}
+                  >
+                    {addSocialLinks.status === 'loading'
+                      ? 'Adding Social link..'
+                      : '+ Add Social Link'}
+                  </button>
+                  <div className='social-links'>
+                    <div className='social-links-modal-wrapper'>
+                      {showSocialLinksModal && (
+                        <OutsideClickHandler
+                          onOutsideClick={() => {
+                            setShowSocialLinksModal(false);
+                          }}
+                        >
+                          <AddSocialLinksModalModal
+                            onChange={handleChange}
+                            onCancel={() => {
+                              setShowSocialLinksModal(false);
+                            }}
+                            onClearValues={handleClearValues}
+                            formData={formData}
+                            setFormData={setFormData}
+                          />
+                        </OutsideClickHandler>
+                      )}
+                    </div>
+                  </div>
+                </div>
               )}
             </div>
           )}
@@ -85,19 +127,6 @@ const SocialLinksCard = ({ othersView }) => {
       ) : (
         <></>
       )}
-      <ModalBox
-        show={showSocialLinksModal}
-        width={isMobile ? '100%' : ''}
-        onClose={() => {
-          setShowSocialLinksModal(false);
-        }}
-      >
-        <SocialLinkslModal
-          close={() => {
-            setShowSocialLinksModal(false);
-          }}
-        />
-      </ModalBox>
     </div>
   );
 };

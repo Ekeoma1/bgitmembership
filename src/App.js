@@ -16,7 +16,6 @@ import SignUp from './pages/SignUp';
 import ForgotPassword from './pages/ForgotPassword';
 import { useSelector } from 'react-redux';
 import Dashboard from './pages/Dashboard';
-import ViewOtherUsers from './pages/ViewOtherUsers';
 import Settings from './pages/Settings';
 import JobBoard from './pages/JobBoard';
 import Resources from './pages/Resources';
@@ -33,6 +32,7 @@ import { darkTheme, lightTheme } from './utils/themes/themes';
 import { GlobalStyles } from './utils/themes/themes';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import SeeMore from './pages/SeeMore';
 
 function App() {
   const isLoggedIn = useSelector((state) => state.auth.isLoggedIn);
@@ -70,27 +70,27 @@ function App() {
               element: <Updates />,
             },
             {
-              path: 'dashboard',
+              path: 'users/:id',
               element: <Dashboard />,
             },
             {
-              path: 'other-users/:id',
-              element: <ViewOtherUsers />,
+              path: 'users/:id/:more',
+              element: <SeeMore />,
             },
             {
               path: 'settings',
               element: <Settings />,
             },
             {
-              path: 'community-forums',
+              path: 'forums',
               element: <CommunityForums />,
             },
             {
-              path: 'community-forums/all',
+              path: 'forums/all',
               element: <CommunityForumsAllForums />,
             },
             {
-              path: 'community-forums/forum/:forumId',
+              path: '/forums/:forumId',
               element: <Forum />,
             },
             {

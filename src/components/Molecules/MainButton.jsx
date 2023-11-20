@@ -20,7 +20,7 @@ const MainButton = ({
         outlined && 'outlined'
       } ${loading && 'loading'} ${disabled && 'disabled'}`}
       style={{ width }}
-      onClick={onClick}
+      onClick={disabled ? null : onClick}
       type='submit'
     >
       {loading ? (

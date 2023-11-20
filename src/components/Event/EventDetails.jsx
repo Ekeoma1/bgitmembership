@@ -16,7 +16,7 @@ const EventDetails = ({ tab, setTab }) => {
   const { applyForEvent } = useSelector((state) => state.events);
   const dispatch = useDispatch();
   useEffect(() => {
-    const data = { queryParams: { userId: getEventById?.data?.createdBy } };
+    const data = { queryParams: { userId: getEventById?.data[0]?.createdBy } };
     dispatch(triggerGetUserProfileById(data));
   }, [getEventById]);
   return (

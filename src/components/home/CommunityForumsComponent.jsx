@@ -69,9 +69,9 @@ const CommunityForumsComponent = () => {
         ) : getAllForums.status === 'successful' ? (
           <>
             {getAllForums.data?.length === 0 ? (
-              <>
-                <div className='empty-state'>Empty forums</div>
-              </>
+              <div className='empty-state'>
+                <p>No forums yet...</p>
+              </div>
             ) : (
               <>
                 {getAllForums?.data?.slice(0, 3).map((forum, key) => {
@@ -87,7 +87,7 @@ const CommunityForumsComponent = () => {
           getAllForums?.data?.length > 3 && (
             <div className='text-center my-4'>
               <Link
-                to='/community-forums'
+                to='/forums'
                 className='sec-btn mx-auto c-gap-5 smallert-text added-width d-flex align-items-center justify-content-center'
               >
                 <span>View all</span> <Icon icon='arrowRight' />

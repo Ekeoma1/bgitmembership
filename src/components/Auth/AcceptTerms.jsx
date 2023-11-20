@@ -12,7 +12,7 @@ import MainButton from '../Molecules/MainButton';
 
 const AcceptTerms = () => {
   const [agreement, setAgreement] = useState(false);
-  const { auth } = useSelector((state) => state);
+  const { signup, signUpFormData } = useSelector((state) => state.auth);
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const handleChange = (event) => {
@@ -20,18 +20,18 @@ const AcceptTerms = () => {
   };
   const finalStage = () => {
     if (agreement) {
-      const signupFinal = { ...auth.signUpFormData, Terms: agreement };
+      const signupFinal = { ...signUpFormData, Terms: agreement };
       dispatch(triggerSignup(signupFinal));
     } else {
       alert('please accept terms and condition');
     }
   };
   useEffect(() => {
-    if (auth.signup.status === 'successful') {
-      if (auth.signup.data.status === 'Success') {
+    if (signup.status === 'successful') {
+      if (signup.data?.status === 'Success') {
         renderToast({
           status: 'success',
-          message: 'Registration Successful, Please Login',
+          message: signup.data?.message,
         });
         setTimeout(() => {
           navigate('/login');
@@ -41,20 +41,21 @@ const AcceptTerms = () => {
       } else {
         renderToast({
           status: 'error',
-          message: auth.signup.data.data,
+          message: signup.data,
         });
+        console.log('error on accept terms');
         setTimeout(() => {
           navigate('/register');
         }, [3000]);
         dispatch(resetSignUp());
       }
-    } else if (auth.signup.status === 'error') {
+    } else if (signup.status === 'error') {
       renderToast({
         status: 'error',
-        message: auth.signup.status,
+        message: signup.status,
       });
     }
-  }, [auth.signup.data.data, auth.signup.data.status, auth.signup.status]);
+  }, [signup.data?.data, signup.data?.status, signup.status]);
 
   return (
     <div className='details-wrapper'>
@@ -89,7 +90,7 @@ const AcceptTerms = () => {
         <MainButton
           text={'Finish'}
           onClick={finalStage}
-          loading={auth.signup.status === 'loading'}
+          loading={signup.status === 'loading'}
         />
       </div>
     </div>

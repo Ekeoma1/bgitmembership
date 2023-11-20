@@ -8,7 +8,7 @@ const Banner = () => {
       <div className="container">
         <div className="page-title-wrapper">
           <div className="title-wrapper">
-            <h3 className="text-color">My Forums</h3>
+            <h3 className="text-color22">My Forums</h3>
           </div>
         </div>
       </div>

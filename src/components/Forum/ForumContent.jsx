@@ -11,7 +11,10 @@ import DoubleLineLoader from '../Atoms/skeleton-loaders/DoubleLineLoader';
 import DetailsLoader from '../Atoms/skeleton-loaders/dashboard-page/DetailsLoader';
 import PostsLoader from '../Atoms/skeleton-loaders/home-page/PostsLoader';
 import ForumDetailsLoader from '../Atoms/skeleton-loaders/ForumDetailsLoader';
-import { triggerGetAllForums } from '../../Features/forums/forums_slice';
+import {
+  triggerGetAllForums,
+  triggerGetForumById,
+} from '../../Features/forums/forums_slice';
 import ForumCardsLoader from '../Atoms/skeleton-loaders/ForumCardsLoader';
 import { Link, useParams } from 'react-router-dom';
 import Icon from '../Icon';
@@ -20,7 +23,12 @@ import { PiUsersThreeFill } from 'react-icons/pi';
 
 const ForumContent = ({ forum }) => {
   const params = useParams();
-  const { getAllForums } = useSelector((state) => state.forums);
+  const dispatch = useDispatch();
+  const { joinForum, leaveForum, getForumById, getAllForums } = useSelector(
+    (state) => state.forums
+  );
+  const [pageNumber] = useState(1);
+  const [pageSize] = useState(10);
   const [relatedGroups, setRelatedGroups] = useState([]);
   useEffect(() => {
     if (getAllForums.status === 'successful') {
@@ -30,36 +38,41 @@ const ForumContent = ({ forum }) => {
     }
   }, [getAllForums]);
 
+  useEffect(() => {
+    const data = { queryParams: { pageNumber, pageSize } };
+    dispatch(triggerGetAllForums(data));
+  }, [params]);
+
   return (
-    <div className='forum-content-wrapper bg-color'>
+    <div className='forum-content-wrapper bg-color22'>
       <div className='container'>
         <div className='forum-content'>
           <div className='about-admin-wrapper'>
-            {getAllForums.status === 'base' ||
-            getAllForums.status === 'loading' ? (
+            {getForumById.status === 'base' ||
+            getForumById.status === 'loading' ? (
               <>
                 <div className='loader-con'>
                   <ForumDetailsLoader />
                 </div>
               </>
-            ) : getAllForums.status === 'successful' ? (
+            ) : getForumById.status === 'successful' ? (
               <>
                 <div className='about-section'>
                   <div className='about'>
                     <h3>About</h3>
-                    <p>{forum?.details}</p>
+                    <p>{getForumById.data[0]?.details}</p>
                   </div>
                   <div className='info'>
                     <h3>Info</h3>
                     <ol>
-                      {forum?.info?.map((info, index) => (
+                      {getForumById?.data[0]?.info?.map((info, index) => (
                         <li key={index}>{info}</li>
                       ))}
                     </ol>
                   </div>
                   <div className='section-bottom'>
                     <div className='content'>
-                      {forum?.visibility !== 'Private' ? (
+                      {getForumById?.data[0]?.visibility !== 'Private' ? (
                         <div className='private'>
                           <CgLock className='icon' />
                           <div className=''>
@@ -76,7 +89,7 @@ const ForumContent = ({ forum }) => {
                           </div>
                         </div>
                       )}
-                      {forum?.dateCreated && (
+                      {getForumById?.data[0]?.dateCreated && (
                         <div className='history'>
                           <TbClockHour9 className='icon' />
                           <div className=''>
@@ -96,10 +109,13 @@ const ForumContent = ({ forum }) => {
                 <div className='admin-section'>
                   <h3>Admin</h3>
                   <div className='content'>
-                    <img src={forum?.forumAdmin?.imageUrl} alt='admin' />
+                    <img
+                      src={getForumById?.data[0]?.forumAdmin?.imageUrl}
+                      alt='admin'
+                    />
                     <div className=''>
-                      <h5>{`${forum?.forumAdmin?.firstName} ${forum?.forumAdmin?.secondName}`}</h5>
-                      <p>{forum?.forumAdmin?.profession}</p>
+                      <h5>{`${getForumById?.data[0]?.forumAdmin?.firstName} ${getForumById?.data[0]?.forumAdmin?.secondName}`}</h5>
+                      <p>{getForumById?.data[0]?.forumAdmin?.profession}</p>
                     </div>
                   </div>
                 </div>
@@ -109,7 +125,7 @@ const ForumContent = ({ forum }) => {
             )}
           </div>
           <div className='related-groups-wrapper'>
-            <h3 className='text-color'>Related groups</h3>
+            <h3 className='text-color22'>Related groups</h3>
             <div className='forum-cards'>
               {getAllForums.status === 'loading' ? (
                 <div className='loader-con'>
@@ -135,7 +151,7 @@ const ForumContent = ({ forum }) => {
             </div>
             <div className='text-center my-4'>
               <Link
-                to='/community-forums'
+                to='/forums'
                 className='sec-btn mx-auto c-gap-5 smallert-text added-width d-flex align-items-center justify-content-center'
               >
                 <span>See More</span> <Icon icon='arrowRight' />

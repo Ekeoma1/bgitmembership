@@ -37,7 +37,7 @@ const ForumCard = ({ forum }) => {
         dispatch(triggerLeaveForum(values));
         dispatch(setActiveForumIdForOngoingRequest(forum.forumId));
       } else {
-        navigate(`/community-forums/forum/${forum.forumId}`);
+        navigate(`/forums/${forum.forumId}`);
       }
     }
   };
@@ -54,14 +54,14 @@ const ForumCard = ({ forum }) => {
   }, [joinForum.status, leaveForum.status]);
 
   return (
-    <div className='forum-card mb-4 bg-color-card' onClick={handleClick}>
+    <div className='forum-card mb-4 bg-color-card22' onClick={handleClick}>
       <img src={forumImg1} alt='forum-img' className='' />
-      <h3 className='text-color-secondary-bold'>
+      <h3 className='text-color-secondary-bold22'>
         {forum.forumName?.length > 15
           ? `${forum.forumName?.substring(0, 15)}...`
           : `${forum.forumName}`}
       </h3>
-      <p className='text-color-secondary-normal'>
+      <p className='text-color-secondary-normal22'>
         {forum.details?.length > 105 && !isMobile
           ? `${forum.details?.substring(0, 105)}...`
           : forum.details?.length > 80 && isMobile
@@ -70,7 +70,7 @@ const ForumCard = ({ forum }) => {
         {forum.details?.length > 105 && (
           <span
             onClick={() => {
-              navigate(`/community-forums/forum/${forum.forumId}`);
+              navigate(`/forums/${forum.forumId}`);
             }}
             className='text-color-secondary-normal'
           >
@@ -80,7 +80,7 @@ const ForumCard = ({ forum }) => {
       </p>
       {forum.isCurrentUserMember ? (
         <button
-          className={`bg-color text-color forum-card-btn joined ${
+          className={`bg-color22 text-color22 forum-card-btn joined ${
             loading && 'loading'
           }`}
           onClick={(e) => handleClick(e)}
@@ -98,7 +98,7 @@ const ForumCard = ({ forum }) => {
       ) : (
         <>
           <button
-            className={` smaller-text  bg-color text-color forum-card-btn join community-forum-btn ${
+            className={` smaller-text  bg-color22 text-color22 forum-card-btn join community-forum-btn ${
               loading && 'loading'
             }`}
             onClick={(e) => handleClick(e)}
@@ -114,7 +114,7 @@ const ForumCard = ({ forum }) => {
               </>
             ) : (
               <>
-                <LuPlus className='icon forum-card-btn' />
+                <LuPlus className='icon forum-card-btn22' />
                 Join
               </>
             )}
@@ -159,7 +159,7 @@ export const ForumCard2 = ({ forum }) => {
       className='forum-card-2'
       onClick={(e) => {
         if (!e.target.classList.contains('forum-card-btn')) {
-          navigate(`/community-forums/forum/${forum.forumId}`);
+          navigate(`/forums/${forum.forumId}`);
         }
       }}
     >

@@ -6,6 +6,7 @@ import {
   triggerCreatePost,
 } from '../../Features/posts/posts_slice';
 import { renderToast } from '../Molecules/CustomToastify';
+import MainButton from '../Molecules/MainButton';
 
 const CreatePost = () => {
   const dispatch = useDispatch();
@@ -40,14 +41,16 @@ const CreatePost = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    let values = { content: postContent };
+    let values = { content: postContent, postPhoto: '', postVideo: '' };
     if (selectedMediaDispatch) {
+      // console.log('selected media dispatch');
       if (mediaType === 'image') {
         values = { ...values, postPhoto: selectedMediaDispatch };
       } else if (mediaType === 'video') {
         values = { ...values, postVideo: selectedMediaDispatch };
       }
     }
+    // console.log('values', values);
     dispatch(triggerCreatePost(values));
   };
   useEffect(() => {
@@ -58,6 +61,7 @@ const CreatePost = () => {
       });
       setPostContent('');
       setSelectedMedia(null);
+      setSelectedMediaDispatch(null);
       // setPostReach('anyone');
       dispatch(resetCreatePost());
     }
@@ -78,7 +82,7 @@ const CreatePost = () => {
         </select>
       </div>
 
-      <form onSubmit={handleSubmit}>
+      <div className='form'>
         <textarea
           value={postContent}
           onChange={(e) => setPostContent(e.target.value)}
@@ -133,11 +137,16 @@ const CreatePost = () => {
               />
             </label>
           </div>
-          <button type='submit' className='primary-btn small-btn'>
-            Post
-          </button>
+          <MainButton
+            onClick={handleSubmit}
+            text={'Post'}
+            size={'small'}
+            width={'17.5rem'}
+            disabled={!postContent && !selectedMediaDispatch}
+            loading={createPost.status === 'loading'}
+          />
         </div>
-      </form>
+      </div>
     </div>
   );
 };

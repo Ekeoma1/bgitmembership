@@ -7,9 +7,7 @@ import PostsLoader from '../Atoms/skeleton-loaders/home-page/PostsLoader';
 
 const Post = () => {
   const dispatch = useDispatch();
-  const { getAllPosts, createPost, getAllPostsRender } = useSelector(
-    (state) => state.posts
-  );
+  const { getAllPosts, createPost } = useSelector((state) => state.posts);
   const [pageNumber] = useState(1);
   const [pageSize] = useState(10);
   useEffect(() => {
@@ -23,12 +21,11 @@ const Post = () => {
     const data = { queryParams: { pageNumber, pageSize } };
     dispatch(triggerGetAllPosts(data));
   }, [dispatch, pageNumber, pageSize]);
+  const [getAllPostsLocal, setGetAllPostsLocal] = useState([]);
 
   useEffect(() => {
     if (getAllPosts?.status === 'successful') {
-      const idsOfUsersWhoHaveLikedThePostTemp =
-        getAllPosts?.data?.posts?.likedUsers?.map((item) => item.userId);
-      // console.log(idsOfUsersWhoHaveLikedThePostTemp);
+      setGetAllPostsLocal([...getAllPosts.data?.posts]);
     }
   }, [getAllPosts?.data?.posts?.likedUsers, getAllPosts?.status]);
 
@@ -39,26 +36,26 @@ const Post = () => {
       </div>
       <div className='post-card-wrapper'>
         {getAllPosts.status === 'base' || getAllPosts.status === 'loading' ? (
-          <>
-            <PostsLoader />
-          </>
+          <PostsLoader />
         ) : getAllPosts.status === 'successful' ? (
           <>
-            {getAllPostsRender.data ? (
+            {getAllPosts.data ? (
               <>
-                {getAllPostsRender.data?.length === 0 ? (
+                {getAllPosts.data?.posts.length === 0 ? (
                   <>
-                    <div className='no-data'>No posts to show</div>
+                    <div className='empty-state'>
+                      <p>No posts to show...</p>
+                    </div>
                   </>
                 ) : (
                   <>
-                    {getAllPostsRender.data?.posts?.map((post, key) => {
+                    {getAllPostsLocal?.map((post, key) => {
                       return (
                         <PostCard
                           key={key}
                           post={post}
-                          pageNumber={pageNumber}
-                          pageSize={pageSize}
+                          getAllPostsLocal={getAllPostsLocal}
+                          setGetAllPostsLocal={setGetAllPostsLocal}
                         />
                       );
                     })}
@@ -68,7 +65,7 @@ const Post = () => {
             ) : (
               <>
                 <div className='internet-error-state'>
-                  Check your internet and try again...
+                  <p> Check your internet and try again...</p>
                 </div>
               </>
             )}

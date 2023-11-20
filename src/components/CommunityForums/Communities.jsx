@@ -97,8 +97,8 @@ const Communities = () => {
                 </div>
               </div>
               <div className='section-title'>
-                <h3 className='text-color'>Communities </h3>
-                <p className='text-color2'> (3)</p>
+                <h3 className='text-color22'>Communities </h3>
+                <p className='text-color222'> (3)</p>
               </div>
               <div className='cards-wrapper'>
                 <Carousel responsive={responsive}>

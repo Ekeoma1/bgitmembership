@@ -10,7 +10,7 @@ const CommunityForumns = () => {
   }, []);
 
   return (
-    <div className="community-forums-wrapper bg-color2">
+    <div className="community-forums-wrapper bg-color22">
       <Banner />
       <Communities />
       <SuggestedForums />

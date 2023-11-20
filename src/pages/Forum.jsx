@@ -5,35 +5,33 @@ import ForumContent from '../components/Forum/ForumContent';
 import ForumContentMain from '../components/Forum/ForumContentMain';
 import { useDispatch, useSelector } from 'react-redux';
 import { triggerGetMyProfile } from '../Features/users/users_slice';
-import { resetActiveForumIdForOngoingRequest, resetJoinForum, resetLeaveForum, triggerGetAllForums } from '../Features/forums/forums_slice';
+import {
+  resetActiveForumIdForOngoingRequest,
+  resetJoinForum,
+  resetLeaveForum,
+  triggerGetAllForums,
+  triggerGetForumById,
+} from '../Features/forums/forums_slice';
 import { useParams } from 'react-router-dom';
 import { renderToast } from '../components/Molecules/CustomToastify';
 
 const Forum = () => {
   const params = useParams();
   const dispatch = useDispatch();
-  const { getAllForums, joinForum, leaveForum } = useSelector(
+  const { joinForum, leaveForum, getForumById } = useSelector(
     (state) => state.forums
   );
   const [pageNumber] = useState(1);
   const [pageSize] = useState(10);
   const [joinForumRequestSuccessful, setJoinForumRequestSuccessful] =
     useState(false);
-  const [forum, setForum] = useState({});
   useEffect(() => {
     window.scrollTo(0, 0);
   }, []);
   useEffect(() => {
-    const data = { queryParams: { pageNumber, pageSize } };
-    dispatch(triggerGetAllForums(data));
+    const data = { queryParams: { forumId: params?.forumId } };
+    dispatch(triggerGetForumById(data));
   }, [params]);
-  useEffect(() => {
-    if (getAllForums.status === 'successful') {
-      setForum(
-        getAllForums.data?.find((item) => item.forumId === params.forumId)
-      );
-    }
-  }, [getAllForums.status]);
   useEffect(() => {
     if (joinForum.status === 'successful') {
       if (joinForum.data === 'You are the admin of the forum.') {
@@ -69,12 +67,11 @@ const Forum = () => {
   return (
     <div className='forum-wrapper'>
       <Banner
-        forum={forum}
         setJoinForumRequestSuccessful={setJoinForumRequestSuccessful}
         joinForumRequestSuccessful={joinForumRequestSuccessful}
       />
-      {!forum.isCurrentUserMember && <ForumContent forum={forum} />}
-      {forum.isCurrentUserMember && <ForumContentMain forum={forum} />}
+      {!getForumById.data[0]?.isCurrentUserMember && <ForumContent />}
+      {getForumById.data[0]?.isCurrentUserMember && <ForumContentMain />}
     </div>
   );
 };

@@ -2,6 +2,7 @@ import React from "react";
 import backgroundImage1 from "../../assets/images/people1.svg";
 
 const Banner = () => {
+  
   return (
     <div
       style={{

@@ -3,15 +3,17 @@ const URL = process.env.REACT_APP_URL || '';
 // console.log('axios');
 
 async function ajax({ method = 'GET', url, data, queryParams }) {
-  console.log('data ', data);
-  // console.log('query ', queryParams);
+  // console.log('query##### ', queryParams);
+  // console.log('data ', data);
   let result, contentType;
   if (
     data?.photo ||
     data?.postImageUrl ||
     data?.postVideoUrl ||
     data?.content ||
-    data?.resume
+    data?.resume ||
+    data?.profilePicture ||
+    data?.backgroundImage
   ) {
     contentType = 'multipart/form-data';
   } else {
@@ -31,11 +33,12 @@ async function ajax({ method = 'GET', url, data, queryParams }) {
       data,
     })
       .then((response) => {
+        console.log('response http', response);
         const { data } = response;
         result = data;
       })
       .catch((err) => {
-        console.log('error here');
+        console.log('error here', err);
         result = err.response?.data;
       });
     return result;

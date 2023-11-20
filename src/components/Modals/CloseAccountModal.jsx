@@ -7,7 +7,7 @@ import {
   resetCloseAccount,
   triggerCloseAccount,
 } from '../../Features/users/users_slice';
-import { logout, resetSignIn } from '../../Features/auth/auth_slice';
+import { logout, resetSignIn, resetSignUp } from '../../Features/auth/auth_slice';
 import { renderToast } from '../Molecules/CustomToastify';
 
 const CloseAccountModal = ({ show, hide }) => {
@@ -27,6 +27,7 @@ const CloseAccountModal = ({ show, hide }) => {
         setTimeout(() => {
           dispatch(logout());
           dispatch(resetSignIn());
+          dispatch(resetSignUp());
         }, 3000);
       }
       hide();
