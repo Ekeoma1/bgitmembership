@@ -296,11 +296,11 @@ const PostCard = ({ post, getAllPostsLocal, setGetAllPostsLocal }) => {
           <div className='d-flex align-items-center c-gap-10'>
             <button
               onClick={handleLikeUnlikePost}
-              className={`heart-icon ${post.isLikedByCurrentUser && 'active'}`}
+              className={`heart-icon ${post?.isLikedByCurrentUser && 'active'}`}
             >
               <Icon icon='heart' />
             </button>
-            <span>{post.likeCount}</span>
+            <span>{post?.likeCount}</span>
           </div>
 
           <div className='d-flex align-items-center c-gap-10'>
@@ -318,7 +318,7 @@ const PostCard = ({ post, getAllPostsLocal, setGetAllPostsLocal }) => {
                 <FaRegBookmark />
               )}
             </button>
-            <span>{post.saveCount}</span>
+            <span>{post?.saveCount}</span>
           </div>
 
           <div className='d-flex align-items-center c-gap-10 share-wrapper'>

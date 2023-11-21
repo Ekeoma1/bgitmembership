@@ -9,7 +9,7 @@ const EventCard = ({ event, news, item }) => {
   const navigate = useNavigate();
   return (
     <div
-      className='event-card shadow'
+      className='event-card shadow-lg'
       onClick={() =>
         navigate(
           news
