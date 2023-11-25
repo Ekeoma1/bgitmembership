@@ -4,7 +4,7 @@ const URL =
   process.env.REACT_APP_NODE_ENV === 'development'
     ? process.env.REACT_APP_URL
     : process.env.REACT_APP_URL_PROD;
-console.log('stage', process.env.REACT_APP_NODE_ENV);
+// console.log('stage', process.env.REACT_APP_NODE_ENV);
 
 async function ajax({ method = 'GET', url, data, queryParams }) {
   // console.log('query##### ', queryParams);
