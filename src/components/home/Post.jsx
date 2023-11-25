@@ -26,7 +26,6 @@ const Post = () => {
 
   useEffect(() => {
     if (getAllPosts?.status === 'successful' && getAllPosts.data.posts) {
-      console.log('temp', getAllPosts.data?.posts);
       const temp = getAllPosts.data?.posts;
       setGetAllPostsLocal(temp);
       setLoading(false);

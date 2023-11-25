@@ -55,7 +55,6 @@ const CommunityCard = ({ community }) => {
           <MdOutlineMoreHoriz className='icon secondary-text-color-normal' onClick={() => setMore(true)} />
           <HiOutlineChevronRight
             className='icon-mobile'
-            onClick={() => console.log('mobile')}
           />
           {more && <div className='leave-group'>Leave group</div>}
         </div>
