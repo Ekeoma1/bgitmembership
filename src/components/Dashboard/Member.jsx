@@ -45,9 +45,9 @@ const Member = () => {
   const handleClick = (e, user) => {
     console.log(e.target.classList);
     if (e.target.classList.contains('connect-btn')) {
-      console.log('connect r');
+      // console.log('connect r');
     } else {
-      console.log('navigate');
+      // console.log('navigate');
       navigate(`/other-users/${user?.userId}`);
     }
   };

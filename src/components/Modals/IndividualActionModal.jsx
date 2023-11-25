@@ -3,11 +3,11 @@ import '../../assets/scss/modal.scss';
 // 1 for block, 2 for unblock, 3 for mute
 const IndividualActionModal = ({ show, tab, close }) => {
   const handleBlock = () => {
-    console.log('block');
+    // console.log('block');
     close()
   };
   const handleMute = () => {
-    console.log('mute');
+    // console.log('mute');
     close()
   };
   return (

@@ -41,11 +41,9 @@ const Checkout = ({ setTab }) => {
     if (insideBoxContainer.current) {
       const height = insideBoxContainer.current.getBoundingClientRect().height;
       setInsideBoxContainerHeight(height);
-      console.log(height);
     }
   }, [formData.payment_method]);
 
-  console.log(formData);
   return (
     <div className='checkout-wrapper'>
       <div className='checkout-content-wrapper'>

@@ -18,7 +18,6 @@ const PasswordResetForm = () => {
     if (values.email !== '') {
       setEmail(values.email);
       setStep(2);
-      console.log('values', values);
 
       // console.log('email', email);
       dispatch();
@@ -26,12 +25,12 @@ const PasswordResetForm = () => {
 
     if (values.code !== '') {
       setStep(3);
-      console.log(values);
+      // console.log(values);
     }
 
     if (values.newPassword !== '' && values.confirmNewPasssword !== '') {
       setStep(4);
-      console.log(values);
+      // console.log(values);
     }
   };
 
@@ -149,7 +148,7 @@ const Code = ({ email }) => {
   const handleButtonClick = () => {
     // Disable the button on click and start the timer
     if (isActive) {
-      console.log('clicked');
+      // console.log('clicked');
       setIsActive(false);
       startTimer();
     }

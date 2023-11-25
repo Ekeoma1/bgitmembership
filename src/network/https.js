@@ -1,6 +1,10 @@
 import axios from 'axios';
-const URL = process.env.REACT_APP_URL || '';
-// console.log('axios');
+
+const URL =
+  process.env.REACT_APP_NODE_ENV === 'development'
+    ? process.env.REACT_APP_URL
+    : process.env.REACT_APP_URL_PROD;
+console.log('stage', process.env.REACT_APP_NODE_ENV);
 
 async function ajax({ method = 'GET', url, data, queryParams }) {
   // console.log('query##### ', queryParams);
@@ -33,12 +37,12 @@ async function ajax({ method = 'GET', url, data, queryParams }) {
       data,
     })
       .then((response) => {
-        console.log('response http', response);
+        // console.log('response http', response);
         const { data } = response;
         result = data;
       })
       .catch((err) => {
-        console.log('error here', err);
+        // console.log('error here', err);
         result = err.response?.data;
       });
     return result;
@@ -86,7 +90,6 @@ export const get = async (payload) => await ajax({ ...payload, method: 'GET' });
 
 // Send POST Requests
 export const post = async (payload) => {
-  console.log('payload', payload);
   return await ajax({ ...payload, method: 'POST' });
 };
 

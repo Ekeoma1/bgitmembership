@@ -24,7 +24,7 @@ const Group = () => {
   const [pageSize] = useState(10);
   const handleJoinForum = (forum) => {
     if (forum?.hasPendingJoinRequest) {
-      console.log('cancel');
+      // console.log('cancel');
     } else if (!forum?.isCurrentUserMember) {
       const values = { forumId: forum.forumId };
       dispatch(triggerJoinForum(values));

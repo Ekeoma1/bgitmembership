@@ -42,7 +42,6 @@ const Home = () => {
     if (searchTerm) {
       setShowSearchModal(true);
       const users = [...getUsers.data?.users];
-      console.log('data', users);
       const searchedUsers = users
         ?.filter(
           (user) =>

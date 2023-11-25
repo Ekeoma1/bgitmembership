@@ -43,7 +43,6 @@ const AcceptTerms = () => {
           status: 'error',
           message: signup.data,
         });
-        console.log('error on accept terms');
         setTimeout(() => {
           navigate('/register');
         }, [3000]);

@@ -14,7 +14,6 @@ const AddSocialLinksModalModal = ({
 }) => {
   const dispatch = useDispatch();
   const handleSubmit = () => {
-    console.log({ formData });
     dispatch(triggerAddSocialLink(formData));
     onCancel();
     setFormData({ url: '', title: '' });

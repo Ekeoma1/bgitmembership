@@ -13,12 +13,12 @@ export default class AuthService {
 
   // sign in
   static async signin(data) {
-    console.log('trying to sign in');
+    // console.log('trying to sign in');
     const response = await post({
       url: apiRoutes.signin,
       data: { ...data },
     });
-    console.log('resopnse here', response);
+    // console.log('resopnse here', response);
     this._saveToken(response);
     return response;
   }

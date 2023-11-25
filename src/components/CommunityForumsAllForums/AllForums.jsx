@@ -58,11 +58,11 @@ const AllForums = ({ setSearchMain }) => {
     setSearchValue(e.target.value);
   };
   const handleSearch = () => {
-    console.log("search", searchValue);
+    // console.log("search", searchValue);
   };
   const handleFilterBoxSearch = () => {
     setShowFilterBoxSection(false);
-    console.log("filterData", filterData);
+    // console.log("filterData", filterData);
   };
   // console.log('empty', showSearchEmptyState);
   return (

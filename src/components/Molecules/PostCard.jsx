@@ -102,10 +102,8 @@ const PostCard = ({ post, getAllPostsLocal, setGetAllPostsLocal }) => {
       timeoutIdRef.current = setTimeout(() => {
         const data = { queryParams: { postId: post.postId } };
         if (!saveCurrentPost) {
-          console.log('save post');
           dispatch(triggerSavePost(data));
         } else {
-          console.log('unsave post');
           dispatch(triggerUnsavePost(data));
         }
       }, 3000);
@@ -171,7 +169,6 @@ const PostCard = ({ post, getAllPostsLocal, setGetAllPostsLocal }) => {
       if (likeCurrentPost) {
         data?.forEach((item) => {
           if (item.postId === post.postId) {
-            console.log('item.postId', item.postId);
             item.isLikedByCurrentUser = true;
             item.likeCount = item.likeCount + 1;
           }
@@ -201,7 +198,6 @@ const PostCard = ({ post, getAllPostsLocal, setGetAllPostsLocal }) => {
         postId: post.postId,
         content: comment,
       };
-      console.log('comment', data);
       dispatch(triggerCreateComment(data));
       setComment('');
     } else if (name === 'reply') {
@@ -209,7 +205,7 @@ const PostCard = ({ post, getAllPostsLocal, setGetAllPostsLocal }) => {
     }
   };
   // console.log('post###', post);
-  console.log('active post###', activePost);
+  // console.log('active post###', activePost);
   const handleLikeComment = (id) => {};
   return (
     <div className='post-card shadow-sm mx-auto'>

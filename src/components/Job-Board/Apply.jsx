@@ -39,7 +39,6 @@ const Apply = ({ setApply, jobSelected }) => {
     const values = { ...formData };
     const date = moment(Date.now()).format('YYYY-MM-DD');
     values.DateApplied = date;
-    console.log('submit', values);
     dispatch(triggerApplyForJob(values));
   };
 

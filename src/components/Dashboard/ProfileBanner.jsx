@@ -413,7 +413,6 @@ const ProfileBanner = ({ data }) => {
             <div className='d-flex c-gap-10 flex-wrap mt-3'>
               <button
                 onClick={() => {
-                  console.log('connect');
                 }}
                 className='reach-btn'
               >
@@ -422,7 +421,6 @@ const ProfileBanner = ({ data }) => {
 
               <button
                 onClick={() => {
-                  console.log('message');
                 }}
                 className='reach-btn'
               >

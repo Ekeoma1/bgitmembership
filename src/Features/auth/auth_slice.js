@@ -33,10 +33,10 @@ export const triggerSignup = createAsyncThunk(
   'sign-up',
   async (params, thunkAPI) => {
     try {
-      console.log('sign up params', params);
+      // console.log('sign up params', params);
       return await AuthService.signup(params);
     } catch (e) {
-      console.log('reject error', e);
+      // console.log('reject error', e);
       return thunkAPI.rejectWithValue(e.message);
     }
   }
@@ -46,12 +46,9 @@ export const triggerSignin = createAsyncThunk(
   'sign-in',
   async (params, thunkAPI) => {
     try {
-      console.log('try');
       const data = await AuthService.signin(params);
-      console.log('data slice', data);
       return data;
     } catch (e) {
-      console.log('catch', e.message);
       return thunkAPI.rejectWithValue(e.message);
     }
   }
@@ -133,7 +130,6 @@ const authSlice = createSlice({
     builder.addCase(triggerSignin.rejected, (state, action) => {
       state.signin.status = states.ERROR;
       state.signin.data = action.payload;
-      console.log('rejected', action.payload);
     });
 
     //   forgot password

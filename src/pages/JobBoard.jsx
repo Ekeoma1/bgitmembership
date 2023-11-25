@@ -98,7 +98,7 @@ const JobBoard = () => {
     dispatch(triggerGetAllJobs());
     dispatch(triggerGetMyProfile());
   }, []);
-  console.log('filterdata', filterData);
+  // console.log('filterdata', filterData);
 
   return (
     <div className='job-board-wrapper'>
