@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/semi */
 import React from 'react';
 import '../../../../assets/scss/atoms.scss';
 
@@ -11,8 +10,8 @@ const DetailsLoader = () => {
         <div className='city skeleton-loader '></div>
       </div>
       <div className='right-content'>
-        <div className="tags skeleton-loader"></div>
-        <div className="skills skeleton-loader"></div>
+        <div className='tags skeleton-loader'></div>
+        <div className='skills skeleton-loader'></div>
       </div>
     </div>
   );

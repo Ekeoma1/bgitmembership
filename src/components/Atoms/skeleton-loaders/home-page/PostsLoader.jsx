@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/semi */
 import React from 'react';
 import '../../../../assets/scss/atoms.scss';
 
