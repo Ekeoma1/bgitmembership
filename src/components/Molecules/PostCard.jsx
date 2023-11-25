@@ -311,10 +311,14 @@ const PostCard = ({ post, getAllPostsLocal, setGetAllPostsLocal }) => {
           </div>
 
           <div className='d-flex align-items-center c-gap-10'>
-            <button onClick={() => setShowCommentsSection(true)}>
+            <button
+              onClick={() => {
+                // setShowCommentsSection(true);
+              }}
+            >
               <Icon icon='comment' />
             </button>
-            <span>5</span>
+            <span>0</span>
           </div>
 
           <div className='d-flex align-items-center c-gap-10'>
