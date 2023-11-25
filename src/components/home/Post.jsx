@@ -10,6 +10,7 @@ const Post = () => {
   const { getAllPosts, createPost } = useSelector((state) => state.posts);
   const [pageNumber] = useState(1);
   const [pageSize] = useState(10);
+  const [loading, setLoading] = useState(true);
   useEffect(() => {
     if (createPost.status === 'successful') {
       const data = { queryParams: { pageNumber, pageSize } };
@@ -24,10 +25,15 @@ const Post = () => {
   const [getAllPostsLocal, setGetAllPostsLocal] = useState([]);
 
   useEffect(() => {
-    if (getAllPosts?.status === 'successful') {
-      setGetAllPostsLocal([...getAllPosts.data?.posts]);
+    console.log('useeffect');
+    if (getAllPosts?.status === 'successful' && getAllPosts.data.posts) {
+      console.log('temp', getAllPosts.data?.posts);
+      const temp = getAllPosts.data?.posts;
+      setGetAllPostsLocal(temp);
+      setLoading(false);
+      console.log('2useeffect###########');
     }
-  }, [getAllPosts?.data?.posts?.likedUsers, getAllPosts?.status]);
+  }, [getAllPosts?.data?.posts, getAllPosts?.status]);
 
   return (
     <div className='post-wrapper'>
@@ -37,7 +43,7 @@ const Post = () => {
       <div className='post-card-wrapper'>
         {getAllPosts.status === 'base' || getAllPosts.status === 'loading' ? (
           <PostsLoader />
-        ) : getAllPosts.status === 'successful' ? (
+        ) : getAllPosts.status === 'successful' && !loading ? (
           <>
             {getAllPosts.data ? (
               <>

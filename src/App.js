@@ -149,7 +149,7 @@ function App() {
         position='top-center'
         autoClose={2000}
       />
-      <div>Hello</div>
+      {/* <div>Hello</div> */}
       <GlobalStyles />
       <RouterProvider router={router} />
     </ThemeProvider>

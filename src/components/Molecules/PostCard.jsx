@@ -7,11 +7,11 @@ import moment from 'moment';
 import { UserProfilePhotoLoader2 } from '../Atoms/skeleton-loaders/dashboard-page/UserProfilePhotoLoader';
 import MediaLoader from '../Atoms/skeleton-loaders/home-page/MediaLoader';
 import {
-  resetActivePostIdForOngoingRequest,
-  resetSaveCurrentPost,
-  resetLikePost,
-  setActivePostIdForOngoingRequest,
-  setSaveCurrentPost,
+  // resetActivePostIdForOngoingRequest,
+  // resetSaveCurrentPost,
+  // resetLikePost,
+  // setActivePostIdForOngoingRequest,
+  // setSaveCurrentPost,
   triggerLikePost,
   triggerSavePost,
   triggerUnsavePost,
@@ -19,8 +19,7 @@ import {
   triggerCreateComment,
 } from '../../Features/posts/posts_slice';
 import { useDispatch, useSelector } from 'react-redux';
-import { FaRegBookmark, FaBookmark, FaRegSmile } from 'react-icons/fa';
-import { TbPhoto } from 'react-icons/tb';
+import { FaRegBookmark, FaBookmark } from 'react-icons/fa';
 
 import OutsideClickHandler from 'react-outside-click-handler';
 import ShareModal from '../Modals/ShareModal';
@@ -44,11 +43,13 @@ const PostCard = ({ post, getAllPostsLocal, setGetAllPostsLocal }) => {
   const [postVideoOnLoadStatus, setPostVideoOnLoadStatus] = useState('base');
 
   // Like unlike post
+  const [activePost, setActivePost] = useState('');
   const [likeCurrentPost, setLikeCurrentPost] = useState(
     post?.isLikedByCurrentUser
   );
   const timeoutIdRef2 = useRef(null);
   const handleLikeUnlikePost = () => {
+    setActivePost(post);
     const startTimeout = () => {
       timeoutIdRef2.current = setTimeout(() => {
         const data = { queryParams: { postId: post.postId } };
@@ -57,7 +58,7 @@ const PostCard = ({ post, getAllPostsLocal, setGetAllPostsLocal }) => {
         } else {
           dispatch(triggerUnlikePost(data));
         }
-      }, 5000);
+      }, 3000);
     };
     const clearTimeoutIfNeeded = () => {
       if (timeoutIdRef2.current) {
@@ -71,22 +72,24 @@ const PostCard = ({ post, getAllPostsLocal, setGetAllPostsLocal }) => {
   useEffect(() => {
     // const data = [...getAllPostsLocal];
     const data = _.cloneDeep(getAllPostsLocal);
-    if (likeCurrentPost) {
-      data?.forEach((item) => {
-        if (item.postId === post.postId) {
-          item.isLikedByCurrentUser = true;
-          item.likeCount = item.saveCount + 1;
-        }
-      });
-    } else {
-      data?.forEach((item) => {
-        if (item.postId === post.postId) {
-          item.isLikedByCurrentUser = false;
-          item.likeCount = item.likeCount - 1;
-        }
-      });
+    if (activePost) {
+      if (likeCurrentPost) {
+        data?.forEach((item) => {
+          if (item.postId === activePost.postId) {
+            item.isLikedByCurrentUser = true;
+            item.likeCount = item.likeCount + 1;
+          }
+        });
+      } else {
+        data?.forEach((item) => {
+          if (item.postId === activePost.postId) {
+            item.isLikedByCurrentUser = false;
+            item.likeCount = item.likeCount - 1;
+          }
+        });
+      }
+      setGetAllPostsLocal(data);
     }
-    setGetAllPostsLocal(data);
   }, [likeCurrentPost]);
 
   // Save unsave post
@@ -105,7 +108,7 @@ const PostCard = ({ post, getAllPostsLocal, setGetAllPostsLocal }) => {
           console.log('unsave post');
           dispatch(triggerUnsavePost(data));
         }
-      }, 5000);
+      }, 3000);
     };
     const clearTimeoutIfNeeded = () => {
       if (timeoutIdRef.current) {
@@ -118,28 +121,28 @@ const PostCard = ({ post, getAllPostsLocal, setGetAllPostsLocal }) => {
   };
   useEffect(() => {
     const data = _.cloneDeep(getAllPostsLocal);
-    if (saveCurrentPost) {
-      data?.forEach((item) => {
-        if (item.postId === post.postId) {
-          item.isSavedByCurrentUser = true;
-          item.saveCount = item.saveCount + 1;
-        }
-      });
-    } else {
-      data?.forEach((item) => {
-        if (item.postId === post.postId) {
-          item.isSavedByCurrentUser = false;
-          item.saveCount = item.saveCount - 1;
-        }
-      });
+    if (activePost) {
+      if (saveCurrentPost) {
+        data?.forEach((item) => {
+          if (item.postId === post.postId) {
+            item.isSavedByCurrentUser = true;
+            item.saveCount = item.saveCount + 1;
+          }
+        });
+      } else {
+        data?.forEach((item) => {
+          if (item.postId === post.postId) {
+            item.isSavedByCurrentUser = false;
+            item.saveCount = item.saveCount - 1;
+          }
+        });
+      }
+      setGetAllPostsLocal(data);
     }
-    setGetAllPostsLocal(data);
   }, [saveCurrentPost]);
 
   // Like unlike comment
-  const [likeComment, setLikeComment] = useState(
-    post?.isLikedByCurrentUser
-  );
+  const [likeComment, setLikeComment] = useState(post?.isLikedByCurrentUser);
   const timeoutIdRef3 = useRef(null);
   const handleLikeUnlikeComment = () => {
     const startTimeout = () => {
@@ -150,7 +153,7 @@ const PostCard = ({ post, getAllPostsLocal, setGetAllPostsLocal }) => {
         } else {
           dispatch(triggerUnlikePost(data));
         }
-      }, 5000);
+      }, 3000);
     };
     const clearTimeoutIfNeeded = () => {
       if (timeoutIdRef2.current) {
@@ -164,24 +167,27 @@ const PostCard = ({ post, getAllPostsLocal, setGetAllPostsLocal }) => {
   useEffect(() => {
     // const data = [...getAllPostsLocal];
     const data = _.cloneDeep(getAllPostsLocal);
-    if (likeCurrentPost) {
-      data?.forEach((item) => {
-        if (item.postId === post.postId) {
-          item.isLikedByCurrentUser = true;
-          item.likeCount = item.saveCount + 1;
-        }
-      });
-    } else {
-      data?.forEach((item) => {
-        if (item.postId === post.postId) {
-          item.isLikedByCurrentUser = false;
-          item.likeCount = item.likeCount - 1;
-        }
-      });
+    if (activePost) {
+      if (likeCurrentPost) {
+        data?.forEach((item) => {
+          if (item.postId === post.postId) {
+            console.log('item.postId', item.postId);
+            item.isLikedByCurrentUser = true;
+            item.likeCount = item.likeCount + 1;
+          }
+        });
+      } else {
+        data?.forEach((item) => {
+          if (item.postId === post.postId) {
+            item.isLikedByCurrentUser = false;
+            item.likeCount = item.likeCount - 1;
+          }
+        });
+      }
     }
-    setGetAllPostsLocal(data);
+    // setGetAllPostsLocal(data);
   }, [likeCurrentPost]);
-// other
+  // other
   const handleChange = (e) => {
     if (e.target.name === 'comment') {
       setComment(e.target.value);
@@ -202,7 +208,8 @@ const PostCard = ({ post, getAllPostsLocal, setGetAllPostsLocal }) => {
       setReply('');
     }
   };
-
+  // console.log('post###', post);
+  console.log('active post###', activePost);
   const handleLikeComment = (id) => {};
   return (
     <div className='post-card shadow-sm mx-auto'>
