@@ -17,8 +17,7 @@ const ScrollToTop = () => {
     return () => {
       window.removeEventListener('scroll', handleScroll);
     };
-  }, []);
-  console.log('Height:', scrollHeight);
+  }, []);  
   return (
     <button
       className={`scroll-to-top-component ${scrollHeight > 300 && 'show'}`}
