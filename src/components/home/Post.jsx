@@ -25,8 +25,8 @@ const Post = () => {
   const [getAllPostsLocal, setGetAllPostsLocal] = useState([]);
 
   useEffect(() => {
-    if (getAllPosts?.status === 'successful' && getAllPosts.data.posts) {
-      const temp = getAllPosts.data?.posts;
+    if (getAllPosts?.status === 'successful' && getAllPosts.data?.posts) {
+      const temp = getAllPosts?.data?.posts;
       setGetAllPostsLocal(temp);
       setLoading(false);
     }

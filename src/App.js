@@ -26,13 +26,14 @@ import CommunityForumsAllForums from './pages/CommunityForumsAllForums';
 import Forum from './pages/Forum';
 import User from './pages/User';
 import { ThemeProvider } from 'styled-components';
-import { useContext } from 'react';
+import { useContext, useEffect, useRef, useState } from 'react';
 import { AppContext } from './context/Context';
 import { darkTheme, lightTheme } from './utils/themes/themes';
 import { GlobalStyles } from './utils/themes/themes';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import SeeMore from './pages/SeeMore';
+import ScrollToTop from './components/Molecules/ScrollToTop';
 
 function App() {
   const isLoggedIn = useSelector((state) => state.auth.isLoggedIn);
@@ -143,16 +144,18 @@ function App() {
   ]);
 
   return (
-    <ThemeProvider theme={themeMode}>
-      <ToastContainer
-        className={'custom-toastify'}
-        position='top-center'
-        autoClose={2000}
-      />
-      {/* <div>Hello</div> */}
-      <GlobalStyles />
-      <RouterProvider router={router} />
-    </ThemeProvider>
+    <div>
+      <ThemeProvider theme={themeMode}>
+        <ToastContainer
+          className={'custom-toastify'}
+          position='top-center'
+          autoClose={2000}
+        />
+        <ScrollToTop />
+        <GlobalStyles />
+        <RouterProvider router={router} />
+      </ThemeProvider>
+    </div>
   );
 }
 
