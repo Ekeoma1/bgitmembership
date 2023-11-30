@@ -15,7 +15,7 @@ const MobileNav = ({ hide, nav }) => {
       {isLoggedIn ? (
         <div className=" text-center">
           <div onClick={hide} className="mobile-menu-item">
-            <Link to="#">My Profile</Link>
+            <Link to="#">Dashboard</Link>
           </div>
           <div onClick={hide} className="mobile-menu-item">
             <Link to="/events-and-news">News & Events</Link>
