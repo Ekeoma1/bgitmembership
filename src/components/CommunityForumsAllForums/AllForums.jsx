@@ -128,7 +128,7 @@ const AllForums = ({ setSearchMain }) => {
             <SearchBox
               onChange={handleChange}
               value={searchTerm}
-              placeholder='Search posts'
+              placeholder='Search forums'
               height={'4.2rem'}
               // enterKeyPressed={() => setDispatchSearch(true)}
               // otherKeysPressed={() => setDispatchSearch(false)}
