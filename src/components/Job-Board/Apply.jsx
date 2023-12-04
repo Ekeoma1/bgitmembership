@@ -1,5 +1,5 @@
 import { useDispatch, useSelector } from 'react-redux';
-import '../../assets/scss/molecules.scss';
+import '../../assets/scss/jobBoard.scss';
 import per1 from '../../../src/assets/images/per1.svg';
 
 import MainButton from '../Molecules/MainButton';

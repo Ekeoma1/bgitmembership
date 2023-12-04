@@ -25,6 +25,7 @@ const Forum = () => {
   const [pageSize] = useState(10);
   const [joinForumRequestSuccessful, setJoinForumRequestSuccessful] =
     useState(false);
+    
   useEffect(() => {
     window.scrollTo(0, 0);
   }, []);
