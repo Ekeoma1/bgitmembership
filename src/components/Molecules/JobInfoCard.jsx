@@ -8,6 +8,8 @@ const JobInfoCard = ({
   setShowJobInfo,
   setApply,
   setJobSelected,
+  getAllJobsLocal,
+  setGetAllJobsLocal,
 }) => {
   return (
     <div className='job-info'>

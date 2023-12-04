@@ -3,6 +3,18 @@ import JobsService from './jobs_service';
 import * as states from '../../utils/strings';
 
 const initialState = {
+  getAllJobs: {
+    status: states.BASE,
+    data: {},
+  },
+  saveJob: {
+    status: states.BASE,
+    data: {},
+  },
+  getSavedJobs: {
+    status: states.BASE,
+    data: {},
+  },
   addJob: {
     status: states.BASE,
     data: {},
@@ -11,7 +23,7 @@ const initialState = {
     status: states.BASE,
     data: {},
   },
-  getAllJobs: {
+  deleteJob: {
     status: states.BASE,
     data: {},
   },
@@ -23,11 +35,37 @@ const initialState = {
     status: states.BASE,
     data: {},
   },
-  deleteJob: {
-    status: states.BASE,
-    data: {},
-  },
 };
+export const triggerGetAllJobs = createAsyncThunk(
+  'get-all-jobs',
+  async (params, thunkAPI) => {
+    try {
+      return await JobsService.getAllJobs(params);
+    } catch (e) {
+      return thunkAPI.rejectWithValue(e.message);
+    }
+  }
+);
+export const triggerSaveJob = createAsyncThunk(
+  'save-job',
+  async (params, thunkAPI) => {
+    try {
+      return await JobsService.saveJob(params);
+    } catch (e) {
+      return thunkAPI.rejectWithValue(e.message);
+    }
+  }
+);
+export const triggerGetSavedJobs = createAsyncThunk(
+  'get-saved-jobs',
+  async (params, thunkAPI) => {
+    try {
+      return await JobsService.getSavedJobs(params);
+    } catch (e) {
+      return thunkAPI.rejectWithValue(e.message);
+    }
+  }
+);
 export const triggerAddJob = createAsyncThunk(
   'add-job',
   async (params, thunkAPI) => {
@@ -49,16 +87,7 @@ export const triggerEditJob = createAsyncThunk(
     }
   }
 );
-export const triggerGetAllJobs = createAsyncThunk(
-  'get-all-jobs',
-  async (params, thunkAPI) => {
-    try {
-      return await JobsService.getAllJobs(params);
-    } catch (e) {
-      return thunkAPI.rejectWithValue(e.message);
-    }
-  }
-);
+
 export const triggerGetAllInactiveJobs = createAsyncThunk(
   'get-all-inactive-jobs',
   async (params, thunkAPI) => {
@@ -95,6 +124,46 @@ const connectionSlice = createSlice({
   initialState,
   reducers: {},
   extraReducers: (builder) => {
+    // Get all jobs
+    builder.addCase(triggerGetAllJobs.pending, (state) => {
+      state.getAllJobs.status = states.LOADING;
+      state.getAllJobs.data = {};
+    });
+    builder.addCase(triggerGetAllJobs.fulfilled, (state, action) => {
+      state.getAllJobs.status = states.SUCCESSFUL;
+      state.getAllJobs.data = action.payload;
+    });
+    builder.addCase(triggerGetAllJobs.rejected, (state, action) => {
+      state.getAllJobs.status = states.ERROR;
+      state.getAllJobs.data = action.payload;
+    });
+    // Save job
+    builder.addCase(triggerSaveJob.pending, (state) => {
+      state.saveJob.status = states.LOADING;
+      state.saveJob.data = {};
+    });
+    builder.addCase(triggerSaveJob.fulfilled, (state, action) => {
+      state.saveJob.status = states.SUCCESSFUL;
+      state.saveJob.data = action.payload;
+    });
+    builder.addCase(triggerSaveJob.rejected, (state, action) => {
+      state.saveJob.status = states.ERROR;
+      state.saveJob.data = action.payload;
+    });
+    // get saved job
+    builder.addCase(triggerGetSavedJobs.pending, (state) => {
+      state.getSavedJobs.status = states.LOADING;
+      state.getSavedJobs.data = {};
+    });
+    builder.addCase(triggerGetSavedJobs.fulfilled, (state, action) => {
+      state.getSavedJobs.status = states.SUCCESSFUL;
+      state.getSavedJobs.data = action.payload;
+    });
+    builder.addCase(triggerGetSavedJobs.rejected, (state, action) => {
+      state.getSavedJobs.status = states.ERROR;
+      state.getSavedJobs.data = action.payload;
+    });
+
     //add job
     builder.addCase(triggerAddJob.pending, (state) => {
       state.addJob.status = states.LOADING;
@@ -121,20 +190,6 @@ const connectionSlice = createSlice({
     builder.addCase(triggerEditJob.rejected, (state) => {
       state.editJob.status = states.ERROR;
       state.editJob.data = {};
-    });
-
-    // Get all jobs
-    builder.addCase(triggerGetAllJobs.pending, (state) => {
-      state.getAllJobs.status = states.LOADING;
-      state.getAllJobs.data = {};
-    });
-    builder.addCase(triggerGetAllJobs.fulfilled, (state, action) => {
-      state.getAllJobs.status = states.SUCCESSFUL;
-      state.getAllJobs.data = action.payload;
-    });
-    builder.addCase(triggerGetAllJobs.rejected, (state, action) => {
-      state.getAllJobs.status = states.ERROR;
-      state.getAllJobs.data = action.payload;
     });
 
     // get all inactive jobs

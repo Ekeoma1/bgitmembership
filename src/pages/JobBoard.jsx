@@ -12,7 +12,10 @@ import useWindowSize from '../hooks/useWindowSize';
 import '../../src/assets/scss/jobBoard.scss';
 import JobInfoCard from '../components/Molecules/JobInfoCard';
 import { useDispatch, useSelector } from 'react-redux';
-import { triggerGetAllJobs } from '../Features/jobs/jobs_slice';
+import {
+  triggerGetAllJobs,
+  triggerGetSavedJobs,
+} from '../Features/jobs/jobs_slice';
 import JobCard from '../components/Molecules/JobCard';
 import Apply from '../components/Job-Board/Apply';
 import { triggerGetMyProfile } from '../Features/users/users_slice';
@@ -22,7 +25,7 @@ import FilterBoard from '../components/Job-Board/FilterBoard';
 const JobBoard = () => {
   const { isMobile } = useWindowSize();
   const [filterData, setFilterData] = useState({});
-  const { getAllJobs } = useSelector((state) => state.jobs);
+  const { getAllJobs, getSavedJobs } = useSelector((state) => state.jobs);
   const { getMyProfile } = useSelector((state) => state.users);
   const [searchValue, setSearchValue] = useState('');
   const [showJobInfo, setShowJobInfo] = useState(false);
@@ -96,8 +99,15 @@ const JobBoard = () => {
   const dispatch = useDispatch();
   useEffect(() => {
     dispatch(triggerGetAllJobs());
+    dispatch(triggerGetSavedJobs());
     dispatch(triggerGetMyProfile());
   }, []);
+  const [getAllJobsLocal, setGetAllJobsLocal] = useState([]);
+  useEffect(() => {
+    if (getAllJobs?.status === 'successful') {
+      setGetAllJobsLocal([...getAllJobs.data?.jobs]);
+    }
+  }, [getAllJobs?.status]);
   // console.log('filterdata', filterData);
 
   return (
@@ -209,7 +219,10 @@ const JobBoard = () => {
                     <h5 className=''>filters</h5>
                   </div>
                 </div>
-                <FilterBoard setFilter={setFilter} setFilterData={setFilterData}/>
+                <FilterBoard
+                  setFilter={setFilter}
+                  setFilterData={setFilterData}
+                />
               </div>
             )}
           </div>
@@ -281,6 +294,8 @@ const JobBoard = () => {
                 setShowJobInfo={setShowJobInfo}
                 setApply={setApply}
                 setJobSelected={setJobSelected}
+                getAllJobsLocal={getAllJobsLocal}
+                setGetAllJobsLocal={setGetAllJobsLocal}
               />
             )}
           </div>

@@ -220,11 +220,7 @@
   flex-direction: column;
   align-items: center;
   cursor: pointer;
-  // @media screen and (max-width: "500px") {
-  //   width: 16.8rem;
-  //   height: 28.9rem;
-  //   padding: 2.2rem 1.6rem;
-  // }
+
   img {
     width: 49px;
     height: 49px;
@@ -990,5 +986,101 @@
     font-size: 1.6rem;
     font-weight: 400;
     line-height: 47.953px;
+  }
+}
+.job-card-component {
+  cursor: pointer;
+  border-radius: 2.3878rem;
+  border: 1.194px solid rgba(128, 124, 139, 0.25);
+  background: #fff;
+  box-shadow: 0px 5.969581604003906px 16.714828491210938px 0px
+    rgba(8, 15, 52, 0.04);
+  padding: 4.5rem 5.1rem;
+  width: 100%;
+  display: flex;
+  column-gap: 10.0997%;
+  position: relative;
+  // width: 614px;
+  height: 23.8rem;
+  flex-shrink: 0;
+  margin-bottom: 2rem;
+  &.selected-job {
+    border-radius: 23.88px;
+    background: rgba(216, 209, 239, 0.15);
+  }
+  .img-con {
+    width: 5.8rem;
+    height: 5.8rem;
+    flex-shrink: 0;
+  }
+  .info {
+    width: 100%;
+    .role {
+      color: #000;
+      font-size: 2.4rem;
+      font-style: normal;
+      font-weight: 700;
+      line-height: 0;
+      margin-bottom: 1.5rem;
+      text-transform: capitalize;
+    }
+    .company {
+      color: #000;
+      font-size: 2.4rem;
+      font-style: normal;
+      font-weight: 600;
+      line-height: normal;
+      margin-bottom: 0.8rem;
+    }
+    .location {
+      color: rgba(0, 0, 0, 0.81);
+      font-size: 1.8rem;
+      font-style: normal;
+      font-weight: 500;
+      margin-bottom: 1rem;
+    }
+    .salary-type {
+      display: flex;
+      column-gap: 4.5rem;
+      margin-bottom: 3.2rem;
+      .salary,
+      .type {
+        display: flex;
+        align-items: center !important;
+        column-gap: 0.7rem;
+        .amount {
+          display: flex;
+          align-items: center;
+        }
+        h5 {
+          color: #33246a;
+          font-size: 1.8rem;
+          font-style: normal;
+          font-weight: 400;
+          line-height: 0;
+          padding: 0.5rem 0 0 0;
+        }
+      }
+    }
+    .just-posted {
+      color: rgba(0, 0, 0, 0.81);
+      font-size: 1.8rem;
+      font-weight: 500;
+      line-height: normal;
+      text-transform: capitalize;
+    }
+  }
+  .save-icon {
+    position: absolute;
+    top: 13.445378%;
+    right: 4.723127%;
+    height: 3rem;
+    width: 3rem;
+    font-size: 3rem;
+    .active {
+      color: $pri-color2;
+    }
+
+    // background-color: green;
   }
 }

@@ -2,6 +2,30 @@ import apiRoutes from '../../routes/api_routes';
 import { del, get, post, put } from '../../network/https';
 
 export default class JobsService {
+  //   get all jobs
+  static async getAllJobs() {
+    const response = await get({
+      url: apiRoutes.getAllJobs,
+    });
+    return response;
+  }
+
+  //   save job
+  static async saveJob() {
+    const response = await post({
+      url: apiRoutes.saveJob,
+    });
+    return response;
+  }
+
+  //   get saved jobs
+  static async getSavedJobs() {
+    const response = await get({
+      url: apiRoutes.getSavedJobs,
+    });
+    return response;
+  }
+
   //  add job
   static async addJob(data) {
     const response = await post({
@@ -16,14 +40,6 @@ export default class JobsService {
     const response = await put({
       url: apiRoutes.editJob,
       data: { ...data },
-    });
-    return response;
-  }
-
-  //   get all jobs
-  static async getAllJobs() {
-    const response = await get({
-      url: apiRoutes.getAllJobs,
     });
     return response;
   }
