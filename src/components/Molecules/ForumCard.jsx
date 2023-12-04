@@ -11,6 +11,7 @@ import {
   resetJoinForum,
   resetLeaveForum,
   setActiveForumIdForOngoingRequest,
+  triggerCancelJoinForumRequest,
   triggerJoinForum,
   triggerLeaveForum,
 } from '../../Features/forums/forums_slice';
@@ -20,9 +21,12 @@ const ForumCard = ({ forum }) => {
   const buttonContainer = useRef(null);
   const { isMobile } = useWindowSize();
   const dispatch = useDispatch();
-  const { joinForum, leaveForum, activeForumIdForOngoingRequest } = useSelector(
-    (state) => state.forums
-  );
+  const {
+    joinForum,
+    leaveForum,
+    cancelJoinForumRequest,
+    activeForumIdForOngoingRequest,
+  } = useSelector((state) => state.forums);
   const [joined, setJoined] = useState(false);
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
@@ -30,7 +34,11 @@ const ForumCard = ({ forum }) => {
   const handleClick = (e) => {
     if (!loading) {
       const values = { forumId: forum.forumId };
-      if (e.target.closest('.join')) {
+      if (e.target.closest('.has-pending-join-request')) {
+        console.log('cancel');
+        dispatch(triggerCancelJoinForumRequest(values));
+        dispatch(setActiveForumIdForOngoingRequest(forum.forumId));
+      } else if (e.target.closest('.join')) {
         dispatch(triggerJoinForum(values));
         dispatch(setActiveForumIdForOngoingRequest(forum.forumId));
       } else if (e.target.closest('.joined')) {
@@ -44,7 +52,9 @@ const ForumCard = ({ forum }) => {
 
   useEffect(() => {
     if (
-      (joinForum.status === 'loading' || leaveForum.status === 'loading') &&
+      (joinForum.status === 'loading' ||
+        leaveForum.status === 'loading' ||
+        cancelJoinForumRequest === 'loading') &&
       activeForumIdForOngoingRequest === forum.forumId
     ) {
       setLoading(true);
@@ -78,30 +88,59 @@ const ForumCard = ({ forum }) => {
           </span>
         )}
       </p>
-      {forum.isCurrentUserMember ? (
+      {forum.hasPendingJoinRequest ? (
         <button
-          className={`bg-color22 text-color22 forum-card-btn joined ${
+          className={`bg-color22 text-color22 forum-card-btn  ${
             loading && 'loading'
           }`}
-          onClick={(e) => handleClick(e)}
           ref={buttonContainer}
         >
-          {leaveForum.status === 'loading' &&
-          forum.forumId === activeForumIdForOngoingRequest ? (
-            <>
-              Loading <img src={loadingDots} alt='' className='' />
-            </>
+          {forum.hasPendingJoinRequest ? (
+            <span className='has-pending-join-request'>
+              {loading ? (
+                <>
+                  Loading <img src={loadingDots} alt='' className='' />
+                </>
+              ) : (
+                'Cancel Request'
+              )}
+            </span>
+          ) : forum.isCurrentUserMember ? (
+            <></>
           ) : (
-            'Leave'
+            <></>
           )}
         </button>
+      ) : forum.isCurrentUserMember ? (
+        <>
+          <button
+            className={` smaller-text  bg-color22 text-color22 forum-card-btn join community-forum-btn ${
+              loading && 'loading'
+            }`}
+            ref={buttonContainer}
+          >
+            {joinForum.status === 'loading' &&
+            forum.forumId === activeForumIdForOngoingRequest ? (
+              <>
+                Loading{' '}
+                <div className='img-wrapper'>
+                  <img src={loadingDots} alt='' className='img-loader' />
+                </div>
+              </>
+            ) : (
+              <>
+                <LuPlus className='icon forum-card-btn22' />
+                Join
+              </>
+            )}
+          </button>
+        </>
       ) : (
         <>
           <button
             className={` smaller-text  bg-color22 text-color22 forum-card-btn join community-forum-btn ${
               loading && 'loading'
             }`}
-            onClick={(e) => handleClick(e)}
             ref={buttonContainer}
           >
             {joinForum.status === 'loading' &&

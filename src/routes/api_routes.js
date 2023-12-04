@@ -73,6 +73,7 @@ const apiRoutes = {
   // forums
   joinForum: '/Forums/JoinForum',
   leaveForum: '/Forums/LeaveForum',
+  cancelJoinForumRequest: '/Forums/CancelJoinForumRequest',
   createForum: '/Forums/CreateForum',
   getAllForums: '/Forums/GetAllForums',
   getForumById: '/Forums/GetForumById',

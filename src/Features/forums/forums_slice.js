@@ -11,6 +11,10 @@ const initialState = {
     status: states.BASE,
     data: {},
   },
+  cancelJoinForumRequest: {
+    status: states.BASE,
+    data: {},
+  },
   createForum: {
     status: states.BASE,
     data: {},
@@ -50,6 +54,17 @@ export const triggerLeaveForum = createAsyncThunk(
   async (params, thunkAPI) => {
     try {
       return await ForumsService.leaveForum(params);
+    } catch (e) {
+      return thunkAPI.rejectWithValue(e.message);
+    }
+  }
+);
+// cancel join forum request
+export const triggerCancelJoinForumRequest = createAsyncThunk(
+  'cancel-join-forum-request',
+  async (params, thunkAPI) => {
+    try {
+      return await ForumsService.cancelJoinForumRequest(params);
     } catch (e) {
       return thunkAPI.rejectWithValue(e.message);
     }
@@ -156,6 +171,20 @@ const forumsSlice = createSlice({
     builder.addCase(triggerLeaveForum.rejected, (state, action) => {
       state.leaveForum.status = states.ERROR;
       state.leaveForum.data = action.payload;
+    });
+
+    // cancel join forum request
+    builder.addCase(triggerCancelJoinForumRequest.pending, (state) => {
+      state.cancelJoinForumRequest.status = states.LOADING;
+      state.cancelJoinForumRequest.data = {};
+    });
+    builder.addCase(triggerCancelJoinForumRequest.fulfilled, (state, action) => {
+      state.cancelJoinForumRequest.status = states.SUCCESSFUL;
+      state.cancelJoinForumRequest.data = action.payload;
+    });
+    builder.addCase(triggerCancelJoinForumRequest.rejected, (state, action) => {
+      state.cancelJoinForumRequest.status = states.ERROR;
+      state.cancelJoinForumRequest.data = action.payload;
     });
 
     // create forum

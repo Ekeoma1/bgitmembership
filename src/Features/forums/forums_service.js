@@ -16,6 +16,13 @@ export default class ForumsService {
     });
     return response;
   }
+  static async cancelJoinForumRequest(data) {
+    const response = await post({
+      url: apiRoutes.cancelJoinForumRequest,
+      data: { ...data },
+    });
+    return response;
+  }
   static async createForum(data) {
     const response = await post({
       url: apiRoutes.createForum,
