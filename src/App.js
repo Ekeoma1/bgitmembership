@@ -21,7 +21,7 @@ import CommunityForumsAllForums from "./pages/CommunityForumsAllForums";
 import Forum from "./pages/Forum";
 import User from "./pages/User";
 import { ThemeProvider } from "styled-components";
-import { useContext, useEffect, useRef, useState } from "react";
+import { useContext } from "react";
 import { AppContext } from "./context/Context";
 import { darkTheme, lightTheme } from "./utils/themes/themes";
 import { GlobalStyles } from "./utils/themes/themes";
@@ -30,6 +30,8 @@ import "react-toastify/dist/ReactToastify.css";
 import SeeMore from "./pages/SeeMore";
 import ScrollToTop from "./components/Molecules/ScrollToTop";
 import Connections from "./pages/Connections";
+import EventTicket from "./pages/EventTicket";
+import IndividualEventTicket from "./pages/IndividualEventTicket";
 
 function App() {
   const isLoggedIn = useSelector((state) => state.auth.isLoggedIn);
@@ -101,6 +103,14 @@ function App() {
             {
               path: "events-and-news/news/:id",
               element: <Event />,
+            },
+            {
+              path: "events-and-news/event-tickets",
+              element: <EventTicket />,
+            },
+            {
+              path: "events-and-news/event-tickets/:id",
+              element: <IndividualEventTicket />,
             },
             {
               path: "job-board",
