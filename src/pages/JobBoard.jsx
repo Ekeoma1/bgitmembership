@@ -108,7 +108,7 @@ const JobBoard = () => {
       setGetAllJobsLocal([...getAllJobs.data?.jobs]);
     }
   }, [getAllJobs?.status]);
-  // console.log('filterdata', filterData);
+  console.log('getSavedJobs', getSavedJobs);
 
   return (
     <div className='job-board-wrapper'>
@@ -185,17 +185,19 @@ const JobBoard = () => {
                     </>
                   ) : getAllJobs.status === 'successful' ? (
                     <>
-                      {getAllJobs?.data?.jobs?.length === 0 ? (
+                      {getAllJobsLocal.length === 0 ? (
                         <></>
                       ) : (
                         <>
-                          {getAllJobs?.data?.jobs?.map((job, index) => (
+                          {getAllJobsLocal.map((job, index) => (
                             <JobCard
                               key={index}
                               job={job}
                               jobSelected={jobSelected}
                               setJobSelected={setJobSelected}
                               setShowJobInfo={setShowJobInfo}
+                              getAllJobsLocal={getAllJobsLocal}
+                              setGetAllJobsLocal={setGetAllJobsLocal}
                             />
                           ))}
                         </>
@@ -247,44 +249,43 @@ const JobBoard = () => {
                   <h5>saved jobs</h5>
                 </div>
                 <div className='saved-jobs'>
-                  {jobsData.map((item, index) => (
-                    <div key={index} className='saved-job'>
-                      <div className='img-con'>
-                        <img src={google} alt='company' className='' />
-                      </div>
-                      <div className='info'>
-                        <div className='details'>
-                          <div className=''>
-                            <h5 className=''>{item.role}</h5>
-                            <p className='company'>{item.company}</p>
-                            <p className='location'>{item.location}</p>
-                          </div>
-                          <span className='status'>{item.status}</span>
-                        </div>
-                        <div className='btn-con'>
-                          <HiOutlineChevronRight />
-                        </div>
-                      </div>
-                    </div>
-                  ))}
-                  <div className='saved-job'>
-                    <div className='img-con'>
-                      <img src={google} alt='company' className='' />
-                    </div>
-                    <div className='info'>
-                      <div className='details'>
-                        <div className=''>
-                          <h5 className=''>Data Analyst </h5>
-                          <p className='company'>Google</p>
-                          <p className='location'>London (Hybrid)</p>
-                        </div>
-                        <span className='status'>Applied 2 days ago</span>
-                      </div>
-                      <div className='btn-con'>
-                        <HiOutlineChevronRight />
-                      </div>
-                    </div>
-                  </div>
+                  {getSavedJobs.status === 'base' ||
+                  getSavedJobs.status === 'loading' ? (
+                    <>
+                      <JobCardsLoader />
+                    </>
+                  ) : getSavedJobs.status === 'successful' ? (
+                    <>
+                      {getSavedJobs.data.length === 0 ? (
+                        <p>No saved jobs</p>
+                      ) : (
+                        <>
+                          {getSavedJobs.data.map((item, index) => (
+                            <div key={index} className='saved-job'>
+                              <div className='img-con'>
+                                <img src={google} alt='company' className='' />
+                              </div>
+                              <div className='info'>
+                                <div className='details'>
+                                  <div className=''>
+                                    <h5 className=''>{item.role}</h5>
+                                    <p className='company'>{item.company}</p>
+                                    <p className='location'>{item.location}</p>
+                                  </div>
+                                  <span className='status'>{item.status}</span>
+                                </div>
+                                <div className='btn-con'>
+                                  <HiOutlineChevronRight />
+                                </div>
+                              </div>
+                            </div>
+                          ))}
+                        </>
+                      )}
+                    </>
+                  ) : (
+                    <></>
+                  )}
                 </div>
               </div>
             )}

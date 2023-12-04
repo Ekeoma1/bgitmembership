@@ -11,9 +11,20 @@ export default class JobsService {
   }
 
   //   save job
-  static async saveJob() {
+  static async saveJob(data) {
     const response = await post({
       url: apiRoutes.saveJob,
+      data,
+      queryParams: data.queryParams,
+    });
+    return response;
+  }
+  //   un save job
+  static async unsaveJob(data) {
+    const response = await post({
+      url: apiRoutes.unsaveJob,
+      data,
+      queryParams: data.queryParams,
     });
     return response;
   }

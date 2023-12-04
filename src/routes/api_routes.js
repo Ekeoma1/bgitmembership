@@ -20,6 +20,7 @@ const apiRoutes = {
   // jobs
   getAllJobs: '/Jobs/GetAllJobs',
   saveJob: '/Jobs/SaveJob',
+  unsaveJob: '/Jobs/UnSaveJob',
   getSavedJobs: '/Jobs/GetSavedJobs',
   addJob: '/Company/Jobs/AddJob',
   editJob: '/Company/Jobs/EditJob',

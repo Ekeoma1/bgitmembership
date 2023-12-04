@@ -11,6 +11,10 @@ const initialState = {
     status: states.BASE,
     data: {},
   },
+  unsaveJob: {
+    status: states.BASE,
+    data: {},
+  },
   getSavedJobs: {
     status: states.BASE,
     data: {},
@@ -51,6 +55,16 @@ export const triggerSaveJob = createAsyncThunk(
   async (params, thunkAPI) => {
     try {
       return await JobsService.saveJob(params);
+    } catch (e) {
+      return thunkAPI.rejectWithValue(e.message);
+    }
+  }
+);
+export const triggerUnSaveJob = createAsyncThunk(
+  'unsave-job',
+  async (params, thunkAPI) => {
+    try {
+      return await JobsService.unsaveJob(params);
     } catch (e) {
       return thunkAPI.rejectWithValue(e.message);
     }
@@ -149,6 +163,19 @@ const connectionSlice = createSlice({
     builder.addCase(triggerSaveJob.rejected, (state, action) => {
       state.saveJob.status = states.ERROR;
       state.saveJob.data = action.payload;
+    });
+    //un Save job
+    builder.addCase(triggerUnSaveJob.pending, (state) => {
+      state.unsaveJob.status = states.LOADING;
+      state.unsaveJob.data = {};
+    });
+    builder.addCase(triggerUnSaveJob.fulfilled, (state, action) => {
+      state.unsaveJob.status = states.SUCCESSFUL;
+      state.unsaveJob.data = action.payload;
+    });
+    builder.addCase(triggerUnSaveJob.rejected, (state, action) => {
+      state.unsaveJob.status = states.ERROR;
+      state.unsaveJob.data = action.payload;
     });
     // get saved job
     builder.addCase(triggerGetSavedJobs.pending, (state) => {
