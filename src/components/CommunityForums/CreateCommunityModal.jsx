@@ -43,9 +43,7 @@ const CreateCommunityModal = ({ show, showModal }) => {
     setErrors(newErrors);
 
     if (Object.keys(newErrors).length === 0) {
-      // Clear errors and submit the form
       setErrors({});
-      // console.log("Form submitted:", formData);
       dispatch(triggerCreateForum(formData));
     }
   };
@@ -54,15 +52,13 @@ const CreateCommunityModal = ({ show, showModal }) => {
     const { name, value } = e.target;
     setFormData((prevData) => ({
       ...prevData,
-      [name]: name === "infoJson" ? value : value.trim(), // Trim leading and trailing spaces for other fields
+      [name]: name === "infoJson" ? value : value.trim(),
     }));
   };
 
   const handleCancel = () => {
-    // Clear errors and reset the form fields
     setErrors({});
     setFormData(initialFormData);
-    // Close the modal
     showModal(false);
   };
 
@@ -90,7 +86,12 @@ const CreateCommunityModal = ({ show, showModal }) => {
 
           <div className="input-wrapper">
             <label htmlFor="infoJson">Info</label>
-            <textarea onChange={handleChange} name="infoJson" id="infoJson"></textarea>
+            <textarea
+              placeholder="Rules about the group (seperate each rule with a dot)"
+              onChange={handleChange}
+              name="infoJson"
+              id="infoJson"
+            ></textarea>
             {errors.infoJson && <div className="error-message">{errors.infoJson}</div>}
           </div>
 
