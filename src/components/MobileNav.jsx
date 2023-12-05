@@ -6,32 +6,32 @@ import { useSelector } from "react-redux";
 
 const MobileNav = ({ hide, nav }) => {
   const isLoggedIn = useSelector((state) => state.auth.isLoggedIn);
-
+  const { getMyProfile } = useSelector((state) => state.users);
   return (
-    <div className={`mobile-nav shadow d-lg-none ${!nav && "d-none"}`}>
+    <div className={`mobile-nav shadow d-lg-none ${!nav && 'd-none'}`}>
       <button onClick={hide}>
-        <Icon icon="close" />
+        <Icon icon='close' />
       </button>
       {isLoggedIn ? (
-        <div className=" text-center">
-          <div onClick={hide} className="mobile-menu-item">
-            <Link to="#">Dashboard</Link>
+        <div className=' text-center'>
+          <div onClick={hide} className='mobile-menu-item'>
+            <Link to={`users/${getMyProfile.data?.userId}`}>Dashboard</Link>
           </div>
-          <div onClick={hide} className="mobile-menu-item">
-            <Link to="/events-and-news">News & Events</Link>
+          <div onClick={hide} className='mobile-menu-item'>
+            <Link to='/events-and-news'>News & Events</Link>
           </div>
-          <div onClick={hide} className="mobile-menu-item">
-            <Link to="/settings">Settings</Link>
+          <div onClick={hide} className='mobile-menu-item'>
+            <Link to='/settings'>Settings</Link>
           </div>
-          <button className="mobile-nav-log-out-btn">Log Out</button>
+          <button className='mobile-nav-log-out-btn'>Log Out</button>
         </div>
       ) : (
-        <div className=" text-center">
-          <div onClick={hide} className="mobile-menu-item">
-            <Link to="/login">Login / Register</Link>
+        <div className=' text-center'>
+          <div onClick={hide} className='mobile-menu-item'>
+            <Link to='/login'>Login / Register</Link>
           </div>
-          <div onClick={hide} className="mobile-menu-item">
-            <Link to="#">Contact Us</Link>
+          <div onClick={hide} className='mobile-menu-item'>
+            <Link to='#'>Contact Us</Link>
           </div>
         </div>
       )}

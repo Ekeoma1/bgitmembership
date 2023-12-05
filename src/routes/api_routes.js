@@ -40,6 +40,7 @@ const apiRoutes = {
   getAllPostsByUserId: '/Posts/GetPostsByUserId',
   getMyPosts: '/Posts/GetMyPosts',
   createComment: '/Posts/CreateComment',
+  replyComment: '/Posts/ReplyComment',
   likeComment: '/Posts/LikeComment',
   unlikeComment: '/Posts/UnlikeComment',
   getAllCommentsByPostId: '/Posts/GetAllCommentsByPostId',
