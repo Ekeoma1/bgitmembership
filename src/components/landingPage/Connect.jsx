@@ -89,7 +89,7 @@ const Connect = () => {
                       <p className="member-interest mb-3 mt-2">Interests: {list.interest}</p>
 
                       <div>
-                        <Link className="pri-btn" to="#">
+                        <Link className="sec-btn" to="#">
                           + Follow
                         </Link>
                       </div>
