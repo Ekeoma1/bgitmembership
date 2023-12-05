@@ -32,6 +32,7 @@ import ScrollToTop from "./components/Molecules/ScrollToTop";
 import Connections from "./pages/Connections";
 import EventTicket from "./pages/EventTicket";
 import IndividualEventTicket from "./pages/IndividualEventTicket";
+import ForumMembers from "./pages/ForumMembers";
 
 function App() {
   const isLoggedIn = useSelector((state) => state.auth.isLoggedIn);
@@ -87,6 +88,10 @@ function App() {
             {
               path: "forums/all",
               element: <CommunityForumsAllForums />,
+            },
+            {
+              path: "forums/members",
+              element: <ForumMembers />,
             },
             {
               path: "/forums/:forumId",

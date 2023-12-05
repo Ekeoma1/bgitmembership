@@ -106,7 +106,7 @@ const Settings = () => {
             </Accordion.Body>
           </Accordion.Item>
 
-          <Accordion.Item eventKey="4">
+          {/* <Accordion.Item eventKey="4">
             <Accordion.Header>
               <div className="d-flex align-items-center gap-3">
                 <div className="icon-circle">
@@ -118,7 +118,7 @@ const Settings = () => {
             <Accordion.Body>
               <SocialLinks />
             </Accordion.Body>
-          </Accordion.Item>
+          </Accordion.Item> */}
 
           <Accordion.Item eventKey="5">
             <Accordion.Header>
