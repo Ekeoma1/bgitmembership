@@ -18,12 +18,15 @@ const apiRoutes = {
   unmuteUser: '/Connections/UnmuteUser',
 
   // jobs
-  addJob: '/Jobs/AddJob',
-  editJob: '/Jobs/EditJob',
   getAllJobs: '/Jobs/GetAllJobs',
-  getAllInactiveJobs: '/Jobs/GetAllInactiveJobs',
-  getAllClosedJobs: '/Jobs/GetAllClosedJobs',
-  deleteJob: '/Jobs/DeleteJob',
+  saveJob: '/Jobs/SaveJob',
+  unsaveJob: '/Jobs/UnSaveJob',
+  getSavedJobs: '/Jobs/GetSavedJobs',
+  addJob: '/Company/Jobs/AddJob',
+  editJob: '/Company/Jobs/EditJob',
+  getAllInactiveJobs: '/Company/Jobs/GetAllInactiveJobs',
+  getAllClosedJobs: '/Company/Jobs/GetAllClosedJobs',
+  deleteJob: '/Company/Jobs/DeleteJob',
 
   // jobs application
   applyForJob: '/JobsApplication/ApplyForJob',

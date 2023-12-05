@@ -4,6 +4,7 @@ import Resources from '../home/Resources';
 import Post from '../home/Post';
 import CommunityForums from '../home/CommunityForumsComponent';
 import Info from './Info';
+import MyUpdates from '../Molecules/MyUpdates';
 
 const ForumContentMain = ({ forum }) => {
   return (
@@ -16,14 +17,15 @@ const ForumContentMain = ({ forum }) => {
         <div className='row mt-lg-5'>
           <div className='col-3 d-lg-block d-none'>
             {/* <Info forum={forum} /> */}
+            <MyUpdates />
             <Resources />
           </div>
-          <div className='col-lg-6 col-12'>
+          <div className='col-lg-9 col-12'>
             <Post />
           </div>
-          <div className='col-3 d-lg-block d-none'>
+          {/* <div className='col-3 d-lg-block d-none'>
             <CommunityForums />
-          </div>
+          </div> */}
         </div>
       </div>
     </div>

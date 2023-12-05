@@ -12,7 +12,10 @@ import useWindowSize from '../hooks/useWindowSize';
 import '../../src/assets/scss/jobBoard.scss';
 import JobInfoCard from '../components/Molecules/JobInfoCard';
 import { useDispatch, useSelector } from 'react-redux';
-import { triggerGetAllJobs } from '../Features/jobs/jobs_slice';
+import {
+  triggerGetAllJobs,
+  triggerGetSavedJobs,
+} from '../Features/jobs/jobs_slice';
 import JobCard from '../components/Molecules/JobCard';
 import Apply from '../components/Job-Board/Apply';
 import { triggerGetMyProfile } from '../Features/users/users_slice';
@@ -22,7 +25,7 @@ import FilterBoard from '../components/Job-Board/FilterBoard';
 const JobBoard = () => {
   const { isMobile } = useWindowSize();
   const [filterData, setFilterData] = useState({});
-  const { getAllJobs } = useSelector((state) => state.jobs);
+  const { getAllJobs, getSavedJobs } = useSelector((state) => state.jobs);
   const { getMyProfile } = useSelector((state) => state.users);
   const [searchValue, setSearchValue] = useState('');
   const [showJobInfo, setShowJobInfo] = useState(false);
@@ -96,9 +99,16 @@ const JobBoard = () => {
   const dispatch = useDispatch();
   useEffect(() => {
     dispatch(triggerGetAllJobs());
+    dispatch(triggerGetSavedJobs());
     dispatch(triggerGetMyProfile());
   }, []);
-  // console.log('filterdata', filterData);
+  const [getAllJobsLocal, setGetAllJobsLocal] = useState([]);
+  useEffect(() => {
+    if (getAllJobs?.status === 'successful') {
+      setGetAllJobsLocal([...getAllJobs.data?.jobs]);
+    }
+  }, [getAllJobs?.status]);
+  console.log('getSavedJobs', getSavedJobs);
 
   return (
     <div className='job-board-wrapper'>
@@ -175,17 +185,19 @@ const JobBoard = () => {
                     </>
                   ) : getAllJobs.status === 'successful' ? (
                     <>
-                      {getAllJobs?.data?.jobs?.length === 0 ? (
+                      {getAllJobsLocal.length === 0 ? (
                         <></>
                       ) : (
                         <>
-                          {getAllJobs?.data?.jobs?.map((job, index) => (
+                          {getAllJobsLocal.map((job, index) => (
                             <JobCard
                               key={index}
                               job={job}
                               jobSelected={jobSelected}
                               setJobSelected={setJobSelected}
                               setShowJobInfo={setShowJobInfo}
+                              getAllJobsLocal={getAllJobsLocal}
+                              setGetAllJobsLocal={setGetAllJobsLocal}
                             />
                           ))}
                         </>
@@ -209,7 +221,10 @@ const JobBoard = () => {
                     <h5 className=''>filters</h5>
                   </div>
                 </div>
-                <FilterBoard setFilter={setFilter} setFilterData={setFilterData}/>
+                <FilterBoard
+                  setFilter={setFilter}
+                  setFilterData={setFilterData}
+                />
               </div>
             )}
           </div>
@@ -234,44 +249,43 @@ const JobBoard = () => {
                   <h5>saved jobs</h5>
                 </div>
                 <div className='saved-jobs'>
-                  {jobsData.map((item, index) => (
-                    <div key={index} className='saved-job'>
-                      <div className='img-con'>
-                        <img src={google} alt='company' className='' />
-                      </div>
-                      <div className='info'>
-                        <div className='details'>
-                          <div className=''>
-                            <h5 className=''>{item.role}</h5>
-                            <p className='company'>{item.company}</p>
-                            <p className='location'>{item.location}</p>
-                          </div>
-                          <span className='status'>{item.status}</span>
-                        </div>
-                        <div className='btn-con'>
-                          <HiOutlineChevronRight />
-                        </div>
-                      </div>
-                    </div>
-                  ))}
-                  <div className='saved-job'>
-                    <div className='img-con'>
-                      <img src={google} alt='company' className='' />
-                    </div>
-                    <div className='info'>
-                      <div className='details'>
-                        <div className=''>
-                          <h5 className=''>Data Analyst </h5>
-                          <p className='company'>Google</p>
-                          <p className='location'>London (Hybrid)</p>
-                        </div>
-                        <span className='status'>Applied 2 days ago</span>
-                      </div>
-                      <div className='btn-con'>
-                        <HiOutlineChevronRight />
-                      </div>
-                    </div>
-                  </div>
+                  {getSavedJobs.status === 'base' ||
+                  getSavedJobs.status === 'loading' ? (
+                    <>
+                      <JobCardsLoader />
+                    </>
+                  ) : getSavedJobs.status === 'successful' ? (
+                    <>
+                      {getSavedJobs.data.length === 0 ? (
+                        <p>No saved jobs</p>
+                      ) : (
+                        <>
+                          {getSavedJobs.data.map((item, index) => (
+                            <div key={index} className='saved-job'>
+                              <div className='img-con'>
+                                <img src={google} alt='company' className='' />
+                              </div>
+                              <div className='info'>
+                                <div className='details'>
+                                  <div className=''>
+                                    <h5 className=''>{item.role}</h5>
+                                    <p className='company'>{item.company}</p>
+                                    <p className='location'>{item.location}</p>
+                                  </div>
+                                  <span className='status'>{item.status}</span>
+                                </div>
+                                <div className='btn-con'>
+                                  <HiOutlineChevronRight />
+                                </div>
+                              </div>
+                            </div>
+                          ))}
+                        </>
+                      )}
+                    </>
+                  ) : (
+                    <></>
+                  )}
                 </div>
               </div>
             )}
@@ -281,6 +295,8 @@ const JobBoard = () => {
                 setShowJobInfo={setShowJobInfo}
                 setApply={setApply}
                 setJobSelected={setJobSelected}
+                getAllJobsLocal={getAllJobsLocal}
+                setGetAllJobsLocal={setGetAllJobsLocal}
               />
             )}
           </div>

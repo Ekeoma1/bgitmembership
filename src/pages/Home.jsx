@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import '../assets/scss/home.scss';
 import Post from '../components/home/Post';
 import CommunityForums from '../components/home/CommunityForumsComponent';
-import MyUpdates from '../components/home/MyUpdates';
+import MyUpdates from '../components/Molecules/MyUpdates';
 import Icon from '../components/Icon';
 import Resources from '../components/home/Resources';
 import img from '../assets/images/admin.svg';

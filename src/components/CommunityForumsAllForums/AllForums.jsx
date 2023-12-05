@@ -111,7 +111,7 @@ const AllForums = ({ setSearchMain }) => {
       setShowSearchModal(false);
     }
   }, [searchTerm]);
-  console.log('searchterm', searchTerm);
+  // console.log('searchterm', searchTerm);
   return (
     <div className='all-forums-section'>
       <div className='container'>
