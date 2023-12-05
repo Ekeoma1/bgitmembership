@@ -40,6 +40,7 @@ const apiRoutes = {
   getAllPostsByUserId: '/Posts/GetPostsByUserId',
   getMyPosts: '/Posts/GetMyPosts',
   createComment: '/Posts/CreateComment',
+  replyComment: '/Posts/ReplyComment',
   likeComment: '/Posts/LikeComment',
   unlikeComment: '/Posts/UnlikeComment',
   getAllCommentsByPostId: '/Posts/GetAllCommentsByPostId',
@@ -73,6 +74,7 @@ const apiRoutes = {
   // forums
   joinForum: '/Forums/JoinForum',
   leaveForum: '/Forums/LeaveForum',
+  cancelJoinForumRequest: '/Forums/CancelJoinForumRequest',
   createForum: '/Forums/CreateForum',
   getAllForums: '/Forums/GetAllForums',
   getForumById: '/Forums/GetForumById',

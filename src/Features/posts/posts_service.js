@@ -75,6 +75,15 @@ export default class PostsService {
     return response;
   }
 
+  //reply comment
+  static async replyComment(data) {
+    const response = await post({
+      url: apiRoutes.replyComment,
+      data: { ...data },
+    });
+    return response;
+  }
+
   //like comment
   static async likeComment(data) {
     const response = await post({

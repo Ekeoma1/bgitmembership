@@ -17,6 +17,9 @@ import {
   triggerUnsavePost,
   triggerUnlikePost,
   triggerCreateComment,
+  triggerReplyComment,
+  resetCreateComment,
+  resetReplyComment,
 } from '../../Features/posts/posts_slice';
 import { useDispatch, useSelector } from 'react-redux';
 import { FaRegBookmark, FaBookmark } from 'react-icons/fa';
@@ -29,13 +32,23 @@ import CommentInput from './CommentInput';
 const PostCard = ({ post, getAllPostsLocal, setGetAllPostsLocal }) => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const { likePost, savePost, unsavePost, activePostIdForOngoingRequest } =
-    useSelector((state) => state.posts);
+  const {
+    likePost,
+    savePost,
+    unsavePost,
+    activePostIdForOngoingRequest,
+    createComment,
+    replyComment: replyCommentRedux,
+  } = useSelector((state) => state.posts);
   const { getMyProfile } = useSelector((state) => state.users);
   const [showCommentsSection, setShowCommentsSection] = useState(false);
   const [comment, setComment] = useState('');
   const [reply, setReply] = useState('');
   const [replyComment, setReplyComment] = useState(false);
+  const [replyChildComment, setReplyChildComment] = useState(false);
+  const [commentThatIsBeingReplied, setCommentThatIsBeingReplied] = useState(
+    {}
+  );
 
   const [actionAcctModal, setActionAcctModal] = useState(false);
   const [profileImgOnLoadStatus, setProfileImgOnLoadStatus] = useState('base');
@@ -98,6 +111,7 @@ const PostCard = ({ post, getAllPostsLocal, setGetAllPostsLocal }) => {
   );
   const timeoutIdRef = useRef(null);
   const handleSaveUnsavePost = () => {
+    setActivePost(post);
     const startTimeout = () => {
       timeoutIdRef.current = setTimeout(() => {
         const data = { queryParams: { postId: post.postId } };
@@ -192,6 +206,13 @@ const PostCard = ({ post, getAllPostsLocal, setGetAllPostsLocal }) => {
       setReply(e.target.value);
     }
   };
+  const handleReplyComment = (comment) => {
+    console.log('comment', comment);
+    setReplyComment(true);
+    setCommentThatIsBeingReplied(comment);
+    setReplyChildComment(true);
+    setActivePost(post);
+  };
   const handleSubmit = (name) => {
     if (name === 'comment') {
       const data = {
@@ -201,11 +222,56 @@ const PostCard = ({ post, getAllPostsLocal, setGetAllPostsLocal }) => {
       dispatch(triggerCreateComment(data));
       setComment('');
     } else if (name === 'reply') {
+      const data = {
+        commentId: commentThatIsBeingReplied.commentId,
+        content: reply,
+      };
+      dispatch(triggerReplyComment(data));
       setReply('');
+      setCommentThatIsBeingReplied('');
     }
   };
+
+  useEffect(() => {
+    console.log('useeffect####################');
+    const data = _.cloneDeep(getAllPostsLocal);
+    console.log('one#################', data);
+    if (createComment.status === 'successful') {
+      data.forEach((item) => {
+        if (item.postId === activePost.postId) {
+          const commentedUsers = [...item?.commentedUsers];
+          console.log('two#################', commentedUsers);
+          const replies = [...commentedUsers?.replies];
+          console.log('three##############', replies);
+          commentedUsers.push(createComment.data);
+          data.commentedUsers = commentedUsers;
+          setGetAllPostsLocal(data);
+          dispatch(resetCreateComment());
+        }
+      });
+    }
+    if (replyCommentRedux.status === 'successful') {
+      console.log('true');
+      data.forEach((item) => {
+        if (item.postId === activePost.postId) {
+          if (Array.isArray(item.commentedUsers)) {
+            const commentedUsers = [...item?.commentedUsers];
+            console.log('two#################', commentedUsers);
+            const replies = [...commentedUsers?.replies];
+            console.log('three##############', replies);
+            replies.push(replyCommentRedux.data);
+            data.replies = replies;
+            setGetAllPostsLocal(data);
+            dispatch(resetReplyComment());
+          }
+        }
+      });
+    }
+  }, [createComment, replyCommentRedux, getAllPostsLocal]);
   // console.log('post###', post);
-  // console.log('active post###', activePost);
+  // console.log('comment', commentThatIsBeingReplied);
+  console.log('comment', createComment);
+  console.log('replycommentRedux', replyCommentRedux);
   const handleLikeComment = (id) => {};
   return (
     <div className='post-card shadow-sm mx-auto'>
@@ -293,7 +359,6 @@ const PostCard = ({ post, getAllPostsLocal, setGetAllPostsLocal }) => {
           </>
         )}
       </div>
-
       <div className='post-card-footer'>
         <div className='post-card-footer-content'>
           <div className='d-flex align-items-center c-gap-10'>
@@ -305,18 +370,16 @@ const PostCard = ({ post, getAllPostsLocal, setGetAllPostsLocal }) => {
             </button>
             <span>{post?.likeCount}</span>
           </div>
-
           <div className='d-flex align-items-center c-gap-10'>
             <button
               onClick={() => {
-                // setShowCommentsSection(true);
+                setShowCommentsSection(!showCommentsSection);
               }}
             >
               <Icon icon='comment' />
             </button>
-            <span>0</span>
+            <span>{post?.commentCount}</span>
           </div>
-
           <div className='d-flex align-items-center c-gap-10'>
             <button className='bookmark ' onClick={handleSaveUnsavePost}>
               {post?.isSavedByCurrentUser ? (
@@ -351,16 +414,52 @@ const PostCard = ({ post, getAllPostsLocal, setGetAllPostsLocal }) => {
             />
             <div className='comments-box'>
               {post.commentedUsers?.map((comment, index) => (
-                <SingleComment
-                  img={comment.userProfilePicture}
-                  name={comment.userName}
-                  role={'UX Design Enthusiast'}
-                  comment={comment.content}
-                  setLikeComment={setLikeComment}
-                  setReplyComment={setReplyComment}
-                />
+                <>
+                  <SingleComment
+                    key={index}
+                    img={comment.userProfilePicture}
+                    name={comment.userName}
+                    role={comment.profession}
+                    comment={comment.content}
+                    setLikeComment={setLikeComment}
+                    setReplyComment={() => handleReplyComment(comment)}
+                  />
+                  <>
+                    <div className='child-comments-wrapper'>
+                      <div className='hidden'></div>
+                      <div className='con'>
+                        {comment.replies.map((item, index) => (
+                          <SingleComment
+                            key={index}
+                            img={item.userProfilePicture}
+                            name={`${item.firstName} ${item.secondName}`}
+                            role={item.profession ?? 'test'}
+                            comment={item.content}
+                            childComment
+                            setReplyComment={() => {
+                              setReplyChildComment(true);
+                              setCommentThatIsBeingReplied(comment);
+                              setActivePost(post);
+                            }}
+                          />
+                        ))}
+                        {replyChildComment &&
+                          commentThatIsBeingReplied.commentId ===
+                            comment.commentId && (
+                            <CommentInput
+                              name={'reply'}
+                              onChange={handleChange}
+                              onSubmit={handleSubmit}
+                              value={reply}
+                              focus={replyChildComment}
+                            />
+                          )}
+                      </div>
+                    </div>
+                  </>
+                </>
               ))}
-              <div className='child-comments-wrapper'>
+              {/* <div className='child-comments-wrapper'>
                 <div className='hidden'></div>
                 <div className='con'>
                   <SingleComment
@@ -397,7 +496,7 @@ const PostCard = ({ post, getAllPostsLocal, setGetAllPostsLocal }) => {
                     />
                   )}
                 </div>
-              </div>
+              </div> */}
             </div>
           </div>
         )}

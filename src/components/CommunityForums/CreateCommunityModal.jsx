@@ -11,9 +11,7 @@ const CreateCommunityModal = ({ show, showModal }) => {
     infoJson: "",
     visibility: "",
   };
-
   const [formData, setFormData] = useState(initialFormData);
-
   const [errors, setErrors] = useState({});
 
   const formSubmit = (e) => {
@@ -22,21 +20,30 @@ const CreateCommunityModal = ({ show, showModal }) => {
     // Validate form fields
     const newErrors = {};
     Object.entries(formData).forEach(([key, value]) => {
-      if (!value.trim()) {
-        newErrors[key] = `${key.charAt(0).toUpperCase() + key.slice(1)} is required`;
+      // Check if the value is a string and not an empty string
+      if (typeof value === "string") {
+        if (value.trim() === "") {
+          newErrors[key] = `${key.charAt(0).toUpperCase() + key.slice(1)} is required`;
+        }
+      } else {
+        console.error(`Unexpected value for ${key}:`, value);
       }
     });
 
     // Additional validation for the 'info' field
     if (!newErrors.infoJson) {
-      const infoArray = formData.infoJson.split(".").map((item) => item.trim());
-      // Filter out empty strings from the array
-      const filteredInfoArray = infoArray.filter((item) => item !== "");
-      if (filteredInfoArray.length === 0) {
-        newErrors.infoJson = "Info should not be empty";
+      if (typeof formData.infoJson === "string") {
+        const infoArray = formData.infoJson.split(".").map((item) => item.trim());
+        // Filter out empty strings from the array
+        const filteredInfoArray = infoArray.filter((item) => item !== "");
+        if (filteredInfoArray.length === 0) {
+          newErrors.infoJson = "Info should not be empty";
+        } else {
+          formData.infoJson = filteredInfoArray; // Update formData with the array
+        }
       } else {
-        // Stringify the infoJson array before updating formData
-        formData.infoJson = JSON.stringify(filteredInfoArray);
+        newErrors.infoJson = "Info should be a string";
+        console.error("Unexpected value for infoJson:", formData.infoJson);
       }
     }
 

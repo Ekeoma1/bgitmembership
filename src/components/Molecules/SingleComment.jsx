@@ -13,10 +13,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { FaRegBookmark, FaBookmark, FaRegSmile } from 'react-icons/fa';
 import { TbPhoto } from 'react-icons/tb';
 import { AiFillHeart } from 'react-icons/ai';
-import AccountActionModal from '../Modals/AccountActionModal';
-import OutsideClickHandler from 'react-outside-click-handler';
-import ShareModal from '../Modals/ShareModal';
-import user from '../../assets/images/author1.png';
+
 const SingleComment = ({
   img,
   name,

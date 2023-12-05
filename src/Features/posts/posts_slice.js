@@ -36,6 +36,10 @@ const initialState = {
     status: states.BASE,
     data: {},
   },
+  replyComment: {
+    status: states.BASE,
+    data: {},
+  },
   likeComment: {
     status: states.BASE,
     data: {},
@@ -140,6 +144,16 @@ export const triggerCreateComment = createAsyncThunk(
     }
   }
 );
+export const triggerReplyComment = createAsyncThunk(
+  'reply-comment',
+  async (params, thunkAPI) => {
+    try {
+      return await PostsService.replyComment(params);
+    } catch (e) {
+      return thunkAPI.rejectWithValue(e.message);
+    }
+  }
+);
 export const triggerLikeComment = createAsyncThunk(
   'like-comment',
   async (params, thunkAPI) => {
@@ -221,6 +235,12 @@ const postsSlice = createSlice({
     },
     resetActivePostIdForOngoingRequest: (state) => {
       state.activePostIdForOngoingRequest = '';
+    },
+    resetCreateComment: (state) => {
+      state.createComment = initialState.createComment;
+    },
+    resetReplyComment: (state) => {
+      state.replyComment = initialState.replyComment;
     },
   },
   extraReducers: (builder) => {
@@ -335,6 +355,19 @@ const postsSlice = createSlice({
       state.createComment.status = states.ERROR;
       state.createComment.data = {};
     });
+    // reply comment
+    builder.addCase(triggerReplyComment.pending, (state) => {
+      state.replyComment.status = states.LOADING;
+      state.replyComment.data = {};
+    });
+    builder.addCase(triggerReplyComment.fulfilled, (state, action) => {
+      state.replyComment.status = states.SUCCESSFUL;
+      state.replyComment.data = action.payload;
+    });
+    builder.addCase(triggerReplyComment.rejected, (state) => {
+      state.replyComment.status = states.ERROR;
+      state.replyComment.data = {};
+    });
 
     // like comment
     builder.addCase(triggerLikeComment.pending, (state) => {
@@ -422,4 +455,6 @@ export const {
   resteUnsavePost,
   setActivePostIdForOngoingRequest,
   resetActivePostIdForOngoingRequest,
+  resetCreateComment,
+  resetReplyComment,
 } = postsSlice.actions;

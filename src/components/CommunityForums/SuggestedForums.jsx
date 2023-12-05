@@ -19,6 +19,7 @@ const SuggestedForums = () => {
   const { getAllForums, joinForum, leaveForum } = useSelector(
     (state) => state.forums
   );
+  const [getAllForumsLocal, setGetAllForumsLocal] = useState([]);
   const [pageNumber] = useState(1);
   const [pageSize] = useState(10);
   const dispatch = useDispatch();
@@ -36,6 +37,8 @@ const SuggestedForums = () => {
         });
       }
       dispatch(resetJoinForum());
+      const data = { queryParams: { pageNumber, pageSize } };
+      dispatch(triggerGetAllForums(data));
       dispatch(resetActiveForumIdForOngoingRequest());
     } else if (joinForum.status === 'error') {
       dispatch(resetJoinForum());
@@ -58,6 +61,11 @@ const SuggestedForums = () => {
     const data = { queryParams: { pageNumber, pageSize } };
     dispatch(triggerGetAllForums(data));
   }, []);
+  useEffect(() => {
+    if (getAllForums.status === 'successful') {
+      setGetAllForumsLocal(getAllForums.data.forums);
+    }
+  }, [getAllForums]);
   const responsive = {
     desktop: {
       breakpoint: { max: 4000, min: 1024 },
@@ -78,9 +86,7 @@ const SuggestedForums = () => {
         <div className='content-wrapper'>
           <h3 className='section-title text-color22'> Suggested Forums </h3>
           <div className='view-all'>
-            <button onClick={() => navigate('/forums/all')}>
-              View all
-            </button>
+            <button onClick={() => navigate('/forums/all')}>View all</button>
           </div>
           <div className='forums-cards-wrapper'>
             {getAllForums.status === 'base' ||
