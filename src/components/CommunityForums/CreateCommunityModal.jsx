@@ -35,7 +35,8 @@ const CreateCommunityModal = ({ show, showModal }) => {
       if (filteredInfoArray.length === 0) {
         newErrors.infoJson = "Info should not be empty";
       } else {
-        formData.infoJson = filteredInfoArray; // Update formData with the array
+        // Stringify the infoJson array before updating formData
+        formData.infoJson = JSON.stringify(filteredInfoArray);
       }
     }
 
@@ -44,7 +45,6 @@ const CreateCommunityModal = ({ show, showModal }) => {
     if (Object.keys(newErrors).length === 0) {
       // Clear errors and submit the form
       setErrors({});
-      // Perform your form submission logic here
       // console.log("Form submitted:", formData);
       dispatch(triggerCreateForum(formData));
     }
