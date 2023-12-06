@@ -19,12 +19,12 @@ const Post = () => {
       const data = { queryParams: { pageNumber, pageSize } };
       dispatch(triggerGetAllPosts(data));
     }
-  }, [createPost.status, pageNumber, pageSize]);
+  }, [createPost.status]);
 
   useEffect(() => {
     const data = { queryParams: { pageNumber, pageSize } };
     dispatch(triggerGetAllPosts(data));
-  }, [pageNumber, pageSize]);
+  }, [pageNumber]);
 
   const [getAllPostsLocal, setGetAllPostsLocal] = useState([]);
 
@@ -32,7 +32,10 @@ const Post = () => {
     if (getAllPosts?.status === 'successful' && getAllPosts.data?.posts) {
       const temp = getAllPosts?.data?.posts;
       const getAllPostsPrevious = [...getAllPostsLocal];
-      const getAllPostsAll = [...getAllPostsPrevious, ...temp];
+      const getAllPostsAllTemp = [...getAllPostsPrevious, ...temp];
+      const getAllPostsAll = getAllPostsAllTemp.filter((obj, index, array) => {
+        return array.findIndex((item) => item.postId === obj.postId) === index;
+      });
       setGetAllPostsLocal(getAllPostsAll);
     }
   }, [getAllPosts?.data?.posts, getAllPosts?.status]);
@@ -85,7 +88,7 @@ const Post = () => {
           </>
         )}
         {pageNumber < 10 && (
-          <div className='btn'>
+          <div className='btn-con'>
             <MainButton
               text={'Load more'}
               onClick={() => {

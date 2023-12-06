@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import '../assets/scss/navFooter.scss';
 import Logo from '../assets/images/logo.png';
-import { Link, NavLink } from 'react-router-dom';
+import { Link, NavLink, useNavigate } from 'react-router-dom';
 import Icon from './Icon';
 import { useSelector, useDispatch } from 'react-redux';
 import MobileNav from './MobileNav';
@@ -12,6 +12,7 @@ import { logout, resetSignIn, resetSignUp } from '../Features/auth/auth_slice';
 import OutsideClickHandler from 'react-outside-click-handler';
 import { UserProfilePhotoLoader2 } from './Atoms/skeleton-loaders/dashboard-page/UserProfilePhotoLoader';
 import { triggerGetMyProfile } from '../Features/users/users_slice';
+import { triggerGetAllPosts } from '../Features/posts/posts_slice';
 
 const Navbar = () => {
   // const { toggleTheme, theme } = useContext(AppContext);
@@ -20,6 +21,9 @@ const Navbar = () => {
   const [showDropdown, setShowDropdown] = useState(false);
   const [mobNav, setMobNav] = useState(false);
   const dispatch = useDispatch();
+  const navigate = useNavigate();
+  const [pageNumber, setPageNumber] = useState(1);
+  const [pageSize, setPageSize] = useState(2);
   const [profileImgOnLoadStatus, setProfileImgOnLoadStatus] = useState('base');
 
   const hideMobNav = () => {
@@ -37,6 +41,11 @@ const Navbar = () => {
   const hideDropdown = () => {
     setShowDropdown(false);
   };
+  const handleClickLogo = () => {
+    navigate('/');
+    const data = { queryParams: { pageNumber, pageSize } };
+    dispatch(triggerGetAllPosts(data));
+  };
   useEffect(() => {
     if (isLoggedIn) {
       dispatch(triggerGetMyProfile());
@@ -46,9 +55,9 @@ const Navbar = () => {
     <nav className=''>
       <div className='container'>
         <div className='nav-divider'>
-          <Link to='/'>
+          <div className='logo-con center' onClick={handleClickLogo}>
             <img src={Logo} alt='bgit logo' width='50' />
-          </Link>
+          </div>
 
           <div className='d-lg-none menu-btn-wrapper'>
             <button>
@@ -161,7 +170,10 @@ const Navbar = () => {
                           !showDropdown && 'd-none'
                         }`}
                       >
-                        <Link onClick={hideDropdown} to={`users/${getMyProfile.data?.userId}`}>
+                        <Link
+                          onClick={hideDropdown}
+                          to={`users/${getMyProfile.data?.userId}`}
+                        >
                           My Dashboard
                         </Link>
                         <Link onClick={hideDropdown} to='/settings'>

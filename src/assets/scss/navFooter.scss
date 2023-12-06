@@ -11,6 +11,11 @@ nav {
     grid-template-columns: 1fr 3fr;
     align-items: center;
 
+    .logo-con{
+      width: 5rem;
+      cursor: pointer;
+    }
+
     .contact-btn {
       padding: 12px 23px;
       background-color: $pri-color2;

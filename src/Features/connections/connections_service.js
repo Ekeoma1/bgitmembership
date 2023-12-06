@@ -1,5 +1,5 @@
 import apiRoutes from '../../routes/api_routes';
-import { get, post, put } from '../../network/https';
+import { get, post } from '../../network/https';
 
 export default class ConnectionsService {
   //  get accepted connections
@@ -60,51 +60,6 @@ export default class ConnectionsService {
   static async rejectConnectionRequest(data) {
     const response = await post({
       url: apiRoutes.rejectConnectionRequest,
-      data: { ...data },
-    });
-    return response;
-  }
-
-  //   get blocked users
-  static async getBlockedUsers(data) {
-    const response = await get({
-      url: apiRoutes.getBlockedUsers,
-      data: { ...data },
-    });
-    return response;
-  }
-
-  //   block user
-  static async blockUser(data) {
-    const response = await put({
-      url: apiRoutes.blockUser,
-      data: { ...data },
-    });
-    return response;
-  }
-
-  // unblock user
-  static async unblockUser(data) {
-    const response = await put({
-      url: apiRoutes.unblockUser,
-      data: { ...data },
-    });
-    return response;
-  }
-
-  // mute user
-  static async muteUser(data) {
-    const response = await put({
-      url: apiRoutes.muteUser,
-      data: { ...data },
-    });
-    return response;
-  }
-
-  // unmute user
-  static async unmuteUser(data) {
-    const response = await put({
-      url: apiRoutes.unmuteUser,
       data: { ...data },
     });
     return response;

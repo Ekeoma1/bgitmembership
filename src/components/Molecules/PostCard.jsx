@@ -233,9 +233,9 @@ const PostCard = ({ post, getAllPostsLocal, setGetAllPostsLocal }) => {
   };
 
   useEffect(() => {
-    console.log('useeffect####################');
+    // console.log('useeffect####################');
     const data = _.cloneDeep(getAllPostsLocal);
-    console.log('one#################', data);
+    // console.log('one#################', data);
     if (createComment.status === 'successful') {
       data.forEach((item) => {
         if (item.postId === activePost.postId) {
@@ -270,8 +270,8 @@ const PostCard = ({ post, getAllPostsLocal, setGetAllPostsLocal }) => {
   }, [createComment, replyCommentRedux, getAllPostsLocal]);
   // console.log('post###', post);
   // console.log('comment', commentThatIsBeingReplied);
-  console.log('comment', createComment);
-  console.log('replycommentRedux', replyCommentRedux);
+  // console.log('comment', createComment);
+  // console.log('replycommentRedux', replyCommentRedux);
   const handleLikeComment = (id) => {};
   return (
     <div className='post-card shadow-sm mx-auto'>

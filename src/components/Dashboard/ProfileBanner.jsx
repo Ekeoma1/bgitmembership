@@ -13,7 +13,7 @@ import UserProfilePhotoLoader from '../Atoms/skeleton-loaders/dashboard-page/Use
 import DetailsLoader from '../Atoms/skeleton-loaders/dashboard-page/DetailsLoader';
 // import defaultImg from '../../assets/images/default-photo.jpeg';
 import defaultImg from '../../assets/images/main2.png';
-import bg from '../../assets/images/people1.svg';
+import spinner from '../../assets/images/loader-spin.png';
 import { FaChevronRight } from 'react-icons/fa';
 import { FaCamera } from 'react-icons/fa6';
 import { GoPencil } from 'react-icons/go';
@@ -22,12 +22,17 @@ import { BsImage } from 'react-icons/bs';
 import OutsideClickHandler from 'react-outside-click-handler/build/OutsideClickHandler';
 import { LuMoreVertical } from 'react-icons/lu';
 import UpdateCoverPhotoModal from '../Modals/UpdateCoverPhotoModal';
+import { triggerSendConnectionRequest } from '../../Features/connections/connections_slice';
 
 const ProfileBanner = ({ data }) => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const { getMyProfile, updateProfilePicture, updateBackgroundPicture } =
-    useSelector((state) => state.users);
+  const {
+    getMyProfile,
+    updateProfilePicture,
+    updateBackgroundPicture,
+    getUserProfileById,
+  } = useSelector((state) => state.users);
   const [actionAcctModal, setActionAcctModal] = useState(false);
   const [individalAcctModal, setIndividualAcctModal] = useState(false);
   const [contentToShow, setContentToShow] = useState(null);
@@ -76,6 +81,11 @@ const ProfileBanner = ({ data }) => {
       }
     }
     setShowDropdown(false);
+  };
+  const handleConnect = () => {
+    const data = { receiverUserId: getUserProfileById.data?.userId };
+    console.log(data);
+    dispatch(triggerSendConnectionRequest(data));
   };
   useEffect(() => {
     if (uploadProfilePicture.profilePicture) {
@@ -411,19 +421,11 @@ const ProfileBanner = ({ data }) => {
         {data.data?.userId !== getMyProfile.data?.userId &&
           data?.status === 'successful' && (
             <div className='d-flex c-gap-10 flex-wrap mt-3'>
-              <button
-                onClick={() => {
-                }}
-                className='reach-btn'
-              >
-                + Connect
+              <button onClick={handleConnect} className='reach-btn'>
+                <img src={spinner} alt='spinner' />+ Connect
               </button>
 
-              <button
-                onClick={() => {
-                }}
-                className='reach-btn'
-              >
+              <button onClick={() => {}} className='reach-btn'>
                 Message
               </button>
             </div>

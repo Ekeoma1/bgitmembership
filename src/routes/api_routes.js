@@ -11,11 +11,13 @@ const apiRoutes = {
   getPendingRequestConnections: '/Connections/GetPendingRequestConnections',
   acceptConnectionRequest: '/Connections/AcceptConnectionRequest',
   rejectConnectionRequest: '/Connections/RejectConnectionRequest',
-  getBlockedUsers: '/Connections/GetBlockedUsers',
-  blockUser: '/Connections/BlockUser',
-  unblockUser: '/Connections/UnblockUser',
-  muteUser: '/Connections/MuteUser',
-  unmuteUser: '/Connections/UnmuteUser',
+
+  // account privacies
+  getBlockedUsers: '/AccountPrivacies/GetBlockedUsers',
+  blockUser: '/AccountPrivacies/BlockUser',
+  unblockUser: '/AccountPrivacies/UnblockUser',
+  muteUser: '/AccountPrivacies/MuteUser',
+  unmuteUser: '/AccountPrivacies/UnmuteUser',
 
   // jobs
   getAllJobs: '/Jobs/GetAllJobs',
