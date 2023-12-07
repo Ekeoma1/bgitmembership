@@ -13,7 +13,7 @@ import UserProfilePhotoLoader from '../Atoms/skeleton-loaders/dashboard-page/Use
 import DetailsLoader from '../Atoms/skeleton-loaders/dashboard-page/DetailsLoader';
 // import defaultImg from '../../assets/images/default-photo.jpeg';
 import defaultImg from '../../assets/images/main2.png';
-import spinner from '../../assets/images/loader-spin.png';
+import spinner from '../../assets/images/spinner2.png';
 import { FaChevronRight } from 'react-icons/fa';
 import { FaCamera } from 'react-icons/fa6';
 import { GoPencil } from 'react-icons/go';
@@ -22,7 +22,11 @@ import { BsImage } from 'react-icons/bs';
 import OutsideClickHandler from 'react-outside-click-handler/build/OutsideClickHandler';
 import { LuMoreVertical } from 'react-icons/lu';
 import UpdateCoverPhotoModal from '../Modals/UpdateCoverPhotoModal';
-import { triggerSendConnectionRequest } from '../../Features/connections/connections_slice';
+import {
+  triggerSendConnectionRequest,
+  triggerCancelConnectionRequest,
+  resetSendConnectionRequest,
+} from '../../Features/connections/connections_slice';
 
 const ProfileBanner = ({ data }) => {
   const navigate = useNavigate();
@@ -33,6 +37,9 @@ const ProfileBanner = ({ data }) => {
     updateBackgroundPicture,
     getUserProfileById,
   } = useSelector((state) => state.users);
+  const { sendConnectionRequest, cancelConnectionRequest } = useSelector(
+    (state) => state.connections
+  );
   const [actionAcctModal, setActionAcctModal] = useState(false);
   const [individalAcctModal, setIndividualAcctModal] = useState(false);
   const [contentToShow, setContentToShow] = useState(null);
@@ -83,10 +90,21 @@ const ProfileBanner = ({ data }) => {
     setShowDropdown(false);
   };
   const handleConnect = () => {
-    const data = { receiverUserId: getUserProfileById.data?.userId };
-    console.log(data);
-    dispatch(triggerSendConnectionRequest(data));
+    if (sendConnectionRequest.status === 'base') {
+      const values = { receiverUserId: getUserProfileById.data?.userId };
+      dispatch(triggerSendConnectionRequest(values));
+    } else if (sendConnectionRequest.status === 'successful') {
+      const values = { receiverUserId: getUserProfileById.data?.userId };
+      dispatch(triggerCancelConnectionRequest(values));
+    }
   };
+
+  useEffect(() => {
+    if (cancelConnectionRequest.status === 'successful') {
+      dispatch(resetSendConnectionRequest());
+    }
+  }, [cancelConnectionRequest]);
+
   useEffect(() => {
     if (uploadProfilePicture.profilePicture) {
       setUploadedprofilePicture(true);
@@ -94,6 +112,7 @@ const ProfileBanner = ({ data }) => {
       dispatch(triggerUpdateProfilePicture(uploadProfilePicture));
     }
   }, [uploadProfilePicture]);
+  
   useEffect(() => {
     if (uploadCoverPicture.backgroundImage) {
       setUploadedCoverPicture(true);
@@ -108,6 +127,7 @@ const ProfileBanner = ({ data }) => {
       setUploadProfilePicture({ profilePicture: '' });
     }
   }, [updateProfilePicture]);
+
   useEffect(() => {
     if (updateBackgroundPicture.status === 'successful') {
       setUploadCoverPicture({ backgroundImage: '' });
@@ -421,8 +441,23 @@ const ProfileBanner = ({ data }) => {
         {data.data?.userId !== getMyProfile.data?.userId &&
           data?.status === 'successful' && (
             <div className='d-flex c-gap-10 flex-wrap mt-3'>
-              <button onClick={handleConnect} className='reach-btn'>
-                <img src={spinner} alt='spinner' />+ Connect
+              <button
+                onClick={handleConnect}
+                className={`reach-btn ${
+                  sendConnectionRequest.status === 'loading' && 'loading'
+                }`}
+              >
+                {sendConnectionRequest.status === 'loading' ||
+                sendConnectionRequest.status === 'loading' ? (
+                  <img src={spinner} alt='spinner' />
+                ) : sendConnectionRequest.status === 'successful' ? (
+                  <>
+                    {sendConnectionRequest.data === 'Connection request sent' &&
+                      'Cancel request'}
+                  </>
+                ) : (
+                  '+ Connect'
+                )}
               </button>
 
               <button onClick={() => {}} className='reach-btn'>

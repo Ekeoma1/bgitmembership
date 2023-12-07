@@ -34,6 +34,7 @@ export default class ConnectionsService {
     const response = await post({
       url: apiRoutes.sendConnectionRequest,
       data: { ...data },
+      queryParams: data.queryParams,
     });
     return response;
   }

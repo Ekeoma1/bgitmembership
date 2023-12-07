@@ -19,6 +19,10 @@ const initialState = {
     status: states.BASE,
     data: {},
   },
+  cancelConnectionRequest: {
+    status: states.BASE,
+    data: {},
+  },
   getPendingRequestConnections: {
     status: states.BASE,
     data: {},
@@ -73,6 +77,16 @@ export const triggerSendConnectionRequest = createAsyncThunk(
     }
   }
 );
+export const triggerCancelConnectionRequest = createAsyncThunk(
+  'cancel-connection-request',
+  async (params, thunkAPI) => {
+    try {
+      return await ConnectionService.sendConnectionRequest(params);
+    } catch (e) {
+      return thunkAPI.rejectWithValue(e.message);
+    }
+  }
+);
 export const triggerGetPendingRequestConnections = createAsyncThunk(
   'get-pending-request-connections',
   async (params, thunkAPI) => {
@@ -107,7 +121,11 @@ export const triggerRejectConnectionRequest = createAsyncThunk(
 const connectionSlice = createSlice({
   name: 'connections',
   initialState,
-  reducers: {},
+  reducers: {
+    resetSendConnectionRequest: (state) => {
+      state.sendConnectionRequest = initialState.sendConnectionRequest;
+    },
+  },
   extraReducers: (builder) => {
     // Get accepted connections
     builder.addCase(triggerGetAcceptedConnections.pending, (state) => {
@@ -173,6 +191,22 @@ const connectionSlice = createSlice({
       state.sendConnectionRequest.status = states.ERROR;
       state.sendConnectionRequest.data = {};
     });
+    // cancel connection requests
+    builder.addCase(triggerCancelConnectionRequest.pending, (state) => {
+      state.cancelConnectionRequest.status = states.LOADING;
+      state.cancelConnectionRequest.data = {};
+    });
+    builder.addCase(
+      triggerCancelConnectionRequest.fulfilled,
+      (state, action) => {
+        state.cancelConnectionRequest.status = states.SUCCESSFUL;
+        state.cancelConnectionRequest.data = action.payload;
+      }
+    );
+    builder.addCase(triggerCancelConnectionRequest.rejected, (state) => {
+      state.cancelConnectionRequest.status = states.ERROR;
+      state.cancelConnectionRequest.data = {};
+    });
 
     // get pending request connections
     builder.addCase(triggerGetPendingRequestConnections.pending, (state) => {
@@ -224,8 +258,8 @@ const connectionSlice = createSlice({
       state.rejectConnectionRequest.status = states.ERROR;
       state.rejectConnectionRequest.data = {};
     });
-  
   },
 });
 
 export default connectionSlice.reducer;
+export const { resetSendConnectionRequest } = connectionSlice.actions;

@@ -278,6 +278,33 @@
         font-weight: 700;
         font-family: $thic700;
         border-radius: 30px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        min-width: 13rem;
+        min-height: 3.8rem;
+        max-width: 13rem;
+        max-height: 3.8rem;
+        &.loading {
+          cursor: default;
+        }
+        img {
+          animation-iteration-count: infinite;
+          animation-duration: 1s;
+          animation-timing-function: linear;
+          height: 2.2rem;
+          width: 2.2rem;
+          object-fit: contain;
+          animation-name: rotate-s-loader;
+        }
+        @keyframes rotate-s-loader {
+          from {
+            transform: rotate(0);
+          }
+          to {
+            transform: rotate(360deg);
+          }
+        }
       }
     }
   }
@@ -452,7 +479,7 @@
     }
 
     .member-card-wrapper {
-      .loading-state{
+      .loading-state {
         width: 100%;
       }
       .member-card {
@@ -490,7 +517,6 @@
         }
       }
     }
-    
 
     .see-more-btn {
       color: $alt-text-color;

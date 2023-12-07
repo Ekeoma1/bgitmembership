@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import '../../../src/assets/scss/updates.scss';
 import request1 from '../../../src/assets/images/request1.svg';
 import request2 from '../../../src/assets/images/request2.svg';
@@ -6,52 +6,29 @@ import request3 from '../../../src/assets/images/request3.svg';
 import RequestCard from '../Molecules/RequestCard';
 import Carousel from 'react-multi-carousel';
 import 'react-multi-carousel/lib/styles.css';
+import { useSelector } from 'react-redux';
+import { ForumCardsLoader2 } from '../Atoms/skeleton-loaders/ForumCardsLoader';
+import EmptyState from '../Molecules/EmptyState';
+import SingleLineLoader, {
+  SingleLineLoader2,
+} from '../Atoms/skeleton-loaders/SingleLineLoader';
 
 const Requests = ({ basedOn }) => {
-  const requests = [
-    {
-      img: request1,
-      time: 'BGIT Member since 2023',
-      name: 'Ediri Oluwa',
-      interests: 'UX design & Shopping',
-    },
-    {
-      img: request2,
-      time: 'BGIT Member since 2013',
-      name: 'Destini Love',
-      interests: 'UX design & Shopping',
-    },
-    {
-      img: request3,
-      time: 'BGIT Member since 2020',
-      name: 'Adeola Otun',
-      interests: 'UX design & Shopping',
-    },
-    {
-      img: request3,
-      time: 'BGIT Member since 2020',
-      name: 'Adeola Otun',
-      interests: 'UX design & Shopping',
-    },
-    {
-      img: request2,
-      time: 'BGIT Member since 2013',
-      name: 'Destini Love',
-      interests: 'UX design & Shopping',
-    },
-    {
-      img: request3,
-      time: 'BGIT Member since 2020',
-      name: 'Adeola Otun',
-      interests: 'UX design & Shopping',
-    },
-    {
-      img: request3,
-      time: 'BGIT Member since 2020',
-      name: 'Adeola Otun',
-      interests: 'UX design & Shopping',
-    },
-  ];
+  const { getPendingRequestConnections } = useSelector(
+    (state) => state.connections
+  );
+  const [
+    getPendingRequestConnectionsLocal,
+    setGetPendingRequestConnectionsLocal,
+  ] = useState([]);
+  useEffect(() => {
+    if (getPendingRequestConnections.status === 'successful') {
+      setGetPendingRequestConnectionsLocal(
+        getPendingRequestConnections.data.pendingRequests
+      );
+    }
+  }, [getPendingRequestConnections]);
+
   const responsive = {
     desktop: {
       breakpoint: { max: 4000, min: 1024 },
@@ -72,15 +49,58 @@ const Requests = ({ basedOn }) => {
         <div className='requests-section-content'>
           <div className='section-title-wrapper'>
             <h5 className=''>
-              Requests <span>{'(4)'}</span>
+              Requests{' '}
+              {getPendingRequestConnections.status === 'base' ||
+              getPendingRequestConnections.status === 'loading' ? (
+                <div className='loader'>
+                  <SingleLineLoader />
+                </div>
+              ) : getPendingRequestConnections.status === 'successful' ? (
+                <span>{`(${getPendingRequestConnections.data?.pendingRequests?.length})`}</span>
+              ) : (
+                <></>
+              )}
             </h5>
           </div>
           <div className='requests-cards-wrapper'>
-            <Carousel responsive={responsive}>
-              {requests.map((item, index) => (
-                <RequestCard item={item} key={index} />
-              ))}
-            </Carousel>
+            {getPendingRequestConnections.status === 'base' ||
+            getPendingRequestConnections.status === 'loading' ? (
+              <div className='container loader-con'>
+                <ForumCardsLoader2 />
+              </div>
+            ) : getPendingRequestConnections.status === 'successful' ? (
+              <>
+                {getPendingRequestConnections.data?.pendingRequests?.length ===
+                0 ? (
+                  <EmptyState
+                    title={'No connection requests'}
+                    info={'See our latest News & Events below.'}
+                    height={'50rem'}
+                  />
+                ) : (
+                  <>
+                    <Carousel responsive={responsive}>
+                      {getPendingRequestConnectionsLocal.map(
+                        (request, index) => (
+                          <RequestCard
+                            key={request.connectionId}
+                            item={request}
+                            getPendingRequestConnectionsLocal={
+                              getPendingRequestConnectionsLocal
+                            }
+                            setGetPendingRequestConnectionsLocal={
+                              setGetPendingRequestConnectionsLocal
+                            }
+                          />
+                        )
+                      )}
+                    </Carousel>
+                  </>
+                )}
+              </>
+            ) : (
+              <></>
+            )}
           </div>
         </div>
       </div>

@@ -20,6 +20,7 @@ import {
   triggerReplyComment,
   resetCreateComment,
   resetReplyComment,
+  triggerGetCommentsByPostId,
 } from '../../Features/posts/posts_slice';
 import { useDispatch, useSelector } from 'react-redux';
 import { FaRegBookmark, FaBookmark } from 'react-icons/fa';
@@ -39,6 +40,7 @@ const PostCard = ({ post, getAllPostsLocal, setGetAllPostsLocal }) => {
     activePostIdForOngoingRequest,
     createComment,
     replyComment: replyCommentRedux,
+    getCommentsByPostId,
   } = useSelector((state) => state.posts);
   const { getMyProfile } = useSelector((state) => state.users);
   const [showCommentsSection, setShowCommentsSection] = useState(false);
@@ -268,6 +270,12 @@ const PostCard = ({ post, getAllPostsLocal, setGetAllPostsLocal }) => {
       });
     }
   }, [createComment, replyCommentRedux, getAllPostsLocal]);
+
+  useEffect(() => {
+    const data = { queryParams: { postId: post.postId } };
+    dispatch(triggerGetCommentsByPostId(data));
+  }, []);
+  console.log('getCommentsByPostId', getCommentsByPostId);
   // console.log('post###', post);
   // console.log('comment', commentThatIsBeingReplied);
   // console.log('comment', createComment);

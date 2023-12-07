@@ -1,24 +1,32 @@
-import axios from "axios";
+import axios from 'axios';
 
-const URL = process.env.REACT_APP_URL ?? "";
+const URL = process.env.REACT_APP_URL ?? '';
 // console.log('stage', process.env.REACT_APP_NODE_ENV);
 
-async function ajax({ method = "GET", url, data, queryParams }) {
+async function ajax({ method = 'GET', url, data, queryParams }) {
   // console.log('query##### ', queryParams);
-  
-  // console.log('data ', data);
+
+  // console.log('data http ', data);
   let result, contentType;
-  if (data?.photo || data?.postImageUrl || data?.postVideoUrl || data?.content || data?.resume || data?.profilePicture || data?.backgroundImage) {
-    contentType = "multipart/form-data";
+  if (
+    data?.photo ||
+    data?.postImageUrl ||
+    data?.postVideoUrl ||
+    data?.content ||
+    data?.resume ||
+    data?.profilePicture ||
+    data?.backgroundImage
+  ) {
+    contentType = 'multipart/form-data';
   } else {
-    contentType = "application/json";
+    contentType = 'application/json';
   }
-  if (url === "/Auth/Login" || url === "/Auth/SignUp") {
+  if (url === '/Auth/Login' || url === '/Auth/SignUp') {
     // console.log('login in or signing up requests');
     const axiosInstance = axios.create({
       baseURL: URL,
       headers: {
-        "Content-Type": contentType,
+        'Content-Type': contentType,
       },
     });
     await axiosInstance({
@@ -37,22 +45,22 @@ async function ajax({ method = "GET", url, data, queryParams }) {
       });
     return result;
   } else {
-    const token = localStorage.getItem("token");
+    const token = localStorage.getItem('token');
     const authToken = JSON.parse(token);
-    const currentToken = JSON.parse(atob(token.split(".")[1]));
+    const currentToken = JSON.parse(atob(token.split('.')[1]));
     // console.log('token', currentToken);
     const expiredDate = new Date(currentToken.exp * 1000);
     let currentDate = new Date();
     if (expiredDate < currentDate) {
-      window.location.replace("/login");
-      localStorage.removeItem("token");
+      window.location.replace('/login');
+      localStorage.removeItem('token');
       // console.log('token expired');
     } else {
       // console.log('normal requests');
       const axiosInstance = axios.create({
         baseURL: URL,
         headers: {
-          "Content-Type": contentType,
+          'Content-Type': contentType,
           Authorization: `Bearer ${authToken}`,
         },
       });
@@ -63,11 +71,12 @@ async function ajax({ method = "GET", url, data, queryParams }) {
         params: queryParams,
       })
         .then((response) => {
+          // console.log('response http############', response);
           const { data } = response;
           result = data;
         })
         .catch((err) => {
-          console.log("axios errp", err);
+          console.log('axios errp', err);
           result = err.response?.data;
         });
       return result;
@@ -76,15 +85,16 @@ async function ajax({ method = "GET", url, data, queryParams }) {
 }
 
 // Send GET Requests
-export const get = async (payload) => await ajax({ ...payload, method: "GET" });
+export const get = async (payload) => await ajax({ ...payload, method: 'GET' });
 
 // Send POST Requests
 export const post = async (payload) => {
-  return await ajax({ ...payload, method: "POST" });
+  return await ajax({ ...payload, method: 'POST' });
 };
 
 // Send Delete Requests
-export const del = async (payload) => await ajax({ ...payload, method: "DELETE" });
+export const del = async (payload) =>
+  await ajax({ ...payload, method: 'DELETE' });
 
 // Send put Requests
-export const put = async (payload) => await ajax({ ...payload, method: "PUT" });
+export const put = async (payload) => await ajax({ ...payload, method: 'PUT' });

@@ -45,7 +45,7 @@ const apiRoutes = {
   replyComment: '/Posts/ReplyComment',
   likeComment: '/Posts/LikeComment',
   unlikeComment: '/Posts/UnlikeComment',
-  getAllCommentsByPostId: '/Posts/GetAllCommentsByPostId',
+  getCommentsByPostId: '/Posts/GetCommentsByPostId',
   savePost: '/Posts/SavePost',
   unsavePost: '/Posts/UnsavePost',
 
