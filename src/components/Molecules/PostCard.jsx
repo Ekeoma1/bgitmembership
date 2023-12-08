@@ -272,7 +272,7 @@ const PostCard = ({ post, getAllPostsLocal, setGetAllPostsLocal }) => {
   }, [createComment, replyCommentRedux, getAllPostsLocal]);
 
   useEffect(() => {
-    const data = { queryParams: { postId: post.postId } };
+    const data = { queryParams: { postId: post?.postId } };
     dispatch(triggerGetCommentsByPostId(data));
   }, []);
   console.log('getCommentsByPostId', getCommentsByPostId);
