@@ -242,6 +242,9 @@ const postsSlice = createSlice({
     resetReplyComment: (state) => {
       state.replyComment = initialState.replyComment;
     },
+    resetGetCommentsByPostId: (state) => {
+      state.getCommentsByPostId = initialState.getCommentsByPostId;
+    },
   },
   extraReducers: (builder) => {
     //create post
@@ -402,13 +405,10 @@ const postsSlice = createSlice({
       state.getCommentsByPostId.status = states.LOADING;
       state.getCommentsByPostId.data = {};
     });
-    builder.addCase(
-      triggerGetCommentsByPostId.fulfilled,
-      (state, action) => {
-        state.getCommentsByPostId.status = states.SUCCESSFUL;
-        state.getCommentsByPostId.data = action.payload;
-      }
-    );
+    builder.addCase(triggerGetCommentsByPostId.fulfilled, (state, action) => {
+      state.getCommentsByPostId.status = states.SUCCESSFUL;
+      state.getCommentsByPostId.data = action.payload;
+    });
     builder.addCase(triggerGetCommentsByPostId.rejected, (state, action) => {
       state.getCommentsByPostId.status = states.ERROR;
       state.getCommentsByPostId.data = action.payload;
@@ -457,4 +457,5 @@ export const {
   resetActivePostIdForOngoingRequest,
   resetCreateComment,
   resetReplyComment,
+  resetGetCommentsByPostId,
 } = postsSlice.actions;

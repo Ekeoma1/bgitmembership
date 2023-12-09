@@ -21,6 +21,7 @@ import {
   resetCreateComment,
   resetReplyComment,
   triggerGetCommentsByPostId,
+  resetGetCommentsByPostId,
 } from '../../Features/posts/posts_slice';
 import { useDispatch, useSelector } from 'react-redux';
 import { FaRegBookmark, FaBookmark } from 'react-icons/fa';
@@ -236,45 +237,76 @@ const PostCard = ({ post, getAllPostsLocal, setGetAllPostsLocal }) => {
 
   useEffect(() => {
     // console.log('useeffect####################');
-    const data = _.cloneDeep(getAllPostsLocal);
+
     // console.log('one#################', data);
     if (createComment.status === 'successful') {
-      data.forEach((item) => {
-        if (item.postId === activePost.postId) {
-          const commentedUsers = [...item?.commentedUsers];
-          console.log('two#################', commentedUsers);
-          const replies = [...commentedUsers?.replies];
-          console.log('three##############', replies);
-          commentedUsers.push(createComment.data);
-          data.commentedUsers = commentedUsers;
-          setGetAllPostsLocal(data);
-          dispatch(resetCreateComment());
-        }
-      });
+      const data = { queryParams: { postId: post?.postId } };
+      dispatch(triggerGetCommentsByPostId(data));
+      dispatch(resetCreateComment());
     }
-    if (replyCommentRedux.status === 'successful') {
-      console.log('true');
-      data.forEach((item) => {
-        if (item.postId === activePost.postId) {
-          if (Array.isArray(item.commentedUsers)) {
-            const commentedUsers = [...item?.commentedUsers];
-            console.log('two#################', commentedUsers);
-            const replies = [...commentedUsers?.replies];
-            console.log('three##############', replies);
-            replies.push(replyCommentRedux.data);
-            data.replies = replies;
-            setGetAllPostsLocal(data);
-            dispatch(resetReplyComment());
-          }
-        }
-      });
-    }
+    // update
+    // if (replyCommentRedux.status === 'successful') {
+    //   console.log('true');
+    //   data.forEach((item) => {
+    //     if (item.postId === activePost.postId) {
+    //       if (Array.isArray(item.commentedUsers)) {
+    //         const commentedUsers = [...item?.commentedUsers];
+    //         console.log('two#################', commentedUsers);
+    //         const replies = [...commentedUsers?.replies];
+    //         console.log('three##############', replies);
+    //         replies.push(replyCommentRedux.data);
+    //         data.replies = replies;
+    //         setGetAllPostsLocal(data);
+    //         dispatch(resetReplyComment());
+    //       }
+    //     }
+    //   });
+    // }
   }, [createComment, replyCommentRedux, getAllPostsLocal]);
 
   useEffect(() => {
-    const data = { queryParams: { postId: post?.postId } };
-    dispatch(triggerGetCommentsByPostId(data));
-  }, []);
+    if (getCommentsByPostId.status === 'successful') {
+      const data = _.cloneDeep(getAllPostsLocal);
+
+      // let externalObject = { id: 2, name: 'Updated Object 2', value: 25 };
+
+      // Find the object with the matching ID
+      const updatedArray = data.map((obj) =>
+        obj.postId === getCommentsByPostId.data.postId
+          ? { ...obj, ...getCommentsByPostId.data }
+          : obj
+      );
+      // If the object with the matching ID is found, replace it with the external object
+      // if (objectToReplace) {
+      //   // Create a new array with the updated object
+      //   const updatedArray = data.map((obj) =>
+      //     obj.postId === objectToReplace.postId ? { ...obj, ...data } : obj
+      //   );
+      //   console.log('updated array', updatedArray);
+      //   // Update the state with the new array
+      //   setGetAllPostsLocal(updatedArray);
+      // } else {
+      //   console.error('Object with the specified ID not found in the array.');
+      // }
+
+      // console.log('datamain', data);
+      console.log('dataupdated#############', updatedArray);
+      setGetAllPostsLocal([...updatedArray]);
+      dispatch(resetGetCommentsByPostId());
+      // new
+      // console.log('getcommentsbypostid#######', getCommentsByPostId.data);
+
+      // data.forEach((item) => {
+      //   if (item.postId === 'fdb1f56b-620a-4f58-b131-08dbf5644d91') {
+      //     console.log('true#############', item);
+      //     item = getCommentsByPostId.data;
+      //   }
+      // });
+      // console.log('dataupdated#############', data);
+      // setGetAllPostsLocal(data);
+      // dispatch(resetGetCommentsByPostId());
+    }
+  }, [getCommentsByPostId]);
   console.log('getCommentsByPostId', getCommentsByPostId);
   // console.log('post###', post);
   // console.log('comment', commentThatIsBeingReplied);
@@ -451,6 +483,9 @@ const PostCard = ({ post, getAllPostsLocal, setGetAllPostsLocal }) => {
                             }}
                           />
                         ))}
+                        {/* {getCommentsByPostId.status === 'loading' && (
+                          <div className='loading-com'>loading...</div>
+                        )} */}
                         {replyChildComment &&
                           commentThatIsBeingReplied.commentId ===
                             comment.commentId && (
