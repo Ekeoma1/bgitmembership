@@ -6,7 +6,7 @@
   background-color: #fff;
   border-radius: 30px;
   position: absolute;
-  z-index: 1000;
+  z-index: 10;
   right: 0;
   top: 3rem;
   width: 302px;
@@ -150,7 +150,7 @@
     box-sizing: border-box;
     border-radius: 30px;
     position: absolute;
-    z-index: 10000;
+    z-index: 100;
     top: 20%;
     left: 0;
 
@@ -162,7 +162,6 @@
     }
 
     .reason-btn {
-      width: 144px;
       height: 41px;
       padding: 0 20px;
       border-radius: 30px;

@@ -27,6 +27,8 @@ import {
   triggerCancelConnectionRequest,
   resetSendConnectionRequest,
 } from '../../Features/connections/connections_slice';
+import { resetReportUser } from '../../Features/reports/reports_slice';
+import { renderToast } from '../Molecules/CustomToastify';
 
 const ProfileBanner = ({ data }) => {
   const navigate = useNavigate();
@@ -40,6 +42,7 @@ const ProfileBanner = ({ data }) => {
   const { sendConnectionRequest, cancelConnectionRequest } = useSelector(
     (state) => state.connections
   );
+  const { reportUser } = useSelector((state) => state.reports);
   const [actionAcctModal, setActionAcctModal] = useState(false);
   const [individalAcctModal, setIndividualAcctModal] = useState(false);
   const [contentToShow, setContentToShow] = useState(null);
@@ -103,7 +106,16 @@ const ProfileBanner = ({ data }) => {
     if (cancelConnectionRequest.status === 'successful') {
       dispatch(resetSendConnectionRequest());
     }
-  }, [cancelConnectionRequest]);
+    if (reportUser.status === 'successful') {
+      console.log('rendertoast');
+      renderToast({
+        status: 'success',
+        message: reportUser?.data,
+      });
+      dispatch(resetReportUser());
+    }
+  }, [cancelConnectionRequest, reportUser]);
+  console.log('report user', reportUser);
 
   useEffect(() => {
     if (uploadProfilePicture.profilePicture) {
@@ -112,7 +124,7 @@ const ProfileBanner = ({ data }) => {
       dispatch(triggerUpdateProfilePicture(uploadProfilePicture));
     }
   }, [uploadProfilePicture]);
-  
+
   useEffect(() => {
     if (uploadCoverPicture.backgroundImage) {
       setUploadedCoverPicture(true);
@@ -407,19 +419,20 @@ const ProfileBanner = ({ data }) => {
                     <LuMoreVertical className='icon' />
                   </button>
                 )}
-                {data.data?.userId !== getMyProfile.data?.userId && (
-                  <OutsideClickHandler
-                    onOutsideClick={() => {
-                      setActionAcctModal(false);
-                    }}
-                  >
-                    <AccountActionModal
-                      reportAction={setReportModal}
-                      show={actionAcctModal}
-                      action={showIndividualAcctModal}
-                    />
-                  </OutsideClickHandler>
-                )}
+                {data.data?.userId !== getMyProfile.data?.userId &&
+                  !reportModal && (
+                    <OutsideClickHandler
+                      onOutsideClick={() => {
+                        setActionAcctModal(false);
+                      }}
+                    >
+                      <AccountActionModal
+                        reportAction={setReportModal}
+                        show={actionAcctModal}
+                        action={showIndividualAcctModal}
+                      />
+                    </OutsideClickHandler>
+                  )}
                 {data.data?.userId !== getMyProfile.data?.userId && (
                   <OutsideClickHandler
                     onOutsideClick={() => {

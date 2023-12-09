@@ -38,7 +38,11 @@ export const triggerGetAllReports = createAsyncThunk(
 const reportsSlice = createSlice({
   name: 'reports',
   initialState,
-  reducers: {},
+  reducers: {
+    resetReportUser: (state) => {
+      state.reportUser = initialState.reportUser;
+    },
+  },
   extraReducers: (builder) => {
     builder.addCase(triggerReportUser.pending, (state) => {
       state.reportUser.status = states.LOADING;
@@ -69,3 +73,4 @@ const reportsSlice = createSlice({
 });
 
 export default reportsSlice.reducer;
+export const { resetReportUser } = reportsSlice.actions;

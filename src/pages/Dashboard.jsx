@@ -44,6 +44,7 @@ const Dashboard = () => {
       dispatch(triggerGetAllPostsByUserId(data));
     }
   }, [getUserProfileById]);
+
   return (
     <div className='user-dashboard'>
       <div className='container'>

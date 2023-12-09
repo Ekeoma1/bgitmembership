@@ -1,5 +1,5 @@
 import apiRoutes from '../../routes/api_routes';
-import { get, put } from '../../network/https';
+import { get, post, put } from '../../network/https';
 
 export default class AccountPrivaciesService {
   //   get blocked users
@@ -13,7 +13,7 @@ export default class AccountPrivaciesService {
 
   //   block user
   static async blockUser(data) {
-    const response = await put({
+    const response = await post({
       url: apiRoutes.blockUser,
       data: { ...data },
     });
@@ -22,7 +22,7 @@ export default class AccountPrivaciesService {
 
   // unblock user
   static async unblockUser(data) {
-    const response = await put({
+    const response = await post({
       url: apiRoutes.unblockUser,
       data: { ...data },
     });
@@ -31,7 +31,7 @@ export default class AccountPrivaciesService {
 
   // mute user
   static async muteUser(data) {
-    const response = await put({
+    const response = await post({
       url: apiRoutes.muteUser,
       data: { ...data },
     });
