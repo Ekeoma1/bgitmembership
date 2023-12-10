@@ -63,6 +63,7 @@ const Post = () => {
                 ) : (
                   <>
                     {getAllPostsLocal?.map((post, key) => {
+                      console.log('getallpostslocal', getAllPostsLocal);
                       return (
                         <PostCard
                           key={key}

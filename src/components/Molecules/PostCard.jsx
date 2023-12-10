@@ -59,20 +59,19 @@ const PostCard = ({ post, getAllPostsLocal, setGetAllPostsLocal }) => {
   const [postVideoOnLoadStatus, setPostVideoOnLoadStatus] = useState('base');
 
   // Like unlike post
-  const [activePost, setActivePost] = useState('');
   const [likeCurrentPost, setLikeCurrentPost] = useState(
     post?.isLikedByCurrentUser
   );
   const timeoutIdRef2 = useRef(null);
-  const handleLikeUnlikePost = () => {
-    setActivePost(post);
+  const handleLikeUnlikePost = (postParam) => {
+    const data = _.cloneDeep(getAllPostsLocal);
     const startTimeout = () => {
       timeoutIdRef2.current = setTimeout(() => {
-        const data = { queryParams: { postId: post.postId } };
+        const values = { queryParams: { postId: postParam.postId } };
         if (!likeCurrentPost) {
-          dispatch(triggerLikePost(data));
+          dispatch(triggerLikePost(values));
         } else {
-          dispatch(triggerUnlikePost(data));
+          dispatch(triggerUnlikePost(values));
         }
       }, 3000);
     };
@@ -83,45 +82,34 @@ const PostCard = ({ post, getAllPostsLocal, setGetAllPostsLocal }) => {
     };
     clearTimeoutIfNeeded();
     startTimeout();
-    setLikeCurrentPost(!likeCurrentPost);
-  };
-  useEffect(() => {
-    // const data = [...getAllPostsLocal];
-    const data = _.cloneDeep(getAllPostsLocal);
-    if (activePost) {
-      if (likeCurrentPost) {
-        data?.forEach((item) => {
-          if (item.postId === activePost.postId) {
-            item.isLikedByCurrentUser = true;
-            item.likeCount = item.likeCount + 1;
-          }
-        });
-      } else {
-        data?.forEach((item) => {
-          if (item.postId === activePost.postId) {
-            item.isLikedByCurrentUser = false;
-            item.likeCount = item.likeCount - 1;
-          }
-        });
+    data.forEach((item) => {
+      if (item.postId === postParam.postId) {
+        setLikeCurrentPost(!likeCurrentPost);
+        item.isLikedByCurrentUser = !item.isLikedByCurrentUser;
+        item.likeCount = item.isLikedByCurrentUser
+          ? item.likeCount + 1
+          : item.likeCount - 1;
       }
-      setGetAllPostsLocal(data);
-    }
-  }, [likeCurrentPost]);
+    });
+    setGetAllPostsLocal(data);
+  };
 
   // Save unsave post
   const [saveCurrentPost, setSaveCurrentPost] = useState(
     post?.isSavedByCurrentUser
   );
+  // console.log('saveCurrentPost', saveCurrentPost);
   const timeoutIdRef = useRef(null);
-  const handleSaveUnsavePost = () => {
-    setActivePost(post);
+  const handleSaveUnsavePost = (postParam) => {
+    const data = _.cloneDeep(getAllPostsLocal);
     const startTimeout = () => {
       timeoutIdRef.current = setTimeout(() => {
-        const data = { queryParams: { postId: post.postId } };
+        const values = { queryParams: { postId: postParam.postId } };
+        console.log('savecurrentpost', saveCurrentPost);
         if (!saveCurrentPost) {
-          dispatch(triggerSavePost(data));
+          dispatch(triggerSavePost(values));
         } else {
-          dispatch(triggerUnsavePost(data));
+          dispatch(triggerUnsavePost(values));
         }
       }, 3000);
     };
@@ -132,29 +120,17 @@ const PostCard = ({ post, getAllPostsLocal, setGetAllPostsLocal }) => {
     };
     clearTimeoutIfNeeded();
     startTimeout();
-    setSaveCurrentPost(!saveCurrentPost);
-  };
-  useEffect(() => {
-    const data = _.cloneDeep(getAllPostsLocal);
-    if (activePost) {
-      if (saveCurrentPost) {
-        data?.forEach((item) => {
-          if (item.postId === post.postId) {
-            item.isSavedByCurrentUser = true;
-            item.saveCount = item.saveCount + 1;
-          }
-        });
-      } else {
-        data?.forEach((item) => {
-          if (item.postId === post.postId) {
-            item.isSavedByCurrentUser = false;
-            item.saveCount = item.saveCount - 1;
-          }
-        });
+    data.forEach((item) => {
+      if (item.postId === postParam.postId) {
+        setSaveCurrentPost(!saveCurrentPost);
+        item.isSavedByCurrentUser = !item.isSavedByCurrentUser;
+        item.saveCount = item.isSavedByCurrentUser
+          ? item.saveCount + 1
+          : item.saveCount - 1;
       }
-      setGetAllPostsLocal(data);
-    }
-  }, [saveCurrentPost]);
+    });
+    setGetAllPostsLocal(data);
+  };
 
   // Like unlike comment
   const [likeComment, setLikeComment] = useState(post?.isLikedByCurrentUser);
@@ -182,22 +158,20 @@ const PostCard = ({ post, getAllPostsLocal, setGetAllPostsLocal }) => {
   useEffect(() => {
     // const data = [...getAllPostsLocal];
     const data = _.cloneDeep(getAllPostsLocal);
-    if (activePost) {
-      if (likeCurrentPost) {
-        data?.forEach((item) => {
-          if (item.postId === post.postId) {
-            item.isLikedByCurrentUser = true;
-            item.likeCount = item.likeCount + 1;
-          }
-        });
-      } else {
-        data?.forEach((item) => {
-          if (item.postId === post.postId) {
-            item.isLikedByCurrentUser = false;
-            item.likeCount = item.likeCount - 1;
-          }
-        });
-      }
+    if (likeCurrentPost) {
+      data?.forEach((item) => {
+        if (item.postId === post.postId) {
+          item.isLikedByCurrentUser = true;
+          item.likeCount = item.likeCount + 1;
+        }
+      });
+    } else {
+      data?.forEach((item) => {
+        if (item.postId === post.postId) {
+          item.isLikedByCurrentUser = false;
+          item.likeCount = item.likeCount - 1;
+        }
+      });
     }
     // setGetAllPostsLocal(data);
   }, [likeCurrentPost]);
@@ -214,7 +188,6 @@ const PostCard = ({ post, getAllPostsLocal, setGetAllPostsLocal }) => {
     setReplyComment(true);
     setCommentThatIsBeingReplied(comment);
     setReplyChildComment(true);
-    setActivePost(post);
   };
   const handleSubmit = (name) => {
     if (name === 'comment') {
@@ -307,8 +280,8 @@ const PostCard = ({ post, getAllPostsLocal, setGetAllPostsLocal }) => {
       // dispatch(resetGetCommentsByPostId());
     }
   }, [getCommentsByPostId]);
-  console.log('getCommentsByPostId', getCommentsByPostId);
-  // console.log('post###', post);
+  // console.log('getCommentsByPostId', getCommentsByPostId);
+  console.log('savepost###', saveCurrentPost, post.isSavedByCurrentUser);
   // console.log('comment', commentThatIsBeingReplied);
   // console.log('comment', createComment);
   // console.log('replycommentRedux', replyCommentRedux);
@@ -403,7 +376,7 @@ const PostCard = ({ post, getAllPostsLocal, setGetAllPostsLocal }) => {
         <div className='post-card-footer-content'>
           <div className='d-flex align-items-center c-gap-10'>
             <button
-              onClick={handleLikeUnlikePost}
+              onClick={() => handleLikeUnlikePost(post)}
               className={`heart-icon ${post?.isLikedByCurrentUser && 'active'}`}
             >
               <Icon icon='heart' />
@@ -421,7 +394,10 @@ const PostCard = ({ post, getAllPostsLocal, setGetAllPostsLocal }) => {
             <span>{post?.commentCount}</span>
           </div>
           <div className='d-flex align-items-center c-gap-10'>
-            <button className='bookmark ' onClick={handleSaveUnsavePost}>
+            <button
+              className='bookmark '
+              onClick={() => handleSaveUnsavePost(post)}
+            >
               {post?.isSavedByCurrentUser ? (
                 <FaBookmark className='active' />
               ) : (
@@ -480,7 +456,6 @@ const PostCard = ({ post, getAllPostsLocal, setGetAllPostsLocal }) => {
                               setReplyComment={() => {
                                 setReplyChildComment(true);
                                 setCommentThatIsBeingReplied(comment);
-                                setActivePost(post);
                               }}
                             />
                           ))}
@@ -542,6 +517,7 @@ const PostCard = ({ post, getAllPostsLocal, setGetAllPostsLocal }) => {
                 </div>
               </div> */}
             </div>
+            <div className='loading-c'>loading</div>
           </div>
         )}
       </div>
