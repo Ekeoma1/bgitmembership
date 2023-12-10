@@ -16,8 +16,9 @@ const Post = () => {
   };
   useEffect(() => {
     if (createPost.status === 'successful') {
-      const data = { queryParams: { pageNumber, pageSize } };
-      dispatch(triggerGetAllPosts(data));
+      const post = createPost?.data;
+      console.log('psst', post);
+      setGetAllPostsLocal([post, ...getAllPostsLocal]);
     }
   }, [createPost.status]);
 

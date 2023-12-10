@@ -453,7 +453,7 @@ const PostCard = ({ post, getAllPostsLocal, setGetAllPostsLocal }) => {
               value={comment}
             />
             <div className='comments-box'>
-              {post.commentedUsers?.map((comment, index) => (
+              {post.commentedUsers?.slice(-2).map((comment, index) => (
                 <>
                   <SingleComment
                     key={index}
@@ -468,21 +468,22 @@ const PostCard = ({ post, getAllPostsLocal, setGetAllPostsLocal }) => {
                     <div className='child-comments-wrapper'>
                       <div className='hidden'></div>
                       <div className='con'>
-                        {comment.replies.map((item, index) => (
-                          <SingleComment
-                            key={index}
-                            img={item.userProfilePicture}
-                            name={`${item.firstName} ${item.secondName}`}
-                            role={item.profession ?? 'test'}
-                            comment={item.content}
-                            childComment
-                            setReplyComment={() => {
-                              setReplyChildComment(true);
-                              setCommentThatIsBeingReplied(comment);
-                              setActivePost(post);
-                            }}
-                          />
-                        ))}
+                        {Array.isArray(comment.replies) &&
+                          comment.replies.slice(-2).map((item, index) => (
+                            <SingleComment
+                              key={index}
+                              img={item.userProfilePicture}
+                              name={`${item.firstName} ${item.secondName}`}
+                              role={item.profession ?? 'test'}
+                              comment={item.content}
+                              childComment
+                              setReplyComment={() => {
+                                setReplyChildComment(true);
+                                setCommentThatIsBeingReplied(comment);
+                                setActivePost(post);
+                              }}
+                            />
+                          ))}
                         {/* {getCommentsByPostId.status === 'loading' && (
                           <div className='loading-com'>loading...</div>
                         )} */}
