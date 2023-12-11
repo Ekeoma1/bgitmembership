@@ -39,7 +39,7 @@ const Post = () => {
       });
       setGetAllPostsLocal(getAllPostsAll);
     }
-  }, [getAllPosts.data?.posts, getAllPosts?.status, getAllPostsLocal]);
+  }, [getAllPosts.data?.posts, getAllPosts?.status]);
 
   return (
     <div className="post-wrapper">

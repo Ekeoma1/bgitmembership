@@ -1,11 +1,11 @@
-import React, { useEffect, useRef, useState } from 'react';
-import _ from 'lodash';
-import Icon from '../Icon';
-import '../../assets/scss/molecules.scss';
-import { useNavigate } from 'react-router-dom';
-import moment from 'moment';
-import { UserProfilePhotoLoader2 } from '../Atoms/skeleton-loaders/dashboard-page/UserProfilePhotoLoader';
-import MediaLoader from '../Atoms/skeleton-loaders/home-page/MediaLoader';
+import React, { useEffect, useRef, useState } from "react";
+import _ from "lodash";
+import Icon from "../Icon";
+import "../../assets/scss/molecules.scss";
+import { useNavigate } from "react-router-dom";
+import moment from "moment";
+import { UserProfilePhotoLoader2 } from "../Atoms/skeleton-loaders/dashboard-page/UserProfilePhotoLoader";
+import MediaLoader from "../Atoms/skeleton-loaders/home-page/MediaLoader";
 import {
   // resetActivePostIdForOngoingRequest,
   // resetSaveCurrentPost,
@@ -22,15 +22,15 @@ import {
   resetReplyComment,
   triggerGetCommentsByPostId,
   resetGetCommentsByPostId,
-} from '../../Features/posts/posts_slice';
-import { useDispatch, useSelector } from 'react-redux';
-import { FaRegBookmark, FaBookmark } from 'react-icons/fa';
+} from "../../Features/posts/posts_slice";
+import { useDispatch, useSelector } from "react-redux";
+import { FaRegBookmark, FaBookmark } from "react-icons/fa";
 
-import OutsideClickHandler from 'react-outside-click-handler';
-import ShareModal from '../Modals/ShareModal';
-import user from '../../assets/images/author1.png';
-import SingleComment from './SingleComment';
-import CommentInput from './CommentInput';
+import OutsideClickHandler from "react-outside-click-handler";
+import ShareModal from "../Modals/ShareModal";
+import user from "../../assets/images/author1.png";
+import SingleComment from "./SingleComment";
+import CommentInput from "./CommentInput";
 const PostCard = ({ post, getAllPostsLocal, setGetAllPostsLocal }) => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
@@ -45,24 +45,20 @@ const PostCard = ({ post, getAllPostsLocal, setGetAllPostsLocal }) => {
   } = useSelector((state) => state.posts);
   const { getMyProfile } = useSelector((state) => state.users);
   const [showCommentsSection, setShowCommentsSection] = useState(false);
-  const [comment, setComment] = useState('');
-  const [preloaderComment, setPreloaderComment] = useState('');
-  const [reply, setReply] = useState('');
+  const [comment, setComment] = useState("");
+  const [preloaderComment, setPreloaderComment] = useState("");
+  const [reply, setReply] = useState("");
   const [replyComment, setReplyComment] = useState(false);
   const [replyChildComment, setReplyChildComment] = useState(false);
-  const [commentThatIsBeingReplied, setCommentThatIsBeingReplied] = useState(
-    {}
-  );
+  const [commentThatIsBeingReplied, setCommentThatIsBeingReplied] = useState({});
 
   const [actionAcctModal, setActionAcctModal] = useState(false);
-  const [profileImgOnLoadStatus, setProfileImgOnLoadStatus] = useState('base');
-  const [postImgOnLoadStatus, setPostImgOnLoadStatus] = useState('base');
-  const [postVideoOnLoadStatus, setPostVideoOnLoadStatus] = useState('base');
+  const [profileImgOnLoadStatus, setProfileImgOnLoadStatus] = useState("base");
+  const [postImgOnLoadStatus, setPostImgOnLoadStatus] = useState("base");
+  const [postVideoOnLoadStatus, setPostVideoOnLoadStatus] = useState("base");
 
   // Like unlike post
-  const [likeCurrentPost, setLikeCurrentPost] = useState(
-    post?.isLikedByCurrentUser
-  );
+  const [likeCurrentPost, setLikeCurrentPost] = useState(post?.isLikedByCurrentUser);
   const timeoutIdRef2 = useRef(null);
   const handleLikeUnlikePost = (postParam) => {
     const data = _.cloneDeep(getAllPostsLocal);
@@ -87,18 +83,14 @@ const PostCard = ({ post, getAllPostsLocal, setGetAllPostsLocal }) => {
       if (item.postId === postParam.postId) {
         setLikeCurrentPost(!likeCurrentPost);
         item.isLikedByCurrentUser = !item.isLikedByCurrentUser;
-        item.likeCount = item.isLikedByCurrentUser
-          ? item.likeCount + 1
-          : item.likeCount - 1;
+        item.likeCount = item.isLikedByCurrentUser ? item.likeCount + 1 : item.likeCount - 1;
       }
     });
     setGetAllPostsLocal(data);
   };
 
   // Save unsave post
-  const [saveCurrentPost, setSaveCurrentPost] = useState(
-    post?.isSavedByCurrentUser
-  );
+  const [saveCurrentPost, setSaveCurrentPost] = useState(post?.isSavedByCurrentUser);
   const timeoutIdRef = useRef(null);
   const handleSaveUnsavePost = (postParam) => {
     const data = _.cloneDeep(getAllPostsLocal);
@@ -123,9 +115,7 @@ const PostCard = ({ post, getAllPostsLocal, setGetAllPostsLocal }) => {
       if (item.postId === postParam.postId) {
         setSaveCurrentPost(!saveCurrentPost);
         item.isSavedByCurrentUser = !item.isSavedByCurrentUser;
-        item.saveCount = item.isSavedByCurrentUser
-          ? item.saveCount + 1
-          : item.saveCount - 1;
+        item.saveCount = item.isSavedByCurrentUser ? item.saveCount + 1 : item.saveCount - 1;
       }
     });
     setGetAllPostsLocal(data);
@@ -173,49 +163,46 @@ const PostCard = ({ post, getAllPostsLocal, setGetAllPostsLocal }) => {
       });
     }
     // setGetAllPostsLocal(data);
-  }, [likeCurrentPost]);
+  }, [getAllPostsLocal, likeCurrentPost, post.postId]);
   // other
 
   const handleChange = (e) => {
-    if (e.target.name === 'comment') {
+    if (e.target.name === "comment") {
       setComment(e.target.value);
-    } else if (e.target.name === 'reply') {
+    } else if (e.target.name === "reply") {
       setReply(e.target.value);
     }
   };
   const handleReplyComment = (comment) => {
-    console.log('comment', comment);
+    console.log("comment", comment);
     setReplyComment(true);
     setCommentThatIsBeingReplied(comment);
     setReplyChildComment(true);
   };
   const handleSubmit = (name, post) => {
-    console.log(name, post);
     setActivePostTemp(post);
-    if (name === 'comment') {
+    if (name === "comment") {
       const data = {
         postId: post.postId,
         content: comment,
       };
       dispatch(triggerCreateComment(data));
       setPreloaderComment(comment);
-      setComment('');
-    } else if (name === 'reply') {
+      setComment("");
+    } else if (name === "reply") {
       const data = {
         commentId: commentThatIsBeingReplied.commentId,
         content: reply,
       };
       dispatch(triggerReplyComment(data));
-      setReply('');
-      setCommentThatIsBeingReplied('');
+      setReply("");
+      setCommentThatIsBeingReplied("");
     }
   };
   // comment
   const [activePostTemp, setActivePostTemp] = useState({});
   useEffect(() => {
-    // console.log('useeffect####################');
-    // console.log('one#################', data);
-    if (createComment.status === 'successful') {
+    if (createComment.status === "successful") {
       if (activePostTemp.postId === post.postId) {
         const data = { queryParams: { postId: activePostTemp?.postId } };
         dispatch(triggerGetCommentsByPostId(data));
@@ -239,21 +226,16 @@ const PostCard = ({ post, getAllPostsLocal, setGetAllPostsLocal }) => {
     //     }
     //   });
     // }
-  }, [createComment, replyCommentRedux, getAllPostsLocal]);
+  }, [createComment, replyCommentRedux, getAllPostsLocal, activePostTemp.postId, post.postId, dispatch]);
 
   useEffect(() => {
-    if (getCommentsByPostId.status === 'successful') {
+    if (getCommentsByPostId.status === "successful") {
       const data = _.cloneDeep(getAllPostsLocal);
       // Find the object with the matching ID
-      const updatedArray = data.map((obj) =>
-        obj.postId === getCommentsByPostId.data.postId
-          ? { ...obj, ...getCommentsByPostId.data }
-          : obj
-      );
-      console.log('dataupdated#############', updatedArray);
+      const updatedArray = data.map((obj) => (obj.postId === getCommentsByPostId.data.postId ? { ...obj, ...getCommentsByPostId.data } : obj));
       dispatch(resetCreateComment());
       dispatch(resetGetCommentsByPostId());
-      setPreloaderComment('');
+      setPreloaderComment("");
       setGetAllPostsLocal([...updatedArray]);
       // new
       // console.log('getcommentsbypostid#######', getCommentsByPostId.data);
@@ -268,137 +250,99 @@ const PostCard = ({ post, getAllPostsLocal, setGetAllPostsLocal }) => {
       // setGetAllPostsLocal(data);
       // dispatch(resetGetCommentsByPostId());
     }
-  }, [getCommentsByPostId]);
-  // console.log('getCommentsByPostId', getCommentsByPostId);
-  console.log('savepost###', saveCurrentPost, post.isSavedByCurrentUser);
-  // console.log('comment', commentThatIsBeingReplied);
-  // console.log('comment', createComment);
-  // console.log('replycommentRedux', replyCommentRedux);
+  }, [dispatch, getAllPostsLocal, getCommentsByPostId, setGetAllPostsLocal]);
+
   const handleLikeComment = (id) => {};
   return (
-    <div className='post-card shadow-sm mx-auto'>
-      <div className='post-card-header'>
-        <div className='post-owner-details'>
-          <div
-            className='img-circle'
-            onClick={() => navigate(`/users/${post?.userId}`)}
-          >
+    <div className="post-card shadow-sm mx-auto">
+      <div className="post-card-header">
+        <div className="post-owner-details">
+          <div className="img-circle" onClick={() => navigate(`/users/${post?.userId}`)}>
             <img
               src={post?.userProfilePicture}
-              alt='post-img'
-              className={`${
-                profileImgOnLoadStatus === 'success' ? 'd-block' : 'd-none'
-              }`}
-              onLoad={() => setProfileImgOnLoadStatus('success')}
-              onError={() => setProfileImgOnLoadStatus('error')}
+              alt="post-img"
+              className={`${profileImgOnLoadStatus === "success" ? "d-block" : "d-none"}`}
+              onLoad={() => setProfileImgOnLoadStatus("success")}
+              onError={() => setProfileImgOnLoadStatus("error")}
             />
-            {profileImgOnLoadStatus === 'base' && <UserProfilePhotoLoader2 />}
-            {profileImgOnLoadStatus === 'error' && (
-              <div className='error-img'>couldn't load img</div>
-            )}
+            {profileImgOnLoadStatus === "base" && <UserProfilePhotoLoader2 />}
+            {profileImgOnLoadStatus === "error" && <div className="error-img">couldn't load img</div>}
           </div>
           <div>
-            <div className='d-flex align-items-center'>
-              <span
-                className='name'
-                onClick={() => navigate(`/users/${post?.userId}`)}
-              >
+            <div className="d-flex align-items-center">
+              <span className="name" onClick={() => navigate(`/users/${post?.userId}`)}>
                 {post?.firstName} {post?.secondName}
               </span>
-              <span className='small-circle'></span>
-              <span className='follow-btn'>
-                {post?.following ? 'following' : 'follow'}
-              </span>
+              <span className="small-circle"></span>
+              <span className="follow-btn">{post?.following ? "following" : "follow"}</span>
             </div>
-            <div className='job-role'>{post?.userProfession}</div>
-            <div className='post-time'>
-              {moment(
-                new Date(post?.createdDate).getTime() + 3600000
-              ).fromNow()}
-            </div>
+            <div className="job-role">{post?.userProfession}</div>
+            <div className="post-time">{moment(new Date(post?.createdDate).getTime() + 3600000).fromNow()}</div>
           </div>
         </div>
-        <div>{post?.event && <div className='rsvp-btn'>RSVP</div>}</div>
+        <div>{post?.event && <div className="rsvp-btn">RSVP</div>}</div>
       </div>
-      <div className='post-content-wrapper'>
-        <div className='post-content'>{post?.content}</div>
+      <div className="post-content-wrapper">
+        <div className="post-content">{post?.content}</div>
         {(post?.postImageUrl || post?.postVideoUrl) && (
           <>
             {post.postImageUrl ? (
-              <div className='post-image'>
+              <div className="post-image">
                 <img
                   src={post?.postImageUrl}
-                  alt='post-img'
-                  className={`${
-                    postImgOnLoadStatus === 'success' ? 'd-block' : 'd-none'
-                  }`}
-                  onLoad={() => setPostImgOnLoadStatus('success')}
-                  onError={() => setPostImgOnLoadStatus('error')}
+                  alt="post-img"
+                  className={`${postImgOnLoadStatus === "success" ? "d-block" : "d-none"}`}
+                  onLoad={() => setPostImgOnLoadStatus("success")}
+                  onError={() => setPostImgOnLoadStatus("error")}
                 />
-                {postImgOnLoadStatus === 'base' && <MediaLoader />}
-                {postImgOnLoadStatus === 'error' && (
-                  <div className='error-img'>couldn't load img</div>
-                )}
+                {postImgOnLoadStatus === "base" && <MediaLoader />}
+                {postImgOnLoadStatus === "error" && <div className="error-img">couldn't load img</div>}
               </div>
             ) : (
-              <div className='post-video'>
+              <div className="post-video">
                 <video
                   controls
-                  className={`${
-                    postVideoOnLoadStatus === 'success' ? 'd-block' : 'd-none'
-                  }`}
-                  onLoadedMetadata={() => setPostVideoOnLoadStatus('success')}
-                  onError={() => setPostVideoOnLoadStatus('error')}
+                  className={`${postVideoOnLoadStatus === "success" ? "d-block" : "d-none"}`}
+                  onLoadedMetadata={() => setPostVideoOnLoadStatus("success")}
+                  onError={() => setPostVideoOnLoadStatus("error")}
                 >
-                  <source src={post?.postVideoUrl} type='video/mp4' />
+                  <source src={post?.postVideoUrl} type="video/mp4" />
                 </video>
-                {postVideoOnLoadStatus === 'base' && <MediaLoader />}
-                {postVideoOnLoadStatus === 'error' && (
-                  <div className='error-img'>couldn't load img</div>
-                )}
+                {postVideoOnLoadStatus === "base" && <MediaLoader />}
+                {postVideoOnLoadStatus === "error" && <div className="error-img">couldn't load img</div>}
               </div>
             )}
           </>
         )}
       </div>
-      <div className='post-card-footer'>
-        <div className='post-card-footer-content'>
-          <div className='d-flex align-items-center c-gap-10'>
-            <button
-              onClick={() => handleLikeUnlikePost(post)}
-              className={`heart-icon ${post?.isLikedByCurrentUser && 'active'}`}
-            >
-              <Icon icon='heart' />
+      <div className="post-card-footer">
+        <div className="post-card-footer-content">
+          <div className="d-flex align-items-center c-gap-10">
+            <button onClick={() => handleLikeUnlikePost(post)} className={`heart-icon ${post?.isLikedByCurrentUser && "active"}`}>
+              <Icon icon="heart" />
             </button>
             <span>{post?.likeCount}</span>
           </div>
-          <div className='d-flex align-items-center c-gap-10'>
+          <div className="d-flex align-items-center c-gap-10">
             <button
               onClick={() => {
                 setShowCommentsSection(!showCommentsSection);
               }}
             >
-              <Icon icon='comment' />
+              <Icon icon="comment" />
             </button>
             <span>{post?.commentCount}</span>
           </div>
-          <div className='d-flex align-items-center c-gap-10'>
-            <button
-              className='bookmark '
-              onClick={() => handleSaveUnsavePost(post)}
-            >
-              {post?.isSavedByCurrentUser ? (
-                <FaBookmark className='active' />
-              ) : (
-                <FaRegBookmark />
-              )}
+          <div className="d-flex align-items-center c-gap-10">
+            <button className="bookmark " onClick={() => handleSaveUnsavePost(post)}>
+              {post?.isSavedByCurrentUser ? <FaBookmark className="active" /> : <FaRegBookmark />}
             </button>
             <span>{post?.saveCount}</span>
           </div>
 
-          <div className='d-flex align-items-center c-gap-10 share-wrapper'>
+          <div className="d-flex align-items-center c-gap-10 share-wrapper">
             <button onClick={() => setActionAcctModal(true)}>
-              <Icon icon='share' />
+              <Icon icon="share" />
             </button>
             <OutsideClickHandler
               onOutsideClick={() => {
@@ -410,22 +354,16 @@ const PostCard = ({ post, getAllPostsLocal, setGetAllPostsLocal }) => {
           </div>
         </div>
         {showCommentsSection && (
-          <div className='comments-sec'>
-            <CommentInput
-              name={'comment'}
-              onChange={handleChange}
-              onSubmit={() => handleSubmit('comment', post)}
-              value={comment}
-            />
-            <div className='comments-box'>
-              {(createComment.status === 'loading' ||
-                getCommentsByPostId.status === 'loading' ||
-                (createComment.status === 'successful' &&
-                  getCommentsByPostId.status === 'base')) && (
+          <div className="comments-sec">
+            <CommentInput name={"comment"} onChange={handleChange} onSubmit={() => handleSubmit("comment", post)} value={comment} />
+            <div className="comments-box">
+              {(createComment.status === "loading" ||
+                getCommentsByPostId.status === "loading" ||
+                (createComment.status === "successful" && getCommentsByPostId.status === "base")) && (
                 <SingleComment
                   img={getMyProfile.data?.imageUrl}
                   name={`${getMyProfile.data?.firstName} ${getMyProfile.data?.secondName}`}
-                  role={getMyProfile.data?.profession || ''}
+                  role={getMyProfile.data?.profession || ""}
                   comment={preloaderComment}
                   loader
                 />
@@ -446,16 +384,16 @@ const PostCard = ({ post, getAllPostsLocal, setGetAllPostsLocal }) => {
                       setReplyComment={() => handleReplyComment(comment)}
                     />
                     <>
-                      <div className='child-comments-wrapper'>
-                        <div className='hidden'></div>
-                        <div className='con'>
+                      <div className="child-comments-wrapper">
+                        <div className="hidden"></div>
+                        <div className="con">
                           {Array.isArray(comment.replies) &&
                             comment.replies.slice(-2).map((item, index) => (
                               <SingleComment
                                 key={index}
                                 img={item.userProfilePicture}
                                 name={`${item.firstName} ${item.secondName}`}
-                                role={item.profession ?? 'test'}
+                                role={item.profession ?? "test"}
                                 comment={item.content}
                                 childComment
                                 setReplyComment={() => {
@@ -467,17 +405,15 @@ const PostCard = ({ post, getAllPostsLocal, setGetAllPostsLocal }) => {
                           {/* {getCommentsByPostId.status === 'loading' && (
                           <div className='loading-com'>loading...</div>
                         )} */}
-                          {replyChildComment &&
-                            commentThatIsBeingReplied.commentId ===
-                              comment.commentId && (
-                              <CommentInput
-                                name={'reply'}
-                                onChange={handleChange}
-                                onSubmit={() => handleSubmit('reply', post)}
-                                value={reply}
-                                focus={replyChildComment}
-                              />
-                            )}
+                          {replyChildComment && commentThatIsBeingReplied.commentId === comment.commentId && (
+                            <CommentInput
+                              name={"reply"}
+                              onChange={handleChange}
+                              onSubmit={() => handleSubmit("reply", post)}
+                              value={reply}
+                              focus={replyChildComment}
+                            />
+                          )}
                         </div>
                       </div>
                     </>
