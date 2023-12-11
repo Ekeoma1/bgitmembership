@@ -443,16 +443,18 @@ const PostCard = ({ post, getAllPostsLocal, setGetAllPostsLocal }) => {
                                 }}
                               />
                             ))}
-                          {commentType === 'reply' && (
-                            <SingleComment
-                              img={getMyProfile.data?.imageUrl}
-                              name={`${getMyProfile.data?.firstName} ${getMyProfile.data?.secondName}`}
-                              role={getMyProfile.data?.profession || ''}
-                              comment={preloaderCommentReply}
-                              childComment
-                              loader
-                            />
-                          )}
+                          {commentType === 'reply' &&
+                            commentThatIsBeingReplied.commentId ===
+                              comment.commentId && (
+                              <SingleComment
+                                img={getMyProfile.data?.imageUrl}
+                                name={`${getMyProfile.data?.firstName} ${getMyProfile.data?.secondName}`}
+                                role={getMyProfile.data?.profession || ''}
+                                comment={preloaderCommentReply}
+                                childComment
+                                loader
+                              />
+                            )}
                           {replyChildComment &&
                             commentThatIsBeingReplied.commentId ===
                               comment.commentId && (
