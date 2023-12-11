@@ -1,10 +1,10 @@
-import React, { useEffect, useState } from 'react';
-import CreatePost from './CreatePost';
-import PostCard from '../Molecules/PostCard';
-import { useDispatch, useSelector } from 'react-redux';
-import { triggerGetAllPosts } from '../../Features/posts/posts_slice';
-import PostsLoader from '../Atoms/skeleton-loaders/home-page/PostsLoader';
-import MainButton from '../Molecules/MainButton';
+import React, { useEffect, useState } from "react";
+import CreatePost from "./CreatePost";
+import PostCard from "../Molecules/PostCard";
+import { useDispatch, useSelector } from "react-redux";
+import { triggerGetAllPosts } from "../../Features/posts/posts_slice";
+import PostsLoader from "../Atoms/skeleton-loaders/home-page/PostsLoader";
+import MainButton from "../Molecules/MainButton";
 
 const Post = () => {
   const dispatch = useDispatch();
@@ -15,7 +15,7 @@ const Post = () => {
     setPageNumber((prevState) => prevState + 1);
   };
   useEffect(() => {
-    if (createPost.status === 'successful') {
+    if (createPost.status === "successful") {
       const data = { queryParams: { pageNumber, pageSize } };
       dispatch(triggerGetAllPosts(data));
     }
@@ -29,51 +29,43 @@ const Post = () => {
   const [getAllPostsLocal, setGetAllPostsLocal] = useState([]);
 
   useEffect(() => {
-    if (getAllPosts?.status === 'successful' && getAllPosts.data?.posts) {
+    if (getAllPosts?.status === "successful" && getAllPosts.data?.posts) {
       const temp = getAllPosts?.data?.posts;
       const getAllPostsPrevious = [...getAllPostsLocal];
       const getAllPostsAll = [...getAllPostsPrevious, ...temp];
       setGetAllPostsLocal(getAllPostsAll);
     }
-  }, [getAllPosts?.data?.posts, getAllPosts?.status]);
+  }, [getAllPosts.data?.posts, getAllPosts?.status, getAllPostsLocal]);
 
   return (
-    <div className='post-wrapper'>
-      <div className='d-lg-block d-none'>
+    <div className="post-wrapper">
+      <div className="d-lg-block d-none">
         <CreatePost />
       </div>
-      <div className='post-card-wrapper'>
-        {(getAllPosts.status === 'base' || getAllPosts.status === 'loading') &&
-        pageNumber === 1 ? (
+      <div className="post-card-wrapper">
+        {(getAllPosts.status === "base" || getAllPosts.status === "loading") && pageNumber === 1 ? (
           <PostsLoader />
-        ) : getAllPosts.status === 'successful' || pageNumber >= 1 ? (
+        ) : getAllPosts.status === "successful" || pageNumber >= 1 ? (
           <>
             {getAllPosts.data ? (
               <>
                 {getAllPostsLocal.length === 0 ? (
                   <>
-                    <div className='empty-state'>
+                    <div className="empty-state">
                       <p>No posts to show...</p>
                     </div>
                   </>
                 ) : (
                   <>
                     {getAllPostsLocal?.map((post, key) => {
-                      return (
-                        <PostCard
-                          key={key}
-                          post={post}
-                          getAllPostsLocal={getAllPostsLocal}
-                          setGetAllPostsLocal={setGetAllPostsLocal}
-                        />
-                      );
+                      return <PostCard key={key} post={post} getAllPostsLocal={getAllPostsLocal} setGetAllPostsLocal={setGetAllPostsLocal} />;
                     })}
                   </>
                 )}
               </>
             ) : (
               <>
-                <div className='internet-error-state'>
+                <div className="internet-error-state">
                   <p> Check your internet and try again...</p>
                 </div>
               </>
@@ -81,20 +73,19 @@ const Post = () => {
           </>
         ) : (
           <>
-            <div className='server-error-state'>Something went wrong</div>
+            <div className="server-error-state">Something went wrong</div>
           </>
         )}
         {pageNumber < 10 && (
-          <div className='btn'>
+          <div className="btn">
             <MainButton
-              text={'Load more'}
+              text={"Load more"}
               onClick={() => {
                 handleLoadMore();
-                console.log('click');
               }}
-              width={'25rem'}
-              size={'small'}
-              loading={getAllPosts.status === 'loading'}
+              width={"25rem"}
+              size={"small"}
+              loading={getAllPosts.status === "loading"}
             />
           </div>
         )}
