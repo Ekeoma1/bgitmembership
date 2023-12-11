@@ -31,6 +31,7 @@ import ShareModal from '../Modals/ShareModal';
 import user from '../../assets/images/author1.png';
 import SingleComment from './SingleComment';
 import CommentInput from './CommentInput';
+import MainButton from './MainButton';
 const PostCard = ({ post, getAllPostsLocal, setGetAllPostsLocal }) => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
@@ -49,6 +50,7 @@ const PostCard = ({ post, getAllPostsLocal, setGetAllPostsLocal }) => {
   const [preloaderComment, setPreloaderComment] = useState('');
   const [reply, setReply] = useState('');
   const [preloaderCommentReply, setPreloaderCommentReply] = useState('');
+  const [numberOfComments, setNumberOfComments] = useState(2);
   const [replyComment, setReplyComment] = useState(false);
   const [replyChildComment, setReplyChildComment] = useState(false);
   const [commentThatIsBeingReplied, setCommentThatIsBeingReplied] = useState(
@@ -174,7 +176,7 @@ const PostCard = ({ post, getAllPostsLocal, setGetAllPostsLocal }) => {
       });
     }
     // setGetAllPostsLocal(data);
-  }, [likeCurrentPost]);
+  }, [getAllPostsLocal, likeCurrentPost, post.postId]);
   // other
 
   const handleChange = (e) => {
@@ -192,7 +194,6 @@ const PostCard = ({ post, getAllPostsLocal, setGetAllPostsLocal }) => {
   };
   const [commentType, setCommentType] = useState('');
   const handleSubmit = (name, post) => {
-    console.log(name, post);
     setActivePostTemp(post);
     if (name === 'comment') {
       const data = {
@@ -212,7 +213,6 @@ const PostCard = ({ post, getAllPostsLocal, setGetAllPostsLocal }) => {
       setCommentType('reply');
       setPreloaderCommentReply(reply);
       setReply('');
-      setCommentThatIsBeingReplied('');
     }
   };
   // comment
@@ -249,13 +249,10 @@ const PostCard = ({ post, getAllPostsLocal, setGetAllPostsLocal }) => {
       setPreloaderComment('');
       setPreloaderCommentReply('');
       setCommentType('');
+      setCommentThatIsBeingReplied('');
     }
-  }, [getCommentsByPostId]);
-  // console.log('getCommentsByPostId', getCommentsByPostId);
-  console.log('savepost###', saveCurrentPost, post.isSavedByCurrentUser);
-  // console.log('comment', commentThatIsBeingReplied);
-  // console.log('comment', createComment);
-  // console.log('replycommentRedux', replyCommentRedux);
+  }, [dispatch, getAllPostsLocal, getCommentsByPostId, setGetAllPostsLocal]);
+
   const handleLikeComment = (id) => {};
   return (
     <div className='post-card shadow-sm mx-auto'>
@@ -429,20 +426,39 @@ const PostCard = ({ post, getAllPostsLocal, setGetAllPostsLocal }) => {
                         <div className='hidden'></div>
                         <div className='con'>
                           {Array.isArray(comment.replies) &&
-                            comment.replies.slice(-10).map((item, index) => (
-                              <SingleComment
-                                key={index}
-                                img={item.userProfilePicture}
-                                name={`${item.firstName} ${item.secondName}`}
-                                role={item.profession ?? 'test'}
-                                comment={item.content}
-                                childComment
-                                setReplyComment={() => {
-                                  setReplyChildComment(true);
-                                  setCommentThatIsBeingReplied(comment);
-                                }}
-                              />
-                            ))}
+                            comment.replies
+                              .slice(
+                                commentThatIsBeingReplied.commentId ===
+                                  comment.commentId
+                                  ? -numberOfComments
+                                  : -2
+                              )
+                              .map((item, index) => (
+                                <SingleComment
+                                  key={index}
+                                  img={item.userProfilePicture}
+                                  name={`${item.firstName} ${item.secondName}`}
+                                  role={item.profession ?? 'test'}
+                                  comment={item.content}
+                                  childComment
+                                  setReplyComment={() => {
+                                    setReplyChildComment(true);
+                                    setCommentThatIsBeingReplied(comment);
+                                  }}
+                                />
+                              ))}
+                          <div className='btn-wrapper'>
+                            <MainButton
+                              height='10rem'
+                              size={'small'}
+                              text={'Load more comments'}
+                              onClick={() => {
+                                setCommentThatIsBeingReplied(comment);
+                                setNumberOfComments(numberOfComments + 2);
+                              }}
+                              // loading={signup.status === 'loading'}
+                            />
+                          </div>
                           {commentType === 'reply' &&
                             commentThatIsBeingReplied.commentId ===
                               comment.commentId && (
