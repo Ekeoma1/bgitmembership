@@ -1,38 +1,31 @@
-import React, { useEffect, useState } from 'react';
-import '../../../src/assets/scss/communityForums.scss';
+import React, { useEffect, useState } from "react";
+import "../../../src/assets/scss/communityForums.scss";
 
-import { useNavigate } from 'react-router-dom';
-import ForumCard from '../Molecules/ForumCard';
-import Carousel from 'react-multi-carousel';
-import 'react-multi-carousel/lib/styles.css';
-import { useDispatch, useSelector } from 'react-redux';
-import {
-  resetActiveForumIdForOngoingRequest,
-  resetJoinForum,
-  resetLeaveForum,
-  triggerGetAllForums,
-} from '../../Features/forums/forums_slice';
-import { ForumCardsLoader2 } from '../Atoms/skeleton-loaders/ForumCardsLoader';
-import { renderToast } from '../Molecules/CustomToastify';
+import { useNavigate } from "react-router-dom";
+import ForumCard from "../Molecules/ForumCard";
+import Carousel from "react-multi-carousel";
+import "react-multi-carousel/lib/styles.css";
+import { useDispatch, useSelector } from "react-redux";
+import { resetActiveForumIdForOngoingRequest, resetJoinForum, resetLeaveForum, triggerGetAllForums } from "../../Features/forums/forums_slice";
+import { ForumCardsLoader2 } from "../Atoms/skeleton-loaders/ForumCardsLoader";
+import { renderToast } from "../Molecules/CustomToastify";
 const SuggestedForums = () => {
   const navigate = useNavigate();
-  const { getAllForums, joinForum, leaveForum } = useSelector(
-    (state) => state.forums
-  );
+  const { getAllForums, joinForum, leaveForum } = useSelector((state) => state.forums);
   const [getAllForumsLocal, setGetAllForumsLocal] = useState([]);
   const [pageNumber] = useState(1);
   const [pageSize] = useState(10);
   const dispatch = useDispatch();
   useEffect(() => {
-    if (joinForum.status === 'successful') {
-      if (joinForum.data === 'You are the admin of the forum.') {
+    if (joinForum.status === "successful") {
+      if (joinForum.data === "You are the admin of the forum.") {
         renderToast({
-          status: 'error',
+          status: "error",
           message: joinForum.data,
         });
       } else {
         renderToast({
-          status: 'success',
+          status: "success",
           message: joinForum.data,
         });
       }
@@ -40,19 +33,19 @@ const SuggestedForums = () => {
       const data = { queryParams: { pageNumber, pageSize } };
       dispatch(triggerGetAllForums(data));
       dispatch(resetActiveForumIdForOngoingRequest());
-    } else if (joinForum.status === 'error') {
+    } else if (joinForum.status === "error") {
       dispatch(resetJoinForum());
       dispatch(resetActiveForumIdForOngoingRequest());
     }
     // leave forum
-    if (leaveForum.status === 'successful') {
+    if (leaveForum.status === "successful") {
       renderToast({
-        status: 'success',
+        status: "success",
         message: leaveForum.data,
       });
       dispatch(resetLeaveForum());
       dispatch(resetActiveForumIdForOngoingRequest());
-    } else if (leaveForum.status === 'error') {
+    } else if (leaveForum.status === "error") {
       dispatch(resetLeaveForum());
       dispatch(resetActiveForumIdForOngoingRequest());
     }
@@ -62,7 +55,7 @@ const SuggestedForums = () => {
     dispatch(triggerGetAllForums(data));
   }, []);
   useEffect(() => {
-    if (getAllForums.status === 'successful') {
+    if (getAllForums.status === "successful") {
       setGetAllForumsLocal(getAllForums.data.forums);
     }
   }, [getAllForums]);
@@ -77,22 +70,21 @@ const SuggestedForums = () => {
     },
     mobile: {
       breakpoint: { max: 600, min: 0 },
-      items: 1.4,
+      items: 1.2,
     },
   };
   return (
-    <div className='suggested-forums-wrapper'>
-      <div className='container'>
-        <div className='content-wrapper'>
-          <h3 className='section-title text-color22'> Suggested Forums </h3>
-          <div className='view-all'>
-            <button onClick={() => navigate('/forums/all')}>View all</button>
+    <div className="suggested-forums-wrapper">
+      <div className="container">
+        <div className="content-wrapper">
+          <h3 className="section-title text-color22"> Suggested Forums </h3>
+          <div className="view-all">
+            <button onClick={() => navigate("/forums/all")}>View all</button>
           </div>
-          <div className='forums-cards-wrapper'>
-            {getAllForums.status === 'base' ||
-            getAllForums.status === 'loading' ? (
+          <div className="forums-cards-wrapper">
+            {getAllForums.status === "base" || getAllForums.status === "loading" ? (
               <ForumCardsLoader2 />
-            ) : getAllForums.status === 'successful' ? (
+            ) : getAllForums.status === "successful" ? (
               <>
                 {getAllForums.data?.length === 0 ? (
                   <></>
@@ -108,7 +100,7 @@ const SuggestedForums = () => {
                   </>
                 )}
               </>
-            ) : getAllForums.status === 'error' ? (
+            ) : getAllForums.status === "error" ? (
               <></>
             ) : (
               <></>

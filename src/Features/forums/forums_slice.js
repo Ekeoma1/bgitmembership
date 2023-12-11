@@ -1,6 +1,7 @@
-import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
-import ForumsService from './forums_service';
-import * as states from '../../utils/strings';
+import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
+import ForumsService from "./forums_service";
+import * as states from "../../utils/strings";
+import { renderToast } from "../../components/Molecules/CustomToastify";
 
 const initialState = {
   joinForum: {
@@ -35,99 +36,90 @@ const initialState = {
     status: states.BASE,
     data: [],
   },
-  activeForumIdForOngoingRequest: '',
+  activeForumIdForOngoingRequest: "",
 };
 // join forum
-export const triggerJoinForum = createAsyncThunk(
-  'join-forum',
-  async (params, thunkAPI) => {
-    try {
-      return await ForumsService.joinForum(params);
-    } catch (e) {
-      return thunkAPI.rejectWithValue(e.message);
-    }
+export const triggerJoinForum = createAsyncThunk("join-forum", async (params, thunkAPI) => {
+  try {
+    return await ForumsService.joinForum(params);
+  } catch (e) {
+    return thunkAPI.rejectWithValue(e.message);
   }
-);
+});
 // leave forum
-export const triggerLeaveForum = createAsyncThunk(
-  'leave-forum',
-  async (params, thunkAPI) => {
-    try {
-      return await ForumsService.leaveForum(params);
-    } catch (e) {
-      return thunkAPI.rejectWithValue(e.message);
-    }
+export const triggerLeaveForum = createAsyncThunk("leave-forum", async (params, thunkAPI) => {
+  try {
+    return await ForumsService.leaveForum(params);
+  } catch (e) {
+    return thunkAPI.rejectWithValue(e.message);
   }
-);
+});
 // cancel join forum request
-export const triggerCancelJoinForumRequest = createAsyncThunk(
-  'cancel-join-forum-request',
-  async (params, thunkAPI) => {
-    try {
-      return await ForumsService.cancelJoinForumRequest(params);
-    } catch (e) {
-      return thunkAPI.rejectWithValue(e.message);
-    }
+export const triggerCancelJoinForumRequest = createAsyncThunk("cancel-join-forum-request", async (params, thunkAPI) => {
+  try {
+    return await ForumsService.cancelJoinForumRequest(params);
+  } catch (e) {
+    return thunkAPI.rejectWithValue(e.message);
   }
-);
+});
 // create forum
-export const triggerCreateForum = createAsyncThunk(
-  'create-forum',
-  async (params, thunkAPI) => {
-    try {
-      return await ForumsService.createForum(params);
-    } catch (e) {
-      return thunkAPI.rejectWithValue(e.message);
+export const triggerCreateForum = createAsyncThunk("create-forum", async (params, thunkAPI) => {
+  try {
+    const response = await ForumsService.createForum(params);
+    if (response.status === 400) {
+      renderToast({
+        status: "error",
+        message: response.title,
+      });
+    } else {
+      renderToast({
+        status: "success",
+        message: response,
+      });
     }
+  } catch (e) {
+    renderToast({
+      status: "error",
+      message: e.message,
+    });
+    return thunkAPI.rejectWithValue(e.message);
   }
-);
+});
 // get all forums
-export const triggerGetAllForums = createAsyncThunk(
-  'get-all-forums',
-  async (params, thunkAPI) => {
-    try {
-      return await ForumsService.getAllForums(params);
-    } catch (e) {
-      return thunkAPI.rejectWithValue(e.message);
-    }
+export const triggerGetAllForums = createAsyncThunk("get-all-forums", async (params, thunkAPI) => {
+  try {
+    return await ForumsService.getAllForums(params);
+  } catch (e) {
+    return thunkAPI.rejectWithValue(e.message);
   }
-);
+});
 // get forum by Id
-export const triggerGetForumById = createAsyncThunk(
-  'get-forum-by-id',
-  async (params, thunkAPI) => {
-    try {
-      return await ForumsService.getForumById(params);
-    } catch (e) {
-      return thunkAPI.rejectWithValue(e.message);
-    }
+export const triggerGetForumById = createAsyncThunk("get-forum-by-id", async (params, thunkAPI) => {
+  try {
+    return await ForumsService.getForumById(params);
+  } catch (e) {
+    return thunkAPI.rejectWithValue(e.message);
   }
-);
+});
 // get all forums by industry
-export const triggerGetAllForumsByIndustry = createAsyncThunk(
-  'get-all-forums-by-industry',
-  async (params, thunkAPI) => {
-    try {
-      return await ForumsService.getAllForumsByIndustry(params);
-    } catch (e) {
-      return thunkAPI.rejectWithValue(e.message);
-    }
+export const triggerGetAllForumsByIndustry = createAsyncThunk("get-all-forums-by-industry", async (params, thunkAPI) => {
+  try {
+    return await ForumsService.getAllForumsByIndustry(params);
+  } catch (e) {
+    return thunkAPI.rejectWithValue(e.message);
   }
-);
+});
 // get all forums by location
-export const triggerGetAllForumsByLocation = createAsyncThunk(
-  'get-all-forums-by-location',
-  async (params, thunkAPI) => {
-    try {
-      return await ForumsService.getAllForumsByLocation(params);
-    } catch (e) {
-      return thunkAPI.rejectWithValue(e.message);
-    }
+export const triggerGetAllForumsByLocation = createAsyncThunk("get-all-forums-by-location", async (params, thunkAPI) => {
+  try {
+    return await ForumsService.getAllForumsByLocation(params);
+  } catch (e) {
+    return thunkAPI.rejectWithValue(e.message);
   }
-);
+});
 
 const forumsSlice = createSlice({
-  name: 'forums',
+  name: "forums",
   initialState,
   reducers: {
     resetJoinForum: (state) => {
@@ -140,8 +132,7 @@ const forumsSlice = createSlice({
       state.activeForumIdForOngoingRequest = action.payload;
     },
     resetActiveForumIdForOngoingRequest: (state) => {
-      state.activeForumIdForOngoingRequest =
-        initialState.activeForumIdForOngoingRequest;
+      state.activeForumIdForOngoingRequest = initialState.activeForumIdForOngoingRequest;
     },
   },
   extraReducers: (builder) => {
@@ -233,13 +224,10 @@ const forumsSlice = createSlice({
       state.getAllForumsByIndustry.status = states.LOADING;
       state.getAllForumsByIndustry.data = {};
     });
-    builder.addCase(
-      triggerGetAllForumsByIndustry.fulfilled,
-      (state, action) => {
-        state.getAllForumsByIndustry.status = states.SUCCESSFUL;
-        state.getAllForumsByIndustry.data = action.payload;
-      }
-    );
+    builder.addCase(triggerGetAllForumsByIndustry.fulfilled, (state, action) => {
+      state.getAllForumsByIndustry.status = states.SUCCESSFUL;
+      state.getAllForumsByIndustry.data = action.payload;
+    });
     builder.addCase(triggerGetAllForumsByIndustry.rejected, (state, action) => {
       state.getAllForumsByIndustry.status = states.ERROR;
       state.getAllForumsByIndustry.data = action.payload;
@@ -250,13 +238,10 @@ const forumsSlice = createSlice({
       state.getAllForumsByLocation.status = states.LOADING;
       state.getAllForumsByLocation.data = {};
     });
-    builder.addCase(
-      triggerGetAllForumsByLocation.fulfilled,
-      (state, action) => {
-        state.getAllForumsByLocation.status = states.SUCCESSFUL;
-        state.getAllForumsByLocation.data = action.payload;
-      }
-    );
+    builder.addCase(triggerGetAllForumsByLocation.fulfilled, (state, action) => {
+      state.getAllForumsByLocation.status = states.SUCCESSFUL;
+      state.getAllForumsByLocation.data = action.payload;
+    });
     builder.addCase(triggerGetAllForumsByLocation.rejected, (state, action) => {
       state.getAllForumsByLocation.status = states.ERROR;
       state.getAllForumsByLocation.data = action.payload;
@@ -265,9 +250,4 @@ const forumsSlice = createSlice({
 });
 
 export default forumsSlice.reducer;
-export const {
-  resetJoinForum,
-  resetLeaveForum,
-  setActiveForumIdForOngoingRequest,
-  resetActiveForumIdForOngoingRequest,
-} = forumsSlice.actions;
+export const { resetJoinForum, resetLeaveForum, setActiveForumIdForOngoingRequest, resetActiveForumIdForOngoingRequest } = forumsSlice.actions;

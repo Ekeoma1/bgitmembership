@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import "../../../src/assets/scss/communityForums.scss";
+import "bootstrap/dist/js/bootstrap.bundle.min";
 
 import SearchBox from "../Molecules/SearchBox";
 import CommunityCard from "./CommunityCard";
@@ -9,7 +10,9 @@ import community3 from "../../../src/assets/images/community3.svg";
 import EmptyState from "../Molecules/EmptyState";
 import Carousel from "react-multi-carousel";
 import "react-multi-carousel/lib/styles.css";
-const Communities = ({ showModal }) => {
+import CreateCommunityModal from "./CreateCommunityModal";
+
+const Communities = () => {
   const [searchValue, setSearchValue] = useState("");
   const [userHasForums] = useState(false);
 
@@ -85,9 +88,8 @@ const Communities = ({ showModal }) => {
     <div className="communities-wrapper">
       <div className="container">
         <div className="content-wrapper">
-          <button onClick={() => showModal(true)} className="alt-btn small-btn">
-            Create Community
-          </button>
+          {/* create community modal */}
+          <CreateCommunityModal />
           {userHasForums && (
             <div className="forums-true">
               <div className="search-box">
