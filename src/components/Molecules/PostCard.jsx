@@ -48,6 +48,7 @@ const PostCard = ({ post, getAllPostsLocal, setGetAllPostsLocal }) => {
   const [comment, setComment] = useState("");
   const [preloaderComment, setPreloaderComment] = useState("");
   const [reply, setReply] = useState("");
+  const [preloaderCommentReply, setPreloaderCommentReply] = useState("");
   const [replyComment, setReplyComment] = useState(false);
   const [replyChildComment, setReplyChildComment] = useState(false);
   const [commentThatIsBeingReplied, setCommentThatIsBeingReplied] = useState({});
@@ -179,6 +180,7 @@ const PostCard = ({ post, getAllPostsLocal, setGetAllPostsLocal }) => {
     setCommentThatIsBeingReplied(comment);
     setReplyChildComment(true);
   };
+  const [commentType, setCommentType] = useState("");
   const handleSubmit = (name, post) => {
     setActivePostTemp(post);
     if (name === "comment") {
@@ -187,6 +189,7 @@ const PostCard = ({ post, getAllPostsLocal, setGetAllPostsLocal }) => {
         content: comment,
       };
       dispatch(triggerCreateComment(data));
+      setCommentType("comment");
       setPreloaderComment(comment);
       setComment("");
     } else if (name === "reply") {
@@ -195,6 +198,8 @@ const PostCard = ({ post, getAllPostsLocal, setGetAllPostsLocal }) => {
         content: reply,
       };
       dispatch(triggerReplyComment(data));
+      setCommentType("reply");
+      setPreloaderCommentReply(reply);
       setReply("");
       setCommentThatIsBeingReplied("");
     }
@@ -208,47 +213,27 @@ const PostCard = ({ post, getAllPostsLocal, setGetAllPostsLocal }) => {
         dispatch(triggerGetCommentsByPostId(data));
       }
     }
-    // update
-    // if (replyCommentRedux.status === 'successful') {
-    //   console.log('true');
-    //   data.forEach((item) => {
-    //     if (item.postId === activePost.postId) {
-    //       if (Array.isArray(item.commentedUsers)) {
-    //         const commentedUsers = [...item?.commentedUsers];
-    //         console.log('two#################', commentedUsers);
-    //         const replies = [...commentedUsers?.replies];
-    //         console.log('three##############', replies);
-    //         replies.push(replyCommentRedux.data);
-    //         data.replies = replies;
-    //         setGetAllPostsLocal(data);
-    //         dispatch(resetReplyComment());
-    //       }
-    //     }
-    //   });
-    // }
-  }, [createComment, replyCommentRedux, getAllPostsLocal, activePostTemp.postId, post.postId, dispatch]);
+    if (replyCommentRedux.status === "successful") {
+      if (activePostTemp.postId === post.postId) {
+        const data = { queryParams: { postId: activePostTemp?.postId } };
+        dispatch(triggerGetCommentsByPostId(data));
+      }
+    }
+  }, [createComment, replyCommentRedux]);
 
   useEffect(() => {
     if (getCommentsByPostId.status === "successful") {
       const data = _.cloneDeep(getAllPostsLocal);
       // Find the object with the matching ID
       const updatedArray = data.map((obj) => (obj.postId === getCommentsByPostId.data.postId ? { ...obj, ...getCommentsByPostId.data } : obj));
+      console.log("dataupdated#############", updatedArray);
+      setGetAllPostsLocal([...updatedArray]);
       dispatch(resetCreateComment());
+      dispatch(resetReplyComment());
       dispatch(resetGetCommentsByPostId());
       setPreloaderComment("");
-      setGetAllPostsLocal([...updatedArray]);
-      // new
-      // console.log('getcommentsbypostid#######', getCommentsByPostId.data);
-
-      // data.forEach((item) => {
-      //   if (item.postId === 'fdb1f56b-620a-4f58-b131-08dbf5644d91') {
-      //     console.log('true#############', item);
-      //     item = getCommentsByPostId.data;
-      //   }
-      // });
-      // console.log('dataupdated#############', data);
-      // setGetAllPostsLocal(data);
-      // dispatch(resetGetCommentsByPostId());
+      setPreloaderCommentReply("");
+      setCommentType("");
     }
   }, [dispatch, getAllPostsLocal, getCommentsByPostId, setGetAllPostsLocal]);
 
@@ -357,9 +342,7 @@ const PostCard = ({ post, getAllPostsLocal, setGetAllPostsLocal }) => {
           <div className="comments-sec">
             <CommentInput name={"comment"} onChange={handleChange} onSubmit={() => handleSubmit("comment", post)} value={comment} />
             <div className="comments-box">
-              {(createComment.status === "loading" ||
-                getCommentsByPostId.status === "loading" ||
-                (createComment.status === "successful" && getCommentsByPostId.status === "base")) && (
+              {commentType === "comment" && (
                 <SingleComment
                   img={getMyProfile.data?.imageUrl}
                   name={`${getMyProfile.data?.firstName} ${getMyProfile.data?.secondName}`}
@@ -388,7 +371,7 @@ const PostCard = ({ post, getAllPostsLocal, setGetAllPostsLocal }) => {
                         <div className="hidden"></div>
                         <div className="con">
                           {Array.isArray(comment.replies) &&
-                            comment.replies.slice(-2).map((item, index) => (
+                            comment.replies.slice(-10).map((item, index) => (
                               <SingleComment
                                 key={index}
                                 img={item.userProfilePicture}
@@ -402,9 +385,16 @@ const PostCard = ({ post, getAllPostsLocal, setGetAllPostsLocal }) => {
                                 }}
                               />
                             ))}
-                          {/* {getCommentsByPostId.status === 'loading' && (
-                          <div className='loading-com'>loading...</div>
-                        )} */}
+                          {commentType === "reply" && (
+                            <SingleComment
+                              img={getMyProfile.data?.imageUrl}
+                              name={`${getMyProfile.data?.firstName} ${getMyProfile.data?.secondName}`}
+                              role={getMyProfile.data?.profession || ""}
+                              comment={preloaderCommentReply}
+                              childComment
+                              loader
+                            />
+                          )}
                           {replyChildComment && commentThatIsBeingReplied.commentId === comment.commentId && (
                             <CommentInput
                               name={"reply"}
