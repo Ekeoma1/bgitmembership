@@ -139,7 +139,7 @@ const PostCard = ({ post, getAllPostsLocal, setGetAllPostsLocal }) => {
   };
 
   // Like unlike comment
-  const [likeComment, setLikeComment] = useState(post?.isLikedByCurrentUser);
+  const [likeCurrentComment, setLikeComment] = useState(post?.isLikedByCurrentUser);
   const timeoutIdRef3 = useRef(null);
   const handleLikeUnlikeComment = () => {
     const startTimeout = () => {
@@ -191,7 +191,7 @@ const PostCard = ({ post, getAllPostsLocal, setGetAllPostsLocal }) => {
     }
   };
   const handleReplyComment = (comment) => {
-    console.log('comment', comment);
+    // console.log('comment', comment);
     setReplyComment(true);
     setCommentThatIsBeingReplied(comment);
     setReplyChildComment(true);
@@ -475,7 +475,6 @@ const PostCard = ({ post, getAllPostsLocal, setGetAllPostsLocal }) => {
                             )}
                           <div className='btn-wrapper'>
                             <MainButton
-                              height='10rem'
                               size={'small'}
                               text={'Load more comments'}
                               onClick={() => {
@@ -489,8 +488,8 @@ const PostCard = ({ post, getAllPostsLocal, setGetAllPostsLocal }) => {
                                 const itemExits = numOfCommentsCon.find(
                                   (item) => item.commentId === comment.commentId
                                 );
-                                console.log('itemExists', itemExits);
-                                console.log('newObj', newObj);
+                                // console.log('itemExists', itemExits);
+                                // console.log('newObj', newObj);
 
                                 if (!itemExits) {
                                   numOfCommentsConTemp.push(newObj);

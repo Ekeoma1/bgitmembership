@@ -723,10 +723,11 @@
     flex: 1 1 0%;
     .details {
       width: 100%;
-      min-height: 106px;
+      // min-height: 106px;
       border-radius: 10px;
       background: rgba(160, 157, 168, 0.16);
-      padding: 1.1rem 1.2rem;
+      padding: 1rem 1.2rem;
+      
       .name {
         color: #000;
         font-weight: 600;
@@ -754,7 +755,8 @@
         font-size: 14.863px;
         font-weight: 400;
         line-height: 100%;
-        margin: 1.5rem 0;
+        margin: auto 0;
+        padding: 0;
       }
     }
     .comment-actions {
