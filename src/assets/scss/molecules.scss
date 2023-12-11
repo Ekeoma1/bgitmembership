@@ -658,6 +658,9 @@
 .comment {
   display: flex;
   margin-bottom: 2rem;
+  &.loader {
+    opacity: 0.5;
+  }
   &.comment-2 {
   }
   .img-con {
@@ -791,7 +794,7 @@
 .request-card {
   width: 23.2rem;
   height: 29.8rem;
-  padding: 0 3.2rem;
+  padding: 0 1.2rem;
   border-radius: 2.3878rem;
   border: 1.194px solid #9d8dd8;
   background: #fff;
@@ -814,23 +817,22 @@
     line-height: 10.326px;
   }
   img {
-    width: 49px;
-    height: 49px;
-    min-width: 63.814px;
-    min-height: 63.814px;
     overflow: hidden;
     object-fit: cover;
     border-radius: 50%;
     overflow: hidden;
     margin-bottom: 1.69rem;
-
     width: 9.0738rem;
     height: 9.0738rem;
+    min-width: 9.0738rem;
+    min-height: 9.0738rem;
+    cursor: pointer;
   }
   h3 {
     color: #000;
     font-size: 1.4327rem;
     line-height: 215.023%;
+    cursor: pointer;
   }
   p {
     color: #6f6c90;

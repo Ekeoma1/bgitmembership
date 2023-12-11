@@ -10,21 +10,22 @@ const Post = () => {
   const dispatch = useDispatch();
   const { getAllPosts, createPost } = useSelector((state) => state.posts);
   const [pageNumber, setPageNumber] = useState(1);
-  const [pageSize, setPageSize] = useState(2);
+  const [pageSize, setPageSize] = useState(20);
   const handleLoadMore = () => {
     setPageNumber((prevState) => prevState + 1);
   };
   useEffect(() => {
     if (createPost.status === "successful") {
-      const data = { queryParams: { pageNumber, pageSize } };
-      dispatch(triggerGetAllPosts(data));
+      const post = createPost?.data;
+      console.log("psst", post);
+      setGetAllPostsLocal([post, ...getAllPostsLocal]);
     }
-  }, [createPost.status, pageNumber, pageSize]);
+  }, [createPost.status]);
 
   useEffect(() => {
     const data = { queryParams: { pageNumber, pageSize } };
     dispatch(triggerGetAllPosts(data));
-  }, [pageNumber, pageSize]);
+  }, [pageNumber]);
 
   const [getAllPostsLocal, setGetAllPostsLocal] = useState([]);
 
@@ -32,7 +33,10 @@ const Post = () => {
     if (getAllPosts?.status === "successful" && getAllPosts.data?.posts) {
       const temp = getAllPosts?.data?.posts;
       const getAllPostsPrevious = [...getAllPostsLocal];
-      const getAllPostsAll = [...getAllPostsPrevious, ...temp];
+      const getAllPostsAllTemp = [...getAllPostsPrevious, ...temp];
+      const getAllPostsAll = getAllPostsAllTemp.filter((obj, index, array) => {
+        return array.findIndex((item) => item.postId === obj.postId) === index;
+      });
       setGetAllPostsLocal(getAllPostsAll);
     }
   }, [getAllPosts.data?.posts, getAllPosts?.status, getAllPostsLocal]);
@@ -77,7 +81,7 @@ const Post = () => {
           </>
         )}
         {pageNumber < 10 && (
-          <div className="btn">
+          <div className="btn-con">
             <MainButton
               text={"Load more"}
               onClick={() => {

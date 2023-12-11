@@ -9,12 +9,19 @@ import EmptyState from '../components/Molecules/EmptyState';
 import { useDispatch, useSelector } from 'react-redux';
 import { triggerGetAllNews } from '../Features/news/news_slice';
 import { triggerGetAllEvents } from '../Features/events/events_slice';
+import { triggerGetPendingRequestConnections } from '../Features/connections/connections_slice';
+import { ForumCardsLoader2 } from '../components/Atoms/skeleton-loaders/ForumCardsLoader';
 
 const Updates = () => {
   const navigate = useNavigate();
+  const dispatch = useDispatch();
   const [emptyState] = useState(false);
+
   useEffect(() => {
     window.scrollTo(0, 0);
+  }, []);
+  useEffect(() => {
+    dispatch(triggerGetPendingRequestConnections());
   }, []);
   return (
     <div className='updates-wrapper bg-color2'>

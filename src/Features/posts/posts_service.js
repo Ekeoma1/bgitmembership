@@ -103,10 +103,11 @@ export default class PostsService {
   }
 
   //get all comments by post id
-  static async getAllCommentsByPostId(data) {
-    const response = await post({
-      url: apiRoutes.getAllCommentsByPostId,
+  static async getCommentsByPostId(data) {
+    const response = await get({
+      url: apiRoutes.getCommentsByPostId,
       data: { ...data },
+      queryParams: data.queryParams,
     });
     return response;
   }

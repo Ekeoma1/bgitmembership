@@ -48,7 +48,7 @@ const initialState = {
     status: states.BASE,
     data: {},
   },
-  getAllCommentsByPostId: {
+  getCommentsByPostId: {
     status: states.BASE,
     data: {},
   },
@@ -174,11 +174,11 @@ export const triggerUnlikeComment = createAsyncThunk(
     }
   }
 );
-export const triggerGetAllCommentsByPostId = createAsyncThunk(
-  'get-all-comments-by-post-id',
+export const triggerGetCommentsByPostId = createAsyncThunk(
+  'get-comments-by-post-id',
   async (params, thunkAPI) => {
     try {
-      return await PostsService.getAllCommentsByPostId(params);
+      return await PostsService.getCommentsByPostId(params);
     } catch (e) {
       return thunkAPI.rejectWithValue(e.message);
     }
@@ -241,6 +241,9 @@ const postsSlice = createSlice({
     },
     resetReplyComment: (state) => {
       state.replyComment = initialState.replyComment;
+    },
+    resetGetCommentsByPostId: (state) => {
+      state.getCommentsByPostId = initialState.getCommentsByPostId;
     },
   },
   extraReducers: (builder) => {
@@ -398,20 +401,17 @@ const postsSlice = createSlice({
     });
 
     // get all comments by post id
-    builder.addCase(triggerGetAllCommentsByPostId.pending, (state) => {
-      state.getAllCommentsByPostId.status = states.LOADING;
-      state.getAllCommentsByPostId.data = {};
+    builder.addCase(triggerGetCommentsByPostId.pending, (state) => {
+      state.getCommentsByPostId.status = states.LOADING;
+      state.getCommentsByPostId.data = {};
     });
-    builder.addCase(
-      triggerGetAllCommentsByPostId.fulfilled,
-      (state, action) => {
-        state.getAllCommentsByPostId.status = states.SUCCESSFUL;
-        state.getAllCommentsByPostId.data = action.payload;
-      }
-    );
-    builder.addCase(triggerGetAllCommentsByPostId.rejected, (state, action) => {
-      state.getAllCommentsByPostId.status = states.ERROR;
-      state.getAllCommentsByPostId.data = action.payload;
+    builder.addCase(triggerGetCommentsByPostId.fulfilled, (state, action) => {
+      state.getCommentsByPostId.status = states.SUCCESSFUL;
+      state.getCommentsByPostId.data = action.payload;
+    });
+    builder.addCase(triggerGetCommentsByPostId.rejected, (state, action) => {
+      state.getCommentsByPostId.status = states.ERROR;
+      state.getCommentsByPostId.data = action.payload;
     });
 
     // save post
@@ -457,4 +457,5 @@ export const {
   resetActivePostIdForOngoingRequest,
   resetCreateComment,
   resetReplyComment,
+  resetGetCommentsByPostId,
 } = postsSlice.actions;

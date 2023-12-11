@@ -19,6 +19,10 @@ const initialState = {
     status: states.BASE,
     data: {},
   },
+  cancelConnectionRequest: {
+    status: states.BASE,
+    data: {},
+  },
   getPendingRequestConnections: {
     status: states.BASE,
     data: {},
@@ -28,26 +32,6 @@ const initialState = {
     data: {},
   },
   rejectConnectionRequest: {
-    status: states.BASE,
-    data: {},
-  },
-  getBlockedUsers: {
-    status: states.BASE,
-    data: {},
-  },
-  blockUser: {
-    status: states.BASE,
-    data: {},
-  },
-  unblockUser: {
-    status: states.BASE,
-    data: {},
-  },
-  muteUser: {
-    status: states.BASE,
-    data: {},
-  },
-  unmuteUser: {
     status: states.BASE,
     data: {},
   },
@@ -93,6 +77,16 @@ export const triggerSendConnectionRequest = createAsyncThunk(
     }
   }
 );
+export const triggerCancelConnectionRequest = createAsyncThunk(
+  'cancel-connection-request',
+  async (params, thunkAPI) => {
+    try {
+      return await ConnectionService.sendConnectionRequest(params);
+    } catch (e) {
+      return thunkAPI.rejectWithValue(e.message);
+    }
+  }
+);
 export const triggerGetPendingRequestConnections = createAsyncThunk(
   'get-pending-request-connections',
   async (params, thunkAPI) => {
@@ -123,61 +117,15 @@ export const triggerRejectConnectionRequest = createAsyncThunk(
     }
   }
 );
-export const triggerGetBlockedUsers = createAsyncThunk(
-  'get-blocked-users',
-  async (params, thunkAPI) => {
-    try {
-      return await ConnectionService.getBlockedUsers(params);
-    } catch (e) {
-      return thunkAPI.rejectWithValue(e.message);
-    }
-  }
-);
-export const triggerBlockUser = createAsyncThunk(
-  'block-user',
-  async (params, thunkAPI) => {
-    try {
-      return await ConnectionService.blockUser(params);
-    } catch (e) {
-      return thunkAPI.rejectWithValue(e.message);
-    }
-  }
-);
-export const triggerUnblockUser = createAsyncThunk(
-  'unblock-user',
-  async (params, thunkAPI) => {
-    try {
-      return await ConnectionService.unblockUser(params);
-    } catch (e) {
-      return thunkAPI.rejectWithValue(e.message);
-    }
-  }
-);
-export const triggerMuteUser = createAsyncThunk(
-  'mute-user',
-  async (params, thunkAPI) => {
-    try {
-      return await ConnectionService.muteUser(params);
-    } catch (e) {
-      return thunkAPI.rejectWithValue(e.message);
-    }
-  }
-);
-export const triggerUnmuteUser = createAsyncThunk(
-  'unmute-user',
-  async (params, thunkAPI) => {
-    try {
-      return await ConnectionService.unmuteUser(params);
-    } catch (e) {
-      return thunkAPI.rejectWithValue(e.message);
-    }
-  }
-);
 
 const connectionSlice = createSlice({
   name: 'connections',
   initialState,
-  reducers: {},
+  reducers: {
+    resetSendConnectionRequest: (state) => {
+      state.sendConnectionRequest = initialState.sendConnectionRequest;
+    },
+  },
   extraReducers: (builder) => {
     // Get accepted connections
     builder.addCase(triggerGetAcceptedConnections.pending, (state) => {
@@ -243,6 +191,22 @@ const connectionSlice = createSlice({
       state.sendConnectionRequest.status = states.ERROR;
       state.sendConnectionRequest.data = {};
     });
+    // cancel connection requests
+    builder.addCase(triggerCancelConnectionRequest.pending, (state) => {
+      state.cancelConnectionRequest.status = states.LOADING;
+      state.cancelConnectionRequest.data = {};
+    });
+    builder.addCase(
+      triggerCancelConnectionRequest.fulfilled,
+      (state, action) => {
+        state.cancelConnectionRequest.status = states.SUCCESSFUL;
+        state.cancelConnectionRequest.data = action.payload;
+      }
+    );
+    builder.addCase(triggerCancelConnectionRequest.rejected, (state) => {
+      state.cancelConnectionRequest.status = states.ERROR;
+      state.cancelConnectionRequest.data = {};
+    });
 
     // get pending request connections
     builder.addCase(triggerGetPendingRequestConnections.pending, (state) => {
@@ -294,77 +258,8 @@ const connectionSlice = createSlice({
       state.rejectConnectionRequest.status = states.ERROR;
       state.rejectConnectionRequest.data = {};
     });
-
-    // get blocked users
-    builder.addCase(triggerGetBlockedUsers.pending, (state) => {
-      state.getBlockedUsers.status = states.LOADING;
-      state.getBlockedUsers.data = {};
-    });
-    builder.addCase(triggerGetBlockedUsers.fulfilled, (state, action) => {
-      state.getBlockedUsers.status = states.SUCCESSFUL;
-      state.getBlockedUsers.data = action.payload;
-    });
-    builder.addCase(triggerGetBlockedUsers.rejected, (state) => {
-      state.getBlockedUsers.status = states.ERROR;
-      state.getBlockedUsers.data = {};
-    });
-
-    // block user
-    builder.addCase(triggerBlockUser.pending, (state) => {
-      state.blockUser.status = states.LOADING;
-      state.blockUser.data = {};
-    });
-    builder.addCase(triggerBlockUser.fulfilled, (state, action) => {
-      state.blockUser.status = states.SUCCESSFUL;
-      state.blockUser.data = action.payload;
-    });
-    builder.addCase(triggerBlockUser.rejected, (state) => {
-      state.blockUser.status = states.ERROR;
-      state.blockUser.data = {};
-    });
-
-    // unblock user
-    builder.addCase(triggerUnblockUser.pending, (state) => {
-      state.unblockUser.status = states.LOADING;
-      state.unblockUser.data = {};
-    });
-    builder.addCase(triggerUnblockUser.fulfilled, (state, action) => {
-      state.unblockUser.status = states.SUCCESSFUL;
-      state.unblockUser.data = action.payload;
-    });
-    builder.addCase(triggerUnblockUser.rejected, (state) => {
-      state.unblockUser.status = states.ERROR;
-      state.unblockUser.data = {};
-    });
-
-    // mute user
-    builder.addCase(triggerMuteUser.pending, (state) => {
-      state.muteUser.status = states.LOADING;
-      state.muteUser.data = {};
-    });
-    builder.addCase(triggerMuteUser.fulfilled, (state, action) => {
-      state.muteUser.status = states.SUCCESSFUL;
-      state.muteUser.data = action.payload;
-    });
-    builder.addCase(triggerMuteUser.rejected, (state) => {
-      state.muteUser.status = states.ERROR;
-      state.muteUser.data = {};
-    });
-
-    // unmute user
-    builder.addCase(triggerUnmuteUser.pending, (state) => {
-      state.unmuteUser.status = states.LOADING;
-      state.unmuteUser.data = {};
-    });
-    builder.addCase(triggerUnmuteUser.fulfilled, (state, action) => {
-      state.unmuteUser.status = states.SUCCESSFUL;
-      state.unmuteUser.data = action.payload;
-    });
-    builder.addCase(triggerUnmuteUser.rejected, (state) => {
-      state.unmuteUser.status = states.ERROR;
-      state.unmuteUser.data = {};
-    });
   },
 });
 
 export default connectionSlice.reducer;
+export const { resetSendConnectionRequest } = connectionSlice.actions;

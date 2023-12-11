@@ -20,6 +20,8 @@ import {
   triggerReplyComment,
   resetCreateComment,
   resetReplyComment,
+  triggerGetCommentsByPostId,
+  resetGetCommentsByPostId,
 } from '../../Features/posts/posts_slice';
 import { useDispatch, useSelector } from 'react-redux';
 import { FaRegBookmark, FaBookmark } from 'react-icons/fa';
@@ -39,10 +41,12 @@ const PostCard = ({ post, getAllPostsLocal, setGetAllPostsLocal }) => {
     activePostIdForOngoingRequest,
     createComment,
     replyComment: replyCommentRedux,
+    getCommentsByPostId,
   } = useSelector((state) => state.posts);
   const { getMyProfile } = useSelector((state) => state.users);
   const [showCommentsSection, setShowCommentsSection] = useState(false);
   const [comment, setComment] = useState('');
+  const [preloaderComment, setPreloaderComment] = useState('');
   const [reply, setReply] = useState('');
   const [replyComment, setReplyComment] = useState(false);
   const [replyChildComment, setReplyChildComment] = useState(false);
@@ -56,20 +60,19 @@ const PostCard = ({ post, getAllPostsLocal, setGetAllPostsLocal }) => {
   const [postVideoOnLoadStatus, setPostVideoOnLoadStatus] = useState('base');
 
   // Like unlike post
-  const [activePost, setActivePost] = useState('');
   const [likeCurrentPost, setLikeCurrentPost] = useState(
     post?.isLikedByCurrentUser
   );
   const timeoutIdRef2 = useRef(null);
-  const handleLikeUnlikePost = () => {
-    setActivePost(post);
+  const handleLikeUnlikePost = (postParam) => {
+    const data = _.cloneDeep(getAllPostsLocal);
     const startTimeout = () => {
       timeoutIdRef2.current = setTimeout(() => {
-        const data = { queryParams: { postId: post.postId } };
+        const values = { queryParams: { postId: postParam.postId } };
         if (!likeCurrentPost) {
-          dispatch(triggerLikePost(data));
+          dispatch(triggerLikePost(values));
         } else {
-          dispatch(triggerUnlikePost(data));
+          dispatch(triggerUnlikePost(values));
         }
       }, 3000);
     };
@@ -80,45 +83,32 @@ const PostCard = ({ post, getAllPostsLocal, setGetAllPostsLocal }) => {
     };
     clearTimeoutIfNeeded();
     startTimeout();
-    setLikeCurrentPost(!likeCurrentPost);
-  };
-  useEffect(() => {
-    // const data = [...getAllPostsLocal];
-    const data = _.cloneDeep(getAllPostsLocal);
-    if (activePost) {
-      if (likeCurrentPost) {
-        data?.forEach((item) => {
-          if (item.postId === activePost.postId) {
-            item.isLikedByCurrentUser = true;
-            item.likeCount = item.likeCount + 1;
-          }
-        });
-      } else {
-        data?.forEach((item) => {
-          if (item.postId === activePost.postId) {
-            item.isLikedByCurrentUser = false;
-            item.likeCount = item.likeCount - 1;
-          }
-        });
+    data.forEach((item) => {
+      if (item.postId === postParam.postId) {
+        setLikeCurrentPost(!likeCurrentPost);
+        item.isLikedByCurrentUser = !item.isLikedByCurrentUser;
+        item.likeCount = item.isLikedByCurrentUser
+          ? item.likeCount + 1
+          : item.likeCount - 1;
       }
-      setGetAllPostsLocal(data);
-    }
-  }, [likeCurrentPost]);
+    });
+    setGetAllPostsLocal(data);
+  };
 
   // Save unsave post
   const [saveCurrentPost, setSaveCurrentPost] = useState(
     post?.isSavedByCurrentUser
   );
   const timeoutIdRef = useRef(null);
-  const handleSaveUnsavePost = () => {
-    setActivePost(post);
+  const handleSaveUnsavePost = (postParam) => {
+    const data = _.cloneDeep(getAllPostsLocal);
     const startTimeout = () => {
       timeoutIdRef.current = setTimeout(() => {
-        const data = { queryParams: { postId: post.postId } };
+        const values = { queryParams: { postId: postParam.postId } };
         if (!saveCurrentPost) {
-          dispatch(triggerSavePost(data));
+          dispatch(triggerSavePost(values));
         } else {
-          dispatch(triggerUnsavePost(data));
+          dispatch(triggerUnsavePost(values));
         }
       }, 3000);
     };
@@ -129,29 +119,17 @@ const PostCard = ({ post, getAllPostsLocal, setGetAllPostsLocal }) => {
     };
     clearTimeoutIfNeeded();
     startTimeout();
-    setSaveCurrentPost(!saveCurrentPost);
-  };
-  useEffect(() => {
-    const data = _.cloneDeep(getAllPostsLocal);
-    if (activePost) {
-      if (saveCurrentPost) {
-        data?.forEach((item) => {
-          if (item.postId === post.postId) {
-            item.isSavedByCurrentUser = true;
-            item.saveCount = item.saveCount + 1;
-          }
-        });
-      } else {
-        data?.forEach((item) => {
-          if (item.postId === post.postId) {
-            item.isSavedByCurrentUser = false;
-            item.saveCount = item.saveCount - 1;
-          }
-        });
+    data.forEach((item) => {
+      if (item.postId === postParam.postId) {
+        setSaveCurrentPost(!saveCurrentPost);
+        item.isSavedByCurrentUser = !item.isSavedByCurrentUser;
+        item.saveCount = item.isSavedByCurrentUser
+          ? item.saveCount + 1
+          : item.saveCount - 1;
       }
-      setGetAllPostsLocal(data);
-    }
-  }, [saveCurrentPost]);
+    });
+    setGetAllPostsLocal(data);
+  };
 
   // Like unlike comment
   const [likeComment, setLikeComment] = useState(post?.isLikedByCurrentUser);
@@ -179,26 +157,25 @@ const PostCard = ({ post, getAllPostsLocal, setGetAllPostsLocal }) => {
   useEffect(() => {
     // const data = [...getAllPostsLocal];
     const data = _.cloneDeep(getAllPostsLocal);
-    if (activePost) {
-      if (likeCurrentPost) {
-        data?.forEach((item) => {
-          if (item.postId === post.postId) {
-            item.isLikedByCurrentUser = true;
-            item.likeCount = item.likeCount + 1;
-          }
-        });
-      } else {
-        data?.forEach((item) => {
-          if (item.postId === post.postId) {
-            item.isLikedByCurrentUser = false;
-            item.likeCount = item.likeCount - 1;
-          }
-        });
-      }
+    if (likeCurrentPost) {
+      data?.forEach((item) => {
+        if (item.postId === post.postId) {
+          item.isLikedByCurrentUser = true;
+          item.likeCount = item.likeCount + 1;
+        }
+      });
+    } else {
+      data?.forEach((item) => {
+        if (item.postId === post.postId) {
+          item.isLikedByCurrentUser = false;
+          item.likeCount = item.likeCount - 1;
+        }
+      });
     }
     // setGetAllPostsLocal(data);
   }, [likeCurrentPost]);
   // other
+
   const handleChange = (e) => {
     if (e.target.name === 'comment') {
       setComment(e.target.value);
@@ -211,15 +188,17 @@ const PostCard = ({ post, getAllPostsLocal, setGetAllPostsLocal }) => {
     setReplyComment(true);
     setCommentThatIsBeingReplied(comment);
     setReplyChildComment(true);
-    setActivePost(post);
   };
-  const handleSubmit = (name) => {
+  const handleSubmit = (name, post) => {
+    console.log(name, post);
+    setActivePostTemp(post);
     if (name === 'comment') {
       const data = {
         postId: post.postId,
         content: comment,
       };
       dispatch(triggerCreateComment(data));
+      setPreloaderComment(comment);
       setComment('');
     } else if (name === 'reply') {
       const data = {
@@ -231,47 +210,70 @@ const PostCard = ({ post, getAllPostsLocal, setGetAllPostsLocal }) => {
       setCommentThatIsBeingReplied('');
     }
   };
+  // comment
+  const [activePostTemp, setActivePostTemp] = useState({});
+  useEffect(() => {
+    // console.log('useeffect####################');
+    // console.log('one#################', data);
+    if (createComment.status === 'successful') {
+      if (activePostTemp.postId === post.postId) {
+        const data = { queryParams: { postId: activePostTemp?.postId } };
+        dispatch(triggerGetCommentsByPostId(data));
+      }
+    }
+    // update
+    // if (replyCommentRedux.status === 'successful') {
+    //   console.log('true');
+    //   data.forEach((item) => {
+    //     if (item.postId === activePost.postId) {
+    //       if (Array.isArray(item.commentedUsers)) {
+    //         const commentedUsers = [...item?.commentedUsers];
+    //         console.log('two#################', commentedUsers);
+    //         const replies = [...commentedUsers?.replies];
+    //         console.log('three##############', replies);
+    //         replies.push(replyCommentRedux.data);
+    //         data.replies = replies;
+    //         setGetAllPostsLocal(data);
+    //         dispatch(resetReplyComment());
+    //       }
+    //     }
+    //   });
+    // }
+  }, [createComment, replyCommentRedux, getAllPostsLocal]);
 
   useEffect(() => {
-    console.log('useeffect####################');
-    const data = _.cloneDeep(getAllPostsLocal);
-    console.log('one#################', data);
-    if (createComment.status === 'successful') {
-      data.forEach((item) => {
-        if (item.postId === activePost.postId) {
-          const commentedUsers = [...item?.commentedUsers];
-          console.log('two#################', commentedUsers);
-          const replies = [...commentedUsers?.replies];
-          console.log('three##############', replies);
-          commentedUsers.push(createComment.data);
-          data.commentedUsers = commentedUsers;
-          setGetAllPostsLocal(data);
-          dispatch(resetCreateComment());
-        }
-      });
+    if (getCommentsByPostId.status === 'successful') {
+      const data = _.cloneDeep(getAllPostsLocal);
+      // Find the object with the matching ID
+      const updatedArray = data.map((obj) =>
+        obj.postId === getCommentsByPostId.data.postId
+          ? { ...obj, ...getCommentsByPostId.data }
+          : obj
+      );
+      console.log('dataupdated#############', updatedArray);
+      dispatch(resetCreateComment());
+      dispatch(resetGetCommentsByPostId());
+      setPreloaderComment('');
+      setGetAllPostsLocal([...updatedArray]);
+      // new
+      // console.log('getcommentsbypostid#######', getCommentsByPostId.data);
+
+      // data.forEach((item) => {
+      //   if (item.postId === 'fdb1f56b-620a-4f58-b131-08dbf5644d91') {
+      //     console.log('true#############', item);
+      //     item = getCommentsByPostId.data;
+      //   }
+      // });
+      // console.log('dataupdated#############', data);
+      // setGetAllPostsLocal(data);
+      // dispatch(resetGetCommentsByPostId());
     }
-    if (replyCommentRedux.status === 'successful') {
-      console.log('true');
-      data.forEach((item) => {
-        if (item.postId === activePost.postId) {
-          if (Array.isArray(item.commentedUsers)) {
-            const commentedUsers = [...item?.commentedUsers];
-            console.log('two#################', commentedUsers);
-            const replies = [...commentedUsers?.replies];
-            console.log('three##############', replies);
-            replies.push(replyCommentRedux.data);
-            data.replies = replies;
-            setGetAllPostsLocal(data);
-            dispatch(resetReplyComment());
-          }
-        }
-      });
-    }
-  }, [createComment, replyCommentRedux, getAllPostsLocal]);
-  // console.log('post###', post);
+  }, [getCommentsByPostId]);
+  // console.log('getCommentsByPostId', getCommentsByPostId);
+  console.log('savepost###', saveCurrentPost, post.isSavedByCurrentUser);
   // console.log('comment', commentThatIsBeingReplied);
-  console.log('comment', createComment);
-  console.log('replycommentRedux', replyCommentRedux);
+  // console.log('comment', createComment);
+  // console.log('replycommentRedux', replyCommentRedux);
   const handleLikeComment = (id) => {};
   return (
     <div className='post-card shadow-sm mx-auto'>
@@ -363,7 +365,7 @@ const PostCard = ({ post, getAllPostsLocal, setGetAllPostsLocal }) => {
         <div className='post-card-footer-content'>
           <div className='d-flex align-items-center c-gap-10'>
             <button
-              onClick={handleLikeUnlikePost}
+              onClick={() => handleLikeUnlikePost(post)}
               className={`heart-icon ${post?.isLikedByCurrentUser && 'active'}`}
             >
               <Icon icon='heart' />
@@ -381,7 +383,10 @@ const PostCard = ({ post, getAllPostsLocal, setGetAllPostsLocal }) => {
             <span>{post?.commentCount}</span>
           </div>
           <div className='d-flex align-items-center c-gap-10'>
-            <button className='bookmark ' onClick={handleSaveUnsavePost}>
+            <button
+              className='bookmark '
+              onClick={() => handleSaveUnsavePost(post)}
+            >
               {post?.isSavedByCurrentUser ? (
                 <FaBookmark className='active' />
               ) : (
@@ -409,56 +414,75 @@ const PostCard = ({ post, getAllPostsLocal, setGetAllPostsLocal }) => {
             <CommentInput
               name={'comment'}
               onChange={handleChange}
-              onSubmit={handleSubmit}
+              onSubmit={() => handleSubmit('comment', post)}
               value={comment}
             />
             <div className='comments-box'>
-              {post.commentedUsers?.map((comment, index) => (
-                <>
-                  <SingleComment
-                    key={index}
-                    img={comment.userProfilePicture}
-                    name={comment.userName}
-                    role={comment.profession}
-                    comment={comment.content}
-                    setLikeComment={setLikeComment}
-                    setReplyComment={() => handleReplyComment(comment)}
-                  />
+              {(createComment.status === 'loading' ||
+                getCommentsByPostId.status === 'loading' ||
+                (createComment.status === 'successful' &&
+                  getCommentsByPostId.status === 'base')) && (
+                <SingleComment
+                  img={getMyProfile.data?.imageUrl}
+                  name={`${getMyProfile.data?.firstName} ${getMyProfile.data?.secondName}`}
+                  role={getMyProfile.data?.profession || ''}
+                  comment={preloaderComment}
+                  loader
+                />
+              )}
+              {post.commentedUsers
+                ?.slice()
+                .reverse()
+                .slice(0, 2)
+                .map((comment, index) => (
                   <>
-                    <div className='child-comments-wrapper'>
-                      <div className='hidden'></div>
-                      <div className='con'>
-                        {comment.replies.map((item, index) => (
-                          <SingleComment
-                            key={index}
-                            img={item.userProfilePicture}
-                            name={`${item.firstName} ${item.secondName}`}
-                            role={item.profession ?? 'test'}
-                            comment={item.content}
-                            childComment
-                            setReplyComment={() => {
-                              setReplyChildComment(true);
-                              setCommentThatIsBeingReplied(comment);
-                              setActivePost(post);
-                            }}
-                          />
-                        ))}
-                        {replyChildComment &&
-                          commentThatIsBeingReplied.commentId ===
-                            comment.commentId && (
-                            <CommentInput
-                              name={'reply'}
-                              onChange={handleChange}
-                              onSubmit={handleSubmit}
-                              value={reply}
-                              focus={replyChildComment}
-                            />
-                          )}
+                    <SingleComment
+                      key={index}
+                      img={comment.userProfilePicture}
+                      name={comment.userName}
+                      role={comment.profession}
+                      comment={comment.content}
+                      setLikeComment={setLikeComment}
+                      setReplyComment={() => handleReplyComment(comment)}
+                    />
+                    <>
+                      <div className='child-comments-wrapper'>
+                        <div className='hidden'></div>
+                        <div className='con'>
+                          {Array.isArray(comment.replies) &&
+                            comment.replies.slice(-2).map((item, index) => (
+                              <SingleComment
+                                key={index}
+                                img={item.userProfilePicture}
+                                name={`${item.firstName} ${item.secondName}`}
+                                role={item.profession ?? 'test'}
+                                comment={item.content}
+                                childComment
+                                setReplyComment={() => {
+                                  setReplyChildComment(true);
+                                  setCommentThatIsBeingReplied(comment);
+                                }}
+                              />
+                            ))}
+                          {/* {getCommentsByPostId.status === 'loading' && (
+                          <div className='loading-com'>loading...</div>
+                        )} */}
+                          {replyChildComment &&
+                            commentThatIsBeingReplied.commentId ===
+                              comment.commentId && (
+                              <CommentInput
+                                name={'reply'}
+                                onChange={handleChange}
+                                onSubmit={() => handleSubmit('reply', post)}
+                                value={reply}
+                                focus={replyChildComment}
+                              />
+                            )}
+                        </div>
                       </div>
-                    </div>
+                    </>
                   </>
-                </>
-              ))}
+                ))}
               {/* <div className='child-comments-wrapper'>
                 <div className='hidden'></div>
                 <div className='con'>

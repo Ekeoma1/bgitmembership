@@ -13,7 +13,7 @@ import UserProfilePhotoLoader from '../Atoms/skeleton-loaders/dashboard-page/Use
 import DetailsLoader from '../Atoms/skeleton-loaders/dashboard-page/DetailsLoader';
 // import defaultImg from '../../assets/images/default-photo.jpeg';
 import defaultImg from '../../assets/images/main2.png';
-import bg from '../../assets/images/people1.svg';
+import spinner from '../../assets/images/spinner2.png';
 import { FaChevronRight } from 'react-icons/fa';
 import { FaCamera } from 'react-icons/fa6';
 import { GoPencil } from 'react-icons/go';
@@ -22,12 +22,27 @@ import { BsImage } from 'react-icons/bs';
 import OutsideClickHandler from 'react-outside-click-handler/build/OutsideClickHandler';
 import { LuMoreVertical } from 'react-icons/lu';
 import UpdateCoverPhotoModal from '../Modals/UpdateCoverPhotoModal';
+import {
+  triggerSendConnectionRequest,
+  triggerCancelConnectionRequest,
+  resetSendConnectionRequest,
+} from '../../Features/connections/connections_slice';
+import { resetReportUser } from '../../Features/reports/reports_slice';
+import { renderToast } from '../Molecules/CustomToastify';
 
 const ProfileBanner = ({ data }) => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const { getMyProfile, updateProfilePicture, updateBackgroundPicture } =
-    useSelector((state) => state.users);
+  const {
+    getMyProfile,
+    updateProfilePicture,
+    updateBackgroundPicture,
+    getUserProfileById,
+  } = useSelector((state) => state.users);
+  const { sendConnectionRequest, cancelConnectionRequest } = useSelector(
+    (state) => state.connections
+  );
+  const { reportUser } = useSelector((state) => state.reports);
   const [actionAcctModal, setActionAcctModal] = useState(false);
   const [individalAcctModal, setIndividualAcctModal] = useState(false);
   const [contentToShow, setContentToShow] = useState(null);
@@ -77,6 +92,31 @@ const ProfileBanner = ({ data }) => {
     }
     setShowDropdown(false);
   };
+  const handleConnect = () => {
+    if (sendConnectionRequest.status === 'base') {
+      const values = { receiverUserId: getUserProfileById.data?.userId };
+      dispatch(triggerSendConnectionRequest(values));
+    } else if (sendConnectionRequest.status === 'successful') {
+      const values = { receiverUserId: getUserProfileById.data?.userId };
+      dispatch(triggerCancelConnectionRequest(values));
+    }
+  };
+
+  useEffect(() => {
+    if (cancelConnectionRequest.status === 'successful') {
+      dispatch(resetSendConnectionRequest());
+    }
+    if (reportUser.status === 'successful') {
+      console.log('rendertoast');
+      renderToast({
+        status: 'success',
+        message: reportUser?.data,
+      });
+      dispatch(resetReportUser());
+    }
+  }, [cancelConnectionRequest, reportUser]);
+  console.log('report user', reportUser);
+
   useEffect(() => {
     if (uploadProfilePicture.profilePicture) {
       setUploadedprofilePicture(true);
@@ -84,6 +124,7 @@ const ProfileBanner = ({ data }) => {
       dispatch(triggerUpdateProfilePicture(uploadProfilePicture));
     }
   }, [uploadProfilePicture]);
+
   useEffect(() => {
     if (uploadCoverPicture.backgroundImage) {
       setUploadedCoverPicture(true);
@@ -98,6 +139,7 @@ const ProfileBanner = ({ data }) => {
       setUploadProfilePicture({ profilePicture: '' });
     }
   }, [updateProfilePicture]);
+
   useEffect(() => {
     if (updateBackgroundPicture.status === 'successful') {
       setUploadCoverPicture({ backgroundImage: '' });
@@ -377,19 +419,20 @@ const ProfileBanner = ({ data }) => {
                     <LuMoreVertical className='icon' />
                   </button>
                 )}
-                {data.data?.userId !== getMyProfile.data?.userId && (
-                  <OutsideClickHandler
-                    onOutsideClick={() => {
-                      setActionAcctModal(false);
-                    }}
-                  >
-                    <AccountActionModal
-                      reportAction={setReportModal}
-                      show={actionAcctModal}
-                      action={showIndividualAcctModal}
-                    />
-                  </OutsideClickHandler>
-                )}
+                {data.data?.userId !== getMyProfile.data?.userId &&
+                  !reportModal && (
+                    <OutsideClickHandler
+                      onOutsideClick={() => {
+                        setActionAcctModal(false);
+                      }}
+                    >
+                      <AccountActionModal
+                        reportAction={setReportModal}
+                        show={actionAcctModal}
+                        action={showIndividualAcctModal}
+                      />
+                    </OutsideClickHandler>
+                  )}
                 {data.data?.userId !== getMyProfile.data?.userId && (
                   <OutsideClickHandler
                     onOutsideClick={() => {
@@ -412,18 +455,25 @@ const ProfileBanner = ({ data }) => {
           data?.status === 'successful' && (
             <div className='d-flex c-gap-10 flex-wrap mt-3'>
               <button
-                onClick={() => {
-                }}
-                className='reach-btn'
+                onClick={handleConnect}
+                className={`reach-btn ${
+                  sendConnectionRequest.status === 'loading' && 'loading'
+                }`}
               >
-                + Connect
+                {sendConnectionRequest.status === 'loading' ||
+                sendConnectionRequest.status === 'loading' ? (
+                  <img src={spinner} alt='spinner' />
+                ) : sendConnectionRequest.status === 'successful' ? (
+                  <>
+                    {sendConnectionRequest.data === 'Connection request sent' &&
+                      'Cancel request'}
+                  </>
+                ) : (
+                  '+ Connect'
+                )}
               </button>
 
-              <button
-                onClick={() => {
-                }}
-                className='reach-btn'
-              >
+              <button onClick={() => {}} className='reach-btn'>
                 Message
               </button>
             </div>
