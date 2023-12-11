@@ -51,6 +51,10 @@ const PostCard = ({ post, getAllPostsLocal, setGetAllPostsLocal }) => {
   const [reply, setReply] = useState('');
   const [preloaderCommentReply, setPreloaderCommentReply] = useState('');
   const [numberOfComments, setNumberOfComments] = useState(2);
+  const [numOfCommentsCon, setNumOfCommentsCon] = useState([
+    { commentId: '', numberOfComments: 2 },
+  ]);
+  console.log('numOfCommentsCon', numOfCommentsCon);
   const [replyComment, setReplyComment] = useState(false);
   const [replyChildComment, setReplyChildComment] = useState(false);
   const [commentThatIsBeingReplied, setCommentThatIsBeingReplied] = useState(
@@ -177,8 +181,8 @@ const PostCard = ({ post, getAllPostsLocal, setGetAllPostsLocal }) => {
     }
     // setGetAllPostsLocal(data);
   }, [getAllPostsLocal, likeCurrentPost, post.postId]);
-  // other
 
+  // comment and reply
   const handleChange = (e) => {
     if (e.target.name === 'comment') {
       setComment(e.target.value);
@@ -241,7 +245,7 @@ const PostCard = ({ post, getAllPostsLocal, setGetAllPostsLocal }) => {
           ? { ...obj, ...getCommentsByPostId.data }
           : obj
       );
-      console.log('dataupdated#############', updatedArray);
+      // console.log('dataupdated#############', updatedArray);
       setGetAllPostsLocal([...updatedArray]);
       dispatch(resetCreateComment());
       dispatch(resetReplyComment());
@@ -428,10 +432,9 @@ const PostCard = ({ post, getAllPostsLocal, setGetAllPostsLocal }) => {
                           {Array.isArray(comment.replies) &&
                             comment.replies
                               .slice(
-                                commentThatIsBeingReplied.commentId ===
-                                  comment.commentId
-                                  ? -numberOfComments
-                                  : -2
+                                -numOfCommentsCon.find(
+                                  (item) => item.commentId === comment.commentId
+                                )?.numberOfComments || -2
                               )
                               .map((item, index) => (
                                 <SingleComment
@@ -447,18 +450,6 @@ const PostCard = ({ post, getAllPostsLocal, setGetAllPostsLocal }) => {
                                   }}
                                 />
                               ))}
-                          <div className='btn-wrapper'>
-                            <MainButton
-                              height='10rem'
-                              size={'small'}
-                              text={'Load more comments'}
-                              onClick={() => {
-                                setCommentThatIsBeingReplied(comment);
-                                setNumberOfComments(numberOfComments + 2);
-                              }}
-                              // loading={signup.status === 'loading'}
-                            />
-                          </div>
                           {commentType === 'reply' &&
                             commentThatIsBeingReplied.commentId ===
                               comment.commentId && (
@@ -482,49 +473,45 @@ const PostCard = ({ post, getAllPostsLocal, setGetAllPostsLocal }) => {
                                 focus={replyChildComment}
                               />
                             )}
+                          <div className='btn-wrapper'>
+                            <MainButton
+                              height='10rem'
+                              size={'small'}
+                              text={'Load more comments'}
+                              onClick={() => {
+                                const newObj = {
+                                  commentId: comment.commentId,
+                                  numberOfComments: 4,
+                                };
+                                const numOfCommentsConTemp = [
+                                  ...numOfCommentsCon,
+                                ];
+                                const itemExits = numOfCommentsCon.find(
+                                  (item) => item.commentId === comment.commentId
+                                );
+                                console.log('itemExists', itemExits);
+                                console.log('newObj', newObj);
+
+                                if (!itemExits) {
+                                  numOfCommentsConTemp.push(newObj);
+                                } else {
+                                  numOfCommentsConTemp.forEach((item) => {
+                                    if (item.commentId === comment.commentId) {
+                                      item.numberOfComments =
+                                        item.numberOfComments + 2;
+                                    }
+                                  });
+                                }
+                                setNumOfCommentsCon(numOfCommentsConTemp);
+                                setCommentThatIsBeingReplied(comment);
+                              }}
+                            />
+                          </div>
                         </div>
                       </div>
                     </>
                   </>
                 ))}
-              {/* <div className='child-comments-wrapper'>
-                <div className='hidden'></div>
-                <div className='con'>
-                  <SingleComment
-                    img={user}
-                    name={'Chidiebere Ezeokwelume'}
-                    role={'UX Design Enthusiast'}
-                    comment={'So excited, can’t wait!'}
-                    childComment
-                    setReplyComment={setReplyComment}
-                  />
-                  <SingleComment
-                    img={user}
-                    name={'Chidiebere Ezeokwelume'}
-                    role={'UX Design Enthusiast'}
-                    comment={'So excited, can’t wait!'}
-                    childComment
-                    setReplyComment={setReplyComment}
-                  />
-                  <SingleComment
-                    img={user}
-                    name={'Chidiebere Ezeokwelume'}
-                    role={'UX Design Enthusiast'}
-                    comment={'So excited, can’t wait!'}
-                    childComment
-                    setReplyComment={setReplyComment}
-                  />
-                  {replyComment && (
-                    <CommentInput
-                      name={'reply'}
-                      onChange={handleChange}
-                      onSubmit={handleSubmit}
-                      value={reply}
-                      focus={replyComment}
-                    />
-                  )}
-                </div>
-              </div> */}
             </div>
           </div>
         )}
