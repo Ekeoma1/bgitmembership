@@ -10,7 +10,7 @@ const Post = () => {
   const dispatch = useDispatch();
   const { getAllPosts, createPost } = useSelector((state) => state.posts);
   const [pageNumber, setPageNumber] = useState(1);
-  const [pageSize, setPageSize] = useState(2);
+  const [pageSize, setPageSize] = useState(20);
   const handleLoadMore = () => {
     setPageNumber((prevState) => prevState + 1);
   };

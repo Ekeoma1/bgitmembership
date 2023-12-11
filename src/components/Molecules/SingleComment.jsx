@@ -21,13 +21,18 @@ const SingleComment = ({
   comment,
   childComment,
   setReplyComment,
+  loader,
 }) => {
   const [likedComment, setLikedComment] = useState(false);
   const handleLikeComment = () => {
     setLikedComment(!likedComment);
   };
   return (
-    <div className={`comment ${childComment && 'comment-2'}`}>
+    <div
+      className={`comment ${loader && 'loader'} ${
+        childComment && 'comment-2'
+      }`}
+    >
       <div className={`img-con ${childComment && 'img-con-2'}`}>
         <img
           className={`commenter-img ${childComment && 'commenter-img-2'}`}

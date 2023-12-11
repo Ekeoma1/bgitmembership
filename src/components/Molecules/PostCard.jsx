@@ -46,6 +46,7 @@ const PostCard = ({ post, getAllPostsLocal, setGetAllPostsLocal }) => {
   const { getMyProfile } = useSelector((state) => state.users);
   const [showCommentsSection, setShowCommentsSection] = useState(false);
   const [comment, setComment] = useState('');
+  const [preloaderComment, setPreloaderComment] = useState('');
   const [reply, setReply] = useState('');
   const [replyComment, setReplyComment] = useState(false);
   const [replyChildComment, setReplyChildComment] = useState(false);
@@ -98,14 +99,12 @@ const PostCard = ({ post, getAllPostsLocal, setGetAllPostsLocal }) => {
   const [saveCurrentPost, setSaveCurrentPost] = useState(
     post?.isSavedByCurrentUser
   );
-  // console.log('saveCurrentPost', saveCurrentPost);
   const timeoutIdRef = useRef(null);
   const handleSaveUnsavePost = (postParam) => {
     const data = _.cloneDeep(getAllPostsLocal);
     const startTimeout = () => {
       timeoutIdRef.current = setTimeout(() => {
         const values = { queryParams: { postId: postParam.postId } };
-        console.log('savecurrentpost', saveCurrentPost);
         if (!saveCurrentPost) {
           dispatch(triggerSavePost(values));
         } else {
@@ -176,6 +175,7 @@ const PostCard = ({ post, getAllPostsLocal, setGetAllPostsLocal }) => {
     // setGetAllPostsLocal(data);
   }, [likeCurrentPost]);
   // other
+
   const handleChange = (e) => {
     if (e.target.name === 'comment') {
       setComment(e.target.value);
@@ -189,13 +189,16 @@ const PostCard = ({ post, getAllPostsLocal, setGetAllPostsLocal }) => {
     setCommentThatIsBeingReplied(comment);
     setReplyChildComment(true);
   };
-  const handleSubmit = (name) => {
+  const handleSubmit = (name, post) => {
+    console.log(name, post);
+    setActivePostTemp(post);
     if (name === 'comment') {
       const data = {
         postId: post.postId,
         content: comment,
       };
       dispatch(triggerCreateComment(data));
+      setPreloaderComment(comment);
       setComment('');
     } else if (name === 'reply') {
       const data = {
@@ -207,15 +210,16 @@ const PostCard = ({ post, getAllPostsLocal, setGetAllPostsLocal }) => {
       setCommentThatIsBeingReplied('');
     }
   };
-
+  // comment
+  const [activePostTemp, setActivePostTemp] = useState({});
   useEffect(() => {
     // console.log('useeffect####################');
-
     // console.log('one#################', data);
     if (createComment.status === 'successful') {
-      const data = { queryParams: { postId: post?.postId } };
-      dispatch(triggerGetCommentsByPostId(data));
-      dispatch(resetCreateComment());
+      if (activePostTemp.postId === post.postId) {
+        const data = { queryParams: { postId: activePostTemp?.postId } };
+        dispatch(triggerGetCommentsByPostId(data));
+      }
     }
     // update
     // if (replyCommentRedux.status === 'successful') {
@@ -240,32 +244,17 @@ const PostCard = ({ post, getAllPostsLocal, setGetAllPostsLocal }) => {
   useEffect(() => {
     if (getCommentsByPostId.status === 'successful') {
       const data = _.cloneDeep(getAllPostsLocal);
-
-      // let externalObject = { id: 2, name: 'Updated Object 2', value: 25 };
-
       // Find the object with the matching ID
       const updatedArray = data.map((obj) =>
         obj.postId === getCommentsByPostId.data.postId
           ? { ...obj, ...getCommentsByPostId.data }
           : obj
       );
-      // If the object with the matching ID is found, replace it with the external object
-      // if (objectToReplace) {
-      //   // Create a new array with the updated object
-      //   const updatedArray = data.map((obj) =>
-      //     obj.postId === objectToReplace.postId ? { ...obj, ...data } : obj
-      //   );
-      //   console.log('updated array', updatedArray);
-      //   // Update the state with the new array
-      //   setGetAllPostsLocal(updatedArray);
-      // } else {
-      //   console.error('Object with the specified ID not found in the array.');
-      // }
-
-      // console.log('datamain', data);
       console.log('dataupdated#############', updatedArray);
-      setGetAllPostsLocal([...updatedArray]);
+      dispatch(resetCreateComment());
       dispatch(resetGetCommentsByPostId());
+      setPreloaderComment('');
+      setGetAllPostsLocal([...updatedArray]);
       // new
       // console.log('getcommentsbypostid#######', getCommentsByPostId.data);
 
@@ -425,59 +414,75 @@ const PostCard = ({ post, getAllPostsLocal, setGetAllPostsLocal }) => {
             <CommentInput
               name={'comment'}
               onChange={handleChange}
-              onSubmit={handleSubmit}
+              onSubmit={() => handleSubmit('comment', post)}
               value={comment}
             />
             <div className='comments-box'>
-              {post.commentedUsers?.slice(-2).map((comment, index) => (
-                <>
-                  <SingleComment
-                    key={index}
-                    img={comment.userProfilePicture}
-                    name={comment.userName}
-                    role={comment.profession}
-                    comment={comment.content}
-                    setLikeComment={setLikeComment}
-                    setReplyComment={() => handleReplyComment(comment)}
-                  />
+              {(createComment.status === 'loading' ||
+                getCommentsByPostId.status === 'loading' ||
+                (createComment.status === 'successful' &&
+                  getCommentsByPostId.status === 'base')) && (
+                <SingleComment
+                  img={getMyProfile.data?.imageUrl}
+                  name={`${getMyProfile.data?.firstName} ${getMyProfile.data?.secondName}`}
+                  role={getMyProfile.data?.profession || ''}
+                  comment={preloaderComment}
+                  loader
+                />
+              )}
+              {post.commentedUsers
+                ?.slice()
+                .reverse()
+                .slice(0, 2)
+                .map((comment, index) => (
                   <>
-                    <div className='child-comments-wrapper'>
-                      <div className='hidden'></div>
-                      <div className='con'>
-                        {Array.isArray(comment.replies) &&
-                          comment.replies.slice(-2).map((item, index) => (
-                            <SingleComment
-                              key={index}
-                              img={item.userProfilePicture}
-                              name={`${item.firstName} ${item.secondName}`}
-                              role={item.profession ?? 'test'}
-                              comment={item.content}
-                              childComment
-                              setReplyComment={() => {
-                                setReplyChildComment(true);
-                                setCommentThatIsBeingReplied(comment);
-                              }}
-                            />
-                          ))}
-                        {/* {getCommentsByPostId.status === 'loading' && (
+                    <SingleComment
+                      key={index}
+                      img={comment.userProfilePicture}
+                      name={comment.userName}
+                      role={comment.profession}
+                      comment={comment.content}
+                      setLikeComment={setLikeComment}
+                      setReplyComment={() => handleReplyComment(comment)}
+                    />
+                    <>
+                      <div className='child-comments-wrapper'>
+                        <div className='hidden'></div>
+                        <div className='con'>
+                          {Array.isArray(comment.replies) &&
+                            comment.replies.slice(-2).map((item, index) => (
+                              <SingleComment
+                                key={index}
+                                img={item.userProfilePicture}
+                                name={`${item.firstName} ${item.secondName}`}
+                                role={item.profession ?? 'test'}
+                                comment={item.content}
+                                childComment
+                                setReplyComment={() => {
+                                  setReplyChildComment(true);
+                                  setCommentThatIsBeingReplied(comment);
+                                }}
+                              />
+                            ))}
+                          {/* {getCommentsByPostId.status === 'loading' && (
                           <div className='loading-com'>loading...</div>
                         )} */}
-                        {replyChildComment &&
-                          commentThatIsBeingReplied.commentId ===
-                            comment.commentId && (
-                            <CommentInput
-                              name={'reply'}
-                              onChange={handleChange}
-                              onSubmit={handleSubmit}
-                              value={reply}
-                              focus={replyChildComment}
-                            />
-                          )}
+                          {replyChildComment &&
+                            commentThatIsBeingReplied.commentId ===
+                              comment.commentId && (
+                              <CommentInput
+                                name={'reply'}
+                                onChange={handleChange}
+                                onSubmit={() => handleSubmit('reply', post)}
+                                value={reply}
+                                focus={replyChildComment}
+                              />
+                            )}
+                        </div>
                       </div>
-                    </div>
+                    </>
                   </>
-                </>
-              ))}
+                ))}
               {/* <div className='child-comments-wrapper'>
                 <div className='hidden'></div>
                 <div className='con'>
@@ -517,7 +522,6 @@ const PostCard = ({ post, getAllPostsLocal, setGetAllPostsLocal }) => {
                 </div>
               </div> */}
             </div>
-            <div className='loading-c'>loading</div>
           </div>
         )}
       </div>

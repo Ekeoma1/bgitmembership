@@ -35,7 +35,7 @@ const CommentInput = ({
             ref={textInput}
             value={value}
           />
-          <div className='actions' onClick={() => onSubmit(name)}>
+          <div className='actions' onClick={onSubmit}>
             <BsSend />
             {/* <label htmlFor='emoji'>
               <FaRegSmile />

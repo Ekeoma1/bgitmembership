@@ -658,6 +658,9 @@
 .comment {
   display: flex;
   margin-bottom: 2rem;
+  &.loader {
+    opacity: 0.5;
+  }
   &.comment-2 {
   }
   .img-con {
