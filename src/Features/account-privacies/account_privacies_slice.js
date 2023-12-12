@@ -79,7 +79,20 @@ export const triggerUnmuteUser = createAsyncThunk(
 const accountPrivaciesSlice = createSlice({
   name: 'account-privacies',
   initialState,
-  reducers: {},
+  reducers: {
+    resetBlockUser: (state) => {
+      state.blockUser = initialState.blockUser;
+    },
+    resetUnblockUser: (state) => {
+      state.unblockUser = initialState.unblockUser;
+    },
+    resetMuteUser: (state) => {
+      state.muteUser = initialState.muteUser;
+    },
+    resetUnmuteUser: (state) => {
+      state.unmuteUser = initialState.unmuteUser;
+    },
+  },
   extraReducers: (builder) => {
     // get blocked users
     builder.addCase(triggerGetBlockedUsers.pending, (state) => {
@@ -154,3 +167,4 @@ const accountPrivaciesSlice = createSlice({
 });
 
 export default accountPrivaciesSlice.reducer;
+export const {resetBlockUser,resetUnblockUser,resetMuteUser,resetUnmuteUser}=accountPrivaciesSlice.actions

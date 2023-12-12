@@ -40,7 +40,7 @@ export default class AccountPrivaciesService {
 
   // unmute user
   static async unmuteUser(data) {
-    const response = await put({
+    const response = await post({
       url: apiRoutes.unmuteUser,
       data: { ...data },
     });

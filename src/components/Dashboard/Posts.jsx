@@ -6,14 +6,19 @@ import Icon from '../Icon';
 import { useSelector } from 'react-redux';
 import moment from 'moment';
 import PostCard from '../Molecules/PostCard';
-import PostsLoader, { PostsLoader2 } from '../Atoms/skeleton-loaders/home-page/PostsLoader';
+import PostsLoader, {
+  PostsLoader2,
+} from '../Atoms/skeleton-loaders/home-page/PostsLoader';
 
 const Posts = () => {
   const { getAllPostsByUserId } = useSelector((state) => state.posts);
   const { getUserProfileById } = useSelector((state) => state.users);
   const [getAllPostsByUserIdLocal, setGetAllPostsByUserIdLocal] = useState([]);
   useEffect(() => {
-    if (getAllPostsByUserId?.status === 'successful') {
+    if (
+      getAllPostsByUserId?.status === 'successful' &&
+      Array.isArray(getAllPostsByUserId.data?.posts)
+    ) {
       setGetAllPostsByUserIdLocal([...getAllPostsByUserId.data?.posts]);
     }
   }, [getAllPostsByUserId?.status]);
@@ -36,7 +41,7 @@ const Posts = () => {
       <div className='post-cards-wrapper'>
         {getAllPostsByUserId?.status === 'base' ||
         getAllPostsByUserId?.status === 'loading' ? (
-          <div className='loading-state'> 
+          <div className='loading-state'>
             <PostsLoader2 />
           </div>
         ) : getAllPostsByUserId?.status === 'successful' ? (

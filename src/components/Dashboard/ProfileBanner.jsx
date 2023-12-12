@@ -6,6 +6,7 @@ import ReportModal from '../Modals/ReportModal';
 import { useDispatch, useSelector } from 'react-redux';
 import {
   triggerGetMyProfile,
+  triggerGetUserProfileById,
   triggerUpdateBackgroundPicture,
   triggerUpdateProfilePicture,
 } from '../../Features/users/users_slice';
@@ -29,6 +30,12 @@ import {
 } from '../../Features/connections/connections_slice';
 import { resetReportUser } from '../../Features/reports/reports_slice';
 import { renderToast } from '../Molecules/CustomToastify';
+import {
+  resetBlockUser,
+  resetMuteUser,
+  resetUnblockUser,
+  resetUnmuteUser,
+} from '../../Features/account-privacies/account_privacies_slice';
 
 const ProfileBanner = ({ data }) => {
   const navigate = useNavigate();
@@ -39,6 +46,9 @@ const ProfileBanner = ({ data }) => {
     updateBackgroundPicture,
     getUserProfileById,
   } = useSelector((state) => state.users);
+  const { blockUser, unblockUser, muteUser, unmuteUser } = useSelector(
+    (state) => state.accountPrivacies
+  );
   const { sendConnectionRequest, cancelConnectionRequest } = useSelector(
     (state) => state.connections
   );
@@ -114,8 +124,56 @@ const ProfileBanner = ({ data }) => {
       });
       dispatch(resetReportUser());
     }
-  }, [cancelConnectionRequest, reportUser]);
-  console.log('report user', reportUser);
+    if (blockUser.status === 'successful') {
+      renderToast({
+        status: 'success',
+        message: blockUser?.data,
+      });
+      dispatch(resetBlockUser());
+      navigate('/');
+    }
+    if (unblockUser?.status === 'successful') {
+      renderToast({
+        status: 'success',
+        message: unblockUser?.data,
+      });
+      dispatch(resetUnblockUser());
+      const data = {
+        queryParams: { userId: getUserProfileById.data?.userId },
+      };
+      dispatch(triggerGetUserProfileById(data));
+    }
+    if (muteUser.status === 'successful') {
+      renderToast({
+        status: 'success',
+        message: muteUser?.data,
+      });
+      dispatch(resetMuteUser());
+      const data = {
+        queryParams: { userId: getUserProfileById.data?.userId },
+      };
+      dispatch(triggerGetUserProfileById(data));
+    }
+    if (unmuteUser.status === 'successful') {
+      renderToast({
+        status: 'success',
+        message: unmuteUser?.data,
+      });
+      dispatch(resetUnmuteUser());
+      const data = {
+        queryParams: { userId: getUserProfileById.data?.userId },
+      };
+      dispatch(triggerGetUserProfileById(data));
+    }
+  }, [
+    cancelConnectionRequest,
+    reportUser,
+    blockUser,
+    unblockUser,
+    muteUser,
+    unmuteUser,
+  ]);
+  // console.log('report user', reportUser);
 
   useEffect(() => {
     if (uploadProfilePicture.profilePicture) {

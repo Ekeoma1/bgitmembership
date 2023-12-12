@@ -1,23 +1,26 @@
-import React, { useEffect, useState } from "react";
-import CreatePost from "./CreatePost";
-import PostCard from "../Molecules/PostCard";
-import { useDispatch, useSelector } from "react-redux";
-import { triggerGetAllPosts } from "../../Features/posts/posts_slice";
-import PostsLoader from "../Atoms/skeleton-loaders/home-page/PostsLoader";
-import MainButton from "../Molecules/MainButton";
+import React, { useEffect, useState } from 'react';
+import CreatePost from './CreatePost';
+import PostCard from '../Molecules/PostCard';
+import { useDispatch, useSelector } from 'react-redux';
+import { triggerGetAllPosts } from '../../Features/posts/posts_slice';
+import PostsLoader from '../Atoms/skeleton-loaders/home-page/PostsLoader';
+import MainButton from '../Molecules/MainButton';
 
 const Post = () => {
   const dispatch = useDispatch();
   const { getAllPosts, createPost } = useSelector((state) => state.posts);
   const [pageNumber, setPageNumber] = useState(1);
-  const [pageSize, setPageSize] = useState(2);
+  const [pageSize, setPageSize] = useState(5);
+  const [loadMore, setLoadMore] = useState(false);
+
   const handleLoadMore = () => {
-    setPageNumber((prevState) => prevState + 2);
+    setLoadMore(true);
+    setPageNumber((prevState) => prevState + 1);
   };
   useEffect(() => {
-    if (createPost.status === "successful") {
+    if (createPost.status === 'successful') {
       const post = createPost?.data;
-      console.log("psst", post);
+      console.log('psst', post);
       setGetAllPostsLocal([post, ...getAllPostsLocal]);
     }
   }, [createPost.status]);
@@ -30,46 +33,62 @@ const Post = () => {
   const [getAllPostsLocal, setGetAllPostsLocal] = useState([]);
 
   useEffect(() => {
-    if (getAllPosts?.status === "successful" && getAllPosts.data?.posts) {
+    if (getAllPosts?.status === 'successful' && getAllPosts.data?.posts) {
       const temp = getAllPosts?.data?.posts;
-      const getAllPostsPrevious = [...getAllPostsLocal];
-      const getAllPostsAllTemp = [...getAllPostsPrevious, ...temp];
-      const getAllPostsAll = getAllPostsAllTemp.filter((obj, index, array) => {
-        return array.findIndex((item) => item.postId === obj.postId) === index;
-      });
-      setGetAllPostsLocal(getAllPostsAll);
+      if (loadMore) {
+        const getAllPostsPrevious = [...getAllPostsLocal];
+        const getAllPostsAllTemp = [...getAllPostsPrevious, ...temp];
+        const getAllPostsAll = getAllPostsAllTemp.filter(
+          (obj, index, array) => {
+            return (
+              array.findIndex((item) => item.postId === obj.postId) === index
+            );
+          }
+        );
+        setGetAllPostsLocal(getAllPostsAll);
+      } else {
+        setGetAllPostsLocal([...temp]);
+      }
     }
   }, [getAllPosts.data?.posts, getAllPosts?.status]);
 
   return (
-    <div className="post-wrapper">
-      <div className="d-lg-block d-none">
+    <div className='post-wrapper'>
+      <div className='d-lg-block d-none'>
         <CreatePost />
       </div>
-      <div className="post-card-wrapper">
-        {(getAllPosts.status === "base" || getAllPosts.status === "loading") && pageNumber === 1 ? (
+      <div className='post-card-wrapper'>
+        {(getAllPosts.status === 'base' || getAllPosts.status === 'loading') &&
+        pageNumber === 1 ? (
           <PostsLoader />
-        ) : getAllPosts.status === "successful" || pageNumber >= 1 ? (
+        ) : getAllPosts.status === 'successful' || pageNumber >= 1 ? (
           <>
             {getAllPosts.data ? (
               <>
                 {getAllPostsLocal.length === 0 ? (
                   <>
-                    <div className="empty-state">
+                    <div className='empty-state'>
                       <p>No posts to show...</p>
                     </div>
                   </>
                 ) : (
                   <>
                     {getAllPostsLocal?.map((post, key) => {
-                      return <PostCard key={key} post={post} getAllPostsLocal={getAllPostsLocal} setGetAllPostsLocal={setGetAllPostsLocal} />;
+                      return (
+                        <PostCard
+                          key={key}
+                          post={post}
+                          getAllPostsLocal={getAllPostsLocal}
+                          setGetAllPostsLocal={setGetAllPostsLocal}
+                        />
+                      );
                     })}
                   </>
                 )}
               </>
             ) : (
               <>
-                <div className="internet-error-state">
+                <div className='internet-error-state'>
                   <p> Check your internet and try again...</p>
                 </div>
               </>
@@ -77,19 +96,19 @@ const Post = () => {
           </>
         ) : (
           <>
-            <div className="server-error-state">Something went wrong</div>
+            <div className='server-error-state'>Something went wrong</div>
           </>
         )}
         {pageNumber < 10 && (
-          <div className="btn-con">
+          <div className='btn-con'>
             <MainButton
-              text={"Load more"}
+              text={'Load more'}
               onClick={() => {
                 handleLoadMore();
               }}
-              width={"25rem"}
-              size={"small"}
-              loading={getAllPosts.status === "loading"}
+              width={'25rem'}
+              size={'small'}
+              loading={getAllPosts.status === 'loading'}
             />
           </div>
         )}
