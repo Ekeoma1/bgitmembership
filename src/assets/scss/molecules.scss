@@ -532,10 +532,22 @@
           .con {
             flex: 1 1 0%;
             padding: 0 0 2rem 0;
-            .btn-wrapper{
+            .btn-wrapper {
               display: flex;
-              justify-content: center;
-              margin: 2rem 0;
+              // justify-content: center;
+              margin: -2rem 0 1rem;
+              p {
+                color: #000;
+                font-feature-settings: 'clig' off, 'liga' off;
+                font-family: Open Sans;
+                font-size: 14.863px;
+                font-style: normal;
+                font-weight: 400;
+                line-height: 23.12px;
+                cursor: pointer;
+                text-decoration: underline;
+              }
+              // background-color: green;
             }
           }
         }
@@ -727,7 +739,7 @@
       border-radius: 10px;
       background: rgba(160, 157, 168, 0.16);
       padding: 1rem 1.2rem;
-      
+
       .name {
         color: #000;
         font-weight: 600;

@@ -98,6 +98,7 @@ export default class PostsService {
     const response = await post({
       url: apiRoutes.unlikeComment,
       data: { ...data },
+
     });
     return response;
   }

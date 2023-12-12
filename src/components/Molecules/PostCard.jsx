@@ -54,7 +54,7 @@ const PostCard = ({ post, getAllPostsLocal, setGetAllPostsLocal }) => {
   const [numOfCommentsCon, setNumOfCommentsCon] = useState([
     { commentId: '', numberOfComments: 2 },
   ]);
-  console.log('numOfCommentsCon', numOfCommentsCon);
+  // console.log('numOfCommentsCon', numOfCommentsCon);
   const [replyComment, setReplyComment] = useState(false);
   const [replyChildComment, setReplyChildComment] = useState(false);
   const [commentThatIsBeingReplied, setCommentThatIsBeingReplied] = useState(
@@ -138,50 +138,6 @@ const PostCard = ({ post, getAllPostsLocal, setGetAllPostsLocal }) => {
     setGetAllPostsLocal(data);
   };
 
-  // Like unlike comment
-  const [likeCurrentComment, setLikeComment] = useState(post?.isLikedByCurrentUser);
-  const timeoutIdRef3 = useRef(null);
-  const handleLikeUnlikeComment = () => {
-    const startTimeout = () => {
-      timeoutIdRef3.current = setTimeout(() => {
-        const data = { queryParams: { postId: post.postId } };
-        if (!likeCurrentPost) {
-          dispatch(triggerLikePost(data));
-        } else {
-          dispatch(triggerUnlikePost(data));
-        }
-      }, 3000);
-    };
-    const clearTimeoutIfNeeded = () => {
-      if (timeoutIdRef2.current) {
-        clearTimeout(timeoutIdRef2.current);
-      }
-    };
-    clearTimeoutIfNeeded();
-    startTimeout();
-    setLikeCurrentPost(!likeCurrentPost);
-  };
-  useEffect(() => {
-    // const data = [...getAllPostsLocal];
-    const data = _.cloneDeep(getAllPostsLocal);
-    if (likeCurrentPost) {
-      data?.forEach((item) => {
-        if (item.postId === post.postId) {
-          item.isLikedByCurrentUser = true;
-          item.likeCount = item.likeCount + 1;
-        }
-      });
-    } else {
-      data?.forEach((item) => {
-        if (item.postId === post.postId) {
-          item.isLikedByCurrentUser = false;
-          item.likeCount = item.likeCount - 1;
-        }
-      });
-    }
-    // setGetAllPostsLocal(data);
-  }, [getAllPostsLocal, likeCurrentPost, post.postId]);
-
   // comment and reply
   const handleChange = (e) => {
     if (e.target.name === 'comment') {
@@ -257,7 +213,6 @@ const PostCard = ({ post, getAllPostsLocal, setGetAllPostsLocal }) => {
     }
   }, [dispatch, getAllPostsLocal, getCommentsByPostId, setGetAllPostsLocal]);
 
-  const handleLikeComment = (id) => {};
   return (
     <div className='post-card shadow-sm mx-auto'>
       <div className='post-card-header'>
@@ -413,7 +368,7 @@ const PostCard = ({ post, getAllPostsLocal, setGetAllPostsLocal }) => {
               {post.commentedUsers
                 ?.slice()
                 .reverse()
-                .slice(0, 2)
+                .slice(0, 10)
                 .map((comment, index) => (
                   <>
                     <SingleComment
@@ -422,15 +377,53 @@ const PostCard = ({ post, getAllPostsLocal, setGetAllPostsLocal }) => {
                       name={comment.userName}
                       role={comment.profession}
                       comment={comment.content}
-                      setLikeComment={setLikeComment}
+                      comment2={comment}
+                      // setLikeComment={setLikeComment}
                       setReplyComment={() => handleReplyComment(comment)}
                     />
                     <>
                       <div className='child-comments-wrapper'>
                         <div className='hidden'></div>
                         <div className='con'>
+                          {comment?.replies?.length > 2 && (
+                            <div className='btn-wrapper'>
+                              <p
+                                onClick={() => {
+                                  const newObj = {
+                                    commentId: comment.commentId,
+                                    numberOfComments: 3,
+                                  };
+                                  const numOfCommentsConTemp = [
+                                    ...numOfCommentsCon,
+                                  ];
+                                  const itemExits = numOfCommentsCon.find(
+                                    (item) =>
+                                      item.commentId === comment.commentId
+                                  );
+                                  if (!itemExits) {
+                                    numOfCommentsConTemp.push(newObj);
+                                  } else {
+                                    numOfCommentsConTemp.forEach((item) => {
+                                      if (
+                                        item.commentId === comment.commentId
+                                      ) {
+                                        item.numberOfComments =
+                                          item.numberOfComments + 1;
+                                      }
+                                    });
+                                  }
+                                  setNumOfCommentsCon(numOfCommentsConTemp);
+                                  setCommentThatIsBeingReplied(comment);
+                                }}
+                              >
+                                Load prev comments
+                              </p>
+                            </div>
+                          )}
                           {Array.isArray(comment.replies) &&
                             comment.replies
+                              // .slice()
+                              // .reverse()
                               .slice(
                                 -numOfCommentsCon.find(
                                   (item) => item.commentId === comment.commentId
@@ -443,6 +436,7 @@ const PostCard = ({ post, getAllPostsLocal, setGetAllPostsLocal }) => {
                                   name={`${item.firstName} ${item.secondName}`}
                                   role={item.profession ?? 'test'}
                                   comment={item.content}
+                                  comment2={item}
                                   childComment
                                   setReplyComment={() => {
                                     setReplyChildComment(true);
@@ -473,39 +467,6 @@ const PostCard = ({ post, getAllPostsLocal, setGetAllPostsLocal }) => {
                                 focus={replyChildComment}
                               />
                             )}
-                          <div className='btn-wrapper'>
-                            <MainButton
-                              size={'small'}
-                              text={'Load more comments'}
-                              onClick={() => {
-                                const newObj = {
-                                  commentId: comment.commentId,
-                                  numberOfComments: 4,
-                                };
-                                const numOfCommentsConTemp = [
-                                  ...numOfCommentsCon,
-                                ];
-                                const itemExits = numOfCommentsCon.find(
-                                  (item) => item.commentId === comment.commentId
-                                );
-                                // console.log('itemExists', itemExits);
-                                // console.log('newObj', newObj);
-
-                                if (!itemExits) {
-                                  numOfCommentsConTemp.push(newObj);
-                                } else {
-                                  numOfCommentsConTemp.forEach((item) => {
-                                    if (item.commentId === comment.commentId) {
-                                      item.numberOfComments =
-                                        item.numberOfComments + 2;
-                                    }
-                                  });
-                                }
-                                setNumOfCommentsCon(numOfCommentsConTemp);
-                                setCommentThatIsBeingReplied(comment);
-                              }}
-                            />
-                          </div>
                         </div>
                       </div>
                     </>
