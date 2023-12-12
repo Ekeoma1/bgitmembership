@@ -10,9 +10,9 @@ const Post = () => {
   const dispatch = useDispatch();
   const { getAllPosts, createPost } = useSelector((state) => state.posts);
   const [pageNumber, setPageNumber] = useState(1);
-  const [pageSize, setPageSize] = useState(20);
+  const [pageSize, setPageSize] = useState(2);
   const handleLoadMore = () => {
-    setPageNumber((prevState) => prevState + 1);
+    setPageNumber((prevState) => prevState + 2);
   };
   useEffect(() => {
     if (createPost.status === "successful") {

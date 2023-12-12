@@ -89,6 +89,7 @@ export default class PostsService {
     const response = await post({
       url: apiRoutes.likeComment,
       data: { ...data },
+      queryParams: data.queryParams,
     });
     return response;
   }
@@ -98,6 +99,7 @@ export default class PostsService {
     const response = await post({
       url: apiRoutes.unlikeComment,
       data: { ...data },
+      queryParams: data.queryParams,
     });
     return response;
   }
