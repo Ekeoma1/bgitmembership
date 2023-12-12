@@ -46,7 +46,7 @@ const SingleComment = ({
     // const data = _.cloneDeep(getAllPostsLocal);
     const startTimeout = () => {
       timeoutIdRef2.current = setTimeout(() => {
-        const values = { commentId: commentParam.commentId };
+        const values = { queryParams: { commentId: commentParam.commentId } };
         if (!likeCurrentComment) {
           console.log('like');
           dispatch(triggerLikeComment(values));
@@ -113,10 +113,12 @@ const SingleComment = ({
               <button onClick={() => handleLikeUnlikeComment(comment2)}>
                 Like
               </button>
-              <div className='no-of-likes-wrapper'>
-                <AiFillHeart className='icon' />
-                <p className='no-of-likes'>{likeCount}</p>
-              </div>
+              {likeCount > 0 && (
+                <div className='no-of-likes-wrapper'>
+                  <AiFillHeart className='icon' />
+                  <p className='no-of-likes'>{likeCount}</p>
+                </div>
+              )}
               {/* {likeCurrentComment && (
             )} */}
             </div>
