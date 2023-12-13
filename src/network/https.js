@@ -1,12 +1,14 @@
 import axios from 'axios';
 
-const URL = process.env.REACT_APP_URL ?? '';
+const URL =
+  process.env.REACT_APP_NODE_ENV === 'development'
+    ? process.env.REACT_APP_URL
+    : process.env.REACT_APP_URL_PROD;
 // console.log('stage', process.env.REACT_APP_NODE_ENV);
 
 async function ajax({ method = 'GET', url, data, queryParams }) {
   // console.log('query##### ', queryParams);
-
-  // console.log('data http ', data);
+  // console.log('data ', data);
   let result, contentType;
   if (
     data?.photo ||
@@ -71,7 +73,6 @@ async function ajax({ method = 'GET', url, data, queryParams }) {
         params: queryParams,
       })
         .then((response) => {
-          // console.log('response http############', response);
           const { data } = response;
           result = data;
         })
