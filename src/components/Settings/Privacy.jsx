@@ -154,6 +154,15 @@ const Privacy = () => {
           secondValue={setting?.secondValue}
         />
       ))}
+      <div className='text-end'>
+        <MainButton
+          text={'Save'}
+          size={'small'}
+          onClick={handleSubmit}
+          disabled={!save}
+          loading={updatePrivacySettings.status === 'loading'}
+        />
+      </div>
       <div className='my-5 position-relative'>
         <div className='d-flex justify-content-between align-items-center'>
           <div className='header'>Blocked List</div>
@@ -170,15 +179,6 @@ const Privacy = () => {
         </div>
       </div>
 
-      <div className='text-end'>
-        <MainButton
-          text={'Save'}
-          size={'small'}
-          onClick={handleSubmit}
-          disabled={!save}
-          loading={updatePrivacySettings.status === 'loading'}
-        />
-      </div>
     </div>
   );
 };

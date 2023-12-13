@@ -1,5 +1,5 @@
-@import "colors";
-@import "index";
+@import 'colors';
+@import 'index';
 
 .settings-page {
   padding: 20px 0 50px 0;
@@ -130,9 +130,17 @@
       .blocked-user-img {
         width: 75px;
         height: 75px;
+        min-width: 75px;
+        min-height: 75px;
         border-radius: 50%;
         background-size: cover;
         background-position: center;
+        overflow: hidden;
+        img {
+          width: 100%;
+          height: 100%;
+          object-fit: cover;
+        }
       }
 
       .blocked-user-details {
@@ -187,11 +195,10 @@
           background-size: cover;
           background-position: center;
           overflow: hidden;
-          img{
+          img {
             width: 100%;
             height: 100%;
             object-fit: cover;
-
           }
         }
 
@@ -227,7 +234,7 @@
         font-size: 18px;
       }
 
-      .text-end{
+      .text-end {
         display: flex;
         justify-content: flex-end;
       }

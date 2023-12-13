@@ -46,6 +46,59 @@
   border-radius: 50%;
   overflow: hidden;
 }
+.img-loader {
+  min-width: 100%;
+  min-height: 100%;
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  overflow: hidden;
+}
+.blocked-users-loader {
+  display: flex;
+  flex-direction: column;
+  row-gap: 3.5rem;
+  .user {
+    display: flex;
+    align-items: center;
+    column-gap: 3.3rem;
+    @media screen and (max-width: '600px') {
+      column-gap: 1.6rem;
+    }
+    .profile-photo {
+      min-width: 7.5rem;
+      min-height: 7.5rem;
+      width: 7.5rem;
+      height: 7.5rem;
+      @media screen and (max-width: '600px') {
+        min-width: 4.9rem;
+        min-height: 4.9rem;
+        width: 4.9rem;
+        height: 4.9rem;
+      }
+    }
+    .details {
+      display: flex;
+      flex-direction: column;
+      row-gap: 1rem;
+      width: 100%;
+      .name {
+        height: 2rem;
+        width: 40rem;
+        @media screen and (max-width: '600px') {
+          width: 100%;
+        }
+      }
+      .profession {
+        height: 1.3rem;
+        width: 30rem;
+        @media screen and (max-width: '600px') {
+          width: 80%;
+        }
+      }
+    }
+  }
+}
 .details-loader {
   display: flex;
   padding: 2rem 0;
