@@ -177,7 +177,6 @@ const Privacy = () => {
           <BlockedUser />
         </div>
       </div>
-
     </div>
   );
 };

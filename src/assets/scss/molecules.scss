@@ -796,6 +796,10 @@
           align-items: center;
           .icon {
             color: #ff66c4;
+            font-size: 1.8rem;
+            &.active {
+              color: #ff66c4;
+            }
           }
           .no-of-likes {
             margin: auto 0;
