@@ -96,13 +96,14 @@ export default class UsersService {
     });
     return response;
   }
-
-  static _getToken() {
-    const token = JSON.parse(localStorage.getItem('token'));
-    return token;
+  //   get connection status
+  static async getConnectionStatusByUserId(data) {
+    const response = await get({
+      url: apiRoutes.getConnectionStatusByUserId,
+      data: { ...data },
+      queryParams: data.queryParams,
+    });
+    return response;
   }
 
-  static _removeToken() {
-    localStorage.removeItem('token');
-  }
 }

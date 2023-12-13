@@ -8,10 +8,10 @@ const apiRoutes = {
   getSentRejectedRequests: '/Connections/GetSentRejectedRequests',
   getPotentialConnections: '/Connections/GetPotentialConnections',
   sendConnectionRequest: '/Connections/SendConnectionRequest',
+  cancelConnectionRequest: '/Connections/CancelConnectionRequest',
   getPendingRequestConnections: '/Connections/GetPendingRequestConnections',
   acceptConnectionRequest: '/Connections/AcceptConnectionRequest',
   rejectConnectionRequest: '/Connections/RejectConnectionRequest',
-  getConnectionStatusByUserId: '/Connections/GetConnectionStatusByUserId',
 
   // account privacies
   getBlockedUsers: '/AccountPrivacies/GetBlockedUsers',
@@ -73,6 +73,7 @@ const apiRoutes = {
   updateProfilePicture: '/Users/UpdateProfilePicture',
   updateBackgroundPicture: '/Users/UpdateBackgroundPicture',
   getUsers: '/Users/GetUsers',
+  getConnectionStatusByUserId: '/Users/GetConnectionStatus',
 
   // forums
   joinForum: '/Forums/JoinForum',

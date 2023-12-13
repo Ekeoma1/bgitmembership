@@ -193,7 +193,7 @@ const SeeMore = () => {
                         {getAllPostsByUserId?.data?.posts
                           ?.slice(0, 2)
                           .map((post, index) => (
-                            <div className='post-card-con'>
+                            <div className='post-card-con' key={index}>
                               <PostCard
                                 key={index}
                                 post={post}
@@ -230,7 +230,7 @@ const SeeMore = () => {
                         {getAllPostsByUserId?.data?.posts
                           ?.slice(0, 2)
                           .map((post, index) => (
-                            <div className='post-card-con'>
+                            <div key={index} className='post-card-con'>
                               <PostCard
                                 key={index}
                                 post={post}

@@ -51,6 +51,10 @@ const initialState = {
     status: states.BASE,
     data: {},
   },
+  getConnectionStatusByUserId: {
+    status: states.BASE,
+    data: {},
+  },
 };
 
 // get user profile by id
@@ -191,6 +195,16 @@ export const triggerGetUsers = createAsyncThunk(
   async (params, thunkAPI) => {
     try {
       return await UsersService.getUsers(params);
+    } catch (e) {
+      return thunkAPI.rejectWithValue(e.message);
+    }
+  }
+);
+export const triggerGetConnectionStatusByUserId = createAsyncThunk(
+  'get-connection-status-by-user-id',
+  async (params, thunkAPI) => {
+    try {
+      return await UsersService.getConnectionStatusByUserId(params);
     } catch (e) {
       return thunkAPI.rejectWithValue(e.message);
     }
@@ -393,6 +407,23 @@ const usersSlice = createSlice({
     builder.addCase(triggerGetUsers.rejected, (state) => {
       state.getUsers.status = states.ERROR;
       state.getUsers.data = {};
+    });
+
+    // get connection status by user id
+    builder.addCase(triggerGetConnectionStatusByUserId.pending, (state) => {
+      state.getConnectionStatusByUserId.status = states.LOADING;
+      state.getConnectionStatusByUserId.data = {};
+    });
+    builder.addCase(
+      triggerGetConnectionStatusByUserId.fulfilled,
+      (state, action) => {
+        state.getConnectionStatusByUserId.status = states.SUCCESSFUL;
+        state.getConnectionStatusByUserId.data = action.payload;
+      }
+    );
+    builder.addCase(triggerGetConnectionStatusByUserId.rejected, (state) => {
+      state.getConnectionStatusByUserId.status = states.ERROR;
+      state.getConnectionStatusByUserId.data = {};
     });
   },
 });

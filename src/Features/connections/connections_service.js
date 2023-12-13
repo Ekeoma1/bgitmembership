@@ -39,6 +39,16 @@ export default class ConnectionsService {
     return response;
   }
 
+  //  camcel connection request
+  static async cancelConnectionRequest(data) {
+    const response = await post({
+      url: apiRoutes.cancelConnectionRequest,
+      data: { ...data },
+      queryParams: data.queryParams,
+    });
+    return response;
+  }
+
   //   get pending request connections
   static async getPendingRequestConnections(data) {
     const response = await get({
@@ -61,14 +71,6 @@ export default class ConnectionsService {
   static async rejectConnectionRequest(data) {
     const response = await post({
       url: apiRoutes.rejectConnectionRequest,
-      data: { ...data },
-    });
-    return response;
-  }
-  //   get connection status
-  static async getConnectionStatusByUserId(data) {
-    const response = await post({
-      url: apiRoutes.getConnectionStatusByUserId,
       data: { ...data },
     });
     return response;

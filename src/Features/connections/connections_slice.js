@@ -35,10 +35,7 @@ const initialState = {
     status: states.BASE,
     data: {},
   },
-  getConnectionStatusByUserId: {
-    status: states.BASE,
-    data: {},
-  },
+
 };
 export const triggerGetAcceptedConnections = createAsyncThunk(
   'get-accepted-connections',
@@ -85,7 +82,7 @@ export const triggerCancelConnectionRequest = createAsyncThunk(
   'cancel-connection-request',
   async (params, thunkAPI) => {
     try {
-      return await ConnectionService.sendConnectionRequest(params);
+      return await ConnectionService.cancelConnectionRequest(params);
     } catch (e) {
       return thunkAPI.rejectWithValue(e.message);
     }
@@ -116,16 +113,6 @@ export const triggerRejectConnectionRequest = createAsyncThunk(
   async (params, thunkAPI) => {
     try {
       return await ConnectionService.rejectConnectionRequest(params);
-    } catch (e) {
-      return thunkAPI.rejectWithValue(e.message);
-    }
-  }
-);
-export const triggerGetConnectionStatusByUserId = createAsyncThunk(
-  'get-connection-status-by-user-id',
-  async (params, thunkAPI) => {
-    try {
-      return await ConnectionService.getConnectionStatusByUserId(params);
     } catch (e) {
       return thunkAPI.rejectWithValue(e.message);
     }
@@ -275,25 +262,9 @@ const connectionSlice = createSlice({
       state.rejectConnectionRequest.status = states.ERROR;
       state.rejectConnectionRequest.data = {};
     });
-
-    // get connection status by user id
-    builder.addCase(triggerGetConnectionStatusByUserId.pending, (state) => {
-      state.getConnectionStatusByUserId.status = states.LOADING;
-      state.getConnectionStatusByUserId.data = {};
-    });
-    builder.addCase(
-      triggerGetConnectionStatusByUserId.fulfilled,
-      (state, action) => {
-        state.getConnectionStatusByUserId.status = states.SUCCESSFUL;
-        state.getConnectionStatusByUserId.data = action.payload;
-      }
-    );
-    builder.addCase(triggerGetConnectionStatusByUserId.rejected, (state) => {
-      state.getConnectionStatusByUserId.status = states.ERROR;
-      state.getConnectionStatusByUserId.data = {};
-    });
   },
 });
 
 export default connectionSlice.reducer;
-export const { resetSendConnectionRequest,resetCancelConnectionRequest } = connectionSlice.actions;
+export const { resetSendConnectionRequest, resetCancelConnectionRequest } =
+  connectionSlice.actions;

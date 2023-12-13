@@ -5,6 +5,7 @@ import { useNavigate, useParams } from 'react-router-dom';
 import ReportModal from '../Modals/ReportModal';
 import { useDispatch, useSelector } from 'react-redux';
 import {
+  triggerGetConnectionStatusByUserId,
   triggerGetMyProfile,
   triggerGetUserProfileById,
   triggerUpdateBackgroundPicture,
@@ -15,7 +16,7 @@ import DetailsLoader from '../Atoms/skeleton-loaders/dashboard-page/DetailsLoade
 // import defaultImg from '../../assets/images/default-photo.jpeg';
 import defaultImg from '../../assets/images/main2.png';
 import spinner from '../../assets/images/spinner2.png';
-import { FaChevronRight, FaRegClock } from 'react-icons/fa';
+import { FaChevronRight, FaRegClock, FaUserClock, FaUserTimes } from 'react-icons/fa';
 import { FaCamera } from 'react-icons/fa6';
 import { GoPencil } from 'react-icons/go';
 import { SingleLineLoader2 } from '../Atoms/skeleton-loaders/SingleLineLoader';
@@ -27,7 +28,6 @@ import {
   triggerSendConnectionRequest,
   triggerCancelConnectionRequest,
   resetSendConnectionRequest,
-  triggerGetConnectionStatusByUserId,
   resetCancelConnectionRequest,
 } from '../../Features/connections/connections_slice';
 import { resetReportUser } from '../../Features/reports/reports_slice';
@@ -52,11 +52,10 @@ const ProfileBanner = ({ data }) => {
   const { blockUser, unblockUser, muteUser, unmuteUser } = useSelector(
     (state) => state.accountPrivacies
   );
-  const {
-    sendConnectionRequest,
-    cancelConnectionRequest,
-    getConnectionStatusByUserId,
-  } = useSelector((state) => state.connections);
+  const { sendConnectionRequest, cancelConnectionRequest } = useSelector(
+    (state) => state.connections
+  );
+  const { getConnectionStatusByUserId } = useSelector((state) => state.users);
   const { reportUser } = useSelector((state) => state.reports);
   const [actionAcctModal, setActionAcctModal] = useState(false);
   const [individalAcctModal, setIndividualAcctModal] = useState(false);
@@ -109,16 +108,13 @@ const ProfileBanner = ({ data }) => {
   };
   const handleConnect = () => {
     const values = { receiverUserId: getUserProfileById.data?.userId };
-    // if (
-    //   getConnectionStatusByUserId.data?.data?.connectionStatus === 'Pending'
-    // ) {
-    //   dispatch(triggerCancelConnectionRequest(values));
-    // } else if (
-    //   getConnectionStatusByUserId.data?.data?.connectionStatus ===
-    //   'Not Connected'
-    // ) {
-    //   dispatch(triggerSendConnectionRequest(values));
-    // }
+    if (getConnectionStatusByUserId.data?.connectionStatus === 'Pending') {
+      dispatch(triggerCancelConnectionRequest(values));
+    } else if (
+      getConnectionStatusByUserId.data?.connectionStatus === 'Not Connected'
+    ) {
+      dispatch(triggerSendConnectionRequest(values));
+    }
   };
   const handleConnect2 = () => {};
 
@@ -126,16 +122,19 @@ const ProfileBanner = ({ data }) => {
     if (sendConnectionRequest.status === 'successful') {
       renderToast({
         status: 'success',
-        message: sendConnectionRequest.data.data || 'Connection request sent',
+        message: 'Connection request sent',
       });
+      const data = { queryParams: { userId: param?.id } };
+      dispatch(triggerGetConnectionStatusByUserId(data));
       dispatch(resetSendConnectionRequest());
     }
     if (cancelConnectionRequest.status === 'successful') {
       renderToast({
         status: 'success',
-        message:
-          cancelConnectionRequest.data.data || 'Connection request cancelled',
+        message: 'Connection request cancelled',
       });
+      const data = { queryParams: { userId: param?.id } };
+      dispatch(triggerGetConnectionStatusByUserId(data));
       dispatch(resetCancelConnectionRequest());
     }
     // report
@@ -188,6 +187,7 @@ const ProfileBanner = ({ data }) => {
       dispatch(triggerGetUserProfileById(data));
     }
   }, [
+    sendConnectionRequest,
     cancelConnectionRequest,
     reportUser,
     blockUser,
@@ -230,7 +230,7 @@ const ProfileBanner = ({ data }) => {
     const data = { queryParams: { userId: param?.id } };
     dispatch(triggerGetConnectionStatusByUserId(data));
   }, [param?.id]);
-
+  console.log('getConnectionStatusByUserId', getConnectionStatusByUserId);
   return (
     <div className='profile-banner-wrapper'>
       {/* cover photo */}
@@ -536,7 +536,7 @@ const ProfileBanner = ({ data }) => {
           )}
         </div>
 
-        {data.data?.userId !== getMyProfile.data?.userId &&
+        {/* {data.data?.userId !== getMyProfile.data?.userId &&
           data?.status === 'successful' && (
             <div className='d-flex c-gap-10 flex-wrap mt-3'>
               {data.data.connectionStatus === 'Pending' ? (
@@ -586,51 +586,64 @@ const ProfileBanner = ({ data }) => {
                 Message
               </button>
             </div>
-          )}
-        {/* {data.data?.userId !== getMyProfile.data?.userId &&
+          )} */}
+        {data.data?.userId !== getMyProfile.data?.userId &&
           data?.status === 'successful' && (
             <>
-              {getConnectionStatusByUserId.status === 'base' ||
-              getConnectionStatusByUserId.status === 'loading' ? (
-                <></>
-              ) : getConnectionStatusByUserId.status === 'successful' ? (
-                <>
-                  <div className='d-flex c-gap-10 flex-wrap mt-3'>
+              <div className='d-flex c-gap-10 flex-wrap mt-3'>
+                {getConnectionStatusByUserId.status === 'base' ||
+                getConnectionStatusByUserId.status === 'loading' ? (
+                  <>
+                    <button
+                      onClick={handleConnect}
+                      className={`reach-btn loading`}
+                    >
+                      <img src={spinner} alt='spinner' />
+                    </button>
+                  </>
+                ) : getConnectionStatusByUserId.status === 'successful' ? (
+                  <>
                     <button
                       onClick={handleConnect}
                       className={`reach-btn ${
                         (sendConnectionRequest.status === 'loading' ||
                           cancelConnectionRequest.status === 'loading') &&
                         'loading'
+                      } ${
+                        getConnectionStatusByUserId.data?.connectionStatus ===
+                          'Pending' && 'pending'
                       }`}
                     >
                       {sendConnectionRequest.status === 'loading' ||
                       cancelConnectionRequest.status === 'loading' ? (
                         <img src={spinner} alt='spinner' />
-                      ) : getConnectionStatusByUserId.data?.data
-                          ?.connectionStatus === 'Pending' ? (
-                        <span>
-                          <FaRegClock />
-                          {'Pending'}
-                        </span>
-                      ) : getConnectionStatusByUserId.data?.data
-                          ?.connectionStatus === 'Not Connected' ? (
+                      ) : getConnectionStatusByUserId.data?.connectionStatus ===
+                        'Pending' ? (
+                        <>
+                          <span className='pending-con'>
+                            <FaUserClock className='icon' /> {'Pending'}
+                          </span>
+                          <span className='cancel-con'>
+                            <FaUserTimes className='icon' /> {'Cancel'}
+                          </span>
+                        </>
+                      ) : getConnectionStatusByUserId.data?.connectionStatus ===
+                        'Not Connected' ? (
                         '+ Connect'
                       ) : (
                         <></>
                       )}
                     </button>
-
-                    <button onClick={() => {}} className='reach-btn'>
-                      Message
-                    </button>
-                  </div>
-                </>
-              ) : (
-                <></>
-              )}
+                  </>
+                ) : (
+                  <></>
+                )}
+                <button onClick={() => {}} className='reach-btn'>
+                  Message
+                </button>
+              </div>
             </>
-          )} */}
+          )}
       </div>
       {/* Adjust this later */}
       {data.data?.userId !== getMyProfile.data?.userId && (

@@ -63,8 +63,8 @@ const Resources = () => {
           <h5>Resources</h5>
         </div>
         <div className='resource-cards-wrapper'>
-          {data.map((card) => (
-            <div className='resource-card-component'>
+          {data.map((card, index) => (
+            <div key={index} className='resource-card-component'>
               <h5 className='title'>{card.title}</h5>
               <div className='card-btn-con'>
                 <p className='info'>{card.info}</p>

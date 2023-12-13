@@ -13,7 +13,7 @@ const SocialLinksCard = ({ othersView, data }) => {
   const dispatch = useDispatch();
   const { getMyProfile } = useSelector((state) => state.users);
   const { addSocialLinks } = useSelector((state) => state.socialLinks);
-  const [showSocialLinksModal, setShowSocialLinksModal] = useState(true);
+  const [showSocialLinksModal, setShowSocialLinksModal] = useState(false);
 
   const [formData, setFormData] = useState({
     url: '',
