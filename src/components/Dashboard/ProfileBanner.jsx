@@ -16,11 +16,10 @@ import DetailsLoader from '../Atoms/skeleton-loaders/dashboard-page/DetailsLoade
 // import defaultImg from '../../assets/images/default-photo.jpeg';
 import defaultImg from '../../assets/images/main2.png';
 import spinner from '../../assets/images/spinner2.png';
-import { FaChevronRight, FaRegClock, FaUserClock, FaUserTimes } from 'react-icons/fa';
+import { FaUserClock, FaUserTimes } from 'react-icons/fa';
 import { FaCamera } from 'react-icons/fa6';
 import { GoPencil } from 'react-icons/go';
 import { SingleLineLoader2 } from '../Atoms/skeleton-loaders/SingleLineLoader';
-import { BsImage } from 'react-icons/bs';
 import OutsideClickHandler from 'react-outside-click-handler/build/OutsideClickHandler';
 import { LuMoreVertical } from 'react-icons/lu';
 import UpdateCoverPhotoModal from '../Modals/UpdateCoverPhotoModal';
@@ -116,8 +115,6 @@ const ProfileBanner = ({ data }) => {
       dispatch(triggerSendConnectionRequest(values));
     }
   };
-  const handleConnect2 = () => {};
-
   useEffect(() => {
     if (sendConnectionRequest.status === 'successful') {
       renderToast({
@@ -146,45 +143,73 @@ const ProfileBanner = ({ data }) => {
       dispatch(resetReportUser());
     }
     if (blockUser.status === 'successful') {
-      renderToast({
-        status: 'success',
-        message: blockUser?.data,
-      });
+      if (blockUser.data.success) {
+        renderToast({
+          status: 'success',
+          message: 'User blocked successfully',
+        });
+        navigate('/');
+      } else {
+        renderToast({
+          status: 'error',
+          message: 'Something went wrong',
+        });
+      }
       dispatch(resetBlockUser());
-      navigate('/');
     }
     if (unblockUser?.status === 'successful') {
-      renderToast({
-        status: 'success',
-        message: unblockUser?.data,
-      });
+      if (unblockUser.data.success) {
+        renderToast({
+          status: 'success',
+          message: 'User unblocked successfully',
+        });
+        const data = {
+          queryParams: { userId: getUserProfileById.data?.userId },
+        };
+        dispatch(triggerGetUserProfileById(data));
+      } else {
+        renderToast({
+          status: 'error',
+          message: 'Something went wrong',
+        });
+      }
       dispatch(resetUnblockUser());
-      const data = {
-        queryParams: { userId: getUserProfileById.data?.userId },
-      };
-      dispatch(triggerGetUserProfileById(data));
     }
     if (muteUser.status === 'successful') {
-      renderToast({
-        status: 'success',
-        message: muteUser?.data,
-      });
+      if (muteUser.data.success) {
+        renderToast({
+          status: 'success',
+          message: 'User muted successfully',
+        });
+        const data = {
+          queryParams: { userId: getUserProfileById.data?.userId },
+        };
+        dispatch(triggerGetUserProfileById(data));
+      } else {
+        renderToast({
+          status: 'error',
+          message: 'Something went wrong',
+        });
+      }
       dispatch(resetMuteUser());
-      const data = {
-        queryParams: { userId: getUserProfileById.data?.userId },
-      };
-      dispatch(triggerGetUserProfileById(data));
     }
     if (unmuteUser.status === 'successful') {
-      renderToast({
-        status: 'success',
-        message: unmuteUser?.data,
-      });
+      if (unmuteUser.data.success) {
+        renderToast({
+          status: 'success',
+          message: "User unmuted successfully",
+        });
+        const data = {
+          queryParams: { userId: getUserProfileById.data?.userId },
+        };
+        dispatch(triggerGetUserProfileById(data));
+      } else {
+        renderToast({
+          status: 'error',
+          message: 'Something went wrong',
+        });
+      }
       dispatch(resetUnmuteUser());
-      const data = {
-        queryParams: { userId: getUserProfileById.data?.userId },
-      };
-      dispatch(triggerGetUserProfileById(data));
     }
   }, [
     sendConnectionRequest,
@@ -536,57 +561,6 @@ const ProfileBanner = ({ data }) => {
           )}
         </div>
 
-        {/* {data.data?.userId !== getMyProfile.data?.userId &&
-          data?.status === 'successful' && (
-            <div className='d-flex c-gap-10 flex-wrap mt-3'>
-              {data.data.connectionStatus === 'Pending' ? (
-                <>
-                  <button
-                    onClick={handleConnect2}
-                    className={`reach-btn ${
-                      cancelConnectionRequest.status === 'loading' && 'loading'
-                    }`}
-                  >
-                    Cancel request
-                    {cancelConnectionRequest.status === 'loading' ? (
-                      <img src={spinner} alt='spinner' />
-                    ) : cancelConnectionRequest.status === 'successful' ? (
-                      <>
-                        {cancelConnectionRequest.data ===
-                          'Connection request cancelled' && '+ Connect'}
-                      </>
-                    ) : (
-                      'Cancel Request'
-                    )}
-                  </button>
-                </>
-              ) : (
-                <>
-                  <button
-                    onClick={handleConnect}
-                    className={`reach-btn ${
-                      sendConnectionRequest.status === 'loading' && 'loading'
-                    }`}
-                  >
-                    {sendConnectionRequest.status === 'loading' ? (
-                      <img src={spinner} alt='spinner' />
-                    ) : sendConnectionRequest.status === 'successful' ? (
-                      <>
-                        {sendConnectionRequest.data ===
-                          'Connection request sent' && 'Cancel request'}
-                      </>
-                    ) : (
-                      '+ Connect'
-                    )}
-                  </button>
-                </>
-              )}
-
-              <button onClick={() => {}} className='reach-btn'>
-                Message
-              </button>
-            </div>
-          )} */}
         {data.data?.userId !== getMyProfile.data?.userId &&
           data?.status === 'successful' && (
             <>
