@@ -65,4 +65,12 @@ export default class ConnectionsService {
     });
     return response;
   }
+  //   get connection status
+  static async getConnectionStatusByUserId(data) {
+    const response = await post({
+      url: apiRoutes.getConnectionStatusByUserId,
+      data: { ...data },
+    });
+    return response;
+  }
 }

@@ -11,6 +11,7 @@ const apiRoutes = {
   getPendingRequestConnections: '/Connections/GetPendingRequestConnections',
   acceptConnectionRequest: '/Connections/AcceptConnectionRequest',
   rejectConnectionRequest: '/Connections/RejectConnectionRequest',
+  getConnectionStatusByUserId: '/Connections/GetConnectionStatusByUserId',
 
   // account privacies
   getBlockedUsers: '/AccountPrivacies/GetBlockedUsers',

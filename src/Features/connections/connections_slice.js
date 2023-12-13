@@ -35,6 +35,10 @@ const initialState = {
     status: states.BASE,
     data: {},
   },
+  getConnectionStatusByUserId: {
+    status: states.BASE,
+    data: {},
+  },
 };
 export const triggerGetAcceptedConnections = createAsyncThunk(
   'get-accepted-connections',
@@ -117,6 +121,16 @@ export const triggerRejectConnectionRequest = createAsyncThunk(
     }
   }
 );
+export const triggerGetConnectionStatusByUserId = createAsyncThunk(
+  'get-connection-status-by-user-id',
+  async (params, thunkAPI) => {
+    try {
+      return await ConnectionService.getConnectionStatusByUserId(params);
+    } catch (e) {
+      return thunkAPI.rejectWithValue(e.message);
+    }
+  }
+);
 
 const connectionSlice = createSlice({
   name: 'connections',
@@ -124,6 +138,9 @@ const connectionSlice = createSlice({
   reducers: {
     resetSendConnectionRequest: (state) => {
       state.sendConnectionRequest = initialState.sendConnectionRequest;
+    },
+    resetCancelConnectionRequest: (state) => {
+      state.cancelConnectionRequest = initialState.cancelConnectionRequest;
     },
   },
   extraReducers: (builder) => {
@@ -258,8 +275,25 @@ const connectionSlice = createSlice({
       state.rejectConnectionRequest.status = states.ERROR;
       state.rejectConnectionRequest.data = {};
     });
+
+    // get connection status by user id
+    builder.addCase(triggerGetConnectionStatusByUserId.pending, (state) => {
+      state.getConnectionStatusByUserId.status = states.LOADING;
+      state.getConnectionStatusByUserId.data = {};
+    });
+    builder.addCase(
+      triggerGetConnectionStatusByUserId.fulfilled,
+      (state, action) => {
+        state.getConnectionStatusByUserId.status = states.SUCCESSFUL;
+        state.getConnectionStatusByUserId.data = action.payload;
+      }
+    );
+    builder.addCase(triggerGetConnectionStatusByUserId.rejected, (state) => {
+      state.getConnectionStatusByUserId.status = states.ERROR;
+      state.getConnectionStatusByUserId.data = {};
+    });
   },
 });
 
 export default connectionSlice.reducer;
-export const { resetSendConnectionRequest } = connectionSlice.actions;
+export const { resetSendConnectionRequest,resetCancelConnectionRequest } = connectionSlice.actions;
