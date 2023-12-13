@@ -166,7 +166,6 @@ const Privacy = () => {
       <div className='my-5 position-relative'>
         <div className='d-flex justify-content-between align-items-center'>
           <div className='header'>Blocked List</div>
-
           <button onClick={() => setShowBlocked(!showBlocked)}>
             <Icon
               icon={!showBlocked ? 'chevronRightBigger' : 'chevronDownBig'}

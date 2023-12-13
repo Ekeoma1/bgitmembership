@@ -33,8 +33,10 @@ const BlockedUser = () => {
 
   const handleConfirmUnblock = () => {
     const values = { userId: selectedUser.userId };
-    dispatch(triggerUnblockUser(values));
-    setActionModal(false);
+    if (unblockUser.status !== 'loading') {
+      dispatch(triggerUnblockUser(values));
+      setActionModal(false);
+    }
   };
   const [getBlockedUsersLocal, setGetBlockedUsersLocal] = useState([]);
   useEffect(() => {
@@ -47,20 +49,26 @@ const BlockedUser = () => {
   }, [getBlockedUsers]);
   useEffect(() => {
     if (unblockUser.status === 'successful') {
-      renderToast({
-        status: 'success',
-        message: unblockUser.data,
-      });
-      dispatch(triggerGetBlockedUsers());
-      // setGetBlockedUsersLocal(
-      //   getBlockedUsersLocal.filter(
-      //     (user) => user.userId !== unblockUser.data.userId
-      //   )
-      // );
+      if (unblockUser.data?.success) {
+        renderToast({
+          status: 'success',
+          message: unblockUser.data.message || 'User unblocked successfully',
+        });
+        dispatch(triggerGetBlockedUsers());
+        setGetBlockedUsersLocal(
+          getBlockedUsersLocal.filter(
+            (user) => user.userId !== unblockUser.data.userId
+          )
+        );
+      } else {
+        renderToast({
+          status: 'error',
+          message: 'Something went wrong',
+        });
+      }
       dispatch(resetUnblockUser());
     }
   }, [unblockUser]);
-  console.log('getBlockedUsers', getBlockedUsers);
   return (
     <div className='mt-4'>
       <p>
@@ -75,7 +83,7 @@ const BlockedUser = () => {
       ) : getBlockedUsers.status === 'successful' ? (
         <>
           {getBlockedUsersLocal.length === 0 ? (
-            <></>
+            <p className='empty-list'>You have no users blocked.</p>
           ) : (
             <>
               {getBlockedUsersLocal.map((user, index) => (
@@ -99,10 +107,14 @@ const BlockedUser = () => {
                   </div>
                   <button
                     onClick={() => {
-                      setActionModal(true);
-                      setSelectedUser(user);
+                      if (unblockUser.status !== 'loading') {
+                        setActionModal(true);
+                        setSelectedUser(user);
+                      }
                     }}
-                    className='unblock-btn'
+                    className={`unblock-btn ${
+                      unblockUser.status === 'loading' && 'loading'
+                    }`}
                   >
                     Unblock
                   </button>
