@@ -104,6 +104,26 @@ export default class PostsService {
     return response;
   }
 
+  //like reply
+  static async likeReply(data) {
+    const response = await post({
+      url: apiRoutes.likeReply,
+      data: { ...data },
+      queryParams: data.queryParams,
+    });
+    return response;
+  }
+
+  //unlike reply
+  static async unlikeReply(data) {
+    const response = await post({
+      url: apiRoutes.unlikReply,
+      data: { ...data },
+      queryParams: data.queryParams,
+    });
+    return response;
+  }
+
   //get all comments by post id
   static async getCommentsByPostId(data) {
     const response = await get({

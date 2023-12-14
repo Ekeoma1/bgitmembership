@@ -10,6 +10,8 @@ import {
   triggerLikeComment,
   triggerToggleLikePost,
   triggerUnlikeComment,
+  triggerLikeReply,
+  triggerUnlikeReply,
 } from '../../Features/posts/posts_slice';
 import { useDispatch, useSelector } from 'react-redux';
 import { FaRegBookmark, FaBookmark, FaRegSmile } from 'react-icons/fa';
@@ -83,14 +85,14 @@ const SingleComment = ({
       const startTimeout = () => {
         timeoutIdRef2.current = setTimeout(() => {
           const values = {
-            queryParams: { commentId: childCommentLocal.commentId },
+            queryParams: { replyId: childCommentLocal.replyId },
           };
           if (!childCommentLocal.isReplyLikedByCurrentUser) {
             console.log('like');
-            dispatch(triggerLikeComment(values));
+            dispatch(triggerLikeReply(values));
           } else {
             console.log('unlike');
-            dispatch(triggerUnlikeComment(values));
+            dispatch(triggerUnlikeReply(values));
           }
         }, 3000);
       };

@@ -48,6 +48,14 @@ const initialState = {
     status: states.BASE,
     data: {},
   },
+  likeReply: {
+    status: states.BASE,
+    data: {},
+  },
+  unlikeReply: {
+    status: states.BASE,
+    data: {},
+  },
   getCommentsByPostId: {
     status: states.BASE,
     data: {},
@@ -169,6 +177,26 @@ export const triggerUnlikeComment = createAsyncThunk(
   async (params, thunkAPI) => {
     try {
       return await PostsService.unlikeComment(params);
+    } catch (e) {
+      return thunkAPI.rejectWithValue(e.message);
+    }
+  }
+);
+export const triggerLikeReply = createAsyncThunk(
+  'like-reply',
+  async (params, thunkAPI) => {
+    try {
+      return await PostsService.likeReply(params);
+    } catch (e) {
+      return thunkAPI.rejectWithValue(e.message);
+    }
+  }
+);
+export const triggerUnlikeReply = createAsyncThunk(
+  'unlike-reply',
+  async (params, thunkAPI) => {
+    try {
+      return await PostsService.unlikeReply(params);
     } catch (e) {
       return thunkAPI.rejectWithValue(e.message);
     }
@@ -398,6 +426,34 @@ const postsSlice = createSlice({
     builder.addCase(triggerUnlikeComment.rejected, (state, action) => {
       state.unlikeComment.status = states.ERROR;
       state.unlikeComment.data = action.payload;
+    });
+
+    // like reply
+    builder.addCase(triggerLikeReply.pending, (state) => {
+      state.likeReply.status = states.LOADING;
+      state.likeReply.data = {};
+    });
+    builder.addCase(triggerLikeReply.fulfilled, (state, action) => {
+      state.likeReply.status = states.SUCCESSFUL;
+      state.likeReply.data = action.payload;
+    });
+    builder.addCase(triggerLikeReply.rejected, (state, action) => {
+      state.likeReply.status = states.ERROR;
+      state.likeReply.data = action.payload;
+    });
+
+    // unlike reply
+    builder.addCase(triggerUnlikeReply.pending, (state) => {
+      state.unlikeReply.status = states.LOADING;
+      state.unlikeReply.data = {};
+    });
+    builder.addCase(triggerUnlikeReply.fulfilled, (state, action) => {
+      state.unlikeReply.status = states.SUCCESSFUL;
+      state.unlikeReply.data = action.payload;
+    });
+    builder.addCase(triggerUnlikeReply.rejected, (state, action) => {
+      state.unlikeReply.status = states.ERROR;
+      state.unlikeReply.data = action.payload;
     });
 
     // get all comments by post id
