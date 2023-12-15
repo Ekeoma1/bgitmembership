@@ -11,6 +11,7 @@ import {
   resetLeaveForum,
   triggerGetAllForums,
   triggerGetForumById,
+  triggerGetForumConnectionStatusByForumId,
 } from '../Features/forums/forums_slice';
 import { useParams } from 'react-router-dom';
 import { renderToast } from '../components/Molecules/CustomToastify';
@@ -25,14 +26,17 @@ const Forum = () => {
   const [pageSize] = useState(10);
   const [joinForumRequestSuccessful, setJoinForumRequestSuccessful] =
     useState(false);
-    
+
   useEffect(() => {
     window.scrollTo(0, 0);
   }, []);
+
   useEffect(() => {
     const data = { queryParams: { forumId: params?.forumId } };
     dispatch(triggerGetForumById(data));
+    dispatch(triggerGetForumConnectionStatusByForumId(data));
   }, [params]);
+
   useEffect(() => {
     if (joinForum.status === 'successful') {
       if (joinForum.data === 'You are the admin of the forum.') {
@@ -71,8 +75,8 @@ const Forum = () => {
         setJoinForumRequestSuccessful={setJoinForumRequestSuccessful}
         joinForumRequestSuccessful={joinForumRequestSuccessful}
       />
-      {/* {!getForumById.data[0]?.isCurrentUserMember && <ForumContent />} */}
-      {!getForumById.data[0]?.isCurrentUserMember && <ForumContentMain />}
+      {!getForumById.data[0]?.isCurrentUserMember && <ForumContent />}
+      {getForumById.data[0]?.isCurrentUserMember && <ForumContentMain />}
     </div>
   );
 };

@@ -169,6 +169,65 @@
               line-height: 19.351px;
               cursor: pointer;
             }
+            .reach-btn {
+              padding: 10px 0;
+              background-color: $pri-color1;
+              color: #fff;
+              font-size: 12.44px;
+              font-weight: 700;
+              font-family: $thic700;
+              border-radius: 30px;
+              display: flex;
+              align-items: center;
+              justify-content: center;
+              min-width: 13rem;
+              min-height: 3.8rem;
+              max-width: 13rem;
+              max-height: 3.8rem;
+              &.loading {
+                cursor: default;
+              }
+              .pending-con {
+                display: flex;
+                align-items: center;
+                column-gap: 0.5rem;
+              }
+              .cancel-con {
+                display: none;
+              }
+              &.pending {
+                &:hover {
+                  .pending-con {
+                    display: none;
+                  }
+                  .cancel-con {
+                    display: flex;
+                    align-items: center;
+                    column-gap: 0.5rem;
+                  }
+                }
+              }
+              .icon {
+                font-size: 1.6rem;
+              }
+              img {
+                animation-iteration-count: infinite;
+                animation-duration: 1s;
+                animation-timing-function: linear;
+                height: 2.2rem;
+                width: 2.2rem;
+                object-fit: contain;
+                animation-name: rotate-s-loader;
+              }
+              @keyframes rotate-s-loader {
+                from {
+                  transform: rotate(0);
+                }
+                to {
+                  transform: rotate(360deg);
+                }
+              }
+            }
           }
         }
       }

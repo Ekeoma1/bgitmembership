@@ -6,6 +6,7 @@ import member2 from '../../../src/assets/images/member2.svg';
 import member3 from '../../../src/assets/images/member3.svg';
 import member4 from '../../../src/assets/images/member4.svg';
 import member5 from '../../../src/assets/images/member5.svg';
+import spinner from '../../../src/assets/images/spinner2.png';
 import forumDefault from '../../../src/assets/images/forumDefault.jpeg';
 import loadingDots from '../../../src/assets/images/loading_dots.gif';
 import { HiArrowLeft } from 'react-icons/hi';
@@ -13,18 +14,20 @@ import { FiPlus } from 'react-icons/fi';
 import { PiCheckBold } from 'react-icons/pi';
 import { useNavigate, useParams } from 'react-router-dom';
 import { ImCancelCircle } from 'react-icons/im';
-import { FaTimes } from 'react-icons/fa';
+import { FaTimes, FaUserClock, FaUserTimes } from 'react-icons/fa';
 import {
   resetActiveForumIdForOngoingRequest,
+  resetCanceljoinForumRequest,
   resetJoinForum,
   resetLeaveForum,
   setActiveForumIdForOngoingRequest,
+  triggerCancelJoinForumRequest,
+  triggerGetForumConnectionStatusByForumId,
   triggerJoinForum,
   triggerLeaveForum,
 } from '../../Features/forums/forums_slice';
 import { useDispatch, useSelector } from 'react-redux';
 import { renderToast } from '../Molecules/CustomToastify';
-import { LuPlus } from 'react-icons/lu';
 import SingleLineLoader, {
   SingleLineLoader2,
 } from '../Atoms/skeleton-loaders/SingleLineLoader';
@@ -37,9 +40,13 @@ const Banner = ({
   const params = useParams();
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const { getForumById, joinForum, leaveForum } = useSelector(
-    (state) => state.forums
-  );
+  const {
+    getForumById,
+    joinForum,
+    leaveForum,
+    getForumConnectionStatusByForumId,
+    cancelJoinForumRequest,
+  } = useSelector((state) => state.forums);
   const [requestSent, setRequestSent] = useState(false);
   const [loading, setLoading] = useState(false);
 
@@ -87,6 +94,40 @@ const Banner = ({
       dispatch(resetActiveForumIdForOngoingRequest());
     }
   }, [joinForum.status, leaveForum.status]);
+
+  // New
+  const handleForumRequest = () => {
+    const values = { forumId: params.id };
+    if (getForumConnectionStatusByForumId.data?.connectionStatus === 'Pending') {
+      // trigger cancel join forum
+      dispatch(triggerCancelJoinForumRequest(values));
+    } else if (
+      getForumConnectionStatusByForumId.data?.connectionStatus === 'Not Connected'
+    ) {
+      // trigger join forum
+      dispatch(triggerJoinForum(values));
+    }
+  };
+  useEffect(() => {
+    if (joinForum.status === 'successful') {
+      renderToast({
+        status: 'success',
+        message: 'Forum connection request sent',
+      });
+      const data = { queryParams: { forumId: params?.id } };
+      dispatch(triggerGetForumConnectionStatusByForumId(data));
+      dispatch(resetJoinForum());
+    }
+    if (cancelJoinForumRequest.status === 'successful') {
+      renderToast({
+        status: 'success',
+        message: 'Connection request cancelled',
+      });
+      const data = { queryParams: { forumId: params?.id } };
+      dispatch(triggerGetForumConnectionStatusByForumId(data));
+      dispatch(resetCanceljoinForumRequest());
+    }
+  }, [joinForum, cancelJoinForumRequest]);
 
   return (
     <>
@@ -163,14 +204,16 @@ const Banner = ({
                 </button>
               )} */}
 
-                    {getForumById?.data[0]?.isCurrentUserMember ? (
-                      <button
-                        className='leave-forum'
-                        onClick={(e) => handleClick(e)}
-                      >
-                        <ImCancelCircle className='icon' />
-                        Leave Forum
-                      </button>
+                    {/* {!getForumById?.data[0]?.isCurrentUserMember ? (
+                      <>
+                        <button
+                          className='leave-forum'
+                          onClick={(e) => handleClick(e)}
+                        >
+                          <ImCancelCircle className='icon' />
+                          Request sent
+                        </button>
+                      </>
                     ) : (
                       <>
                         <button
@@ -181,6 +224,54 @@ const Banner = ({
                           Join
                         </button>
                       </>
+                    )} */}
+                    {getForumConnectionStatusByForumId.status === 'base' ||
+                    getForumConnectionStatusByForumId.status === 'loading' ? (
+                      <>
+                        <button
+                          onClick={handleForumRequest}
+                          className={`reach-btn loading`}
+                        >
+                          <img src={spinner} alt='spinner' />
+                        </button>
+                      </>
+                    ) : getForumConnectionStatusByForumId.status ===
+                      'successful' ? (
+                      <>
+                        <button
+                          onClick={handleForumRequest}
+                          className={`reach-btn ${
+                            (joinForum.status === 'loading' ||
+                              cancelJoinForumRequest.status === 'loading') &&
+                            'loading'
+                          } ${
+                            getForumConnectionStatusByForumId.data
+                              ?.connectionStatus === 'Pending' && 'pending'
+                          }`}
+                        >
+                          {joinForum.status === 'loading' ||
+                          cancelJoinForumRequest.status === 'loading' ? (
+                            <img src={spinner} alt='spinner' />
+                          ) : getForumConnectionStatusByForumId.data
+                              ?.connectionStatus === 'Pending' ? (
+                            <>
+                              <span className='pending-con'>
+                                <FaUserClock className='icon' /> {'Pending'}
+                              </span>
+                              <span className='cancel-con'>
+                                <FaUserTimes className='icon' /> {'Cancel'}
+                              </span>
+                            </>
+                          ) : getForumConnectionStatusByForumId.data
+                              ?.connectionStatus === 'Not Connected' ? (
+                            '+ Connect'
+                          ) : (
+                            <></>
+                          )}
+                        </button>
+                      </>
+                    ) : (
+                      <></>
                     )}
                   </div>
                 </div>

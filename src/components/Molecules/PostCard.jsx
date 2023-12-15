@@ -52,7 +52,6 @@ const PostCard = ({ post, getAllPostsLocal, setGetAllPostsLocal }) => {
   const [preloaderCommentReply, setPreloaderCommentReply] = useState('');
   const [numberOfComments, setNumberOfComments] = useState(2);
   const [numOfCommentsCon, setNumOfCommentsCon] = useState([
-    { commentId: '', numberOfComments: 2 },
   ]);
   // console.log('numOfCommentsCon', numOfCommentsCon);
   const [replyComment, setReplyComment] = useState(false);
@@ -412,6 +411,10 @@ const PostCard = ({ post, getAllPostsLocal, setGetAllPostsLocal }) => {
                                       }
                                     });
                                   }
+                                  console.log(
+                                    'numOfCommentsConTemp',
+                                    numOfCommentsConTemp
+                                  );
                                   setNumOfCommentsCon(numOfCommentsConTemp);
                                   setCommentThatIsBeingReplied(comment);
                                 }}

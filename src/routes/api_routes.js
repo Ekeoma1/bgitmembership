@@ -84,6 +84,7 @@ const apiRoutes = {
   createForum: '/Forums/CreateForum',
   getAllForums: '/Forums/GetAllForums',
   getForumById: '/Forums/GetForumById',
+  getForumConnectionStatusById: '/Forums/GetForumMembershipStatus',
   getAllForumsByIndustry: '/Forums/GetAllForumsByIndustry',
   getAllForumsByLocation: '/Forums/GetAllForumsByLocation',
 
