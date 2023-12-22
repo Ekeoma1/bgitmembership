@@ -10,11 +10,10 @@ import spinner from '../../../src/assets/images/spinner2.png';
 import forumDefault from '../../../src/assets/images/forumDefault.jpeg';
 import loadingDots from '../../../src/assets/images/loading_dots.gif';
 import { HiArrowLeft } from 'react-icons/hi';
-import { FiPlus } from 'react-icons/fi';
-import { PiCheckBold } from 'react-icons/pi';
+
 import { useNavigate, useParams } from 'react-router-dom';
-import { ImCancelCircle } from 'react-icons/im';
-import { FaTimes, FaUserClock, FaUserTimes } from 'react-icons/fa';
+import { FaTimes } from 'react-icons/fa';
+import { IoCheckmarkSharp } from 'react-icons/io5';
 import {
   resetActiveForumIdForOngoingRequest,
   resetCanceljoinForumRequest,
@@ -47,87 +46,60 @@ const Banner = ({
     getForumConnectionStatusByForumId,
     cancelJoinForumRequest,
   } = useSelector((state) => state.forums);
-  const [requestSent, setRequestSent] = useState(false);
-  const [loading, setLoading] = useState(false);
 
-  const handleClick = (e) => {
-    const values = { forumId: params?.forumId };
-    if (e.currentTarget.classList.contains('join')) {
-      dispatch(triggerJoinForum(values));
-      dispatch(setActiveForumIdForOngoingRequest(params?.forumId));
-    } else if (e.currentTarget.classList.contains('request-sent')) {
-      // cancel request endpoint
-    } else {
-      dispatch(triggerLeaveForum(values));
-      dispatch(setActiveForumIdForOngoingRequest(forum.forumId));
-    }
-  };
-  useEffect(() => {
-    if (joinForum.status === 'successful') {
-      if (joinForum.data === 'You are the admin of the forum.') {
-        renderToast({
-          status: 'error',
-          message: joinForum.data,
-        });
-      } else {
-        renderToast({
-          status: 'success',
-          message: joinForum.data,
-        });
-      }
-      dispatch(resetJoinForum());
-      dispatch(resetActiveForumIdForOngoingRequest());
-    } else if (joinForum.status === 'error') {
-      dispatch(resetJoinForum());
-      dispatch(resetActiveForumIdForOngoingRequest());
-    }
-    // leave forum
-    if (leaveForum.status === 'successful') {
-      renderToast({
-        status: 'success',
-        message: leaveForum.data,
-      });
-      dispatch(resetLeaveForum());
-      dispatch(resetActiveForumIdForOngoingRequest());
-    } else if (leaveForum.status === 'error') {
-      dispatch(resetLeaveForum());
-      dispatch(resetActiveForumIdForOngoingRequest());
-    }
-  }, [joinForum.status, leaveForum.status]);
-
-  // New
   const handleForumRequest = () => {
-    const values = { forumId: params.id };
-    if (getForumConnectionStatusByForumId.data?.connectionStatus === 'Pending') {
-      // trigger cancel join forum
+    // console.log('params', params);
+    const values = { forumId: params.forumId };
+    if (
+      getForumConnectionStatusByForumId.data?.membershipStatus === 'Pending'
+    ) {
       dispatch(triggerCancelJoinForumRequest(values));
     } else if (
-      getForumConnectionStatusByForumId.data?.connectionStatus === 'Not Connected'
+      getForumConnectionStatusByForumId.data?.membershipStatus ===
+      'Not a member'
     ) {
-      // trigger join forum
       dispatch(triggerJoinForum(values));
+    } else if (
+      getForumConnectionStatusByForumId.data?.membershipStatus === 'Member'
+    ) {
+      dispatch(triggerLeaveForum(values));
     }
   };
   useEffect(() => {
+    const data = { queryParams: { forumId: params?.forumId } };
     if (joinForum.status === 'successful') {
-      renderToast({
-        status: 'success',
-        message: 'Forum connection request sent',
-      });
-      const data = { queryParams: { forumId: params?.id } };
-      dispatch(triggerGetForumConnectionStatusByForumId(data));
+      if (joinForum.data === 'Request sent successfully.') {
+        renderToast({
+          status: 'success',
+          message: 'Forum connection request sent',
+        });
+        dispatch(triggerGetForumConnectionStatusByForumId(data));
+      }
       dispatch(resetJoinForum());
     }
     if (cancelJoinForumRequest.status === 'successful') {
-      renderToast({
-        status: 'success',
-        message: 'Connection request cancelled',
-      });
-      const data = { queryParams: { forumId: params?.id } };
-      dispatch(triggerGetForumConnectionStatusByForumId(data));
+      if (
+        cancelJoinForumRequest.data === 'Join request canceled successfully.'
+      ) {
+        renderToast({
+          status: 'success',
+          message: 'Connection request cancelled',
+        });
+        dispatch(triggerGetForumConnectionStatusByForumId(data));
+      }
       dispatch(resetCanceljoinForumRequest());
     }
-  }, [joinForum, cancelJoinForumRequest]);
+    if (leaveForum.status === 'successful') {
+      if (leaveForum.data === 'leave request canceled successfully.') {
+        renderToast({
+          status: 'success',
+          message: 'Forum left successfully',
+        });
+        dispatch(triggerGetForumConnectionStatusByForumId(data));
+      }
+      dispatch(resetCanceljoinForumRequest());
+    }
+  }, [joinForum, cancelJoinForumRequest, leaveForum]);
 
   return (
     <>
@@ -176,65 +148,19 @@ const Banner = ({
                       </div>
                     </div>
                     <div className='members-amount'>
-                      {/* <p>{community.community_members}</p> */}
                       <p>{getForumById?.data[0]?.userCount}</p>
                       <p>Members</p>
                     </div>
                   </div>
                   <div className='btns'>
-                    {/* {!requestSent && !joinForumRequestSuccessful && (
-                <button className='join' onClick={(e) => handleClick(e)}>
-                  <FiPlus className='icon' />
-                  Join
-                </button>
-              )}
-              {requestSent && !joinForumRequestSuccessful && (
-                <button
-                  className='request-sent'
-                  onClick={(e) => handleClick(e)}
-                >
-                  <FaTimes className='icon' />
-                  Cancel request
-                </button>
-              )}
-              {joinForumRequestSuccessful && (
-                <button className='leave-forum' onClick={(e) => handleClick(e)}>
-                  <ImCancelCircle className='icon' />
-                  Leave Forum
-                </button>
-              )} */}
-
-                    {/* {!getForumById?.data[0]?.isCurrentUserMember ? (
-                      <>
-                        <button
-                          className='leave-forum'
-                          onClick={(e) => handleClick(e)}
-                        >
-                          <ImCancelCircle className='icon' />
-                          Request sent
-                        </button>
-                      </>
-                    ) : (
-                      <>
-                        <button
-                          className='join'
-                          onClick={(e) => handleClick(e)}
-                        >
-                          <FiPlus className='icon' />
-                          Join
-                        </button>
-                      </>
-                    )} */}
                     {getForumConnectionStatusByForumId.status === 'base' ||
                     getForumConnectionStatusByForumId.status === 'loading' ? (
-                      <>
-                        <button
-                          onClick={handleForumRequest}
-                          className={`reach-btn loading`}
-                        >
-                          <img src={spinner} alt='spinner' />
-                        </button>
-                      </>
+                      <button
+                        onClick={handleForumRequest}
+                        className={`reach-btn  loading`}
+                      >
+                        <img src={spinner} alt='spinner' />
+                      </button>
                     ) : getForumConnectionStatusByForumId.status ===
                       'successful' ? (
                       <>
@@ -242,29 +168,35 @@ const Banner = ({
                           onClick={handleForumRequest}
                           className={`reach-btn ${
                             (joinForum.status === 'loading' ||
-                              cancelJoinForumRequest.status === 'loading') &&
+                              cancelJoinForumRequest.status === 'loading' ||
+                              leaveForum.status === 'loading') &&
                             'loading'
                           } ${
                             getForumConnectionStatusByForumId.data
-                              ?.connectionStatus === 'Pending' && 'pending'
+                              ?.membershipStatus === 'Pending' && 'pending'
                           }`}
                         >
                           {joinForum.status === 'loading' ||
-                          cancelJoinForumRequest.status === 'loading' ? (
+                          cancelJoinForumRequest.status === 'loading' ||
+                          leaveForum.status === 'loading' ? (
                             <img src={spinner} alt='spinner' />
                           ) : getForumConnectionStatusByForumId.data
-                              ?.connectionStatus === 'Pending' ? (
+                              ?.membershipStatus === 'Pending' ? (
                             <>
                               <span className='pending-con'>
-                                <FaUserClock className='icon' /> {'Pending'}
+                                <IoCheckmarkSharp className='icon' />{' '}
+                                {'Request sent'}
                               </span>
                               <span className='cancel-con'>
-                                <FaUserTimes className='icon' /> {'Cancel'}
+                                <FaTimes className='icon' /> {'Cancel Request'}
                               </span>
                             </>
                           ) : getForumConnectionStatusByForumId.data
-                              ?.connectionStatus === 'Not Connected' ? (
-                            '+ Connect'
+                              ?.membershipStatus === 'Not a member' ? (
+                            '+ Join'
+                          ) : getForumConnectionStatusByForumId.data
+                              ?.membershipStatus === 'Member' ? (
+                            ' Leave forum'
                           ) : (
                             <></>
                           )}

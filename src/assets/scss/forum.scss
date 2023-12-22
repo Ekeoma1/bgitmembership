@@ -171,7 +171,7 @@
             }
             .reach-btn {
               padding: 10px 0;
-              background-color: $pri-color1;
+              background-color: #ff66ca;
               color: #fff;
               font-size: 12.44px;
               font-weight: 700;
@@ -186,6 +186,8 @@
               max-height: 3.8rem;
               &.loading {
                 cursor: default;
+                border: 1px solid #ff66ca;
+                background-color: #fff;
               }
               .pending-con {
                 display: flex;
@@ -196,6 +198,9 @@
                 display: none;
               }
               &.pending {
+                border: 1px solid #ff66ca;
+                background-color: #fff;
+                color: #ff66ca;
                 &:hover {
                   .pending-con {
                     display: none;
