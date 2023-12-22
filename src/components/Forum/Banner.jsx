@@ -97,7 +97,7 @@ const Banner = ({
         });
         dispatch(triggerGetForumConnectionStatusByForumId(data));
       }
-      dispatch(resetCanceljoinForumRequest());
+      dispatch(resetLeaveForum());
     }
   }, [joinForum, cancelJoinForumRequest, leaveForum]);
 
