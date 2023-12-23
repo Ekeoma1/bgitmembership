@@ -51,8 +51,7 @@ const PostCard = ({ post, getAllPostsLocal, setGetAllPostsLocal }) => {
   const [reply, setReply] = useState('');
   const [preloaderCommentReply, setPreloaderCommentReply] = useState('');
   const [numberOfComments, setNumberOfComments] = useState(2);
-  const [numOfCommentsCon, setNumOfCommentsCon] = useState([
-  ]);
+  const [numOfCommentsCon, setNumOfCommentsCon] = useState([]);
   // console.log('numOfCommentsCon', numOfCommentsCon);
   const [replyComment, setReplyComment] = useState(false);
   const [replyChildComment, setReplyChildComment] = useState(false);
@@ -211,7 +210,7 @@ const PostCard = ({ post, getAllPostsLocal, setGetAllPostsLocal }) => {
       setCommentThatIsBeingReplied('');
     }
   }, [dispatch, getAllPostsLocal, getCommentsByPostId, setGetAllPostsLocal]);
-
+  // console.log('getallpostslocal', getAllPostsLocal);
   return (
     <div className='post-card shadow-sm mx-auto'>
       <div className='post-card-header'>

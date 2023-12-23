@@ -16,7 +16,7 @@ const PrintButton = ({ targetElementId, fileName = "download.pdf" }) => {
       pdf.save(fileName);
 
       // If you want to open the print dialog directly
-      //   pdf.autoPrint();
+        pdf.autoPrint();
 
       // If you want to close the print dialog automatically
       window.close();

@@ -7,6 +7,10 @@ const initialState = {
     status: states.BASE,
     data: {},
   },
+  getConnectionsByUserId: {
+    status: states.BASE,
+    data: {},
+  },
   getSentRejectedRequests: {
     status: states.BASE,
     data: {},
@@ -35,13 +39,26 @@ const initialState = {
     status: states.BASE,
     data: {},
   },
-
+  removeConnection: {
+    status: states.BASE,
+    data: {},
+  },
 };
 export const triggerGetAcceptedConnections = createAsyncThunk(
   'get-accepted-connections',
   async (params, thunkAPI) => {
     try {
       return await ConnectionService.getAcceptedConnections(params);
+    } catch (e) {
+      return thunkAPI.rejectWithValue(e.message);
+    }
+  }
+);
+export const triggerGetConnectionsByUserId = createAsyncThunk(
+  'get-connections-by-user-id',
+  async (params, thunkAPI) => {
+    try {
+      return await ConnectionService.getConnectionsByUserId(params);
     } catch (e) {
       return thunkAPI.rejectWithValue(e.message);
     }
@@ -118,6 +135,16 @@ export const triggerRejectConnectionRequest = createAsyncThunk(
     }
   }
 );
+export const triggerRemoveConnection = createAsyncThunk(
+  'remove-connection',
+  async (params, thunkAPI) => {
+    try {
+      return await ConnectionService.removeConnection(params);
+    } catch (e) {
+      return thunkAPI.rejectWithValue(e.message);
+    }
+  }
+);
 
 const connectionSlice = createSlice({
   name: 'connections',
@@ -128,6 +155,9 @@ const connectionSlice = createSlice({
     },
     resetCancelConnectionRequest: (state) => {
       state.cancelConnectionRequest = initialState.cancelConnectionRequest;
+    },
+    resetRemoveConnection: (state) => {
+      state.removeConnection = initialState.removeConnection;
     },
   },
   extraReducers: (builder) => {
@@ -146,6 +176,22 @@ const connectionSlice = createSlice({
     builder.addCase(triggerGetAcceptedConnections.rejected, (state, action) => {
       state.getAcceptedConnections.status = states.ERROR;
       state.getAcceptedConnections.data = {};
+    });
+    // Get connections by user id
+    builder.addCase(triggerGetConnectionsByUserId.pending, (state) => {
+      state.getConnectionsByUserId.status = states.LOADING;
+      state.getConnectionsByUserId.data = {};
+    });
+    builder.addCase(
+      triggerGetConnectionsByUserId.fulfilled,
+      (state, action) => {
+        state.getConnectionsByUserId.status = states.SUCCESSFUL;
+        state.getConnectionsByUserId.data = action.payload;
+      }
+    );
+    builder.addCase(triggerGetConnectionsByUserId.rejected, (state, action) => {
+      state.getConnectionsByUserId.status = states.ERROR;
+      state.getConnectionsByUserId.data = {};
     });
 
     // Get sent rejected requests
@@ -262,9 +308,26 @@ const connectionSlice = createSlice({
       state.rejectConnectionRequest.status = states.ERROR;
       state.rejectConnectionRequest.data = {};
     });
+
+    // remove connection
+    builder.addCase(triggerRemoveConnection.pending, (state) => {
+      state.removeConnection.status = states.LOADING;
+      state.removeConnection.data = {};
+    });
+    builder.addCase(triggerRemoveConnection.fulfilled, (state, action) => {
+      state.removeConnection.status = states.SUCCESSFUL;
+      state.removeConnection.data = action.payload;
+    });
+    builder.addCase(triggerRemoveConnection.rejected, (state) => {
+      state.removeConnection.status = states.ERROR;
+      state.removeConnection.data = {};
+    });
   },
 });
 
 export default connectionSlice.reducer;
-export const { resetSendConnectionRequest, resetCancelConnectionRequest } =
-  connectionSlice.actions;
+export const {
+  resetSendConnectionRequest,
+  resetCancelConnectionRequest,
+  resetRemoveConnection,
+} = connectionSlice.actions;

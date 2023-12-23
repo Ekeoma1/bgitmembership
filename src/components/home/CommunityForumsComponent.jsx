@@ -16,9 +16,8 @@ import { HiPlus } from 'react-icons/hi';
 import { renderToast } from '../Molecules/CustomToastify';
 
 const CommunityForumsComponent = () => {
-  const { getAllForums, joinForum, leaveForum } = useSelector(
-    (state) => state.forums
-  );
+  const { getAllForums, joinForum, leaveForum, cancelJoinForumRequest } =
+    useSelector((state) => state.forums);
   const [pageNumber] = useState(1);
   const [pageSize] = useState(10);
   const dispatch = useDispatch();
@@ -26,38 +25,17 @@ const CommunityForumsComponent = () => {
     const data = { queryParams: { pageNumber, pageSize } };
     dispatch(triggerGetAllForums(data));
   }, []);
+  const [getAllForumsLocal, setGetAllForumsLocal] = useState([]);
   useEffect(() => {
-    if (joinForum.status === 'successful') {
-      if (joinForum.data === 'You are the admin of the forum.') {
-        renderToast({
-          status: 'error',
-          message: joinForum.data,
-        });
-      } else {
-        renderToast({
-          status: 'success',
-          message: joinForum.data,
-        });
-      }
-      dispatch(resetJoinForum());
-      dispatch(resetActiveForumIdForOngoingRequest());
-    } else if (joinForum.status === 'error') {
-      dispatch(resetJoinForum());
-      dispatch(resetActiveForumIdForOngoingRequest());
+    if (
+      getAllForums.status === 'successful' &&
+      Array.isArray(getAllForums.data)
+    ) {
+      // console.log('data########', getAllForums.data);
+      setGetAllForumsLocal(getAllForums.data);
     }
-    // leave forum
-    if (leaveForum.status === 'successful') {
-      renderToast({
-        status: 'success',
-        message: leaveForum.data,
-      });
-      dispatch(resetLeaveForum());
-      dispatch(resetActiveForumIdForOngoingRequest());
-    } else if (leaveForum.status === 'error') {
-      dispatch(resetLeaveForum());
-      dispatch(resetActiveForumIdForOngoingRequest());
-    }
-  }, [joinForum.status, leaveForum.status]);
+  }, [getAllForums]);
+  // console.log('getallforumsLocalhere', getAllForumsLocal);
   return (
     <div className='community-forum-wrapper'>
       <div className='community-forum-card-wrapper shadow-sm'>
@@ -66,16 +44,24 @@ const CommunityForumsComponent = () => {
           <>
             <ForumCardsLoader />
           </>
-        ) : getAllForums.status === 'successful' ? (
+        ) : getAllForums.status === 'successful' &&
+          Array.isArray(getAllForums.data) ? (
           <>
-            {getAllForums.data?.length === 0 ? (
+            {getAllForumsLocal.length === 0 ? (
               <div className='empty-state'>
                 <p>No forums yet...</p>
               </div>
             ) : (
               <>
-                {getAllForums?.data?.slice(0, 3).map((forum, key) => {
-                  return <ForumCard2 key={key} forum={forum} />;
+                {getAllForumsLocal?.slice(0, 3).map((forum, key) => {
+                  return (
+                    <ForumCard2
+                      key={key}
+                      forum={forum}
+                      getAllForumsLocal={getAllForumsLocal}
+                      setGetAllForumsLocal={setGetAllForumsLocal}
+                    />
+                  );
                 })}
               </>
             )}

@@ -10,6 +10,15 @@ export default class ConnectionsService {
     });
     return response;
   }
+  //  get accepted connections
+  static async getConnectionsByUserId(data) {
+    const response = await get({
+      url: apiRoutes.getConnectionsByUserId,
+      data: { ...data },
+      queryParams: data.queryParams,
+    });
+    return response;
+  }
 
   //  get sent rejected requests
   static async getSentRejectedRequests(data) {
@@ -71,6 +80,15 @@ export default class ConnectionsService {
   static async rejectConnectionRequest(data) {
     const response = await post({
       url: apiRoutes.rejectConnectionRequest,
+      data: { ...data },
+    });
+    return response;
+  }
+
+  //   remove connection
+  static async removeConnection(data) {
+    const response = await post({
+      url: apiRoutes.removeConnection,
       data: { ...data },
     });
     return response;

@@ -5,6 +5,7 @@ const apiRoutes = {
 
   // connections
   getAcceptedConnections: '/Connections/GetAcceptedConnections',
+  getConnectionsByUserId: '/Connections/GetConnectionsByUserId',
   getSentRejectedRequests: '/Connections/GetSentRejectedRequests',
   getPotentialConnections: '/Connections/GetPotentialConnections',
   sendConnectionRequest: '/Connections/SendConnectionRequest',
@@ -12,6 +13,7 @@ const apiRoutes = {
   getPendingRequestConnections: '/Connections/GetPendingRequestConnections',
   acceptConnectionRequest: '/Connections/AcceptConnectionRequest',
   rejectConnectionRequest: '/Connections/RejectConnectionRequest',
+  removeConnection: '/Connections/RemoveConnection',
 
   // account privacies
   getBlockedUsers: '/AccountPrivacies/GetBlockedUsers',

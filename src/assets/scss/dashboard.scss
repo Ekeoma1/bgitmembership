@@ -230,16 +230,21 @@
       .other-details {
         font-weight: 700;
         color: $alt-text-color;
+
         &.location {
           font-size: 16px;
         }
         &.connect {
           color: $pri-color2;
           font-size: 16px;
+          display: inline-block;
           @media screen and (max-width: 600px) {
             margin: 2.4rem 0;
             line-height: 100%;
           }
+        }
+        &.view {
+          cursor: pointer;
         }
         &.tag-names {
           font-size: 14px;

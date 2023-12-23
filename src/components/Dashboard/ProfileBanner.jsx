@@ -113,6 +113,10 @@ const ProfileBanner = ({ data }) => {
       getConnectionStatusByUserId.data?.connectionStatus === 'Not Connected'
     ) {
       dispatch(triggerSendConnectionRequest(values));
+    } else if (
+      getConnectionStatusByUserId.data?.connectionStatus === 'Connected'
+    ) {
+      // dispatch(triggeRemoveConnection(values));
     }
   };
   useEffect(() => {
@@ -197,7 +201,7 @@ const ProfileBanner = ({ data }) => {
       if (unmuteUser.data.success) {
         renderToast({
           status: 'success',
-          message: "User unmuted successfully",
+          message: 'User unmuted successfully',
         });
         const data = {
           queryParams: { userId: getUserProfileById.data?.userId },
@@ -253,6 +257,7 @@ const ProfileBanner = ({ data }) => {
   // connection status
   useEffect(() => {
     const data = { queryParams: { userId: param?.id } };
+    console.log('trigger');
     dispatch(triggerGetConnectionStatusByUserId(data));
   }, [param?.id]);
   console.log('getConnectionStatusByUserId', getConnectionStatusByUserId);
@@ -480,7 +485,12 @@ const ProfileBanner = ({ data }) => {
                     <div className='other-details location'>
                       {data?.data?.city}
                     </div>
-                    <div className='other-details connect'>
+                    <div
+                      onClick={() => navigate(`/connections/${param.id}`)}
+                      className={`other-details connect ${
+                        data?.data?.connectionCount >= 0 && 'view'
+                      }`}
+                    >
                       {data?.data?.connectionCount} connections
                     </div>
                   </div>
@@ -604,6 +614,9 @@ const ProfileBanner = ({ data }) => {
                       ) : getConnectionStatusByUserId.data?.connectionStatus ===
                         'Not Connected' ? (
                         '+ Connect'
+                      ) : getConnectionStatusByUserId.data?.connectionStatus ===
+                        'Connected' ? (
+                        'Remove Connection'
                       ) : (
                         <></>
                       )}

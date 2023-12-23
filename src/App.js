@@ -126,7 +126,7 @@ function App() {
               element: <Resources />,
             },
             {
-              path: "connections",
+              path: "connections/:id",
               element: <Connections />,
             },
           ],
