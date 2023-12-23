@@ -23,51 +23,35 @@ const Recommended = ({ basedOn }) => {
   const { getAllForumsByIndustry, getAllForumsByLocation } = useSelector(
     (state) => state.forums
   );
-  const { joinForum, leaveForum, activeForumIdForOngoingRequest } = useSelector(
-    (state) => state.forums
-  );
   const dispatch = useDispatch();
   const [pageNumber] = useState(1);
   const [pageSize] = useState(10);
-
-  useEffect(() => {
-    if (joinForum.status === 'successful') {
-      if (joinForum.data === 'You are the admin of the forum.') {
-        renderToast({
-          status: 'error',
-          message: joinForum.data,
-        });
-      } else {
-        renderToast({
-          status: 'success',
-          message: joinForum.data,
-        });
-      }
-      dispatch(resetJoinForum());
-      dispatch(resetActiveForumIdForOngoingRequest());
-    } else if (joinForum.status === 'error') {
-      dispatch(resetJoinForum());
-      dispatch(resetActiveForumIdForOngoingRequest());
-    }
-    // leave forum
-    if (leaveForum.status === 'successful') {
-      renderToast({
-        status: 'success',
-        message: leaveForum.data,
-      });
-      dispatch(resetLeaveForum());
-      dispatch(resetActiveForumIdForOngoingRequest());
-    } else if (leaveForum.status === 'error') {
-      dispatch(resetActiveForumIdForOngoingRequest());
-      dispatch(resetLeaveForum());
-    }
-  }, [joinForum.status, leaveForum.status]);
+  const [getAllForumsByIndustryLocal, setGetAllForumsByIndustryLocal] =
+    useState([]);
+  const [activeForumIndustryMain, setActiveForumIndustryMain] = useState({});
+  const [getAllForumsByLocationLocal, setGetAllForumsByLocationLocal] =
+    useState([]);
+  const [activeForumLocationMain, setActiveForumLocationMain] = useState({});
 
   useEffect(() => {
     const data = { queryParams: { pageNumber, pageSize } };
     dispatch(triggerGetAllForumsByIndustry(data));
     dispatch(triggerGetAllForumsByLocation(data));
   }, []);
+  useEffect(() => {
+    if (
+      getAllForumsByIndustry.status === 'successful' &&
+      Array.isArray(getAllForumsByIndustry.data)
+    ) {
+      setGetAllForumsByIndustryLocal(getAllForumsByIndustry.data);
+    }
+    if (
+      getAllForumsByLocation.status === 'successful' &&
+      Array.isArray(getAllForumsByLocation.data)
+    ) {
+      setGetAllForumsByLocationLocal(getAllForumsByLocation.data);
+    }
+  }, [getAllForumsByIndustry, getAllForumsByLocation]);
 
   const responsive = {
     desktop: {
@@ -100,7 +84,7 @@ const Recommended = ({ basedOn }) => {
                 </>
               ) : getAllForumsByIndustry.status === 'successful' ? (
                 <>
-                  {getAllForumsByIndustry.data.length === 0 ? (
+                  {getAllForumsByIndustryLocal.length === 0 ? (
                     <>
                       <EmptyState
                         title={'No forums found based on your industry'}
@@ -110,8 +94,17 @@ const Recommended = ({ basedOn }) => {
                   ) : (
                     <>
                       <Carousel responsive={responsive}>
-                        {getAllForumsByIndustry.data.map((forum, index) => (
-                          <ForumCard key={index} forum={forum} />
+                        {getAllForumsByIndustryLocal.map((forum, index) => (
+                          <ForumCard
+                            key={index}
+                            forum={forum}
+                            getAllForumsLocal={getAllForumsByIndustryLocal}
+                            setGetAllForumsLocal={
+                              setGetAllForumsByIndustryLocal
+                            }
+                            activeForumMain={activeForumIndustryMain}
+                            setActiveForumMain={setActiveForumIndustryMain}
+                          />
                         ))}
                       </Carousel>
                     </>
@@ -133,7 +126,7 @@ const Recommended = ({ basedOn }) => {
                 </>
               ) : getAllForumsByLocation.status === 'successful' ? (
                 <>
-                  {getAllForumsByLocation.data.length === 0 ? (
+                  {getAllForumsByLocationLocal.length === 0 ? (
                     <>
                       <EmptyState
                         title={'No forums found based on your Location'}
@@ -143,8 +136,17 @@ const Recommended = ({ basedOn }) => {
                   ) : (
                     <>
                       <Carousel responsive={responsive}>
-                        {getAllForumsByLocation.data.map((forum, index) => (
-                          <ForumCard key={index} forum={forum} />
+                        {getAllForumsByLocationLocal.map((forum, index) => (
+                          <ForumCard
+                            key={index}
+                            forum={forum}
+                            getAllForumsLocal={getAllForumsByLocationLocal}
+                            setGetAllForumsLocal={
+                              setGetAllForumsByLocationLocal
+                            }
+                            activeForumMain={activeForumLocationMain}
+                            setActiveForumMain={setActiveForumLocationMain}
+                          />
                         ))}
                       </Carousel>
                     </>

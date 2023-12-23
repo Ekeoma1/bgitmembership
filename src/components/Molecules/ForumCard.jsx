@@ -136,6 +136,8 @@ const ForumCard = ({
       (joinForum.status === 'loading' ||
         leaveForum.status === 'loading' ||
         cancelJoinForumRequest.status === 'loading') &&
+      forum &&
+      activeForumMain &&
       forum.forumId === activeForumMain.forumId
     ) {
       setLoading(true);

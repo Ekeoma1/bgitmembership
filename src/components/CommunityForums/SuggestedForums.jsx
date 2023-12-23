@@ -14,6 +14,7 @@ import {
 } from '../../Features/forums/forums_slice';
 import { ForumCardsLoader2 } from '../Atoms/skeleton-loaders/ForumCardsLoader';
 import { renderToast } from '../Molecules/CustomToastify';
+import EmptyState from '../Molecules/EmptyState';
 const SuggestedForums = () => {
   console.log('suggested forums###############');
   const navigate = useNavigate();
@@ -51,7 +52,7 @@ const SuggestedForums = () => {
       items: 1.2,
     },
   };
-  console.log('getallforumslocal', getAllForumsLocal);
+
   return (
     <div className='suggested-forums-wrapper'>
       <div className='container'>
@@ -67,7 +68,9 @@ const SuggestedForums = () => {
             ) : getAllForums.status === 'successful' ? (
               <>
                 {getAllForumsLocal?.length === 0 ? (
-                  <></>
+                  <>
+                    <EmptyState title={'No forums found'} height={'50rem'} />
+                  </>
                 ) : (
                   <>
                     <Carousel responsive={responsive}>
