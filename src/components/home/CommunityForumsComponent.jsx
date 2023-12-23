@@ -26,6 +26,7 @@ const CommunityForumsComponent = () => {
     dispatch(triggerGetAllForums(data));
   }, []);
   const [getAllForumsLocal, setGetAllForumsLocal] = useState([]);
+  const [activeForumMain, setActiveForumMain] = useState({});
   useEffect(() => {
     if (
       getAllForums.status === 'successful' &&
@@ -60,6 +61,8 @@ const CommunityForumsComponent = () => {
                       forum={forum}
                       getAllForumsLocal={getAllForumsLocal}
                       setGetAllForumsLocal={setGetAllForumsLocal}
+                      activeForumMain={activeForumMain}
+                      setActiveForumMain={setActiveForumMain}
                     />
                   );
                 })}
