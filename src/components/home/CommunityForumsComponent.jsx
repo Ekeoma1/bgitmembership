@@ -11,13 +11,10 @@ import {
   triggerGetAllForums,
   triggerJoinForum,
 } from '../../Features/forums/forums_slice';
-import ForumCard, { ForumCard2 } from '../Molecules/ForumCard';
-import { HiPlus } from 'react-icons/hi';
-import { renderToast } from '../Molecules/CustomToastify';
+import { ForumCard2 } from '../Molecules/ForumCard';
 
 const CommunityForumsComponent = () => {
-  const { getAllForums, joinForum, leaveForum, cancelJoinForumRequest } =
-    useSelector((state) => state.forums);
+  const { getAllForums } = useSelector((state) => state.forums);
   const [pageNumber] = useState(1);
   const [pageSize] = useState(10);
   const dispatch = useDispatch();

@@ -12,43 +12,7 @@ const SuggestedForums = () => {
   const onChange = (e) => {
     setSearchValue(e.target.value);
   };
-  const communities = [
-    {
-      community_img: community1,
-      recently_joined: true,
-      community_name: 'UX/UI Design',
-      community_members: 100,
-      unreadMsg: false,
-    },
-    {
-      community_img: community2,
-      recently_joined: false,
-      community_name: 'Engineer Girls',
-      community_members: 67,
-      unreadMsg: true,
-    },
-    {
-      community_img: community3,
-      recently_joined: true,
-      community_name: 'Data Babes 😍👩🏾‍💻',
-      community_members: 83,
-      unreadMsg: true,
-    },
-    {
-      community_img: community3,
-      recently_joined: true,
-      community_name: 'Data Babes 😍👩🏾‍💻',
-      community_members: 83,
-      unreadMsg: true,
-    },
-    {
-      community_img: community3,
-      recently_joined: true,
-      community_name: 'Data Babes 😍👩🏾‍💻',
-      community_members: 83,
-      unreadMsg: true,
-    },
-  ];
+
   return (
     <div className='suggested-forums-wrapper'>
       <div className='container'>
