@@ -1180,6 +1180,16 @@
 
   .section-list-wrapper {
     margin: 20px 0;
+    .requests-con {
+      display: flex;
+      align-items: center;
+      column-gap: 1rem;
+    }
+    .requests-count-loader {
+      width: 4rem;
+      height: 2.3rem;
+
+    }
     .loader {
       margin-bottom: 20px;
       display: flex;

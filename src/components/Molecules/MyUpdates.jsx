@@ -5,9 +5,13 @@ import { useDispatch, useSelector } from 'react-redux';
 import { triggerGetAllNews } from '../../Features/news/news_slice';
 import { triggerGetAllEvents } from '../../Features/events/events_slice';
 import SingleLineLoader from '../Atoms/skeleton-loaders/SingleLineLoader';
+import { triggerGetPendingRequestConnections } from '../../Features/connections/connections_slice';
 const MyUpdates = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const { getPendingRequestConnections } = useSelector(
+    (state) => state.connections
+  );
   const { getAllNews } = useSelector((state) => state.news);
   const { getAllEvents } = useSelector((state) => state.events);
   const [pageNumber] = useState(1);
@@ -17,8 +21,8 @@ const MyUpdates = () => {
     const data = { queryParams: { pageNumber, pageSize } };
     dispatch(triggerGetAllNews(data));
     dispatch(triggerGetAllEvents(data));
+    dispatch(triggerGetPendingRequestConnections());
   }, []);
-
   // console.log('data', getAllEvents, getAllNews);
   return (
     <div className='my-updates-wrapper shadow-sm'>
@@ -107,15 +111,27 @@ const MyUpdates = () => {
       <div>
         <div className='section-header'>New</div>
         <div className='section-list-wrapper'>
-          <div className='big-text'>
-            <Link to='#'>
-              <span>Request</span> (4)
+          <div className='big-text requests-con'>
+            <Link to='#' className='requests-con'>
+              <span>Request</span>{' '}
+              {getPendingRequestConnections.status === 'base' ||
+              getPendingRequestConnections.status === 'loading' ? (
+                <div className=' requests-count-loader'>
+                  <SingleLineLoader />
+                </div>
+              ) : getPendingRequestConnections.status === 'successful' ? (
+                <>
+                  {`(${getPendingRequestConnections.data?.pendingRequests?.length})`}
+                </>
+              ) : (
+                <></>
+              )}
             </Link>
           </div>
 
           <div className='big-text'>
             <Link to='#'>
-              <span>Comments</span> (1)
+              <span>Comments</span> (2)
             </Link>
           </div>
         </div>
