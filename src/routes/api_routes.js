@@ -98,6 +98,11 @@ const apiRoutes = {
   getAllEvents: '/Events/GetAllEvents',
   getEventById: '/Events/GetEventById',
   applyForEvent: '/Events/ApplyForEvent',
+
+  // Notifications
+  getAllNotifications: '/Notification/getAllNotifications',
+  getUnreadNotificationCount: '/Notification/getUnreadNotificationCount',
+  getPendingRequestCount: '/Notification/getPendingRequestCount',
 };
 
 export default apiRoutes;

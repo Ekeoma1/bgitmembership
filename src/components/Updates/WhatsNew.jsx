@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { RiHeart3Fill } from 'react-icons/ri';
 import { IoMdShareAlt } from 'react-icons/io';
 import { BiMessageRoundedDots } from 'react-icons/bi';
@@ -9,6 +9,8 @@ import PostCard from '../Molecules/PostCard';
 import AuthorImg1 from '../../../src/assets/images/author1.png';
 import PostImage from '../../../src/assets/images/post-image.png';
 import MainButton from '../Molecules/MainButton';
+import { useDispatch, useSelector } from 'react-redux';
+import { triggerGetAllNotifications } from '../../Features/notification/notification_slice';
 
 const WhatsNew = () => {
   const postList = [
@@ -24,38 +26,86 @@ const WhatsNew = () => {
       following: true,
     },
   ];
+  const dispatch = useDispatch();
+  const { getAllNotifications } = useSelector((state) => state.notification);
+  const [notificationsAmount, setNotificationsAmount] = useState(3);
+  useEffect(() => {
+    dispatch(triggerGetAllNotifications());
+  }, []);
+
   return (
     <div className='whats-new-wrapper'>
       <div className='container'>
         <div className='whats-new-section-content'>
           <div className='section-title-wrapper'>
             <h5 className=''>
-              Whats new <span>{'(4)'}</span>
+              Whats new <span>{`(${getAllNotifications.data?.length})`}</span>
             </h5>
           </div>
           <div className='section-content-wrapper'>
             <div className='section-content'>
-              <div className='liked-your-comment'>
-                <div className='main-wrapper'>
-                  <img src={request2} alt='' className='' />
-                  <div className='content'>
-                    <div className=''>
-                      <h3>Samantha</h3>
-                      <h5>
-                        Liked your comment<span className='colon'>:</span>{' '}
-                        <p>
-                          I’m not sure you know, think it’s gonna rain on the
-                          day but i’m travelling from Manchester so gonna bring
-                          an umbrella jusssst in case x
-                        </p>
-                      </h5>
-                    </div>
-                    <span className='like'>
-                      <RiHeart3Fill />
-                    </span>
-                  </div>
-                </div>
-              </div>
+              {getAllNotifications.status === 'base' ||
+              getAllNotifications.status === 'loading' ? (
+                <></>
+              ) : getAllNotifications.status === 'successful' ? (
+                <>
+                  {getAllNotifications.data.length === 0 ? (
+                    <></>
+                  ) : (
+                    <>
+                      {getAllNotifications.data
+                        .slice(0, notificationsAmount)
+                        .map((notification, index) => {
+                          const inputString = notification.notificationContent;
+
+                          // Create a temporary div element
+                          const tempDiv = document.createElement('div');
+
+                          // Set the HTML content of the div
+                          tempDiv.innerHTML = inputString;
+
+                          // Access the content inside the <b> element
+                          const content =
+                            tempDiv.querySelector('b').textContent;
+                          const remaining = inputString.replace(
+                            `<b>${content}</b>`,
+                            ''
+                          );
+                          return (
+                            <div className='liked-your-comment' key={index}>
+                              <div className='main-wrapper'>
+                                <img
+                                  src={notification.notificationUserImageUrl}
+                                  alt=''
+                                  className=''
+                                />
+                                <div className='content'>
+                                  <div className=''>
+                                    <h3>{`${notification.notificationUserFirstName} ${notification.notificationUserSecondName}`}</h3>
+                                    <h5>
+                                      {content}
+                                      <p>
+                                        {remaining}
+                                      </p>
+                                    </h5>
+                                  </div>
+                                  <span className='like'>
+                                    <RiHeart3Fill />
+                                  </span>
+                                </div>
+                              </div>
+                            </div>
+                          );
+                        })}
+                    </>
+                  )}
+                </>
+              ) : getAllNotifications.status === 'error' ? (
+                <></>
+              ) : (
+                <></>
+              )}
+
               <div className='shared-your-post'>
                 <div className='main-wrapper'>
                   <img src={request1} alt='' className='' />
@@ -63,7 +113,9 @@ const WhatsNew = () => {
                     <div className='section-top'>
                       <div className=''>
                         <h3>Destiny L</h3>
-                        <h5>Shared your post<span>:</span> </h5>
+                        <h5>
+                          Shared your post<span>:</span>{' '}
+                        </h5>
                       </div>
                       <span className='share'>
                         <IoMdShareAlt />
@@ -77,31 +129,15 @@ const WhatsNew = () => {
                   </div>
                 </div>
               </div>
-              <div className='commented'>
-                <div className='main-wrapper'>
-                  <img src={request3} alt='' className='' />
-                  <div className='content'>
-                    <div className=''>
-                      <h3>Amaka G</h3>
-                      <h5>
-                        Commented on your post<span>:</span>{' '}
-                        <p>
-                          LOOOOOOOL!! 🤣 omd, I can’t wait for the event in 3
-                          weeks
-                        </p>
-                      </h5>
-                    </div>
-                    <span className='comment-icon'>
-                      <BiMessageRoundedDots />
-                    </span>
-                  </div>
-                </div>
-              </div>
+            
               <div className='load-more'>
                 <MainButton
                   text={'Load more'}
                   size={'small'}
                   variant={'outlined'}
+                  onClick={() =>
+                    setNotificationsAmount(notificationsAmount + 1)
+                  }
                 />
               </div>
             </div>
