@@ -241,26 +241,12 @@ export const ForumCard2 = ({
   const handleClick = (e, forumParam) => {
     if (
       joinForum.status === 'base' &&
-      cancelJoinForumRequest.status === 'base' &&
-      leaveForum.status === 'base'
+      cancelJoinForumRequest.status === 'base'
     ) {
-      console.log('click##########################################');
       const values = { forumId: forum.forumId };
-      const dataTemp = activeForums.filter(
-        (item) => item.forumId !== forumParam.forumId
-      );
-      dataTemp.push(forumParam);
-      // console.log('forumparam', forumParam);
-      // console.log('datatemp', dataTemp);
-      // setActiveForums(dataTemp);
-
       setActiveForum(forum);
-      dispatch(setActiveForumForOngoingRequest(forumParam));
-
       if (e.target.closest('.pending')) {
         dispatch(triggerCancelJoinForumRequest(values));
-      } else if (e.target.closest('.member')) {
-        dispatch(triggerLeaveForum(values));
       } else if (e.target.closest('.not-a-member')) {
         dispatch(triggerJoinForum(values));
       } else {
@@ -279,6 +265,10 @@ export const ForumCard2 = ({
             <button
               className={`smaller-text community-forum-btn forum-card-btn joined pending ${
                 forum.requestStatus === 'loading' && 'loading'
+              } ${
+                (joinForum.status !== 'base' ||
+                  cancelJoinForumRequest.status !== 'base') &&
+                'not-allowed'
               }`}
             >
               {forum.requestStatus === 'loading' ? (
@@ -290,24 +280,14 @@ export const ForumCard2 = ({
               )}
             </button>
           </>
-        ) : forum.forumMembershipStatus === 'Member' ? (
-          <button
-            className={`smaller-text community-forum-btn forum-card-btn joined member ${
-              forum.requestStatus === 'loading' && 'loading'
-            }`}
-          >
-            {forum.requestStatus === 'loading' ? (
-              <>
-                Loading <img src={loadingDots} alt='' className='' />
-              </>
-            ) : (
-              'Leave'
-            )}
-          </button>
         ) : forum.forumMembershipStatus === 'NotAMember' ? (
           <button
             className={`smaller-text community-forum-btn forum-card-btn join not-a-member ${
               forum.requestStatus === 'loading' && 'loading'
+            } ${
+              (joinForum.status !== 'base' ||
+                cancelJoinForumRequest.status !== 'base') &&
+              'not-allowed'
             }`}
           >
             {forum.requestStatus === 'loading' ? (
