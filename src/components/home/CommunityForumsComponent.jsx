@@ -1,18 +1,14 @@
 import React, { useEffect, useState } from 'react';
 import Icon from '../Icon';
 import _ from 'lodash';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import ForumCardsLoader from '../Atoms/skeleton-loaders/ForumCardsLoader';
 import { useDispatch } from 'react-redux';
 import {
-  resetActiveForumIdForOngoingRequest,
   resetCanceljoinForumRequest,
   resetJoinForum,
-  resetLeaveForum,
-  setActiveForumsForOngoingRequest,
   triggerGetAllForums,
-  triggerJoinForum,
 } from '../../Features/forums/forums_slice';
 import { ForumCard2 } from '../Molecules/ForumCard';
 import { renderToast } from '../Molecules/CustomToastify';
@@ -29,37 +25,30 @@ const CommunityForumsComponent = () => {
   const [getAllForumsLocal, setGetAllForumsLocal] = useState([]);
   const [activeForums, setActiveForums] = useState([]);
   const [activeForum, setActiveForum] = useState({});
+
   useEffect(() => {
     if (
       getAllForums.status === 'successful' &&
       Array.isArray(getAllForums.data)
     ) {
-      // console.log('data########', getAllForums.data);
       setGetAllForumsLocal(getAllForums.data);
     }
   }, [getAllForums]);
-  // console.log('geallforum############', getAllForums.data);
-  // console.log('geallforum status############', getAllForums.status);
-  const {
-    joinForum,
-    leaveForum,
-    cancelJoinForumRequest,
-    activeForumsForOngoingRequest,
-    activeForumsCurrentRequests,
-  } = useSelector((state) => state.forums);
+  const { joinForum, cancelJoinForumRequest } = useSelector(
+    (state) => state.forums
+  );
+
   useEffect(() => {
     const data = _.cloneDeep(getAllForumsLocal);
     // join forum
 
     if (joinForum.status === 'loading') {
-      // data.forEach((item) => {
-      //   if (item.forumId === activeForum.forumId) {
-      //     console.log('yessjoinforumloading#################');
-      //     item.requestStatus = 'loading';
-      //   }
-      // });
-      // console.log('datajoinforumloading##################', data);
-      // setGetAllForumsLocal(data);
+      data.forEach((item) => {
+        if (item.forumId === activeForum.forumId) {
+          item.requestStatus = 'loading';
+        }
+      });
+      setGetAllForumsLocal(data);
     } else if (joinForum.status === 'successful') {
       console.log('jooin####################################');
       if (joinForum.data.status === 'error') {
@@ -68,85 +57,56 @@ const CommunityForumsComponent = () => {
           message: 'You are the admin of the forum.',
         });
       } else if (joinForum.data.status === 'success') {
-        // const activeforumsTemp = [
-        //   activeForumsForOngoingRequest.filter(
-        //     (item) => item.forumId !== joinForum.data.forumId
-        //   ),
-        // ];
-        // dispatch(setActiveForumsForOngoingRequest(activeforumsTemp));
         renderToast({
           status: 'success',
           message: 'Join request sent successfully',
         });
         data.forEach((item) => {
-          if (item.forumId === joinForum.data.forumId) {
+          if (item.forumId === activeForum.forumId) {
             item.forumMembershipStatus = 'PendingRequest';
             delete item.requestStatus;
-            console.log('yessjoinforumsuccessful#################');
           }
         });
-        // console.log('datajoinforumsuccessful##################', data);
         setGetAllForumsLocal(data);
       }
+      setActiveForum({});
       dispatch(resetJoinForum());
     } else if (joinForum.status === 'error') {
       renderToast({
         status: 'error',
         message: 'Something went wrong',
       });
-      const activeforumsTemp = [
-        activeForumsForOngoingRequest.filter(
-          (item) => item.forumId !== joinForum.data.forumId
-        ),
-      ];
-      dispatch(setActiveForumsForOngoingRequest(activeforumsTemp));
       data.forEach((item) => {
         if (item.forumId === joinForum.data.forumId) {
           delete item.requestStatus;
         }
       });
       setGetAllForumsLocal(data);
+      setActiveForum({});
       dispatch(resetJoinForum());
     }
-
     // cancel Join forum request
     if (cancelJoinForumRequest.status === 'loading') {
-      // data.forEach((item) => {
-      //   if (item.forumId === activeForum.forumId) {
-      //     console.log('yescancelloading######');
-      //     item.requestStatus = 'loading';
-      //   }
-      // });
-      // console.log('datacanceljoinforumloading##################', data);
-      // setGetAllForumsLocal(data);
+      data.forEach((item) => {
+        if (item.forumId === activeForum.forumId) {
+          item.requestStatus = 'loading';
+        }
+      });
+      setGetAllForumsLocal(data);
     } else if (cancelJoinForumRequest.status === 'successful') {
-      console.log('cancel#######################################');
-      if (
-        // cancelJoinForumRequest.data === 'Join request canceled successfully.'
-        cancelJoinForumRequest.data.status === 'success'
-      ) {
+      if (cancelJoinForumRequest.data.status === 'success') {
         renderToast({
           status: 'success',
           message: 'Join request canceled successfully.',
         });
-        const activeforumsTemp = [
-          activeForumsForOngoingRequest.filter(
-            (item) => item.forumId !== cancelJoinForumRequest.data.forumId
-          ),
-        ];
-        dispatch(setActiveForumsForOngoingRequest(activeforumsTemp));
         data.forEach((item) => {
-          if (item.forumId === cancelJoinForumRequest.data.forumId) {
+          if (item.forumId === activeForum.forumId) {
             item.forumMembershipStatus = 'NotAMember';
             delete item.requestStatus;
-            // console.log(
-            //   'data canceljoinforum successful ##################',
-            //   data
-            // );
           }
         });
-        // console.log('datacancelforumsuccessful##################', data);
         setGetAllForumsLocal(data);
+        setActiveForum({});
         dispatch(resetCanceljoinForumRequest());
       }
     } else if (cancelJoinForumRequest.status === 'error') {
@@ -154,65 +114,17 @@ const CommunityForumsComponent = () => {
         status: 'error',
         message: 'Something went wrong',
       });
-      const activeforumsTemp = [
-        activeForumsForOngoingRequest.filter(
-          (item) => item.forumId !== cancelJoinForumRequest.data.forumId
-        ),
-      ];
-      dispatch(setActiveForumsForOngoingRequest(activeforumsTemp));
       data.forEach((item) => {
         if (item.forumId === cancelJoinForumRequest.status.forumId) {
           delete item.requestStatus;
         }
       });
       setGetAllForumsLocal(data);
+      setActiveForum({});
       dispatch(resetCanceljoinForumRequest());
     }
+  }, [joinForum.status, cancelJoinForumRequest.status]);
 
-    // leave forum
-    if (leaveForum.status === 'successful') {
-      renderToast({
-        status: 'success',
-        message: leaveForum.data,
-      });
-      data.forEach((item) => {
-        if (item.forumId === leaveForum.data.forumId) {
-          item.requestStatus = 'loading';
-        }
-      });
-      setGetAllForumsLocal(data);
-    } else if (leaveForum.status === 'successful') {
-      renderToast({
-        status: 'success',
-        message: leaveForum.data,
-      });
-      data.forEach((item) => {
-        if (item.forumId === leaveForum.data.forumId) {
-          item.forumMembershipStatus = 'NotAMember';
-        }
-      });
-      setGetAllForumsLocal(data);
-      dispatch(resetLeaveForum());
-    } else if (leaveForum.status === 'error') {
-      renderToast({
-        status: 'error',
-        message: 'Something went wrong',
-      });
-      data.forEach((item) => {
-        if (item.forumId === leaveForum.data.forumId) {
-          item.forumMembershipStatus = 'NotAMember';
-        }
-      });
-      setGetAllForumsLocal(data);
-      dispatch(resetLeaveForum());
-    }
-  }, [joinForum, cancelJoinForumRequest, leaveForum]);
-  // console.log('active', activeForum);
-  // console.log('activeforums', activeForums);
-  // console.log('activeForumsCurrentRequests', activeForumsCurrentRequests);
-  console.log('data', joinForum);
-  console.log('canceljoinforum', cancelJoinForumRequest);
-  console.log('data', getAllForumsLocal);
   return (
     <div className='community-forum-wrapper'>
       <div className='community-forum-card-wrapper shadow-sm'>
