@@ -9,7 +9,7 @@ import {
   resetCanceljoinForumRequest,
   resetJoinForum,
   resetLeaveForum,
-  setActiveForumForOngoingRequest,
+  setActiveForumsForOngoingRequest,
   triggerCancelJoinForumRequest,
   triggerJoinForum,
   triggerLeaveForum,
@@ -230,44 +230,64 @@ export const ForumCard2 = ({
   activeForum,
   setActiveForum,
 }) => {
-  const { joinForum, leaveForum, cancelJoinForumRequest } = useSelector(
-    (state) => state.forums
-  );
+  const {
+    joinForum,
+    leaveForum,
+    cancelJoinForumRequest,
+    activeForumsForOngoingRequest,
+    activeForumsCurrentRequests,
+  } = useSelector((state) => state.forums);
 
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const [loading, setLoading] = useState(false);
 
   const handleClick = (e, forumParam) => {
-    if (
-      joinForum.status === 'base' &&
-      cancelJoinForumRequest.status === 'base' &&
-      leaveForum.status === 'base'
-    ) {
-      console.log('click##########################################');
-      const values = { forumId: forum.forumId };
-      const dataTemp = activeForums.filter(
-        (item) => item.forumId !== forumParam.forumId
-      );
-      dataTemp.push(forumParam);
-      // console.log('forumparam', forumParam);
-      // console.log('datatemp', dataTemp);
-      // setActiveForums(dataTemp);
+    const values = { forumId: forum.forumId };
+    const dataTemp = activeForumsForOngoingRequest.filter(
+      (item) => item.forumId !== forumParam.forumId
+    );
+    dataTemp.push(forumParam);
+    dispatch(setActiveForumsForOngoingRequest(dataTemp));
+    // console.log('forumparam', forumParam);
+    // console.log('datatemp', dataTemp);
+    // setActiveForums(dataTemp);
+    setActiveForum(dataTemp);
 
-      setActiveForum(forum);
-      dispatch(setActiveForumForOngoingRequest(forumParam));
-
-      if (e.target.closest('.pending')) {
-        dispatch(triggerCancelJoinForumRequest(values));
-      } else if (e.target.closest('.member')) {
-        dispatch(triggerLeaveForum(values));
-      } else if (e.target.closest('.not-a-member')) {
-        dispatch(triggerJoinForum(values));
-      } else {
-        navigate(`/forums/${forum.forumId}`);
-      }
+    if (e.target.closest('.pending')) {
+      dispatch(triggerCancelJoinForumRequest(values));
+    } else if (e.target.closest('.member')) {
+      dispatch(triggerLeaveForum(values));
+    } else if (e.target.closest('.not-a-member')) {
+      dispatch(triggerJoinForum(values));
+    } else {
+      navigate(`/forums/${forum.forumId}`);
     }
   };
+  let [forumTemp, setForumTemp] = useState({ ...forum });
+  // useEffect(() => {
+  //   // console.log('activeforumscurrentrequests', activeForumsCurrentRequests);
+  //   // console.log(
+  //   //   '######################################',
+  //   //   activeForumsCurrentRequests?.[forum.forumId]?.type === 'join-forum' &&
+  //   //     activeForumsCurrentRequests?.[forum.forumId]?.status === 'fulfilled'
+  //   // );
+
+  //   if (
+  //     activeForumsCurrentRequests?.[forumTemp.forumId]?.type === 'join-forum' &&
+  //     activeForumsCurrentRequests?.[forumTemp.forumId]?.status === 'fulfilled'
+  //   ) {
+  //     console.log('forummembershipstatus joinforum #####################');
+  //     forumTemp.forumMembershipStatus = 'PendingRequest';
+  //   } else if (
+  //     activeForumsCurrentRequests?.[forumTemp.forumId]?.type ===
+  //       'cancel-request' &&
+  //     activeForumsCurrentRequests?.[forumTemp.forumId]?.status === 'fulfilled'
+  //   ) {
+  //     console.log('forummembershipstatus cancel #####################');
+  //     forumTemp.forumMembershipStatus = 'NotAMember';
+  //   }
+  // }, [activeForumsCurrentRequests[forum.forumId]]);
 
   return (
     <div className='forum-card-2' onClick={(e) => handleClick(e, forum)}>
@@ -278,10 +298,12 @@ export const ForumCard2 = ({
           <>
             <button
               className={`smaller-text community-forum-btn forum-card-btn joined pending ${
-                forum.requestStatus === 'loading' && 'loading'
+                activeForumsCurrentRequests?.[forum.forumId]?.status ===
+                  'pending' && 'loading'
               }`}
             >
-              {forum.requestStatus === 'loading' ? (
+              {activeForumsCurrentRequests?.[forum.forumId]?.status ===
+              'pending' ? (
                 <>
                   Loading <img src={loadingDots} alt='' className='' />
                 </>
@@ -293,10 +315,12 @@ export const ForumCard2 = ({
         ) : forum.forumMembershipStatus === 'Member' ? (
           <button
             className={`smaller-text community-forum-btn forum-card-btn joined member ${
-              forum.requestStatus === 'loading' && 'loading'
+              activeForumsCurrentRequests?.[forum.forumId]?.status ===
+                'pending' && 'loading'
             }`}
           >
-            {forum.requestStatus === 'loading' ? (
+            {activeForumsCurrentRequests?.[forum.forumId]?.status ===
+            'pending' ? (
               <>
                 Loading <img src={loadingDots} alt='' className='' />
               </>
@@ -307,10 +331,12 @@ export const ForumCard2 = ({
         ) : forum.forumMembershipStatus === 'NotAMember' ? (
           <button
             className={`smaller-text community-forum-btn forum-card-btn join not-a-member ${
-              forum.requestStatus === 'loading' && 'loading'
+              activeForumsCurrentRequests?.[forum.forumId]?.status ===
+                'pending' && 'loading'
             }`}
           >
-            {forum.requestStatus === 'loading' ? (
+            {activeForumsCurrentRequests?.[forum.forumId]?.status ===
+            'pending' ? (
               <>
                 Loading{' '}
                 <img src={loadingDots} alt='' className='forum-card-btn' />

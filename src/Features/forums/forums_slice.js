@@ -42,7 +42,7 @@ const initialState = {
   },
   activeForumIdForOngoingRequest: '',
   activeForumsForOngoingRequest: [],
-  activeForumForOngoingRequest: {},
+  activeForumsCurrentRequests: {},
 };
 // join forum
 export const triggerJoinForum = createAsyncThunk(
@@ -173,22 +173,11 @@ const forumsSlice = createSlice({
       state.activeForumIdForOngoingRequest = action.payload;
     },
     setActiveForumsForOngoingRequest: (state, action) => {
-      const dataTemp = state.activeForumsForOngoingRequest.filter(
-        (item) => item.forumId !== action.payload.forumId
-      );
-      dataTemp.push(action.payload);
-      state.activeForumIdForOngoingRequest = dataTemp;
+      state.activeForumsForOngoingRequest = action.payload;
     },
     resetActiveForumIdForOngoingRequest: (state) => {
       state.activeForumIdForOngoingRequest =
         initialState.activeForumIdForOngoingRequest;
-    },
-    setActiveForumForOngoingRequest: (state, action) => {
-      state.activeForumForOngoingRequest = action.payload;
-    },
-    resetActiveForumForOngoingRequest: (state) => {
-      state.activeForumForOngoingRequest =
-        initialState.activeForumForOngoingRequest;
     },
     resetCanceljoinForumRequest: (state) => {
       state.cancelJoinForumRequest = initialState.cancelJoinForumRequest;
@@ -196,17 +185,59 @@ const forumsSlice = createSlice({
   },
   extraReducers: (builder) => {
     // Join forum
-    builder.addCase(triggerJoinForum.pending, (state) => {
+    builder.addCase(triggerJoinForum.pending, (state, action) => {
+      console.log('action.payload######################', action);
       state.joinForum.status = states.LOADING;
       state.joinForum.data = {};
+      state.activeForumsCurrentRequests[`${action.meta.arg.forumId}`] = {
+        status: action.meta.requestStatus,
+        type: 'join-forum',
+      };
     });
     builder.addCase(triggerJoinForum.fulfilled, (state, action) => {
       state.joinForum.status = states.SUCCESSFUL;
       state.joinForum.data = action.payload;
+      state.activeForumsCurrentRequests[`${action.meta.arg.forumId}`] = {
+        status: action.meta.requestStatus,
+        type: 'join-forum',
+      };
     });
     builder.addCase(triggerJoinForum.rejected, (state, action) => {
       state.joinForum.status = states.ERROR;
       state.joinForum.data = action.payload;
+      state.activeForumsCurrentRequests[`${action.meta.arg.forumId}`] = {
+        status: action.meta.requestStatus,
+        type: 'join-forum',
+      };
+    });
+
+    // cancel join forum request
+    builder.addCase(triggerCancelJoinForumRequest.pending, (state, action) => {
+      state.cancelJoinForumRequest.status = states.LOADING;
+      state.cancelJoinForumRequest.data = {};
+      state.activeForumsCurrentRequests[`${action.meta.arg.forumId}`] = {
+        status: action.meta.requestStatus,
+        type: 'cancel-request',
+      };
+    });
+    builder.addCase(
+      triggerCancelJoinForumRequest.fulfilled,
+      (state, action) => {
+        state.cancelJoinForumRequest.status = states.SUCCESSFUL;
+        state.cancelJoinForumRequest.data = action.payload;
+        state.activeForumsCurrentRequests[`${action.meta.arg.forumId}`] = {
+          status: action.meta.requestStatus,
+          type: 'cancel-request',
+        };
+      }
+    );
+    builder.addCase(triggerCancelJoinForumRequest.rejected, (state, action) => {
+      state.cancelJoinForumRequest.status = states.ERROR;
+      state.cancelJoinForumRequest.data = action.payload;
+      state.activeForumsCurrentRequests[`${action.meta.arg.forumId}`] = {
+        status: action.meta.requestStatus,
+        type: 'cancel-request',
+      };
     });
 
     // leave forum
@@ -221,23 +252,6 @@ const forumsSlice = createSlice({
     builder.addCase(triggerLeaveForum.rejected, (state, action) => {
       state.leaveForum.status = states.ERROR;
       state.leaveForum.data = action.payload;
-    });
-
-    // cancel join forum request
-    builder.addCase(triggerCancelJoinForumRequest.pending, (state) => {
-      state.cancelJoinForumRequest.status = states.LOADING;
-      state.cancelJoinForumRequest.data = {};
-    });
-    builder.addCase(
-      triggerCancelJoinForumRequest.fulfilled,
-      (state, action) => {
-        state.cancelJoinForumRequest.status = states.SUCCESSFUL;
-        state.cancelJoinForumRequest.data = action.payload;
-      }
-    );
-    builder.addCase(triggerCancelJoinForumRequest.rejected, (state, action) => {
-      state.cancelJoinForumRequest.status = states.ERROR;
-      state.cancelJoinForumRequest.data = action.payload;
     });
 
     // create forum
@@ -348,6 +362,4 @@ export const {
   setActiveForumsForOngoingRequest,
   resetActiveForumIdForOngoingRequest,
   resetCanceljoinForumRequest,
-  setActiveForumForOngoingRequest,
-  resetActiveForumForOngoingRequest,
 } = forumsSlice.actions;
