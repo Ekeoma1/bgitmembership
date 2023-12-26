@@ -57,14 +57,8 @@ const WhatsNew = () => {
                         .slice(0, notificationsAmount)
                         .map((notification, index) => {
                           const inputString = notification.notificationContent;
-
-                          // Create a temporary div element
                           const tempDiv = document.createElement('div');
-
-                          // Set the HTML content of the div
                           tempDiv.innerHTML = inputString;
-
-                          // Access the content inside the <b> element
                           const content =
                             tempDiv.querySelector('b').textContent;
                           const remaining = inputString.replace(
