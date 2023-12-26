@@ -37,7 +37,7 @@ const CommunityForumsComponent = () => {
   const { joinForum, cancelJoinForumRequest } = useSelector(
     (state) => state.forums
   );
-  
+
   useEffect(() => {
     const data = _.cloneDeep(getAllForumsLocal);
     // join forum
@@ -83,7 +83,6 @@ const CommunityForumsComponent = () => {
       setActiveForum({});
       dispatch(resetJoinForum());
     }
-
     // cancel Join forum request
     if (cancelJoinForumRequest.status === 'loading') {
       data.forEach((item) => {
