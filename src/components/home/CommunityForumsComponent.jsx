@@ -1,20 +1,26 @@
 import React, { useEffect, useState } from 'react';
 import Icon from '../Icon';
+import _ from 'lodash';
 import { Link, useNavigate } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import ForumCardsLoader from '../Atoms/skeleton-loaders/ForumCardsLoader';
 import { useDispatch } from 'react-redux';
 import {
+  resetActiveForumForOngoingRequest,
   resetActiveForumIdForOngoingRequest,
+  resetCanceljoinForumRequest,
   resetJoinForum,
   resetLeaveForum,
   triggerGetAllForums,
   triggerJoinForum,
 } from '../../Features/forums/forums_slice';
 import { ForumCard2 } from '../Molecules/ForumCard';
+import { renderToast } from '../Molecules/CustomToastify';
 
 const CommunityForumsComponent = () => {
-  const { getAllForums } = useSelector((state) => state.forums);
+  const { getAllForums, activeForumForOngoingRequest } = useSelector(
+    (state) => state.forums
+  );
   const [pageNumber] = useState(1);
   const [pageSize] = useState(10);
   const dispatch = useDispatch();
@@ -23,7 +29,8 @@ const CommunityForumsComponent = () => {
     dispatch(triggerGetAllForums(data));
   }, []);
   const [getAllForumsLocal, setGetAllForumsLocal] = useState([]);
-  const [activeForumMain, setActiveForumMain] = useState({});
+  const [activeForums, setActiveForums] = useState([]);
+  const [activeForum, setActiveForum] = useState({});
   useEffect(() => {
     if (
       getAllForums.status === 'successful' &&
@@ -33,7 +40,180 @@ const CommunityForumsComponent = () => {
       setGetAllForumsLocal(getAllForums.data);
     }
   }, [getAllForums]);
-  // console.log('getallforumsLocalhere', getAllForumsLocal);
+  const {
+    joinForum,
+    leaveForum,
+    cancelJoinForumRequest,
+    activeForumsForOngoingRequest,
+  } = useSelector((state) => state.forums);
+  useEffect(() => {
+    const data = _.cloneDeep(getAllForumsLocal);
+    // join forum
+    if (joinForum.status === 'loading') {
+      data.forEach((item) => {
+        if (item.forumId === activeForumForOngoingRequest.forumId) {
+          // console.log('yessjoinforumloading#################');
+          item.requestStatus = 'loading';
+        }
+      });
+      console.log('data joinforumloading ##################', data);
+      // setActiveForum(activeForum);
+      setGetAllForumsLocal(data);
+    } else if (joinForum.status === 'successful') {
+      if (joinForum.data.status === 'error') {
+        renderToast({
+          status: 'error',
+          message: 'You are the admin of the forum.',
+        });
+      } else if (joinForum.data.status === 'success') {
+        const activeforumsTemp = activeForums.filter(
+          (item) => item.forumId !== joinForum.data.forumId
+        );
+        // console.log(activeforumsTemp);
+        // setActiveForums(activeforumsTemp);
+        renderToast({
+          status: 'success',
+          message: 'Join request sent successfully',
+        });
+        data.forEach((item) => {
+          if (item.forumId === activeForumForOngoingRequest.forumId) {
+            item.forumMembershipStatus = 'PendingRequest';
+            delete item.requestStatus;
+            // console.log('yessjoinforumsuccessful#################');
+          }
+        });
+        console.log('datajoinforumsuccessful##################', data);
+        setGetAllForumsLocal(data);
+      }
+      dispatch(resetActiveForumForOngoingRequest())
+      setActiveForum({});
+      dispatch(resetJoinForum());
+    } else if (joinForum.status === 'error') {
+      renderToast({
+        status: 'error',
+        message: 'Something went wrong',
+      });
+      // const activeforumsTemp = activeForums.filter(
+      //   (item) => item.forumId !== joinForum.data.forumId
+      // );
+      // setActiveForums(activeforumsTemp);
+      data.forEach((item) => {
+        if (item.forumId === joinForum.data.forumId) {
+          delete item.requestStatus;
+        }
+      });
+      setGetAllForumsLocal(data);
+      setActiveForum({});
+      dispatch(resetActiveForumForOngoingRequest())
+      dispatch(resetJoinForum());
+    }
+
+    // cancel Join forum request
+    if (cancelJoinForumRequest.status === 'loading') {
+      data.forEach((item) => {
+        if (item.forumId === activeForumForOngoingRequest.forumId) {
+          // console.log('yescancelloading######');
+          item.requestStatus = 'loading';
+        }
+      });
+      setActiveForum(activeForum);
+      // console.log('datacanceljoinforumloading##################', data);
+      setGetAllForumsLocal(data);
+    } else if (cancelJoinForumRequest.status === 'successful') {
+      if (
+        // cancelJoinForumRequest.data === 'Join request canceled successfully.'
+        cancelJoinForumRequest.data.status === 'success'
+      ) {
+        renderToast({
+          status: 'success',
+          message: 'Join request canceled successfully.',
+        });
+        const activeforumsTemp = activeForums.filter(
+          (item) => item.forumId !== cancelJoinForumRequest.data.forumId
+        );
+        setActiveForums(activeforumsTemp);
+        data.forEach((item) => {
+          if (item.forumId === activeForumForOngoingRequest.forumId) {
+            item.forumMembershipStatus = 'NotAMember';
+            delete item.requestStatus;
+            // console.log(
+            //   'data canceljoinforum successful ##################',
+            //   data
+            // );
+          }
+        });
+        // console.log('datacancelforumsuccessful##################', data);
+        setGetAllForumsLocal(data);
+        setActiveForum({});
+        dispatch(resetActiveForumForOngoingRequest())
+        dispatch(resetCanceljoinForumRequest());
+      }
+    } else if (cancelJoinForumRequest.status === 'error') {
+      renderToast({
+        status: 'error',
+        message: 'Something went wrong',
+      });
+      const activeforumsTemp = activeForums.filter(
+        (item) => item.forumId !== cancelJoinForumRequest.data.forumId
+      );
+      setActiveForums(activeforumsTemp);
+      data.forEach((item) => {
+        if (item.forumId === activeForum.forumId) {
+          delete item.requestStatus;
+        }
+      });
+      setGetAllForumsLocal(data);
+      dispatch(resetActiveForumForOngoingRequest())
+      setActiveForum({});
+      dispatch(resetCanceljoinForumRequest());
+    }
+
+    // leave forum
+    if (leaveForum.status === 'successful') {
+      renderToast({
+        status: 'success',
+        message: leaveForum.data,
+      });
+      data.forEach((item) => {
+        if (item.forumId === activeForumForOngoingRequest.forumId) {
+          item.requestStatus = 'loading';
+        }
+      });
+      setGetAllForumsLocal(data);
+
+    } else if (leaveForum.status === 'successful') {
+      renderToast({
+        status: 'success',
+        message: leaveForum.data,
+      });
+      data.forEach((item) => {
+        if (item.forumId === activeForumForOngoingRequest.forumId) {
+          item.forumMembershipStatus = 'NotAMember';
+        }
+      });
+      setGetAllForumsLocal(data);
+      dispatch(resetLeaveForum());
+      dispatch(resetActiveForumForOngoingRequest())
+    } else if (leaveForum.status === 'error') {
+      renderToast({
+        status: 'error',
+        message: 'Something went wrong',
+      });
+      data.forEach((item) => {
+        if (item.forumId === activeForumForOngoingRequest.forumId) {
+          item.forumMembershipStatus = 'NotAMember';
+        }
+      });
+      setGetAllForumsLocal(data);
+      dispatch(resetActiveForumForOngoingRequest())
+      dispatch(resetLeaveForum());
+    }
+  }, [joinForum.status, cancelJoinForumRequest.status, leaveForum.status]);
+  // console.log('active', activeForum);
+  console.log(
+    'activeForumForOngoingRequest#############',
+    activeForumForOngoingRequest
+  );
   return (
     <div className='community-forum-wrapper'>
       <div className='community-forum-card-wrapper shadow-sm'>
@@ -58,8 +238,10 @@ const CommunityForumsComponent = () => {
                       forum={forum}
                       getAllForumsLocal={getAllForumsLocal}
                       setGetAllForumsLocal={setGetAllForumsLocal}
-                      activeForumMain={activeForumMain}
-                      setActiveForumMain={setActiveForumMain}
+                      activeForums={activeForums}
+                      setActiveForums={setActiveForums}
+                      activeForum={activeForum}
+                      setActiveForum={setActiveForum}
                     />
                   );
                 })}

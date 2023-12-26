@@ -53,6 +53,7 @@ const Group = () => {
       dispatch(resetActiveForumIdForOngoingRequest());
     }
   }, [joinForum.status]);
+  
   return (
     <div className='dashboard-card group-wrapper'>
       {getAllForums.status === 'base' || getAllForums.status === 'loading' ? (
@@ -70,7 +71,7 @@ const Group = () => {
             )}
           </div>
           <div className='row mt-2 gap-md-0 gap-3 flex-wrap'>
-            {getAllForums.data.slice(0, 2)?.map((group, index) => (
+            {getAllForums.data?.slice(0, 2)?.map((group, index) => (
               <div key={index} className='col-md'>
                 <div className='d-flex gap-3 flex-wrap align-items-start'>
                   <div

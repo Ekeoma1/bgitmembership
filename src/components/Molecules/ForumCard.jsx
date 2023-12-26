@@ -1,8 +1,5 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import _ from 'lodash';
-import '../../assets/scss/molecules.scss';
-import { LuPlus } from 'react-icons/lu';
-import { GrCheckmark } from 'react-icons/gr';
 import useWindowSize from '../../hooks/useWindowSize';
 import { useNavigate } from 'react-router-dom';
 import forumImg1 from '../../../src/assets/images/forumcard1.svg';
@@ -12,7 +9,7 @@ import {
   resetCanceljoinForumRequest,
   resetJoinForum,
   resetLeaveForum,
-  setActiveForumIdForOngoingRequest,
+  setActiveForumForOngoingRequest,
   triggerCancelJoinForumRequest,
   triggerJoinForum,
   triggerLeaveForum,
@@ -24,9 +21,8 @@ const ForumCard = ({
   getAllForumsLocal,
   setGetAllForumsLocal,
   activeForumMain,
-  setActiveForumMain,
+  setActiveForums,
 }) => {
-  const buttonContainer = useRef(null);
   const { isMobile } = useWindowSize();
   const dispatch = useDispatch();
   const { joinForum, leaveForum, cancelJoinForumRequest } = useSelector(
@@ -35,7 +31,7 @@ const ForumCard = ({
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
   const handleClick = (e) => {
-    setActiveForumMain(forum);
+    setActiveForums(forum);
     const values = { forumId: forum.forumId };
     if (e.target.closest('.pending')) {
       dispatch(triggerCancelJoinForumRequest(values));
@@ -142,7 +138,7 @@ const ForumCard = ({
     ) {
       setLoading(true);
     } else {
-      setLoading(false);
+      // setLoading(false);
     }
   }, [joinForum.status, cancelJoinForumRequest.status, leaveForum.status]);
 
@@ -229,8 +225,10 @@ export const ForumCard2 = ({
   forum,
   getAllForumsLocal,
   setGetAllForumsLocal,
-  activeForumMain,
-  setActiveForumMain,
+  activeForums,
+  setActiveForums,
+  activeForum,
+  setActiveForum,
 }) => {
   const { joinForum, leaveForum, cancelJoinForumRequest } = useSelector(
     (state) => state.forums
@@ -240,119 +238,39 @@ export const ForumCard2 = ({
   const dispatch = useDispatch();
   const [loading, setLoading] = useState(false);
 
-  const handleClick = (e) => {
-    setActiveForumMain(forum);
-    const values = { forumId: forum.forumId };
+  const handleClick = (e, forumParam) => {
+    if (
+      joinForum.status === 'base' &&
+      cancelJoinForumRequest.status === 'base' &&
+      leaveForum.status === 'base'
+    ) {
+      console.log('click##########################################');
+      const values = { forumId: forum.forumId };
+      const dataTemp = activeForums.filter(
+        (item) => item.forumId !== forumParam.forumId
+      );
+      dataTemp.push(forumParam);
+      // console.log('forumparam', forumParam);
+      // console.log('datatemp', dataTemp);
+      // setActiveForums(dataTemp);
 
-    if (e.target.closest('.pending')) {
-      dispatch(triggerCancelJoinForumRequest(values));
-    } else if (e.target.closest('.member')) {
-      dispatch(triggerLeaveForum(values));
-    } else if (e.target.closest('.not-a-member')) {
-      dispatch(triggerJoinForum(values));
-    } else {
-      navigate(`/forums/${forum.forumId}`);
+      setActiveForum(forum);
+      dispatch(setActiveForumForOngoingRequest(forumParam));
+
+      if (e.target.closest('.pending')) {
+        dispatch(triggerCancelJoinForumRequest(values));
+      } else if (e.target.closest('.member')) {
+        dispatch(triggerLeaveForum(values));
+      } else if (e.target.closest('.not-a-member')) {
+        dispatch(triggerJoinForum(values));
+      } else {
+        navigate(`/forums/${forum.forumId}`);
+      }
     }
   };
 
-  useEffect(() => {
-    if (
-      forum?.forumId &&
-      activeForumMain?.forumId &&
-      forum?.forumId === activeForumMain?.forumId
-    ) {
-      const data = _.cloneDeep(getAllForumsLocal);
-      // join forum
-      if (joinForum.status === 'successful') {
-        if (joinForum.data === 'You are the admin of the forum.') {
-          renderToast({
-            status: 'error',
-            message: joinForum.data,
-          });
-        } else {
-          renderToast({
-            status: 'success',
-            message: joinForum.data,
-          });
-          data.forEach((item) => {
-            if (item.forumId === activeForumMain.forumId) {
-              item.forumMembershipStatus = 'PendingRequest';
-            }
-          });
-          setGetAllForumsLocal(data);
-        }
-        dispatch(resetJoinForum());
-      } else if (joinForum.status === 'error') {
-        renderToast({
-          status: 'error',
-          message: 'Something went wrong',
-        });
-        dispatch(resetJoinForum());
-      }
-
-      // cancel Join forum request
-      if (cancelJoinForumRequest.status === 'successful') {
-        if (
-          cancelJoinForumRequest.data === 'Join request canceled successfully.'
-        ) {
-          renderToast({
-            status: 'success',
-            message: cancelJoinForumRequest.data,
-          });
-          data.forEach((item) => {
-            if (item.forumId === activeForumMain.forumId) {
-              item.forumMembershipStatus = 'NotAMember';
-            }
-          });
-          setGetAllForumsLocal(data);
-          dispatch(resetCanceljoinForumRequest());
-        }
-      } else if (cancelJoinForumRequest.status === 'error') {
-        renderToast({
-          status: 'error',
-          message: 'Something went wrong',
-        });
-        dispatch(resetCanceljoinForumRequest());
-      }
-
-      // leave forum
-      if (leaveForum.status === 'successful') {
-        renderToast({
-          status: 'success',
-          message: leaveForum.data,
-        });
-        data.forEach((item) => {
-          if (item.forumId === activeForumMain.forumId) {
-            item.forumMembershipStatus = 'NotAMember';
-          }
-        });
-        setGetAllForumsLocal(data);
-        dispatch(resetLeaveForum());
-      } else if (leaveForum.status === 'error') {
-        renderToast({
-          status: 'error',
-          message: 'Something went wrong',
-        });
-        dispatch(resetLeaveForum());
-      }
-    }
-  }, [joinForum.status, cancelJoinForumRequest.status, leaveForum.status]);
-
-  useEffect(() => {
-    if (
-      (joinForum.status === 'loading' ||
-        leaveForum.status === 'loading' ||
-        cancelJoinForumRequest.status === 'loading') &&
-      forum.forumId === activeForumMain.forumId
-    ) {
-      setLoading(true);
-    } else {
-      setLoading(false);
-    }
-  }, [joinForum.status, cancelJoinForumRequest.status, leaveForum.status]);
-
   return (
-    <div className='forum-card-2' onClick={(e) => handleClick(e)}>
+    <div className='forum-card-2' onClick={(e) => handleClick(e, forum)}>
       <h4 className='mt-3'>{forum.forumName}</h4>
       <div className='community-forum-content'>{forum.details}</div>
       <div className='text-center'>
@@ -360,10 +278,10 @@ export const ForumCard2 = ({
           <>
             <button
               className={`smaller-text community-forum-btn forum-card-btn joined pending ${
-                loading && 'loading'
+                forum.requestStatus === 'loading' && 'loading'
               }`}
             >
-              {loading ? (
+              {forum.requestStatus === 'loading' ? (
                 <>
                   Loading <img src={loadingDots} alt='' className='' />
                 </>
@@ -375,10 +293,10 @@ export const ForumCard2 = ({
         ) : forum.forumMembershipStatus === 'Member' ? (
           <button
             className={`smaller-text community-forum-btn forum-card-btn joined member ${
-              loading && 'loading'
+              forum.requestStatus === 'loading' && 'loading'
             }`}
           >
-            {loading ? (
+            {forum.requestStatus === 'loading' ? (
               <>
                 Loading <img src={loadingDots} alt='' className='' />
               </>
@@ -389,10 +307,10 @@ export const ForumCard2 = ({
         ) : forum.forumMembershipStatus === 'NotAMember' ? (
           <button
             className={`smaller-text community-forum-btn forum-card-btn join not-a-member ${
-              loading && 'loading'
+              forum.requestStatus === 'loading' && 'loading'
             }`}
           >
-            {loading ? (
+            {forum.requestStatus === 'loading' ? (
               <>
                 Loading{' '}
                 <img src={loadingDots} alt='' className='forum-card-btn' />

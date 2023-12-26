@@ -41,6 +41,8 @@ const initialState = {
     data: [],
   },
   activeForumIdForOngoingRequest: '',
+  activeForumsForOngoingRequest: [],
+  activeForumForOngoingRequest: {},
 };
 // join forum
 export const triggerJoinForum = createAsyncThunk(
@@ -170,9 +172,23 @@ const forumsSlice = createSlice({
     setActiveForumIdForOngoingRequest: (state, action) => {
       state.activeForumIdForOngoingRequest = action.payload;
     },
+    setActiveForumsForOngoingRequest: (state, action) => {
+      const dataTemp = state.activeForumsForOngoingRequest.filter(
+        (item) => item.forumId !== action.payload.forumId
+      );
+      dataTemp.push(action.payload);
+      state.activeForumIdForOngoingRequest = dataTemp;
+    },
     resetActiveForumIdForOngoingRequest: (state) => {
       state.activeForumIdForOngoingRequest =
         initialState.activeForumIdForOngoingRequest;
+    },
+    setActiveForumForOngoingRequest: (state, action) => {
+      state.activeForumForOngoingRequest = action.payload;
+    },
+    resetActiveForumForOngoingRequest: (state) => {
+      state.activeForumForOngoingRequest =
+        initialState.activeForumForOngoingRequest;
     },
     resetCanceljoinForumRequest: (state) => {
       state.cancelJoinForumRequest = initialState.cancelJoinForumRequest;
@@ -329,6 +345,9 @@ export const {
   resetJoinForum,
   resetLeaveForum,
   setActiveForumIdForOngoingRequest,
+  setActiveForumsForOngoingRequest,
   resetActiveForumIdForOngoingRequest,
   resetCanceljoinForumRequest,
+  setActiveForumForOngoingRequest,
+  resetActiveForumForOngoingRequest,
 } = forumsSlice.actions;

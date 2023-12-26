@@ -21,6 +21,7 @@ const Requests = ({ basedOn }) => {
     getPendingRequestConnectionsLocal,
     setGetPendingRequestConnectionsLocal,
   ] = useState([]);
+  const [activeRequests, setActiveRequests] = useState([]);
   useEffect(() => {
     if (getPendingRequestConnections.status === 'successful') {
       setGetPendingRequestConnectionsLocal(
@@ -84,13 +85,15 @@ const Requests = ({ basedOn }) => {
                         (request, index) => (
                           <RequestCard
                             key={request.connectionId}
-                            item={request}
+                            request={request}
                             getPendingRequestConnectionsLocal={
                               getPendingRequestConnectionsLocal
                             }
                             setGetPendingRequestConnectionsLocal={
                               setGetPendingRequestConnectionsLocal
                             }
+                            activeRequests={activeRequests}
+                            setActiveRequests={setActiveRequests}
                           />
                         )
                       )}

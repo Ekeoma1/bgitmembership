@@ -159,6 +159,12 @@ const connectionSlice = createSlice({
     resetRemoveConnection: (state) => {
       state.removeConnection = initialState.removeConnection;
     },
+    resetAcceptConnectionRequest: (state) => {
+      state.acceptConnectionRequest = initialState.acceptConnectionRequest;
+    },
+    resetRejectConnectionRequest: (state) => {
+      state.rejectConnectionRequest = initialState.rejectConnectionRequest;
+    },
   },
   extraReducers: (builder) => {
     // Get accepted connections
@@ -330,4 +336,6 @@ export const {
   resetSendConnectionRequest,
   resetCancelConnectionRequest,
   resetRemoveConnection,
+  resetAcceptConnectionRequest,
+  resetRejectConnectionRequest,
 } = connectionSlice.actions;
