@@ -65,31 +65,77 @@ const WhatsNew = () => {
                             `<b>${content}</b>`,
                             ''
                           );
-                          return (
-                            <div className='liked-your-comment' key={index}>
-                              <div className='main-wrapper'>
-                                <img
-                                  src={notification.notificationUserImageUrl}
-                                  alt=''
-                                  className=''
-                                />
-                                <div className='content'>
-                                  <div className=''>
-                                    <h3>{`${notification.notificationUserFirstName} ${notification.notificationUserSecondName}`}</h3>
-                                    <h5>
-                                      {content}
-                                      <p>
-                                        {remaining}
-                                      </p>
-                                    </h5>
+                          if (
+                            notification.notificationType === 'COMMENT' ||
+                            notification.notificationType === 'POST'
+                          ) {
+                            return (
+                              <div
+                                className='commented liked-your-comment'
+                                key={index}
+                              >
+                                <div className='main-wrapper'>
+                                  <img
+                                    src={notification.notificationUserImageUrl}
+                                    alt=''
+                                    className=''
+                                  />
+                                  <div className='content'>
+                                    <div className=''>
+                                      <h3>{`${notification.notificationUserFirstName} ${notification.notificationUserSecondName}`}</h3>
+                                      <h5>
+                                        {content}
+                                        <p>{remaining}</p>
+                                      </h5>
+                                    </div>
+                                    {notification.notificationType ===
+                                    'COMMENT' ? (
+                                      <span className='comment-icon'>
+                                        <BiMessageRoundedDots />
+                                      </span>
+                                    ) : notification.notificationType ===
+                                      'POST' ? (
+                                      <span className='like'>
+                                        <RiHeart3Fill />
+                                      </span>
+                                    ) : (
+                                      <></>
+                                    )}
                                   </div>
-                                  <span className='like'>
-                                    <RiHeart3Fill />
-                                  </span>
                                 </div>
                               </div>
-                            </div>
-                          );
+                            );
+                          } else if (
+                            notification.notificationType === 'SHARE'
+                          ) {
+                            return (
+                              <div className='shared-your-post'>
+                                <div className='main-wrapper'>
+                                  <img src={request1} alt='' className='' />
+                                  <div className='content'>
+                                    <div className='section-top'>
+                                      <div className=''>
+                                        <h3>Destiny L</h3>
+                                        <h5>
+                                          Shared your post<span>:</span>{' '}
+                                        </h5>
+                                      </div>
+                                      <span className='share'>
+                                        <IoMdShareAlt />
+                                      </span>
+                                    </div>
+                                    <div className='postcard'>
+                                      {postList.map((list, key) => {
+                                        return (
+                                          <PostCard key={key} list={list} />
+                                        );
+                                      })}
+                                    </div>
+                                  </div>
+                                </div>
+                              </div>
+                            );
+                          }
                         })}
                     </>
                   )}
@@ -100,30 +146,6 @@ const WhatsNew = () => {
                 <></>
               )}
 
-              <div className='shared-your-post'>
-                <div className='main-wrapper'>
-                  <img src={request1} alt='' className='' />
-                  <div className='content'>
-                    <div className='section-top'>
-                      <div className=''>
-                        <h3>Destiny L</h3>
-                        <h5>
-                          Shared your post<span>:</span>{' '}
-                        </h5>
-                      </div>
-                      <span className='share'>
-                        <IoMdShareAlt />
-                      </span>
-                    </div>
-                    <div className='postcard'>
-                      {postList.map((list, key) => {
-                        return <PostCard key={key} list={list} />;
-                      })}
-                    </div>
-                  </div>
-                </div>
-              </div>
-            
               <div className='load-more'>
                 <MainButton
                   text={'Load more'}

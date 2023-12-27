@@ -1,64 +1,64 @@
 import React, { useEffect, useState } from 'react';
 import '../../../src/assets/scss/communityForums.scss';
-import _ from 'lodash';
-import { useNavigate } from 'react-router-dom';
 import ForumCard from '../Molecules/ForumCard';
+import _ from 'lodash';
 import Carousel from 'react-multi-carousel';
 import 'react-multi-carousel/lib/styles.css';
 import { useDispatch, useSelector } from 'react-redux';
+import { ForumCardsLoader2 } from '../Atoms/skeleton-loaders/ForumCardsLoader';
 import {
   resetCanceljoinForumRequest,
   resetJoinForum,
-  triggerGetAllForums,
+  triggerGetAllForumsByLocation,
 } from '../../Features/forums/forums_slice';
-import { ForumCardsLoader2 } from '../Atoms/skeleton-loaders/ForumCardsLoader';
-import { renderToast } from '../Molecules/CustomToastify';
 import EmptyState from '../Molecules/EmptyState';
+import { renderToast } from '../Molecules/CustomToastify';
 
-const SuggestedForums = () => {
-  const navigate = useNavigate();
-  const { getAllForums, joinForum, cancelJoinForumRequest } =
+const RecommendedBasedOnLocation = ({ basedOn }) => {
+  const { getAllForumsByLocation, joinForum, cancelJoinForumRequest } =
     useSelector((state) => state.forums);
-  const [getAllForumsLocal, setGetAllForumsLocal] = useState([]);
-  const [activeForumMain, setActiveForumMain] = useState({});
+  const dispatch = useDispatch();
   const [pageNumber] = useState(1);
   const [pageSize] = useState(10);
-  const dispatch = useDispatch();
-  const [activeForum, setActiveForum] = useState({});
+
+  const [getAllForumsByLocationLocal, setGetAllForumsByLocationLocal] =
+    useState([]);
+  const [activeForumLocation, setActiveForumLocation] = useState({});
 
   useEffect(() => {
     const data = { queryParams: { pageNumber, pageSize } };
-    dispatch(triggerGetAllForums(data));
+    dispatch(triggerGetAllForumsByLocation(data));
   }, []);
-  useEffect(() => {
-    if (
-      getAllForums.status === 'successful' &&
-      Array.isArray(getAllForums.data)
-    ) {
-      setGetAllForumsLocal(getAllForums.data);
-    }
-  }, [getAllForums]);
 
   useEffect(() => {
-    const data = _.cloneDeep(getAllForumsLocal);
+    if (
+      getAllForumsByLocation.status === 'successful' &&
+      Array.isArray(getAllForumsByLocation.data)
+    ) {
+      setGetAllForumsByLocationLocal(getAllForumsByLocation.data);
+    }
+  }, [getAllForumsByLocation]);
+
+  useEffect(() => {
+    const data = _.cloneDeep(getAllForumsByLocationLocal);
     const setBactToDefault = () => {
       data.forEach((item) => {
-        if (item.forumId === activeForum.forumId) {
+        if (item.forumId === activeForumLocation.forumId) {
           delete item.requestStatus;
         }
       });
-      setGetAllForumsLocal(data);
-      setActiveForum({});
+      setGetAllForumsByLocationLocal(data);
+      setActiveForumLocation({});
     };
 
     // join forum
     if (joinForum.status === 'loading') {
       data.forEach((item) => {
-        if (item.forumId === activeForum.forumId) {
+        if (item.forumId === activeForumLocation.forumId) {
           item.requestStatus = 'loading';
         }
       });
-      setGetAllForumsLocal(data);
+      setGetAllForumsByLocationLocal(data);
     } else if (joinForum.status === 'successful') {
       if (joinForum.data.status === 'error') {
         renderToast({
@@ -71,11 +71,11 @@ const SuggestedForums = () => {
           message: 'Join request sent successfully',
         });
         data.forEach((item) => {
-          if (item.forumId === activeForum.forumId) {
+          if (item.forumId === activeForumLocation.forumId) {
             item.forumMembershipStatus = 'PendingRequest';
           }
         });
-        setGetAllForumsLocal(data);
+        setGetAllForumsByLocationLocal(data);
       }
       dispatch(resetJoinForum());
       setBactToDefault();
@@ -91,11 +91,11 @@ const SuggestedForums = () => {
     // cancel Join forum request
     if (cancelJoinForumRequest.status === 'loading') {
       data.forEach((item) => {
-        if (item.forumId === activeForum.forumId) {
+        if (item.forumId === activeForumLocation.forumId) {
           item.requestStatus = 'loading';
         }
       });
-      setGetAllForumsLocal(data);
+      setGetAllForumsByLocationLocal(data);
     } else if (cancelJoinForumRequest.status === 'successful') {
       if (cancelJoinForumRequest.data.status === 'success') {
         renderToast({
@@ -103,11 +103,11 @@ const SuggestedForums = () => {
           message: 'Join request canceled successfully.',
         });
         data.forEach((item) => {
-          if (item.forumId === activeForum.forumId) {
+          if (item.forumId === activeForumLocation.forumId) {
             item.forumMembershipStatus = 'NotAMember';
           }
         });
-        setGetAllForumsLocal(data);
+        setGetAllForumsByLocationLocal(data);
       }
       dispatch(resetCanceljoinForumRequest());
       setBactToDefault();
@@ -132,44 +132,48 @@ const SuggestedForums = () => {
     },
     mobile: {
       breakpoint: { max: 600, min: 0 },
-      items: 1.2,
+      items: 1.4,
     },
   };
 
   return (
-    <div className='suggested-forums-wrapper'>
+    <div className='recommended-section'>
       <div className='container'>
-        <div className='content-wrapper'>
-          <h3 className='section-title text-color22'> Suggested Forums</h3>
-          <div className='view-all'>
-            <button onClick={() => navigate('/forums/all')}>View all</button>
+        <div className='recommended-section-content'>
+          <div className='section-title-wrapper'>
+            <h5 className='text-colo'>Recommended based on your Location</h5>
           </div>
+
           <div className='forums-cards-wrapper'>
-            {getAllForums.status === 'base' ||
-            getAllForums.status === 'loading' ? (
-              <ForumCardsLoader2 />
-            ) : getAllForums.status === 'successful' ? (
+            {getAllForumsByLocation.status === 'base' ||
+            getAllForumsByLocation.status === 'loading' ? (
               <>
-                {getAllForumsLocal?.length === 0 ? (
+                <ForumCardsLoader2 />
+              </>
+            ) : getAllForumsByLocation.status === 'successful' ? (
+              <>
+                {getAllForumsByLocationLocal.length === 0 ? (
                   <>
-                    <EmptyState title={'No forums found'} height={'50rem'} />
+                    <EmptyState
+                      title={'No forums found based on your Location'}
+                      height={'20rem'}
+                    />
                   </>
                 ) : (
                   <>
                     <Carousel responsive={responsive}>
-                      {getAllForumsLocal &&
-                        getAllForumsLocal?.map((forum, index) => (
-                          <ForumCard
-                            key={index}
-                            forum={forum}
-                            setActiveForum={setActiveForum}
-                          />
-                        ))}
+                      {getAllForumsByLocationLocal.map((forum, index) => (
+                        <ForumCard
+                          key={index}
+                          forum={forum}
+                          setActiveForum={setActiveForumLocation}
+                        />
+                      ))}
                     </Carousel>
                   </>
                 )}
               </>
-            ) : getAllForums.status === 'error' ? (
+            ) : getAllForumsByLocation.status === 'error' ? (
               <></>
             ) : (
               <></>
@@ -181,4 +185,4 @@ const SuggestedForums = () => {
   );
 };
 
-export default SuggestedForums;
+export default RecommendedBasedOnLocation;

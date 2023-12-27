@@ -288,6 +288,12 @@
       cursor: default;
       opacity: 0.6;
     }
+    &.not-allowed {
+      cursor: default;
+      &:hover {
+        opacity: 1;
+      }
+    }
     .icon {
       font-size: 1.5rem;
     }
@@ -342,6 +348,9 @@
       }
       &.not-allowed {
         cursor: default;
+        &:hover {
+          opacity: 1;
+        }
       }
       img {
         width: 2rem;
@@ -1191,7 +1200,6 @@
     .requests-count-loader {
       width: 4rem;
       height: 2.3rem;
-
     }
     .loader {
       margin-bottom: 20px;

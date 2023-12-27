@@ -1,7 +1,9 @@
 import { useState, useEffect } from "react";
 import "../../src/assets/scss/communityForumsAllForums.scss";
 import AllForums from "../components/CommunityForumsAllForums/AllForums";
-import Recommended from "../components/CommunityForumsAllForums/Recommended";
+import Recommended from "../components/CommunityForumsAllForums/RecommendedBasedOnIndustry";
+import RecommendedBasedOnIndustry from '../components/CommunityForumsAllForums/RecommendedBasedOnIndustry';
+import RecommendedBasedOnLocation from '../components/CommunityForumsAllForums/RecommendedBasedOnLocation';
 
 const CommunityForumsAllForums = () => {
   const [searchMain, setSearchMain] = useState(false);
@@ -13,8 +15,8 @@ const CommunityForumsAllForums = () => {
       <AllForums setSearchMain={setSearchMain} />
       {!searchMain && (
         <>
-          <Recommended basedOn="industry" />
-          <Recommended basedOn="location" />
+          <RecommendedBasedOnIndustry  />
+          <RecommendedBasedOnLocation />
         </>
       )}
     </div>

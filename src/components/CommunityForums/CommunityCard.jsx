@@ -24,20 +24,20 @@ const CommunityCard = ({ community }) => {
         <div className='info'>
           <h3 className='text-color-secondary-bold'>{community.community_name}</h3>
           <div className='members-wrapper'>
-            <div class='members-img'>
-              <div class='image-con'>
+            <div className='members-img'>
+              <div className='image-con'>
                 <img src={member1} alt='community-img-sm' />
               </div>
-              <div class='image-con'>
+              <div className='image-con'>
                 <img src={member2} alt='community-img-sm' />
               </div>
-              <div class='image-con'>
+              <div className='image-con'>
                 <img src={member3} alt='community-img-sm' />
               </div>
-              <div class='image-con'>
+              <div className='image-con'>
                 <img src={member4} alt='community-img-sm' />
               </div>
-              <div class='image-con'>
+              <div className='image-con'>
                 <img src={member5} alt='community-img-sm' />
               </div>
             </div>

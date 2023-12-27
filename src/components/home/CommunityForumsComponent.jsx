@@ -23,7 +23,6 @@ const CommunityForumsComponent = () => {
     dispatch(triggerGetAllForums(data));
   }, []);
   const [getAllForumsLocal, setGetAllForumsLocal] = useState([]);
-  const [activeForums, setActiveForums] = useState([]);
   const [activeForum, setActiveForum] = useState({});
 
   useEffect(() => {
@@ -40,8 +39,17 @@ const CommunityForumsComponent = () => {
 
   useEffect(() => {
     const data = _.cloneDeep(getAllForumsLocal);
-    // join forum
+    const setBactToDefault = () => {
+      data.forEach((item) => {
+        if (item.forumId === activeForum.forumId) {
+          delete item.requestStatus;
+        }
+      });
+      setGetAllForumsLocal(data);
+      setActiveForum({});
+    };
 
+    // join forum
     if (joinForum.status === 'loading') {
       data.forEach((item) => {
         if (item.forumId === activeForum.forumId) {
@@ -50,7 +58,6 @@ const CommunityForumsComponent = () => {
       });
       setGetAllForumsLocal(data);
     } else if (joinForum.status === 'successful') {
-      console.log('jooin####################################');
       if (joinForum.data.status === 'error') {
         renderToast({
           status: 'error',
@@ -64,27 +71,21 @@ const CommunityForumsComponent = () => {
         data.forEach((item) => {
           if (item.forumId === activeForum.forumId) {
             item.forumMembershipStatus = 'PendingRequest';
-            delete item.requestStatus;
           }
         });
         setGetAllForumsLocal(data);
       }
-      setActiveForum({});
       dispatch(resetJoinForum());
+      setBactToDefault();
     } else if (joinForum.status === 'error') {
       renderToast({
         status: 'error',
         message: 'Something went wrong',
       });
-      data.forEach((item) => {
-        if (item.forumId === joinForum.data.forumId) {
-          delete item.requestStatus;
-        }
-      });
-      setGetAllForumsLocal(data);
-      setActiveForum({});
       dispatch(resetJoinForum());
+      setBactToDefault();
     }
+
     // cancel Join forum request
     if (cancelJoinForumRequest.status === 'loading') {
       data.forEach((item) => {
@@ -102,26 +103,19 @@ const CommunityForumsComponent = () => {
         data.forEach((item) => {
           if (item.forumId === activeForum.forumId) {
             item.forumMembershipStatus = 'NotAMember';
-            delete item.requestStatus;
           }
         });
         setGetAllForumsLocal(data);
-        setActiveForum({});
-        dispatch(resetCanceljoinForumRequest());
       }
+      dispatch(resetCanceljoinForumRequest());
+      setBactToDefault();
     } else if (cancelJoinForumRequest.status === 'error') {
       renderToast({
         status: 'error',
         message: 'Something went wrong',
       });
-      data.forEach((item) => {
-        if (item.forumId === cancelJoinForumRequest.status.forumId) {
-          delete item.requestStatus;
-        }
-      });
-      setGetAllForumsLocal(data);
-      setActiveForum({});
       dispatch(resetCanceljoinForumRequest());
+      setBactToDefault();
     }
   }, [joinForum.status, cancelJoinForumRequest.status]);
 
@@ -147,11 +141,6 @@ const CommunityForumsComponent = () => {
                     <ForumCard2
                       key={forum.forumId}
                       forum={forum}
-                      getAllForumsLocal={getAllForumsLocal}
-                      setGetAllForumsLocal={setGetAllForumsLocal}
-                      activeForums={activeForums}
-                      setActiveForums={setActiveForums}
-                      activeForum={activeForum}
                       setActiveForum={setActiveForum}
                     />
                   );
