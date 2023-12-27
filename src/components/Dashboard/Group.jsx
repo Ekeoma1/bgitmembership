@@ -1,13 +1,17 @@
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
+import _ from 'lodash';
+
 // import forumDefault from '../../../src/assets/images/forumDefault.png';
 import forumDefault from '../../../src/assets/images/forumDefault.svg';
 import SocialLinksLoader from '../Atoms/skeleton-loaders/dashboard-page/SocialLinksLoader';
 import GroupLoader from '../Atoms/skeleton-loaders/dashboard-page/GroupLoader';
 import {
   resetActiveForumIdForOngoingRequest,
+  resetCanceljoinForumRequest,
   resetJoinForum,
   resetLeaveForum,
+  triggerCancelJoinForumRequest,
   triggerGetAllForums,
   triggerJoinForum,
 } from '../../Features/forums/forums_slice';
@@ -17,43 +21,118 @@ import { useNavigate } from 'react-router-dom';
 const Group = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const { getAllForums, joinForum, leaveForum } = useSelector(
+  const { getAllForums, joinForum, cancelJoinForumRequest } = useSelector(
     (state) => state.forums
   );
+
   const [pageNumber] = useState(1);
   const [pageSize] = useState(10);
-  const handleJoinForum = (forum) => {
-    if (forum?.hasPendingJoinRequest) {
-      // console.log('cancel');
-    } else if (!forum?.isCurrentUserMember) {
-      const values = { forumId: forum.forumId };
-      dispatch(triggerJoinForum(values));
+  const [getAllForumsLocal, setGetAllForumsLocal] = useState([]);
+  const [activeForum, setActiveForum] = useState({});
+  const handleJoinForum = (e, forum) => {
+    if (
+      joinForum.status === 'base' &&
+      cancelJoinForumRequest.status === 'base'
+    ) {
+      const values = { forumId: forum?.forumId };
+      setActiveForum(forum);
+      if (e.target.closest('.pending')) {
+        dispatch(triggerCancelJoinForumRequest(values));
+      } else if (e.target.closest('.not-a-member')) {
+        dispatch(triggerJoinForum(values));
+      }
     }
   };
-
   useEffect(() => {
-    if (joinForum.status === 'successful') {
-      if (joinForum.data === 'You are the admin of the forum.') {
+    if (
+      getAllForums.status === 'successful' &&
+      Array.isArray(getAllForums.data)
+    ) {
+      setGetAllForumsLocal(getAllForums.data);
+    }
+  }, [getAllForums]);
+  useEffect(() => {
+    const data = _.cloneDeep(getAllForumsLocal);
+    const setBactToDefault = () => {
+      data.forEach((item) => {
+        if (item.forumId === activeForum.forumId) {
+          delete item.requestStatus;
+        }
+      });
+      setGetAllForumsLocal(data);
+      setActiveForum({});
+    };
+
+    // join forum
+    if (joinForum.status === 'loading') {
+      data.forEach((item) => {
+        if (item.forumId === activeForum.forumId) {
+          item.requestStatus = 'loading';
+        }
+      });
+      setGetAllForumsLocal(data);
+    } else if (joinForum.status === 'successful') {
+      if (joinForum.data.status === 'error') {
         renderToast({
           status: 'error',
-          message: joinForum.data,
+          message: 'You are the admin of the forum.',
         });
-      } else {
+      } else if (joinForum.data.status === 'success') {
         renderToast({
           status: 'success',
-          message: joinForum.data,
+          message: 'Join request sent successfully',
         });
-        const data2 = { queryParams: { pageNumber, pageSize } };
-        dispatch(triggerGetAllForums(data2));
+        data.forEach((item) => {
+          if (item.forumId === activeForum.forumId) {
+            item.forumMembershipStatus = 'PendingRequest';
+          }
+        });
+        setGetAllForumsLocal(data);
       }
       dispatch(resetJoinForum());
-      dispatch(resetActiveForumIdForOngoingRequest());
+      setBactToDefault();
     } else if (joinForum.status === 'error') {
+      renderToast({
+        status: 'error',
+        message: 'Something went wrong',
+      });
       dispatch(resetJoinForum());
-      dispatch(resetActiveForumIdForOngoingRequest());
+      setBactToDefault();
     }
-  }, [joinForum.status]);
-  
+
+    // cancel Join forum request
+    if (cancelJoinForumRequest.status === 'loading') {
+      data.forEach((item) => {
+        if (item.forumId === activeForum.forumId) {
+          item.requestStatus = 'loading';
+        }
+      });
+      setGetAllForumsLocal(data);
+    } else if (cancelJoinForumRequest.status === 'successful') {
+      if (cancelJoinForumRequest.data.status === 'success') {
+        renderToast({
+          status: 'success',
+          message: 'Join request canceled successfully.',
+        });
+        data.forEach((item) => {
+          if (item.forumId === activeForum.forumId) {
+            item.forumMembershipStatus = 'NotAMember';
+          }
+        });
+        setGetAllForumsLocal(data);
+      }
+      dispatch(resetCanceljoinForumRequest());
+      setBactToDefault();
+    } else if (cancelJoinForumRequest.status === 'error') {
+      renderToast({
+        status: 'error',
+        message: 'Something went wrong',
+      });
+      dispatch(resetCanceljoinForumRequest());
+      setBactToDefault();
+    }
+  }, [joinForum.status, cancelJoinForumRequest.status]);
+  console.log('getallfroumslocal', getAllForumsLocal);
   return (
     <div className='dashboard-card group-wrapper'>
       {getAllForums.status === 'base' || getAllForums.status === 'loading' ? (
@@ -64,14 +143,14 @@ const Group = () => {
         <>
           <div className='d-flex justify-content-between align-items-center'>
             <div className='dashboard-header'>Groups</div>
-            {getAllForums.data?.length > 2 && (
+            {getAllForumsLocal.length > 2 && (
               <div>
                 <button className='dashboard-text'>See more</button>
               </div>
             )}
           </div>
           <div className='row mt-2 gap-md-0 gap-3 flex-wrap'>
-            {getAllForums.data?.slice(0, 2)?.map((group, index) => (
+            {getAllForumsLocal.slice(0, 2)?.map((group, index) => (
               <div key={index} className='col-md'>
                 <div className='d-flex gap-3 flex-wrap align-items-start'>
                   <div
@@ -103,29 +182,33 @@ const Group = () => {
                             !group.isCurrentUserMember && handleJoinForum(group)
                           }
                         >
-                          {group.isCurrentUserMember ? '+ Joined' : 'Join'}
+                          {/* {group.isCurrentUserMember ? '+ Joined' : 'Join'} */}
+                          kffjkfkd
                         </button>
                       </div>
                     </div>
                   </div>
                   <div className='d-xl-block d-none'>
-                    {joinForum.status === 'loading' ? (
+                    {group.requestStatus === 'loading' ? (
                       <button className='join-btn join-btn-2'>
                         Loading...
                       </button>
-                    ) : (
+                    ) : group.forumMembershipStatus === 'NotAMember' ? (
                       <button
-                        className={`join-btn ${
-                          group.isCurrentUserMember && 'join-btn-2'
-                        } `}
-                        onClick={() => handleJoinForum(group)}
+                        className={`join-btn join-btn-2 not-a-member`}
+                        onClick={(e) => handleJoinForum(e, group)}
                       >
-                        {group.hasPendingJoinRequest
-                          ? 'Cancel request'
-                          : group.isCurrentUserMember
-                          ? '+ Joined'
-                          : '+ Join'}
+                        + Join
                       </button>
+                    ) : group.forumMembershipStatus === 'PendingRequest' ? (
+                      <button
+                        className={`join-btn join-btn-2 pending `}
+                        onClick={(e) => handleJoinForum(e, group)}
+                      >
+                        Cancel Request
+                      </button>
+                    ) : (
+                      <></>
                     )}
                   </div>
                 </div>
