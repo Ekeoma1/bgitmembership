@@ -20,7 +20,6 @@ const SuggestedForums = () => {
   const { getAllForums, joinForum, cancelJoinForumRequest } =
     useSelector((state) => state.forums);
   const [getAllForumsLocal, setGetAllForumsLocal] = useState([]);
-  const [activeForumMain, setActiveForumMain] = useState({});
   const [pageNumber] = useState(1);
   const [pageSize] = useState(10);
   const dispatch = useDispatch();

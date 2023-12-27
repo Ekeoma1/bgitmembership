@@ -197,11 +197,12 @@ const AllForums = ({ setSearchMain }) => {
               </OutsideClickHandler>
             )}
           </div>
-          <div className='btn'>
+          {/* <div className='btn'>
             <MainButton onClick={handleSearch} size={'small'} text={'search'} />
-          </div>
+          </div> */}
         </div>
-        {!search && (
+        {/* Old flow */}
+        {/* {!search && (
           <div className={`filter ${showFilterBoxSection && 'filter2'}`}>
             <div className='filter-btn'>
               <FilterBtn
@@ -361,7 +362,7 @@ const AllForums = ({ setSearchMain }) => {
               </>
             )}
           </div>
-        )}
+        )} */}
       </div>
     </div>
   );

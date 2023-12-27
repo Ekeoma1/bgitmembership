@@ -37,38 +37,7 @@ const Forum = () => {
     dispatch(triggerGetForumConnectionStatusByForumId(data));
   }, [params]);
 
-  useEffect(() => {
-    if (joinForum.status === 'successful') {
-      if (joinForum.data === 'You are the admin of the forum.') {
-        renderToast({
-          status: 'error',
-          message: joinForum.data,
-        });
-      } else {
-        renderToast({
-          status: 'success',
-          message: joinForum.data,
-        });
-      }
-      dispatch(resetJoinForum());
-      dispatch(resetActiveForumIdForOngoingRequest());
-    } else if (joinForum.status === 'error') {
-      dispatch(resetJoinForum());
-      dispatch(resetActiveForumIdForOngoingRequest());
-    }
-    // leave forum
-    if (leaveForum.status === 'successful') {
-      renderToast({
-        status: 'success',
-        message: leaveForum.data,
-      });
-      dispatch(resetLeaveForum());
-      dispatch(resetActiveForumIdForOngoingRequest());
-    } else if (leaveForum.status === 'error') {
-      dispatch(resetLeaveForum());
-      dispatch(resetActiveForumIdForOngoingRequest());
-    }
-  }, [joinForum.status, leaveForum.status]);
+
   return (
     <div className='forum-wrapper'>
       <Banner

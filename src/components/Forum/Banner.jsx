@@ -68,7 +68,7 @@ const Banner = ({
   useEffect(() => {
     const data = { queryParams: { forumId: params?.forumId } };
     if (joinForum.status === 'successful') {
-      if (joinForum.data === 'Request sent successfully.') {
+      if (joinForum.data.status === 'success') {
         renderToast({
           status: 'success',
           message: 'Forum connection request sent',
@@ -79,7 +79,7 @@ const Banner = ({
     }
     if (cancelJoinForumRequest.status === 'successful') {
       if (
-        cancelJoinForumRequest.data === 'Join request canceled successfully.'
+        cancelJoinForumRequest.data.status === 'success'
       ) {
         renderToast({
           status: 'success',
@@ -90,7 +90,7 @@ const Banner = ({
       dispatch(resetCanceljoinForumRequest());
     }
     if (leaveForum.status === 'successful') {
-      if (leaveForum.data === 'leave request canceled successfully.') {
+      if (leaveForum.data.status === 'success') {
         renderToast({
           status: 'success',
           message: 'Forum left successfully',
@@ -108,7 +108,6 @@ const Banner = ({
           <SingleLineLoader2 />
         </div>
       ) : getForumById.status === 'successful' ? (
-        <>
           <div
             style={{
               backgroundImage: `url(${
@@ -210,7 +209,6 @@ const Banner = ({
               </div>
             </div>
           </div>
-        </>
       ) : (
         <></>
       )}
