@@ -30,7 +30,6 @@ const ForumContent = ({ forum }) => {
   const [pageSize] = useState(10);
   const [relatedGroups, setRelatedGroups] = useState([]);
   const [activeForum, setActiveForum] = useState({});
-  const [getAllForumsLocal, setGetAllForumsLocal] = useState([]);
   useEffect(() => {
     const data = { queryParams: { pageNumber, pageSize } };
     dispatch(triggerGetAllForums(data));

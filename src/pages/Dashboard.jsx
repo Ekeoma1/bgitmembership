@@ -25,6 +25,7 @@ const Dashboard = () => {
   useEffect(() => {
     window.scrollTo(0, 0);
   }, []);
+  const [from, setFrom] = useState('');
   useEffect(() => {
     const data = { queryParams: { userId: param?.id } };
     dispatch(triggerGetUserProfileById(data));
@@ -36,7 +37,7 @@ const Dashboard = () => {
     if (getUserProfileById.status === 'successful') {
       const data = {
         queryParams: {
-          userId: getUserProfileById.data.userId,
+          userId: getUserProfileById.data?.userId,
           pageNumber,
           pageSize,
         },
@@ -55,7 +56,11 @@ const Dashboard = () => {
         </div>
         <div className='row mt-5'>
           <div className='col-lg-9 col-12'>
-            <ProfileBanner data={getUserProfileById} />
+            <ProfileBanner
+              data={getUserProfileById}
+              from={from}
+              setFrom={setFrom}
+            />
             {/* show mobile */}
             <div className='dashboard-card d-lg-none'>
               <div className='row gap-md-0 gap-3'>
@@ -77,7 +82,7 @@ const Dashboard = () => {
             <SocialLinksCard data={getUserProfileById} />
             {/* show mobile */}
             <div className='dashboard-card d-lg-none'>
-              <Member />
+              <Member from={from} setFrom={setFrom} />
             </div>
             <Group />
             <Resources />
@@ -100,7 +105,7 @@ const Dashboard = () => {
                 <Icon icon='chevronRightBig' />
               </div>
             </Link>
-            <Member />
+            <Member from={from} setFrom={setFrom} />
           </div>
         </div>
       </div>

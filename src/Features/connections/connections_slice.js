@@ -139,6 +139,7 @@ export const triggerRemoveConnection = createAsyncThunk(
   'remove-connection',
   async (params, thunkAPI) => {
     try {
+      console.log(params);
       return await ConnectionService.removeConnection(params);
     } catch (e) {
       return thunkAPI.rejectWithValue(e.message);

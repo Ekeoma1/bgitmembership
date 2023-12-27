@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import AccountActionModal from '../Modals/AccountActionModal';
+import _ from 'lodash';
 import IndividualActionModal from '../Modals/IndividualActionModal';
 import { useNavigate, useParams } from 'react-router-dom';
 import ReportModal from '../Modals/ReportModal';
@@ -28,6 +29,8 @@ import {
   triggerCancelConnectionRequest,
   resetSendConnectionRequest,
   resetCancelConnectionRequest,
+  triggerRemoveConnection,
+  resetRemoveConnection,
 } from '../../Features/connections/connections_slice';
 import { resetReportUser } from '../../Features/reports/reports_slice';
 import { renderToast } from '../Molecules/CustomToastify';
@@ -38,7 +41,7 @@ import {
   resetUnmuteUser,
 } from '../../Features/account-privacies/account_privacies_slice';
 
-const ProfileBanner = ({ data }) => {
+const ProfileBanner = ({ data, from, setFrom }) => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const param = useParams();
@@ -51,9 +54,8 @@ const ProfileBanner = ({ data }) => {
   const { blockUser, unblockUser, muteUser, unmuteUser } = useSelector(
     (state) => state.accountPrivacies
   );
-  const { sendConnectionRequest, cancelConnectionRequest } = useSelector(
-    (state) => state.connections
-  );
+  const { sendConnectionRequest, cancelConnectionRequest, removeConnection } =
+    useSelector((state) => state.connections);
   const { getConnectionStatusByUserId } = useSelector((state) => state.users);
   const { reportUser } = useSelector((state) => state.reports);
   const [actionAcctModal, setActionAcctModal] = useState(false);
@@ -106,6 +108,7 @@ const ProfileBanner = ({ data }) => {
     setShowDropdown(false);
   };
   const handleConnect = () => {
+    setFrom('profile-banner');
     const values = { receiverUserId: getUserProfileById.data?.userId };
     if (getConnectionStatusByUserId.data?.connectionStatus === 'Pending') {
       dispatch(triggerCancelConnectionRequest(values));
@@ -116,27 +119,54 @@ const ProfileBanner = ({ data }) => {
     } else if (
       getConnectionStatusByUserId.data?.connectionStatus === 'Connected'
     ) {
-      // dispatch(triggeRemoveConnection(values));
+      dispatch(triggerRemoveConnection(values));
     }
   };
+  const [dataLocal, setDataLocal] = useState(data);
   useEffect(() => {
-    if (sendConnectionRequest.status === 'successful') {
-      renderToast({
-        status: 'success',
-        message: 'Connection request sent',
-      });
-      const data = { queryParams: { userId: param?.id } };
-      dispatch(triggerGetConnectionStatusByUserId(data));
-      dispatch(resetSendConnectionRequest());
+    if (data.status === 'successful') {
+      setDataLocal(data.data);
     }
-    if (cancelConnectionRequest.status === 'successful') {
-      renderToast({
-        status: 'success',
-        message: 'Connection request cancelled',
-      });
-      const data = { queryParams: { userId: param?.id } };
-      dispatch(triggerGetConnectionStatusByUserId(data));
-      dispatch(resetCancelConnectionRequest());
+  }, [data.status]);
+
+  useEffect(() => {
+    if (sendConnectionRequest.status === 'successful' && from==='profile-banner') {
+      if (sendConnectionRequest.data.status === 'success') {
+        renderToast({
+          status: 'success',
+          message: 'Connection request sent',
+        });
+        const data = { queryParams: { userId: param?.id } };
+        dispatch(triggerGetConnectionStatusByUserId(data));
+        dispatch(resetSendConnectionRequest());
+      }
+    }
+    if (cancelConnectionRequest.status === 'successful' && from==='profile-banner') {
+      if (cancelConnectionRequest.data.status === 'success') {
+        renderToast({
+          status: 'success',
+          message: 'Connection request cancelled',
+        });
+        const data = { queryParams: { userId: param?.id } };
+        dispatch(triggerGetConnectionStatusByUserId(data));
+        dispatch(resetCancelConnectionRequest());
+      }
+    }
+    if (removeConnection.status === 'successful') {
+      if (removeConnection.data.status === 'success') {
+        renderToast({
+          status: 'success',
+          message: 'Connection removed',
+        });
+        const data = { queryParams: { userId: param?.id } };
+        dispatch(triggerGetConnectionStatusByUserId(data));
+        dispatch(resetRemoveConnection());
+        const dataLocalTemp = { ...dataLocal };
+        setDataLocal({
+          ...dataLocalTemp,
+          connectionCount: dataLocalTemp.connectionCount - 1,
+        });
+      }
     }
     // report
     if (reportUser.status === 'successful') {
@@ -218,6 +248,7 @@ const ProfileBanner = ({ data }) => {
   }, [
     sendConnectionRequest,
     cancelConnectionRequest,
+    removeConnection,
     reportUser,
     blockUser,
     unblockUser,
@@ -260,7 +291,9 @@ const ProfileBanner = ({ data }) => {
     console.log('trigger');
     dispatch(triggerGetConnectionStatusByUserId(data));
   }, [param?.id]);
-  console.log('getConnectionStatusByUserId', getConnectionStatusByUserId);
+
+  console.log('dataLocal', dataLocal);
+  console.log('data', data);
   return (
     <div className='profile-banner-wrapper'>
       {/* cover photo */}
@@ -488,10 +521,10 @@ const ProfileBanner = ({ data }) => {
                     <div
                       onClick={() => navigate(`/connections/${param.id}`)}
                       className={`other-details connect ${
-                        data?.data?.connectionCount >= 0 && 'view'
+                        dataLocal?.connectionCount >= 0 && 'view'
                       }`}
                     >
-                      {data?.data?.connectionCount} connections
+                      {dataLocal?.connectionCount} connections
                     </div>
                   </div>
                   <div className='col-md-6'>
@@ -575,13 +608,11 @@ const ProfileBanner = ({ data }) => {
           data?.status === 'successful' && (
             <>
               <div className='d-flex c-gap-10 flex-wrap mt-3'>
-                {getConnectionStatusByUserId.status === 'base' ||
-                getConnectionStatusByUserId.status === 'loading' ? (
+                {(getConnectionStatusByUserId.status === 'base' ||
+                  getConnectionStatusByUserId.status === 'loading') &&
+                from === 'profile-banner' ? (
                   <>
-                    <button
-                      onClick={handleConnect}
-                      className={`reach-btn loading`}
-                    >
+                    <button className={`reach-btn loading`}>
                       <img src={spinner} alt='spinner' />
                     </button>
                   </>
@@ -591,15 +622,19 @@ const ProfileBanner = ({ data }) => {
                       onClick={handleConnect}
                       className={`reach-btn ${
                         (sendConnectionRequest.status === 'loading' ||
-                          cancelConnectionRequest.status === 'loading') &&
+                          cancelConnectionRequest.status === 'loading' ||
+                          removeConnection.status === 'loading') &&
+                        from === 'profile-banner' &&
                         'loading'
                       } ${
                         getConnectionStatusByUserId.data?.connectionStatus ===
                           'Pending' && 'pending'
                       }`}
                     >
-                      {sendConnectionRequest.status === 'loading' ||
-                      cancelConnectionRequest.status === 'loading' ? (
+                      {(sendConnectionRequest.status === 'loading' ||
+                        cancelConnectionRequest.status === 'loading' ||
+                        removeConnection.status === 'loading') &&
+                      from === 'profile-banner' ? (
                         <img src={spinner} alt='spinner' />
                       ) : getConnectionStatusByUserId.data?.connectionStatus ===
                         'Pending' ? (
