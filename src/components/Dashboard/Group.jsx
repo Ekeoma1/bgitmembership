@@ -176,15 +176,27 @@ const Group = () => {
                         {`Member${group.userCount > 0 ? 's' : ''}`}
                       </div>
                       <div className='d-xl-none'>
-                        <button
-                          className='join-btn '
-                          onClick={() =>
-                            !group.isCurrentUserMember && handleJoinForum(group)
-                          }
-                        >
-                          {/* {group.isCurrentUserMember ? '+ Joined' : 'Join'} */}
-                          kffjkfkd
-                        </button>
+                        {group.requestStatus === 'loading' ? (
+                          <button className='join-btn join-btn-2'>
+                            Loading...
+                          </button>
+                        ) : group.forumMembershipStatus === 'NotAMember' ? (
+                          <button
+                            className={`join-btn join-btn-2 not-a-member`}
+                            onClick={(e) => handleJoinForum(e, group)}
+                          >
+                            + Join
+                          </button>
+                        ) : group.forumMembershipStatus === 'PendingRequest' ? (
+                          <button
+                            className={`join-btn join-btn-2 pending `}
+                            onClick={(e) => handleJoinForum(e, group)}
+                          >
+                            Cancel Request
+                          </button>
+                        ) : (
+                          <></>
+                        )}
                       </div>
                     </div>
                   </div>
