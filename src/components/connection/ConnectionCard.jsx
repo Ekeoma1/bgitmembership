@@ -58,7 +58,7 @@ const ConnectionCard = ({ withoutAction, user }) => {
             <Icon icon='envelope' />
           </span>
         </Link>
-        {getMyProfile.data?.userId !== getUserProfileById.data?.userId && (
+        {getMyProfile.data?.userId === params.id && (
           <button onClick={() => toggleAction()}>
             <Icon icon='elipse-horizontal' />
           </button>
@@ -69,8 +69,7 @@ const ConnectionCard = ({ withoutAction, user }) => {
           onClick={() => {
             dispatch(
               triggerRemoveConnection({
-                connectionId: user.connectionId,
-                userId: user.receiverUserId,
+                receiveruserId: user.receiverUserId,
               })
             );
           }}

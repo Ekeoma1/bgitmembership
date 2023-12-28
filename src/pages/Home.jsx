@@ -138,7 +138,7 @@ const Home = () => {
                     </div>
                   </div>
                 )}
-                {searchedUsers.length == 0 && searchedForums.length === 0 && (
+                {searchedUsers.length === 0 && searchedForums.length === 0 && (
                   <p>No results found...</p>
                 )}
               </div>

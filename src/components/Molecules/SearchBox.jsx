@@ -1,24 +1,32 @@
-import React, { useRef } from 'react';
+import React, { useRef, useState } from 'react';
 import '../../assets/scss/molecules.scss';
 import Icon from '../Icon';
 
 const SearchBox = ({
-  onChange,
+  name,
   value,
+  setValue,
   placeholder,
   height,
+  onChange,
   enterKeyPressed,
   otherKeysPressed,
 }) => {
   const inputContainer = useRef(null);
+  const [val, setVal] = useState('');
 
+  const handleChange = (e) => {
+    setVal(e.target.value);
+  };
+  console.log('val', val);
   return (
     <div className='search-box-component'>
       <input
         type='text'
         placeholder={placeholder}
-        onChange={onChange}
+        onChange={(e) => setValue(e.target.value)}
         value={value}
+        name={name}
         ref={inputContainer}
         style={{ height }}
       />
