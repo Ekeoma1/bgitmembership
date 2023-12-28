@@ -1,27 +1,36 @@
 import React, { useEffect, useState } from 'react';
 import '../../../src/assets/scss/updates.scss';
+import _ from 'lodash';
 import request1 from '../../../src/assets/images/request1.svg';
 import request2 from '../../../src/assets/images/request2.svg';
 import request3 from '../../../src/assets/images/request3.svg';
 import RequestCard from '../Molecules/RequestCard';
 import Carousel from 'react-multi-carousel';
 import 'react-multi-carousel/lib/styles.css';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { ForumCardsLoader2 } from '../Atoms/skeleton-loaders/ForumCardsLoader';
 import EmptyState from '../Molecules/EmptyState';
 import SingleLineLoader, {
   SingleLineLoader2,
 } from '../Atoms/skeleton-loaders/SingleLineLoader';
+import { renderToast } from '../Molecules/CustomToastify';
+import {
+  resetAcceptConnectionRequest,
+  resetRejectConnectionRequest,
+} from '../../Features/connections/connections_slice';
 
 const Requests = ({ basedOn }) => {
-  const { getPendingRequestConnections } = useSelector(
-    (state) => state.connections
-  );
+  const dispatch = useDispatch();
+  const {
+    getPendingRequestConnections,
+    acceptConnectionRequest,
+    rejectConnectionRequest,
+  } = useSelector((state) => state.connections);
   const [
     getPendingRequestConnectionsLocal,
     setGetPendingRequestConnectionsLocal,
   ] = useState([]);
-  const [activeRequests, setActiveRequests] = useState([]);
+  const [activeRequest, setActiveRequest] = useState({});
   useEffect(() => {
     if (getPendingRequestConnections.status === 'successful') {
       setGetPendingRequestConnectionsLocal(
@@ -29,6 +38,81 @@ const Requests = ({ basedOn }) => {
       );
     }
   }, [getPendingRequestConnections]);
+  useEffect(() => {
+    const data = _.cloneDeep(getPendingRequestConnectionsLocal);
+    const setBactToDefault = () => {
+      data.forEach((item) => {
+        if (item.connectionId === activeRequest.connectionId) {
+          delete item.requestStatus;
+        }
+      });
+      setGetPendingRequestConnectionsLocal(data);
+      setActiveRequest({});
+    };
+    // accept connection request
+    if (acceptConnectionRequest.status === 'loading') {
+      data.forEach((item) => {
+        if (item.connectionId === activeRequest.connectionId) {
+          item.requestStatus = 'loading';
+        }
+      });
+      setGetPendingRequestConnectionsLocal(data);
+    } else if (acceptConnectionRequest.status === 'successful') {
+      if (acceptConnectionRequest.data.status === 'success') {
+        renderToast({
+          status: 'success',
+          message: 'Connection accepted successfully',
+        });
+        data.forEach((item) => {
+          if (item.connectionId === activeRequest.connectionId) {
+            item.connectionStatus = 'Connected';
+          }
+        });
+        setGetPendingRequestConnectionsLocal(data);
+      }
+      dispatch(resetAcceptConnectionRequest());
+      setBactToDefault();
+    } else if (acceptConnectionRequest.status === 'error') {
+      renderToast({
+        status: 'error',
+        message: 'Something went wrong',
+      });
+      dispatch(resetAcceptConnectionRequest());
+      setBactToDefault();
+    }
+
+    // reject connection request
+    if (rejectConnectionRequest.status === 'loading') {
+      data.forEach((item) => {
+        if (item.connectionId === activeRequest.connectionId) {
+          item.requestStatus = 'loading';
+        }
+      });
+      setGetPendingRequestConnectionsLocal(data);
+    } else if (rejectConnectionRequest.status === 'successful') {
+      if (rejectConnectionRequest.data.status === 'success') {
+        renderToast({
+          status: 'success',
+          message: 'Connection rejected successfully',
+        });
+        data.forEach((item) => {
+          if (item.connectionId === activeRequest.connectionId) {
+            item.connectionStatus = 'Not Connected';
+          }
+        });
+        setGetPendingRequestConnectionsLocal(data);
+      }
+      dispatch(resetRejectConnectionRequest());
+      setBactToDefault();
+    } else if (rejectConnectionRequest.status === 'error') {
+      renderToast({
+        status: 'error',
+        message: 'Something went wrong',
+      });
+      dispatch(resetRejectConnectionRequest());
+      setBactToDefault();
+    }
+  }, [acceptConnectionRequest, rejectConnectionRequest]);
 
   const responsive = {
     desktop: {
@@ -44,6 +128,7 @@ const Requests = ({ basedOn }) => {
       items: 2,
     },
   };
+  console.log('local', getPendingRequestConnectionsLocal);
   return (
     <div className='requests-wrapper'>
       <div className='container'>
@@ -71,8 +156,7 @@ const Requests = ({ basedOn }) => {
               </div>
             ) : getPendingRequestConnections.status === 'successful' ? (
               <>
-                {getPendingRequestConnections.data?.pendingRequests?.length ===
-                0 ? (
+                {getPendingRequestConnectionsLocal.length === 0 ? (
                   <EmptyState
                     title={'No connection requests'}
                     info={'See our latest News & Events below.'}
@@ -86,14 +170,7 @@ const Requests = ({ basedOn }) => {
                           <RequestCard
                             key={request.connectionId}
                             request={request}
-                            getPendingRequestConnectionsLocal={
-                              getPendingRequestConnectionsLocal
-                            }
-                            setGetPendingRequestConnectionsLocal={
-                              setGetPendingRequestConnectionsLocal
-                            }
-                            activeRequests={activeRequests}
-                            setActiveRequests={setActiveRequests}
+                            setActiveRequest={setActiveRequest}
                           />
                         )
                       )}
