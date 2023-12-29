@@ -11,6 +11,10 @@ const MainButton = ({
   iconLeft,
   iconRight,
   width,
+  height,
+  padding,
+  border,
+  borderRadius,
   loading,
   disabled,
 }) => {
@@ -19,7 +23,7 @@ const MainButton = ({
       className={`button-component ${size === 'small' && 'small-btn'} ${
         outlined && 'outlined'
       } ${loading && 'loading'} ${disabled && 'disabled'}`}
-      style={{ width }}
+      style={{ width, height, padding, border, borderRadius }}
       onClick={disabled ? null : onClick}
       type='submit'
     >

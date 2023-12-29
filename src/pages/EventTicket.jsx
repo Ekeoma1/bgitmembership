@@ -55,25 +55,25 @@ const EventTicket = () => {
         )}
 
         <div className='order-detail-con'>
-          <Link to='1'>
-            <div className='order-detail'>
-              <div className='con'>
-                <h4 className='title'>Orders</h4>
-                {getMyAppliedEvents.status === 'base' ||
-                getMyAppliedEvents.status === 'loading' ? (
-                  <OrderLoader />
-                ) : getMyAppliedEvents.status === 'successful' ? (
-                  <>
-                    {getMyAppliedEvents.data?.length === 0 ? (
-                      <EmptyState
-                        title={'No tickets found'}
-                        height={'30rem'}
-                        padding={'0'}
-                      />
-                    ) : (
-                      <>
-                        {getMyAppliedEvents.data?.map((ticket, index) => (
-                          <div key={index} className='order-detail-wrapper'>
+          <div className='order-detail'>
+            <div className='con'>
+              <h4 className='title'>Orders</h4>
+              {getMyAppliedEvents.status === 'base' ||
+              getMyAppliedEvents.status === 'loading' ? (
+                <OrderLoader />
+              ) : getMyAppliedEvents.status === 'successful' ? (
+                <>
+                  {getMyAppliedEvents.data?.length === 0 ? (
+                    <EmptyState
+                      title={'No tickets found'}
+                      height={'30rem'}
+                      padding={'0'}
+                    />
+                  ) : (
+                    <>
+                      {getMyAppliedEvents.data?.map((ticket, index) => (
+                        <Link to={ticket.eventId} key={index}>
+                          <div className='order-detail-wrapper'>
                             <div className='order-date'>
                               <span className='month'>
                                 {moment(ticket.eventDate).format('MMM')}
@@ -98,16 +98,16 @@ const EventTicket = () => {
                               </div>
                             </div>
                           </div>
-                        ))}
-                      </>
-                    )}
-                  </>
-                ) : (
-                  <></>
-                )}
-              </div>
+                        </Link>
+                      ))}
+                    </>
+                  )}
+                </>
+              ) : (
+                <></>
+              )}
             </div>
-          </Link>
+          </div>
         </div>
       </div>
     </div>

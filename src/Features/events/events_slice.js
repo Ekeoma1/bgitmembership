@@ -19,6 +19,10 @@ const initialState = {
     status: states.BASE,
     data: {},
   },
+  cancelEventApplication: {
+    status: states.BASE,
+    data: {},
+  },
 };
 // get all events
 export const triggerGetAllEvents = createAsyncThunk(
@@ -66,12 +70,27 @@ export const triggerApplyForEvent = createAsyncThunk(
   }
 );
 
+//cancel event application
+export const triggerCancelEventApplication = createAsyncThunk(
+  'cancel-event-application',
+  async (params, thunkAPI) => {
+    try {
+      return await EventsService.cancelEventApplication(params);
+    } catch (e) {
+      return thunkAPI.rejectWithValue(e.message);
+    }
+  }
+);
+
 const eventsSlice = createSlice({
   name: 'events',
   initialState,
   reducers: {
     resetApplyForEvent: (state) => {
       state.applyForEvent = initialState.applyForEvent;
+    },
+    resetCancelEventApplication: (state) => {
+      state.cancelEventApplication = initialState.cancelEventApplication;
     },
   },
   extraReducers: (builder) => {
@@ -130,8 +149,25 @@ const eventsSlice = createSlice({
       state.applyForEvent.status = states.ERROR;
       state.applyForEvent.data = action.payload;
     });
+
+    // cancel event application
+    builder.addCase(triggerCancelEventApplication.pending, (state) => {
+      state.cancelEventApplication.status = states.LOADING;
+      state.cancelEventApplication.data = {};
+    });
+    builder.addCase(
+      triggerCancelEventApplication.fulfilled,
+      (state, action) => {
+        state.cancelEventApplication.status = states.SUCCESSFUL;
+        state.cancelEventApplication.data = action.payload;
+      }
+    );
+    builder.addCase(triggerCancelEventApplication.rejected, (state, action) => {
+      state.cancelEventApplication.status = states.ERROR;
+      state.cancelEventApplication.data = action.payload;
+    });
   },
 });
 
 export default eventsSlice.reducer;
-export const { resetApplyForEvent } = eventsSlice.actions;
+export const { resetApplyForEvent,resetCancelEventApplication } = eventsSlice.actions;

@@ -24,7 +24,7 @@ const PrintButton = ({ targetElementId, fileName = "download.pdf" }) => {
   };
 
   return (
-    <button className="alt-btn small-btn" onClick={handlePrint}>
+    <button className="alt-btn " onClick={handlePrint}>
       Print Ticket
     </button>
   );

@@ -99,6 +99,7 @@ const apiRoutes = {
   getMyAppliedEvents: '/Events/GetMyAppliedEvents',
   getEventById: '/Events/GetEventById',
   applyForEvent: '/Events/ApplyForEvent',
+  cancelEventApplication: '/Events/CancelEventApplication',
 
   // Notifications
   getAllNotifications: '/Notification/getAllNotifications',
