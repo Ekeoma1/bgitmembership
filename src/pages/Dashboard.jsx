@@ -99,7 +99,7 @@ const Dashboard = () => {
                 <Icon icon='chevronRightBig' />
               </div>
             </Link>
-            <Link to='#'>
+            <Link to='/events-and-news/event-tickets'>
               <div className='other-pages-btn'>
                 <div>Event Tickets</div>
                 <Icon icon='chevronRightBig' />

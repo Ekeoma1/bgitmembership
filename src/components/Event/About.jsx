@@ -24,7 +24,9 @@ const About = ({ setTab }) => {
 
   const apply = () => {
     if (applyForEvent.status === 'base') {
-      dispatch(triggerApplyForEvent({ eventId: getEventById?.data?.eventId }));
+      dispatch(
+        triggerApplyForEvent({ eventId: getEventById?.data[0]?.eventId })
+      );
     }
   };
   useEffect(() => {
@@ -34,6 +36,7 @@ const About = ({ setTab }) => {
           status: 'error',
           message: applyForEvent.data,
         });
+        setTab('order-success');
       } else {
         setTab('order-success');
       }
@@ -74,7 +77,7 @@ const About = ({ setTab }) => {
               </div>
               <div className='price-mobile'>
                 <button
-                  onClick={applyForEvent.status !=='loading' && apply}
+                  onClick={applyForEvent.status !== 'loading' && apply}
                   className={` ${
                     applyForEvent.status === 'loading' && 'loading'
                   } `}

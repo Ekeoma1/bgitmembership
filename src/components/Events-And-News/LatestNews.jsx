@@ -1,9 +1,10 @@
-import React from "react";
-import SearchBox from "../Molecules/SearchBox";
-import EventCard from "./EventCard";
-import Carousel from "react-multi-carousel";
-import "react-multi-carousel/lib/styles.css";
-import { useSelector } from "react-redux";
+import React from 'react';
+import SearchBox from '../Molecules/SearchBox';
+import EventCard from './EventCard';
+import Carousel from 'react-multi-carousel';
+import 'react-multi-carousel/lib/styles.css';
+import { useSelector } from 'react-redux';
+import EventsAndNewsCardsLoader from '../Atoms/skeleton-loaders/events-and-news-page/EventsAndNewsCardsLoader';
 
 const LatestNews = () => {
   const { getAllNews } = useSelector((state) => state.news);
@@ -28,29 +29,30 @@ const LatestNews = () => {
   };
 
   return (
-    <div className="latest-news-wrapper">
-      <div className="container">
-        <div className="latest-news-content">
-          <div className="section-header row align-items-end">
-            <div className="col-md">
+    <div className='latest-news-wrapper'>
+      <div className='container'>
+        <div className='latest-news-content'>
+          <div className='section-header row align-items-end'>
+            <div className='col-md'>
               <h2>Latest news</h2>
             </div>
-            <div className="col-md">
-              <div className="search-wrapper">
-                <div className="search-box-wrapper">
-                  <div className="search-box-con">
-                    <SearchBox placeholder={"Search news"} />
+            <div className='col-md'>
+              <div className='search-wrapper'>
+                <div className='search-box-wrapper'>
+                  <div className='search-box-con'>
+                    <SearchBox placeholder={'Search news'} />
                   </div>
                 </div>
               </div>
             </div>
           </div>
 
-          <div className="section-content">
-            <div className="cards-wrapper">
-              {getAllNews.status === "base" || getAllNews.status === "loading" ? (
-                <>Loading...</>
-              ) : getAllNews.status === "successful" ? (
+          <div className='section-content'>
+            <div className='cards-wrapper'>
+              {getAllNews.status === 'base' ||
+              getAllNews.status === 'loading'  ? (
+               <EventsAndNewsCardsLoader/>
+              ) : getAllNews.status === 'successful' ? (
                 <>
                   <Carousel responsive={responsive}>
                     {getAllNews?.data?.news?.map((item, index) => (

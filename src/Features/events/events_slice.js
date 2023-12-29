@@ -7,6 +7,10 @@ const initialState = {
     status: states.BASE,
     data: [],
   },
+  getMyAppliedEvents: {
+    status: states.BASE,
+    data: [],
+  },
   getEventById: {
     status: states.BASE,
     data: {},
@@ -27,6 +31,17 @@ export const triggerGetAllEvents = createAsyncThunk(
     }
   }
 );
+// get my applied events
+export const triggerGetMyAppliedEvents = createAsyncThunk(
+  'get-my-applied-events',
+  async (params, thunkAPI) => {
+    try {
+      return await EventsService.getMyAppliedEvents(params);
+    } catch (e) {
+      return thunkAPI.rejectWithValue(e.message);
+    }
+  }
+);
 // get event by ID
 export const triggerGetEventByID = createAsyncThunk(
   'get-event-by-id',
@@ -38,6 +53,7 @@ export const triggerGetEventByID = createAsyncThunk(
     }
   }
 );
+
 //apply for event
 export const triggerApplyForEvent = createAsyncThunk(
   'apply-for-event',
@@ -71,6 +87,20 @@ const eventsSlice = createSlice({
     builder.addCase(triggerGetAllEvents.rejected, (state, action) => {
       state.getAllEvents.status = states.ERROR;
       state.getAllEvents.data = action.payload;
+    });
+
+    // Get my applied events
+    builder.addCase(triggerGetMyAppliedEvents.pending, (state) => {
+      state.getMyAppliedEvents.status = states.LOADING;
+      state.getMyAppliedEvents.data = {};
+    });
+    builder.addCase(triggerGetMyAppliedEvents.fulfilled, (state, action) => {
+      state.getMyAppliedEvents.status = states.SUCCESSFUL;
+      state.getMyAppliedEvents.data = action.payload;
+    });
+    builder.addCase(triggerGetMyAppliedEvents.rejected, (state, action) => {
+      state.getMyAppliedEvents.status = states.ERROR;
+      state.getMyAppliedEvents.data = action.payload;
     });
 
     // Get event by ID

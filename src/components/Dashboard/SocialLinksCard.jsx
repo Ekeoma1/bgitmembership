@@ -6,7 +6,9 @@ import { renderToast } from '../Molecules/CustomToastify';
 import { resetAddSocialLinks } from '../../Features/social-links/social_links_slice';
 import { triggerGetMyProfile } from '../../Features/users/users_slice';
 import OutsideClickHandler from 'react-outside-click-handler';
-import AddSocialLinksModalModal, { AddSocialLinksModalModal2 } from '../Modals/AddSocialLinksModal';
+import AddSocialLinksModalModal, {
+  AddSocialLinksModalModal2,
+} from '../Modals/AddSocialLinksModal';
 
 const SocialLinksCard = ({ othersView, data }) => {
   const { isMobile } = useWindowSize();
@@ -53,7 +55,6 @@ const SocialLinksCard = ({ othersView, data }) => {
       dispatch(resetAddSocialLinks());
     }
   }, [addSocialLinks.status]);
-
 
   return (
     <div className='dashboard-card'>

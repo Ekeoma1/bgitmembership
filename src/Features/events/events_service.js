@@ -10,6 +10,13 @@ export default class ForumsService {
     });
     return response;
   }
+  static async getMyAppliedEvents(data) {
+    const response = await get({
+      url: apiRoutes.getMyAppliedEvents,
+      data: { ...data },
+    });
+    return response;
+  }
   static async getEventById(data) {
     const response = await get({
       url: apiRoutes.getEventById,

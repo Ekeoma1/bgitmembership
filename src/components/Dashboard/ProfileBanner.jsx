@@ -130,7 +130,10 @@ const ProfileBanner = ({ data, from, setFrom }) => {
   }, [data.status]);
 
   useEffect(() => {
-    if (sendConnectionRequest.status === 'successful' && from==='profile-banner') {
+    if (
+      sendConnectionRequest.status === 'successful' &&
+      from === 'profile-banner'
+    ) {
       if (sendConnectionRequest.data.status === 'success') {
         renderToast({
           status: 'success',
@@ -141,7 +144,10 @@ const ProfileBanner = ({ data, from, setFrom }) => {
         dispatch(resetSendConnectionRequest());
       }
     }
-    if (cancelConnectionRequest.status === 'successful' && from==='profile-banner') {
+    if (
+      cancelConnectionRequest.status === 'successful' &&
+      from === 'profile-banner'
+    ) {
       if (cancelConnectionRequest.data.status === 'success') {
         renderToast({
           status: 'success',

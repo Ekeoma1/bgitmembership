@@ -53,7 +53,9 @@ const Connections = () => {
       setSearchedUsers([]);
     }
   }, [searchTerm]);
+
   console.log('searchusers', searchedUsers);
+  
   return (
     <section className='connection-page'>
       <div className='container'>

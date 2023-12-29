@@ -17,8 +17,9 @@ import EmptyState from '../Molecules/EmptyState';
 
 const SuggestedForums = () => {
   const navigate = useNavigate();
-  const { getAllForums, joinForum, cancelJoinForumRequest } =
-    useSelector((state) => state.forums);
+  const { getAllForums, joinForum, cancelJoinForumRequest } = useSelector(
+    (state) => state.forums
+  );
   const [getAllForumsLocal, setGetAllForumsLocal] = useState([]);
   const [pageNumber] = useState(1);
   const [pageSize] = useState(10);

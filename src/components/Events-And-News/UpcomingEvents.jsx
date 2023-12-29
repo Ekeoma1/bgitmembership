@@ -4,6 +4,7 @@ import Carousel from "react-multi-carousel";
 import "react-multi-carousel/lib/styles.css";
 import { useSelector } from "react-redux";
 import SearchBox from "../Molecules/SearchBox";
+import EventsAndNewsCardsLoader from '../Atoms/skeleton-loaders/events-and-news-page/EventsAndNewsCardsLoader';
 
 const UpcomingEvents = () => {
   const responsive = {
@@ -29,28 +30,29 @@ const UpcomingEvents = () => {
 
   useEffect(() => {}, []);
   return (
-    <div className="upcoming-events-wrapper">
-      <div className="container">
-        <div className="upcoming-events-content">
-          <div className="section-header row align-items-end">
-            <div className="col-md">
+    <div className='upcoming-events-wrapper'>
+      <div className='container'>
+        <div className='upcoming-events-content'>
+          <div className='section-header row align-items-end'>
+            <div className='col-md'>
               <h2>Upcoming Events</h2>
             </div>
-            <div className="col-md">
-              <div className="search-wrapper">
-                <div className="search-box-wrapper">
-                  <div className="search-box-con">
-                    <SearchBox placeholder={"Search events"} />
+            <div className='col-md'>
+              <div className='search-wrapper'>
+                <div className='search-box-wrapper'>
+                  <div className='search-box-con'>
+                    <SearchBox placeholder={'Search events'} />
                   </div>
                 </div>
               </div>
             </div>
           </div>
-          <div className="section-content">
-            <div className="cards-wrapper">
-              {getAllEvents.status === "base" || getAllEvents.status === "loading" ? (
-                <></>
-              ) : getAllEvents.status === "successful" ? (
+          <div className='section-content'>
+            <div className='cards-wrapper'>
+              {getAllEvents.status === 'base' ||
+              getAllEvents.status === 'loading' ? (
+                <EventsAndNewsCardsLoader />
+              ) : getAllEvents.status === 'successful' ? (
                 <>
                   {getAllEvents.data.length === 0 ? (
                     <>No events...</>

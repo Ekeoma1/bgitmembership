@@ -41,7 +41,7 @@ const NewsCard = ({ news }) => {
   );
 };
 export const EventsCard = ({ event }) => {
-  const navigate=useNavigate()
+  const navigate = useNavigate();
   const [imgOnLoadStatus, setImgOnLoadStatus] = useState('base');
 
   return (
@@ -66,7 +66,7 @@ export const EventsCard = ({ event }) => {
         <div className='btn-con'>
           <button
             onClick={() => {
-              navigate(`/events-and-news/event/${event.eventId}`)
+              navigate(`/events-and-news/event/${event.eventId}`);
             }}
           >
             More info
