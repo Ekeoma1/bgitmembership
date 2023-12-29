@@ -29,7 +29,7 @@ const EventTicket = () => {
         </button>
         {getMyProfile.status === 'base' || getMyProfile.status === 'loading' ? (
           <ProfileLoader />
-        ) : getMyProfile.status === 'successful' ? (
+        ) : getMyProfile.status === 'successful' && getMyProfile.data ? (
           <div className='profile-wrapper'>
             <div className='profile-pic'>
               <img src={getMyProfile.data?.imageUrl} alt='' className='' />
@@ -65,7 +65,7 @@ const EventTicket = () => {
                 <>
                   {getMyAppliedEvents.data?.length === 0 ? (
                     <EmptyState
-                      title={'No tickets found'}
+                      title={'No orders found'}
                       height={'30rem'}
                       padding={'0'}
                     />
@@ -82,16 +82,24 @@ const EventTicket = () => {
                                 {moment(ticket.eventDate).format('D')}
                               </span>
                             </div>
-                            <div className='order-img'></div>
+                            <div className='order-img'>
+                              <img
+                                src={ticket.eventImageUrl}
+                                alt=''
+                                className=''
+                              />
+                            </div>
                             <div className='order-info'>
                               <h4>{ticket.eventName}</h4>
                               <div className='other-info'>
                                 {moment(ticket.eventDate).format(
-                                  'ddd, MMMM D, HH:mm'
-                                )}
+                                  'dddd, MMMM D'
+                                )},{' '}
+                                {ticket.eventTime}
                               </div>
                               <div className='other-info'>
-                                Free order no 89405736578 placed on{' '}
+                                Free order {/* {'no 89405736578'} */}
+                                placed on{' '}
                                 {moment(ticket.applicationDate).format(
                                   'ddd, MMMM D, HH:mm'
                                 )}

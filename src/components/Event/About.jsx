@@ -14,6 +14,7 @@ import {
 } from '../../Features/events/events_slice';
 import { renderToast } from '../Molecules/CustomToastify';
 import SingleLineLoader from '../Atoms/skeleton-loaders/SingleLineLoader';
+import bgtCreator from '../../assets/images/bgtCreator.svg';
 const About = ({ setTab }) => {
   const dispatch = useDispatch();
 
@@ -24,9 +25,7 @@ const About = ({ setTab }) => {
 
   const apply = () => {
     if (applyForEvent.status === 'base') {
-      dispatch(
-        triggerApplyForEvent({ eventId: getEventById?.data[0]?.eventId })
-      );
+      dispatch(triggerApplyForEvent({ eventId: getEventById?.data?.eventId }));
     }
   };
   useEffect(() => {
@@ -60,14 +59,14 @@ const About = ({ setTab }) => {
           <div className='about-content-wrapper'>
             <div className='details'>
               <div className='event-details-card'>
-                <h3 className='title'>{getEventById?.data[0]?.title}</h3>
+                <h3 className='title'>{getEventById?.data?.title}</h3>
                 <div className='info'>
                   <div className='date-wrapper'>
                     <LuCalendarDays className='icon' />
                     <div className=''>
                       <h5 className=''>Date</h5>
                       <p className=''>
-                        {moment(getEventById?.data[0]?.eventDate).format(
+                        {moment(getEventById?.data?.eventDate).format(
                           'dddd, MMMM Do YYYY, h:mm:ss a'
                         )}
                       </p>
@@ -77,7 +76,7 @@ const About = ({ setTab }) => {
                     <MdOutlineLocationOn className='icon' />
                     <div className=''>
                       <h5 className=''>Location</h5>
-                      <p className=''>{getEventById?.data[0]?.location} </p>
+                      <p className=''>{getEventById?.data?.location} </p>
                     </div>
                   </div>
                 </div>
@@ -97,13 +96,13 @@ const About = ({ setTab }) => {
               <div className='about'>
                 <h3 className='title'>About</h3>
                 <div className='info'>
-                  <p>{getEventById?.data[0]?.description}</p>
+                  <p>{getEventById?.data?.description}</p>
                 </div>
               </div>
               <div className='tags'>
                 <h3 className='title'>Tags</h3>
                 <div className='tags-wrapper'>
-                  {getEventById?.data[0]?.tag?.split(',').map((item, index) => (
+                  {getEventById?.data?.tags?.map((item, index) => (
                     <Tag key={index} text={item} />
                   ))}
                 </div>
@@ -118,7 +117,7 @@ const About = ({ setTab }) => {
                     ) : getUserProfileById?.status === 'successful' ? (
                       <>
                         <img
-                          src={getUserProfileById?.data?.imageUrl}
+                          src={bgtCreator}
                           alt='creator-img'
                           className={`${
                             profileImgOnLoadStatus === 'success'
@@ -143,29 +142,26 @@ const About = ({ setTab }) => {
                       <></>
                     )}
                   </div>
-                  {getUserProfileById?.data?.firstName &&
-                  getUserProfileById?.data?.secondName ? (
-                    <h5>{`${getUserProfileById?.data?.firstName} ${getUserProfileById?.data?.secondName}`}</h5>
-                  ) : (
-                    <div className='loading-state'>
-                      <SingleLineLoader />
-                    </div>
-                  )}
+                  {<h5>{'BGIT Team'}</h5>}
                 </div>
               </div>
             </div>
             <div className='price'>
               <div className='price-card'>
-                <button
-                  onClick={apply}
-                  className={` ${
-                    applyForEvent.status === 'loading' && 'loading'
-                  } `}
-                >
-                  {applyForEvent.status === 'loading'
-                    ? 'Loading...'
-                    : 'Get tickets'}
-                </button>
+                {getEventById.data?.eventApplyStatus ? (
+                  <button>Applied</button>
+                ) : (
+                  <button
+                    onClick={apply}
+                    className={` ${
+                      applyForEvent.status === 'loading' && 'loading'
+                    } `}
+                  >
+                    {applyForEvent.status === 'loading'
+                      ? 'Loading...'
+                      : 'Get tickets'}
+                  </button>
+                )}
               </div>
             </div>
           </div>

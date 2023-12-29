@@ -21,7 +21,9 @@ const Banner = ({ tab }) => {
           style={{
             backgroundSize: 'cover',
             backgroundRepeat: 'no-repeat',
-            background: `${getEventById?.data.imageUrl ?? `#bdc3c7`}`,
+            backgroundPosition: 'center',
+            width: '100%',
+            background: `url(${getEventById?.data.imageUrl ?? `#bdc3c7`})`,
           }}
           className='banner-wrapper'
         >

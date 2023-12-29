@@ -3,10 +3,11 @@ import '../../assets/scss/event.scss';
 import { SlCheck } from 'react-icons/sl';
 import { FaChevronLeft } from 'react-icons/fa';
 import { useNavigate } from 'react-router-dom';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { resetApplyForEvent } from '../../Features/events/events_slice';
 const OrderSuccess = ({ setTab }) => {
   const navigate = useNavigate();
+  const { getEventById } = useSelector((state) => state.events);
   useEffect(() => {
     window.scrollTo(0, 0);
   }, []);
@@ -23,7 +24,7 @@ const OrderSuccess = ({ setTab }) => {
           <p>Back to Events</p>
         </div>
         <div className='main-content-wrapper'>
-          <h3>You’re going to Black Girls In Tech Summer Mixer! </h3>
+          <h3>You’re going to {getEventById.data?.title} </h3>
           <div className='info-wrapper'>
             <div className='info'>
               <p className='first-child'>
