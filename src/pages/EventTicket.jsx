@@ -8,6 +8,7 @@ import EmptyState from '../components/Molecules/EmptyState';
 import SingleLineLoader from '../components/Atoms/skeleton-loaders/SingleLineLoader';
 import ProfileLoader from '../components/Atoms/skeleton-loaders/event-tickets-page/ProfileLoader';
 import OrderLoader from '../components/Atoms/skeleton-loaders/event-tickets-page/OrderLoader';
+import moment from 'moment';
 
 const EventTicket = () => {
   const navigate = useNavigate();
@@ -74,17 +75,26 @@ const EventTicket = () => {
                         {getMyAppliedEvents.data?.map((ticket, index) => (
                           <div key={index} className='order-detail-wrapper'>
                             <div className='order-date'>
-                              <span className='month'>Oct</span>
-                              <span className='day'>8</span>
+                              <span className='month'>
+                                {moment(ticket.eventDate).format('MMM')}
+                              </span>
+                              <span className='day'>
+                                {moment(ticket.eventDate).format('D')}
+                              </span>
                             </div>
                             <div className='order-img'></div>
                             <div className='order-info'>
-                              <h4>BGIT Staycation</h4>
+                              <h4>{ticket.eventName}</h4>
                               <div className='other-info'>
-                                Tue, October 8, 18:00
+                                {moment(ticket.eventDate).format(
+                                  'ddd, MMMM D, HH:mm'
+                                )}
                               </div>
                               <div className='other-info'>
-                                Free order no 89405736578 placed on Nov 14 18:00
+                                Free order no 89405736578 placed on{' '}
+                                {moment(ticket.applicationDate).format(
+                                  'ddd, MMMM D, HH:mm'
+                                )}
                               </div>
                             </div>
                           </div>

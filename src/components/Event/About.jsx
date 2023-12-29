@@ -36,12 +36,19 @@ const About = ({ setTab }) => {
           status: 'error',
           message: applyForEvent.data,
         });
-        setTab('order-success');
       } else {
+        renderToast({
+          status: 'success',
+          message: 'Event saved',
+        });
         setTab('order-success');
       }
       dispatch(resetApplyForEvent());
     } else if (applyForEvent.status === 'error') {
+      renderToast({
+        status: 'error',
+        message: 'Something went wrong',
+      });
       dispatch(resetApplyForEvent());
     }
   }, [applyForEvent]);
