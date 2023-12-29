@@ -94,6 +94,9 @@ button {
   font-style: normal;
   font-weight: 700;
   transition: all linear 0.1s;
+  @media screen and (max-width: '600px') {
+    height: 5rem !important;
+  }
 
   &.small-btn {
     width: 175px;

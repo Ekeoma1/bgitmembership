@@ -84,6 +84,11 @@
       color: #ffffff;
     }
   }
+  &.cancel-order {
+    @media screen and (max-width: '600px') {
+      height: 5rem !important;
+    }
+  }
   .img-container {
     display: flex;
     align-items: center;

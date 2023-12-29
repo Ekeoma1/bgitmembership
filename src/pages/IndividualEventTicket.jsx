@@ -4,6 +4,7 @@ import PrintButton from '../components/PrintButton';
 import {
   resetCancelEventApplication,
   triggerApplyForEvent,
+  triggerCancelEventApplication,
   triggerGetEventByID,
 } from '../Features/events/events_slice';
 import { useDispatch, useSelector } from 'react-redux';
@@ -21,7 +22,7 @@ const IndividualEventTicket = () => {
   );
   const { getMyProfile } = useSelector((state) => state.users);
   const handleCancelOrder = () => {
-    // dispatch(triggerApplyForEvent())
+    dispatch(triggerApplyForEvent({ eventId: getEventById?.data[0]?.eventId }));
   };
   useEffect(() => {
     const data = { queryParams: { eventId: params.id } };
@@ -83,23 +84,17 @@ const IndividualEventTicket = () => {
                 />
 
                 <div className='mt-4'>
-                  {/* <button
-                    className='secondary-btn small-btn'
-                    onClick={handleCancelOrder}
-                  >
-                    Cancel Order
-                  </button> */}
                   <MainButton
                     text={'Cancel Order'}
                     onClick={handleCancelOrder}
                     loading={cancelEventApplication.status === 'loading'}
-                    size={'small'}
                     outlined
                     width={'301px'}
                     height={'60px'}
                     padding={'0'}
                     borderRadius={'1.6rem'}
                     border={'1px solid'}
+                    cancelOrder
                   />
                 </div>
               </div>

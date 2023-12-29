@@ -1011,6 +1011,10 @@
     display: grid;
     grid-template-columns: 1fr 2fr;
     gap: 20px;
+    @media screen and (max-width: '600px') {
+     display: flex;
+     flex-direction: column;
+    }
 
     .serial-details {
       font-size: 16px;

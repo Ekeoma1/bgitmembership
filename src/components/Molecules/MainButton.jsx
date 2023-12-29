@@ -17,12 +17,15 @@ const MainButton = ({
   borderRadius,
   loading,
   disabled,
+  cancelOrder
 }) => {
   return (
     <button
       className={`button-component ${size === 'small' && 'small-btn'} ${
         outlined && 'outlined'
-      } ${loading && 'loading'} ${disabled && 'disabled'}`}
+      } ${loading && 'loading'} ${disabled && 'disabled'} ${
+        cancelOrder && 'cancel-order'
+      }`}
       style={{ width, height, padding, border, borderRadius }}
       onClick={disabled ? null : onClick}
       type='submit'
