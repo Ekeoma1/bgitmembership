@@ -68,6 +68,7 @@ const JobCard = ({
       setGetAllJobsLocal(data);
     }
   }, [saveCurrentJob]);
+
   return (
     <div
       className={`job-card-component ${
@@ -75,31 +76,42 @@ const JobCard = ({
       }`}
       onClick={() => {
         setShowJobInfo(true);
-        setJobSelected(
-          getAllJobs?.data?.jobs?.find((item) => item.jobId === job.jobId)
-        );
+        setJobSelected(job);
       }}
     >
       <div className='img-con'>
-        <img src={job.job.imageUrl ?? google} alt='' className='' />
+        <img src={job.companyDetails.logoUrl ?? google} alt='' className='' />
       </div>
       <div className='info'>
-        <h5 className='role'>{job?.job?.job?.jobTitle}</h5>
-        <h5 className='company'>{job?.job?.company}</h5>
-        <p className='location'>{job?.job?.location}</p>
-        <div className='salary-type'>
-          <div className='salary'>
-            <Icon icon='money' />
-            <div className='amount'>
-              <h5 className='currency'>{job?.job?.currency}</h5>
-              <h5 className='price'>
-                {Number(job?.job?.salary).toLocaleString()}
-              </h5>
+        <div className='details'>
+          <h5 className='role'>{job?.job?.jobTitle}</h5>
+          <h5 className='company'>{job?.job?.company}</h5>
+          <p className='location'>{job?.job?.location}</p>
+          <div className='salary-type'>
+            <div className='salary'>
+              <div className='icon-con'>
+                <Icon icon='money' />
+              </div>
+              <div className='amount'>
+                <h5 className='currency'>
+                  {job?.job?.salary?.match(/[^0-9]+/)
+                    ? job?.job?.salary?.match(/[^0-9]+/)[0]
+                    : '#'}
+                </h5>
+                <h5 className='price'>
+                  {parseInt(
+                    job?.job?.salary.match(/\d+/)[0],
+                    10
+                  ).toLocaleString()}
+                </h5>
+              </div>
             </div>
-          </div>
-          <div className='type'>
-            <Icon icon='box' />
-            <h5 className=''>{job?.job?.jobType}</h5>
+            <div className='type'>
+              <div className='icon-con'>
+                <Icon icon='box' />
+              </div>
+              <h5 className=''>{job?.job?.employmentType}</h5>
+            </div>
           </div>
         </div>
         <h5 className='just-posted'>

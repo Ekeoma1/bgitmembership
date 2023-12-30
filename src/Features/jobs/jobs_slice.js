@@ -133,10 +133,17 @@ export const triggerDeleteJob = createAsyncThunk(
   }
 );
 
-const connectionSlice = createSlice({
+const jobsSlice = createSlice({
   name: 'jobs',
   initialState,
-  reducers: {},
+  reducers: {
+    resetSaveJob: (state) => {
+      state.saveJob = initialState.saveJob;
+    },
+    resetUnsaveJob: (state) => {
+      state.unsaveJob = initialState.unsaveJob;
+    },
+  },
   extraReducers: (builder) => {
     // Get all jobs
     builder.addCase(triggerGetAllJobs.pending, (state) => {
@@ -263,4 +270,5 @@ const connectionSlice = createSlice({
   },
 });
 
-export default connectionSlice.reducer;
+export default jobsSlice.reducer;
+export const { resetSaveJob, resetUnsaveJob } = jobsSlice.actions;

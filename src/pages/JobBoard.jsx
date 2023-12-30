@@ -13,6 +13,8 @@ import '../../src/assets/scss/jobBoard.scss';
 import JobInfoCard from '../components/Molecules/JobInfoCard';
 import { useDispatch, useSelector } from 'react-redux';
 import {
+  resetSaveJob,
+  resetUnsaveJob,
   triggerGetAllJobs,
   triggerGetSavedJobs,
 } from '../Features/jobs/jobs_slice';
@@ -21,11 +23,15 @@ import Apply from '../components/Job-Board/Apply';
 import { triggerGetMyProfile } from '../Features/users/users_slice';
 import JobCardsLoader from '../components/Atoms/skeleton-loaders/job-board-page/JobCardsLoader';
 import FilterBoard from '../components/Job-Board/FilterBoard';
+import moment from 'moment';
+import { renderToast } from '../components/Molecules/CustomToastify';
 
 const JobBoard = () => {
   const { isMobile } = useWindowSize();
   const [filterData, setFilterData] = useState({});
-  const { getAllJobs, getSavedJobs } = useSelector((state) => state.jobs);
+  const { getAllJobs, getSavedJobs, saveJob, unsaveJob } = useSelector(
+    (state) => state.jobs
+  );
   const { getMyProfile } = useSelector((state) => state.users);
   const [searchValue, setSearchValue] = useState('');
   const [showJobInfo, setShowJobInfo] = useState(false);
@@ -36,66 +42,9 @@ const JobBoard = () => {
   const onChange = (e) => {
     setSearchValue(e.target.value);
   };
-  const jobsData = [
-    {
-      id: 1,
-      role: 'UX Designer',
-      company: 'Google',
-      location: 'London (Hybrid)',
-      currency: '$',
-      price: '45000',
-      type: 'Contract',
-      timePosted: 'Just posted',
-      status: 'Applied 2 days ago',
-    },
-    {
-      id: 2,
-      role: 'Data Analyst',
-      company: 'Google',
-      location: 'London (Hybrid)',
-      currency: '$',
-      price: '29500',
-      type: 'Contract',
-      timePosted: 'Just posted',
-      status: 'Posted 2 days ago',
-    },
-    {
-      id: 3,
-      role: 'Software Engineer',
-      company: 'Apple',
-      location: 'Berlin (Hybrid)',
-      currency: '$',
-      price: '55500',
-      type: 'Contract',
-      timePosted: 'Just posted',
-      status: 'Application closed',
-    },
-    {
-      id: 4,
-      role: 'Cyber security',
-      company: 'Amazon',
-      location: 'Paris (Hybrid)',
-      currency: '$',
-      price: '60000',
-      type: 'Contract',
-      timePosted: 'Just posted',
-      status: 'Posted 2 days',
-    },
-    {
-      id: 5,
-      role: 'Cyber security',
-      company: 'Amazon',
-      location: 'Paris (Hybrid)',
-      currency: '$',
-      price: '60000',
-      type: 'Contract',
-      timePosted: 'Just posted',
-      status: 'Posted 2 days',
-    },
-  ];
   useEffect(() => {
     window.scrollTo(0, 0);
-  }, []);
+  }, [apply]);
   const dispatch = useDispatch();
   useEffect(() => {
     dispatch(triggerGetAllJobs());
@@ -108,7 +57,26 @@ const JobBoard = () => {
       setGetAllJobsLocal([...getAllJobs.data?.jobs]);
     }
   }, [getAllJobs?.status]);
-  console.log('getSavedJobs', getSavedJobs);
+
+  useEffect(() => {
+    if (saveJob.status === 'successful' && saveJob.data) {
+      renderToast({
+        status: 'success',
+        message: 'Job Saved',
+      });
+      dispatch(resetSaveJob());
+    }
+    if (unsaveJob.status === 'successful' && unsaveJob.data) {
+      renderToast({
+        status: 'success',
+        message: 'Job Unsaved',
+      });
+      dispatch(resetUnsaveJob());
+    }
+  }, [saveJob, unsaveJob]);
+
+  // console.log('getSavedJobs', getSavedJobs);
+  console.log('jobselected', jobSelected);
 
   return (
     <div className='job-board-wrapper'>
@@ -256,23 +224,57 @@ const JobBoard = () => {
                     </>
                   ) : getSavedJobs.status === 'successful' ? (
                     <>
-                      {getSavedJobs.data.length === 0 ? (
+                      {getSavedJobs.data?.jobs.length === 0 ? (
                         <p>No saved jobs</p>
                       ) : (
                         <>
-                          {getSavedJobs.data.map((item, index) => (
-                            <div key={index} className='saved-job'>
+                          {getSavedJobs.data?.jobs?.map((item, index) => (
+                            <div
+                              key={index}
+                              className='saved-job'
+                              onClick={() => {
+                                setApply(true);
+                                setJobSelected(item);
+                              }}
+                            >
                               <div className='img-con'>
-                                <img src={google} alt='company' className='' />
+                                <img
+                                  src={item.companyDetails.logoUrl}
+                                  alt='company'
+                                  className=''
+                                />
                               </div>
                               <div className='info'>
                                 <div className='details'>
                                   <div className=''>
-                                    <h5 className=''>{item.role}</h5>
-                                    <p className='company'>{item.company}</p>
-                                    <p className='location'>{item.location}</p>
+                                    <h5 className=''>{item.job.jobTitle}</h5>
+                                    <p className='company'>
+                                      {item.job.company}
+                                    </p>
+                                    <div className='location-wrapper'>
+                                      <p className='location'>
+                                        {item.job.location}
+                                      </p>
+                                      <p className='location'>
+                                        ({item.job.workPlacePolicy})
+                                      </p>
+                                    </div>
                                   </div>
-                                  <span className='status'>{item.status}</span>
+                                  <span
+                                    className={`status ${
+                                      !item.isJobOpen && 'closed'
+                                    }`}
+                                  >
+                                    {!item.ijob?.sJobOpen
+                                      ? 'Application closed'
+                                      : item.djob?.ateApplied
+                                      ? `Applied ${moment(
+                                          item?.job?.dateApplied
+                                        ).fromNow()}`
+                                      : `Posted ${moment(
+                                          item?.job?.datePosted
+                                        ).fromNow()}`}
+                                  </span>
                                 </div>
                                 <div className='btn-con'>
                                   <HiOutlineChevronRight />

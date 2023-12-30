@@ -4,28 +4,37 @@ import per1 from '../../../src/assets/images/per1.svg';
 
 import MainButton from '../Molecules/MainButton';
 import { HiOutlineChevronDown } from 'react-icons/hi';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import UserProfilePhotoLoader from '../Atoms/skeleton-loaders/dashboard-page/UserProfilePhotoLoader';
 import moment from 'moment';
-import { triggerApplyForJob } from '../../Features/jobs-application/jobs_application_slice';
+import {
+  resetApplyForJob,
+  triggerApplyForJob,
+} from '../../Features/jobs-application/jobs_application_slice';
 import SingleLineLoader from '../Atoms/skeleton-loaders/SingleLineLoader';
+import { renderToast } from '../Molecules/CustomToastify';
+import { useNavigate } from 'react-router-dom';
 const Apply = ({ setApply, jobSelected }) => {
   const dispatch = useDispatch();
+  const navigate = useNavigate();
   const { getMyProfile } = useSelector((state) => state.users);
+  const { applyForJob } = useSelector((state) => state.jobsApplication);
   const [profileImgOnLoadStatus, setProfileImgOnLoadStatus] = useState('base');
   const [formData, setFormData] = useState({
-    JobId: jobSelected.jobId,
+    JobId: jobSelected.job?.jobId,
     UserId: getMyProfile?.data?.userId,
     UserResumeUrl: '',
     CoverLetterUrl: '',
-    YearsOfExp: 0,
+    YearsOfExp: '',
     IsAllowedToWork: true,
     DateApplied: '',
     resume: '',
+    CoverLetter: '',
   });
 
   const handleChange = (e) => {
     let { value, type } = e.target;
+    // console.log('value', e.target.value, type);
     if (type === 'radio') {
       value = JSON.parse(value);
     } else if (type === 'file') {
@@ -35,15 +44,46 @@ const Apply = ({ setApply, jobSelected }) => {
   };
 
   const handleSubmit = () => {
-    //  setApply(false);
     const values = { ...formData };
     const date = moment(Date.now()).format('YYYY-MM-DD');
     values.DateApplied = date;
     dispatch(triggerApplyForJob(values));
   };
+  useEffect(() => {
+    if (
+      applyForJob.status === 'successful' &&
+      applyForJob.data === 'Job application successful.'
+    ) {
+      renderToast({
+        status: 'success',
+        message: 'Job applied successfully',
+      });
+      dispatch(resetApplyForJob());
+      setFormData({
+        JobId: jobSelected.job.jobId,
+        UserId: getMyProfile?.data?.userId,
+        UserResumeUrl: '',
+        CoverLetterUrl: '',
+        YearsOfExp: '',
+        IsAllowedToWork: true,
+        DateApplied: '',
+        resume: '',
+        CoverLetter: '',
+      });
+       setApply(false);
+    } else if (applyForJob.status === 'error') {
+      renderToast({
+        status: 'error',
+        message: 'something went wrong',
+      });
+      dispatch(resetApplyForJob());
+    }
+  }, [applyForJob]);
 
   // console.log('resume', resume);
-  // console.log('values', formData);
+  console.log('formdata', formData);
+  // console.log('formdata.coverLetter', formData.CoverLetter);
+  // console.log(applyForJob);
   return (
     <div className='apply'>
       <div className='sec-1'>
@@ -103,7 +143,6 @@ const Apply = ({ setApply, jobSelected }) => {
           <div className='edit'>
             <label htmlFor='resume' className='edit'>
               <h4 className='edit'>Edit</h4>
-
               <input
                 name='resume'
                 type='file'
@@ -116,30 +155,54 @@ const Apply = ({ setApply, jobSelected }) => {
           </div>
         </div>
         <div className='resume-box-wrapper'>
-          <div className='resume-box'>
-            <div className='pdf'>PDF</div>
-            <div className='filename-wrapper'>
-              <div className=''>
-                <p className='filename'>Claire Jenkins' CV</p>
-                <p className='filesize'>84kb</p>
+          {formData.resume && (
+            <div className='resume-box'>
+              <div className='pdf'>PDF</div>
+              <div className='filename-wrapper'>
+                <div className=''>
+                  <p className='filename'>{formData.resume.name}</p>
+                  {/* <p className='filesize'>{formData.resume.size}</p> */}
+                </div>
+              </div>
+              <div className='btn-con'>
+                <>
+                  {/* <MainButton
+                    text={'View'}
+                    size={'small'}
+                    onClick={() => {
+                      console.log('click btn');
+                    }}
+                  /> */}
+                </>
               </div>
             </div>
-            <div className='btn-con'>
-              <MainButton
-                text={'View'}
-                size={'small'}
-                onClick={() => {
-                  console.log('click btn');
-                }}
-              />
-            </div>
-          </div>
+          )}
         </div>
+        {formData.resume?.size > 3000000 && (
+          <p className='error'>Resume size should not exceed 3MB</p>
+        )}
       </div>
       <div className='cover-letter'>
         <p className='title'>Cover letter (Optional)</p>
         <div className='btn'>
-          <button>Upload Cover letter</button>
+          <div className=''>
+            <label htmlFor='cover-letter'>
+              <input
+                type='file'
+                accept='.pdf,.doc'
+                style={{ display: 'none' }}
+                name='CoverLetter'
+                id='cover-letter'
+                onChange={handleChange}
+              />
+              {formData.CoverLetter
+                ? formData.CoverLetter.name
+                : 'Upload Cover letter'}
+            </label>
+            {formData.CoverLetter?.size > 3000000 && (
+              <p className='error'>Cover letter size should not exceed 3MB</p>
+            )}
+          </div>
         </div>
       </div>
       <div className='add-qstns'>
@@ -152,6 +215,7 @@ const Apply = ({ setApply, jobSelected }) => {
               type='text'
               className='input-component'
               onChange={handleChange}
+              value={formData.UserResumeUrl}
             />
           </div>
         </div>
@@ -163,6 +227,7 @@ const Apply = ({ setApply, jobSelected }) => {
               type='text'
               className='input-component'
               onChange={handleChange}
+              value={formData.CoverLetterUrl}
             />
           </div>
         </div>
@@ -176,12 +241,14 @@ const Apply = ({ setApply, jobSelected }) => {
               type='number'
               className='input-component'
               onChange={handleChange}
+              value={formData.YearsOfExp}
             />
           </div>
         </div>
         <div className='qstn'>
           <p className=''>
-            Do you have a right to work in the UK without restrictions*
+            Do you have a right to work in {jobSelected?.job.location} without
+            restrictions*
           </p>
           <div className='input-wrapper radio'>
             <div className='radio-con'>
@@ -215,7 +282,19 @@ const Apply = ({ setApply, jobSelected }) => {
         </div>
       </div>
       <div className='submit-btn'>
-        <MainButton text={'Submit'} onClick={handleSubmit} />
+        <MainButton
+          text={'Submit'}
+          onClick={handleSubmit}
+          loading={applyForJob.status === 'loading'}
+          disabled={
+            formData.resume === '' ||
+            formData.CoverLetter === '' ||
+            formData.CoverLetterUrl === '' ||
+            formData.UserResumeUrl === '' ||
+            formData.resume.size > 3000000 ||
+            formData.CoverLetter.size > 3000000
+          }
+        />
       </div>
     </div>
   );

@@ -19,10 +19,14 @@ export const triggerApplyForJob = createAsyncThunk(
   }
 );
 
-const connectionSlice = createSlice({
+const jobsApplicationSlice = createSlice({
   name: 'jobs-application',
   initialState,
-  reducers: {},
+  reducers: {
+    resetApplyForJob: (state) => {
+      state.applyForJob = initialState.applyForJob;
+    },
+  },
   extraReducers: (builder) => {
     builder.addCase(triggerApplyForJob.pending, (state) => {
       state.applyForJob.status = states.LOADING;
@@ -39,4 +43,5 @@ const connectionSlice = createSlice({
   },
 });
 
-export default connectionSlice.reducer;
+export default jobsApplicationSlice.reducer;
+export const {resetApplyForJob} = jobsApplicationSlice.actions;

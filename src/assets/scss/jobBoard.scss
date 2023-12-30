@@ -175,15 +175,17 @@
           column-gap: 7.26%;
           border-bottom: 1px solid #d8d1ef;
           padding: 2.1rem 0;
-
           .img-con {
             width: 3.7rem;
             height: 3.7rem;
             flex-shrink: 0;
             margin-top: 1.4rem;
+            border-radius: 50%;
+            overflow: hidden;
             img {
               width: 100%;
               height: 100%;
+              object-fit: cover;
             }
           }
           .info {
@@ -210,12 +212,17 @@
                   font-weight: 600;
                   line-height: normal;
                 }
-                .location {
-                  color: rgba(0, 0, 0, 0.81);
-                  font-size: 1.5463rem;
-                  font-style: normal;
-                  font-weight: 500;
-                  line-height: normal;
+                .location-wrapper {
+                  display: flex;
+                  align-items: center;
+                  column-gap: 0.2rem;
+                  .location {
+                    color: rgba(0, 0, 0, 0.81);
+                    font-size: 1.5463rem;
+                    font-style: normal;
+                    font-weight: 500;
+                    line-height: normal;
+                  }
                 }
               }
               .status {
@@ -225,6 +232,9 @@
                 font-weight: 500;
                 line-height: normal;
                 width: 20%;
+                &.closed {
+                  color: #be2a29;
+                }
               }
             }
             .btn-con {
@@ -648,7 +658,10 @@
       }
       .btn {
         padding: 0;
-        button {
+        cursor: default;
+
+        button,
+        label {
           display: flex;
           width: 255px;
           height: 61px;
@@ -664,6 +677,7 @@
           font-weight: 700;
           line-height: 20px;
           letter-spacing: 2px;
+          cursor: pointer;
           @media screen and (max-width: '500px') {
             width: 19.3rem;
             height: 5.2rem;
@@ -770,6 +784,13 @@
   }
   .show {
     display: block;
+  }
+  .error {
+    color: #be2a29;
+    // font-size: 10px;
+    font-style: normal;
+    // font-weight: 500;
+    line-height: normal;
   }
 }
 
@@ -1183,14 +1204,15 @@
             column-gap: 2rem;
             border-bottom: 1px solid #d8d1ef;
             padding: 0.9rem 0;
-
             .img-con {
               width: 3.2rem;
               height: 3.2rem;
               margin-top: 1.2rem;
+
               img {
                 width: 100%;
                 height: 100%;
+                object-fit: cover;
               }
             }
             .info {

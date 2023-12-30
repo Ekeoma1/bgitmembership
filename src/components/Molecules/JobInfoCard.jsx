@@ -18,15 +18,15 @@ const JobInfoCard = ({
       </div>
       <div className='role-hybrid-con'>
         <div className='role-con'>
-          <h4 className='role'>{jobSelected?.jobTitle}</h4>
-          <p className='company'>{jobSelected?.company}</p>
-          <p className='location'>{jobSelected?.location}</p>
+          <h4 className='role'>{jobSelected?.job?.jobTitle}</h4>
+          <p className='company'>{jobSelected?.job?.company}</p>
+          <p className='location'>{jobSelected?.job?.location}</p>
         </div>
         <div className='hybrid'>
           <div className='icon'>
             <Icon icon={'tag'} />
           </div>
-          <p>{jobSelected?.jobType}</p>
+          <p>{jobSelected?.job?.workPlacePolicy}</p>
         </div>
       </div>
       <div className='sec-2'>
@@ -36,9 +36,7 @@ const JobInfoCard = ({
           </div>
           <div className='info-con'>
             <h5 className='title'>Salary</h5>
-            <h5 className='info'>{`Up to ${Number(
-              jobSelected.salary
-            ).toLocaleString()} a year`}</h5>
+            <h5 className='info'>{`Up to ${jobSelected.job?.salary} a year`}</h5>
           </div>
         </div>
         <div className='detail d-flex gap-4'>
@@ -48,7 +46,7 @@ const JobInfoCard = ({
           <div className='info-con'>
             <h5 className='title'>Job Type</h5>
             <div className='d-flex items-center justify-between test'>
-              <h5 className='info'>{jobSelected?.jobType}</h5>
+              <h5 className='info'>{jobSelected?.job?.employmentType}</h5>
             </div>
           </div>
         </div>
@@ -59,14 +57,16 @@ const JobInfoCard = ({
           <div className='info-con'>
             <h5 className='title'>Application Deadline</h5>
             <h5 className='info'>
-              {moment(jobSelected.deadlineDate).format('dddd, MMMM Do YYYY')}
+              {moment(jobSelected.job.deadlineDate).format(
+                'dddd, MMMM Do YYYY'
+              )}
             </h5>
           </div>
         </div>
       </div>
       <div className='overview'>
         <h3 className='title'>Overview</h3>
-        {jobSelected.overview}
+        {jobSelected.job.jobDescription}
       </div>
       <div className='job-requirements'>
         <h3 className='title'>Job Requirements</h3>
@@ -77,13 +77,6 @@ const JobInfoCard = ({
         {jobSelected.benefits}
       </div>
       <div className='btn'>
-        {/* <button
-          onClick={() => setApply(true)}
-          type='submit'
-          className='primary-btn small-btn'
-        >
-          Apply
-        </button> */}
         <MainButton
           text={'Apply'}
           size={'small'}
@@ -98,13 +91,6 @@ const JobInfoCard = ({
             setJobSelected({});
           }}
         />
-        {/* <button
-          onClick={() => setShowJobInfo(false)}
-          type='submit'
-          className='primary-btn small-btn'
-        >
-          Cancel
-        </button> */}
       </div>
     </div>
   );
