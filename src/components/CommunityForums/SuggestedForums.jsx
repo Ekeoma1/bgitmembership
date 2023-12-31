@@ -10,6 +10,7 @@ import {
   resetCanceljoinForumRequest,
   resetJoinForum,
   triggerGetAllForums,
+  triggerGetSuggestedForums,
 } from '../../Features/forums/forums_slice';
 import { ForumCardsLoader2 } from '../Atoms/skeleton-loaders/ForumCardsLoader';
 import { renderToast } from '../Molecules/CustomToastify';
@@ -17,7 +18,7 @@ import EmptyState from '../Molecules/EmptyState';
 
 const SuggestedForums = () => {
   const navigate = useNavigate();
-  const { getAllForums, joinForum, cancelJoinForumRequest } = useSelector(
+  const { getSuggestedForums, joinForum, cancelJoinForumRequest } = useSelector(
     (state) => state.forums
   );
   const [getAllForumsLocal, setGetAllForumsLocal] = useState([]);
@@ -28,16 +29,17 @@ const SuggestedForums = () => {
 
   useEffect(() => {
     const data = { queryParams: { pageNumber, pageSize } };
+    dispatch(triggerGetSuggestedForums(data));
     dispatch(triggerGetAllForums(data));
   }, []);
   useEffect(() => {
     if (
-      getAllForums.status === 'successful' &&
-      Array.isArray(getAllForums.data)
+      getSuggestedForums.status === 'successful' &&
+      Array.isArray(getSuggestedForums.data.forums)
     ) {
-      setGetAllForumsLocal(getAllForums.data);
+      setGetAllForumsLocal(getSuggestedForums.data.forums);
     }
-  }, [getAllForums]);
+  }, [getSuggestedForums]);
 
   useEffect(() => {
     const data = _.cloneDeep(getAllForumsLocal);
@@ -145,10 +147,10 @@ const SuggestedForums = () => {
             <button onClick={() => navigate('/forums/all')}>View all</button>
           </div>
           <div className='forums-cards-wrapper'>
-            {getAllForums.status === 'base' ||
-            getAllForums.status === 'loading' ? (
+            {getSuggestedForums.status === 'base' ||
+            getSuggestedForums.status === 'loading' ? (
               <ForumCardsLoader2 />
-            ) : getAllForums.status === 'successful' ? (
+            ) : getSuggestedForums.status === 'successful' ? (
               <>
                 {getAllForumsLocal?.length === 0 ? (
                   <>
@@ -169,7 +171,7 @@ const SuggestedForums = () => {
                   </>
                 )}
               </>
-            ) : getAllForums.status === 'error' ? (
+            ) : getSuggestedForums.status === 'error' ? (
               <></>
             ) : (
               <></>

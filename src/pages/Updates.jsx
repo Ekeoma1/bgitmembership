@@ -24,15 +24,15 @@ const Updates = () => {
     dispatch(triggerGetPendingRequestConnections());
   }, []);
   return (
-    <div className='updates-wrapper bg-color2'>
+    <div className='updates-wrapper bg-color22'>
       <div className='top-section'>
         <div className='container'>
           <div className='page-title-wrapper'>
             <div className='title-wrapper'>
               <div className='icon' onClick={() => navigate('/')}>
-                <HiArrowLeft className='text-color' />
+                <HiArrowLeft className='text-color22' />
               </div>
-              <h3 className='text-color'>Updates</h3>
+              <h3 className='text-color22'>Updates</h3>
             </div>
           </div>
         </div>

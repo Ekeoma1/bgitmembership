@@ -11,6 +11,7 @@ import PostImage from '../../../src/assets/images/post-image.png';
 import MainButton from '../Molecules/MainButton';
 import { useDispatch, useSelector } from 'react-redux';
 import { triggerGetAllNotifications } from '../../Features/notification/notification_slice';
+import SingleLineLoader from '../Atoms/skeleton-loaders/SingleLineLoader';
 
 const WhatsNew = () => {
   const postList = [
@@ -39,7 +40,20 @@ const WhatsNew = () => {
         <div className='whats-new-section-content'>
           <div className='section-title-wrapper'>
             <h5 className=''>
-              Whats new <span>{`(${getAllNotifications.data?.length})`}</span>
+              Whats new{' '}
+              {getAllNotifications.status === 'base' ||
+              getAllNotifications.status === 'loading'  ? (
+                <div className='loading'>
+                  <SingleLineLoader />
+                </div>
+              ) : getAllNotifications.status === 'successful' &&
+                getAllNotifications.data ? (
+                <span>{`(${getAllNotifications.data?.length})`}</span>
+              ) : getAllNotifications.status === 'error' ? (
+                <></>
+              ) : (
+                <></>
+              )}{' '}
             </h5>
           </div>
           <div className='section-content-wrapper'>

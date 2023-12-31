@@ -28,9 +28,9 @@ const CommunityForumsComponent = () => {
   useEffect(() => {
     if (
       getAllForums.status === 'successful' &&
-      Array.isArray(getAllForums.data)
+      Array.isArray(getAllForums.data.forums)
     ) {
-      setGetAllForumsLocal(getAllForums.data);
+      setGetAllForumsLocal(getAllForums.data.forums);
     }
   }, [getAllForums]);
   const { joinForum, cancelJoinForumRequest } = useSelector(
@@ -128,7 +128,7 @@ const CommunityForumsComponent = () => {
             <ForumCardsLoader />
           </>
         ) : getAllForums.status === 'successful' &&
-          Array.isArray(getAllForums.data) ? (
+          Array.isArray(getAllForums.data.forums) ? (
           <>
             {getAllForumsLocal.length === 0 ? (
               <div className='empty-state'>

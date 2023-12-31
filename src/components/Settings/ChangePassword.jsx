@@ -13,14 +13,21 @@ const ChangePassword = () => {
   const { changePassword } = useSelector((state) => state.users);
   const [formData, setFormData] = useState({});
   const validationSchema = Yup.object().shape({
-    currentPassword: Yup.string().required("Required"),
+    currentPassword: Yup.string().required('Required'),
     newPassword: Yup.string()
-      .required("Required")
-      .matches(/^(?=.*\d)(?=.*[A-Z])(?=.*[^A-Za-z0-9]).*$/, "Must contain at least one number, one uppercase letter, and one special character"),
+      .required('Required')
+      .matches(
+        /^(?=.*\d)(?=.*[A-Z])(?=.*[^A-Za-z0-9]).*$/,
+        'Must contain at least one number, one uppercase letter, and one special character'
+      )
+      .min(8, 'Must be at least 8 characters'),
     confirmNewPassword: Yup.string()
-      .required("Required")
-      .matches(/^(?=.*\d)(?=.*[A-Z])(?=.*[^A-Za-z0-9]).*$/, "Must contain at least one number, one uppercase letter, and one special character")
-      .oneOf([Yup.ref("newPassword")], "Passwords do not match"),
+      .required('Required')
+      .matches(
+        /^(?=.*\d)(?=.*[A-Z])(?=.*[^A-Za-z0-9]).*$/,
+        'Must contain at least one number, one uppercase letter, and one special character'
+      )
+      .oneOf([Yup.ref('newPassword')], 'Passwords do not match'),
   });
 
   const handleSubmit = (values, { resetForm }) => {

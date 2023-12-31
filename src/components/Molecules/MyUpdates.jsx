@@ -6,12 +6,14 @@ import { triggerGetAllNews } from '../../Features/news/news_slice';
 import { triggerGetAllEvents } from '../../Features/events/events_slice';
 import SingleLineLoader from '../Atoms/skeleton-loaders/SingleLineLoader';
 import { triggerGetPendingRequestConnections } from '../../Features/connections/connections_slice';
+import { triggerGetAllNotifications } from '../../Features/notification/notification_slice';
 const MyUpdates = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const { getPendingRequestConnections } = useSelector(
     (state) => state.connections
   );
+  const { getAllNotifications } = useSelector((state) => state.notification);
   const { getAllNews } = useSelector((state) => state.news);
   const { getAllEvents } = useSelector((state) => state.events);
   const [pageNumber] = useState(1);
@@ -22,7 +24,9 @@ const MyUpdates = () => {
     dispatch(triggerGetAllNews(data));
     dispatch(triggerGetAllEvents(data));
     dispatch(triggerGetPendingRequestConnections());
+    dispatch(triggerGetAllNotifications());
   }, []);
+
   // console.log('data', getAllEvents, getAllNews);
   return (
     <div className='my-updates-wrapper shadow-sm'>
@@ -112,7 +116,7 @@ const MyUpdates = () => {
         <div className='section-header'>New</div>
         <div className='section-list-wrapper'>
           <div className='big-text requests-con'>
-            <Link to='#' className='requests-con'>
+            <Link to='/updates' className='requests-con'>
               <span>Request</span>{' '}
               {getPendingRequestConnections.status === 'base' ||
               getPendingRequestConnections.status === 'loading' ? (
@@ -128,10 +132,23 @@ const MyUpdates = () => {
               )}
             </Link>
           </div>
-
-          <div className='big-text'>
-            <Link to='#'>
-              <span>Comments</span> (2)
+          <div className='big-text requests-con'>
+            <Link to='/updates' className='requests-con'>
+              <span>Comments</span>{' '}
+              {getAllNotifications.status === 'base' ||
+              getAllNotifications.status === 'loading' ? (
+                <div className=' requests-count-loader'>
+                  <SingleLineLoader />
+                </div>
+              ) : getAllNotifications.status === 'successful' ? (
+                <>{`(${
+                  getAllNotifications.data?.filter(
+                    (item) => item.notificationType === 'COMMENT'
+                  )?.length
+                })`}</>
+              ) : (
+                <></>
+              )}
             </Link>
           </div>
         </div>

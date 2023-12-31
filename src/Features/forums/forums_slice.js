@@ -24,6 +24,10 @@ const initialState = {
     status: states.BASE,
     data: [],
   },
+  getSuggestedForums: {
+    status: states.BASE,
+    data: [],
+  },
   getForumById: {
     status: states.BASE,
     data: [],
@@ -109,6 +113,17 @@ export const triggerGetAllForums = createAsyncThunk(
   async (params, thunkAPI) => {
     try {
       return await ForumsService.getAllForums(params);
+    } catch (e) {
+      return thunkAPI.rejectWithValue(e.message);
+    }
+  }
+);
+// get suggested forums
+export const triggerGetSuggestedForums = createAsyncThunk(
+  'get-suggested-forums',
+  async (params, thunkAPI) => {
+    try {
+      return await ForumsService.getSuggestedForums(params);
     } catch (e) {
       return thunkAPI.rejectWithValue(e.message);
     }
@@ -279,6 +294,19 @@ const forumsSlice = createSlice({
     builder.addCase(triggerGetAllForums.rejected, (state, action) => {
       state.getAllForums.status = states.ERROR;
       state.getAllForums.data = action.payload;
+    });
+    // get suggested forums
+    builder.addCase(triggerGetSuggestedForums.pending, (state) => {
+      state.getSuggestedForums.status = states.LOADING;
+      state.getSuggestedForums.data = {};
+    });
+    builder.addCase(triggerGetSuggestedForums.fulfilled, (state, action) => {
+      state.getSuggestedForums.status = states.SUCCESSFUL;
+      state.getSuggestedForums.data = action.payload;
+    });
+    builder.addCase(triggerGetSuggestedForums.rejected, (state, action) => {
+      state.getSuggestedForums.status = states.ERROR;
+      state.getSuggestedForums.data = action.payload;
     });
 
     // get forums by ID
