@@ -150,7 +150,7 @@ const Requests = ({ basedOn }) => {
           </div>
           <div className='requests-cards-wrapper'>
             {getPendingRequestConnections.status === 'base' ||
-            getPendingRequestConnections.status === 'loading' ? (
+            getPendingRequestConnections.status === 'loading'? (
               <div className='container loader-con'>
                 <ForumCardsLoader2 />
               </div>

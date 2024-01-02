@@ -23,33 +23,7 @@ const News = () => {
     dispatch(triggerGetAllNews(data));
     dispatch(triggerGetAllEvents(data));
   }, []);
-  const newsData = [
-    {
-      img: news1,
-      title: 'BGIT Staycation Retreat',
-      date: 'October 6 - 8 (Fri - Sun)',
-    },
-    {
-      img: news2,
-      title: 'Bonfire night & Vibez',
-      date: 'November 5',
-    },
-    {
-      img: news3,
-      title: 'Trends to watch',
-      date: 'November 21',
-    },
-    {
-      img: news3,
-      title: 'Trends to watch',
-      date: 'November 21',
-    },
-    {
-      img: news3,
-      title: 'Trends to watch',
-      date: 'November 21',
-    },
-  ];
+
   const responsive = {
     desktop: {
       breakpoint: { max: 4000, min: 1024 },

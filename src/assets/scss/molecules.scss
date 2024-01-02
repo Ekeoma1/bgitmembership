@@ -964,7 +964,7 @@
   height: 30.6182rem;
   border-radius: 22.662px;
   overflow: hidden;
-  @media screen and (max-width: '600px') {
+  @media screen and (max-width: '1000px') {
     width: 20rem;
     height: 28.9rem;
   }
@@ -989,7 +989,7 @@
     flex-direction: column;
     justify-content: center;
     padding: 0 1.6rem;
-    @media screen and (max-width: '500px') {
+    @media screen and (max-width: '1000px') {
       justify-content: flex-start;
       padding-top: 1.23rem;
     }
@@ -1000,7 +1000,7 @@
       line-height: 100%;
       margin-bottom: 0.8rem;
 
-      @media screen and (max-width: '500px') {
+      @media screen and (max-width: '1000px') {
         font-size: 1.0148rem;
       }
     }
@@ -1010,14 +1010,14 @@
       font-weight: 700;
       line-height: 117%;
       margin-bottom: 1.3rem;
-      @media screen and (max-width: '500px') {
+      @media screen and (max-width: '1000px') {
         font-size: 8.457px;
       }
     }
     .btn-con {
       display: flex;
       justify-content: flex-end;
-      @media screen and (max-width: '500px') {
+      @media screen and (max-width: '1000px') {
         justify-content: flex-start;
       }
       button {

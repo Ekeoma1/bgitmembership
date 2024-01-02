@@ -12,8 +12,12 @@ import MainButton from '../Molecules/MainButton';
 import { useDispatch, useSelector } from 'react-redux';
 import { triggerGetAllNotifications } from '../../Features/notification/notification_slice';
 import SingleLineLoader from '../Atoms/skeleton-loaders/SingleLineLoader';
+import { useNavigate } from 'react-router-dom';
+import NotificationsLoader from '../Atoms/skeleton-loaders/updates-page/NotificationsLoader';
+import EmptyState from '../Molecules/EmptyState';
 
 const WhatsNew = () => {
+  const navigate = useNavigate();
   const postList = [
     {
       author: 'Karen Emelu',
@@ -42,7 +46,7 @@ const WhatsNew = () => {
             <h5 className=''>
               Whats new{' '}
               {getAllNotifications.status === 'base' ||
-              getAllNotifications.status === 'loading'  ? (
+              getAllNotifications.status === 'loading' ? (
                 <div className='loading'>
                   <SingleLineLoader />
                 </div>
@@ -60,11 +64,18 @@ const WhatsNew = () => {
             <div className='section-content'>
               {getAllNotifications.status === 'base' ||
               getAllNotifications.status === 'loading' ? (
-                <></>
+                <NotificationsLoader />
               ) : getAllNotifications.status === 'successful' ? (
                 <>
                   {getAllNotifications.data.length === 0 ? (
-                    <></>
+                    <>
+                      <EmptyState
+                        title={'No notifications found'}
+                        info={'No new notifications'}
+                        height={'30rem'}
+                        padding={'0'}
+                      />
+                    </>
                   ) : (
                     <>
                       {getAllNotifications.data
@@ -93,10 +104,19 @@ const WhatsNew = () => {
                                     src={notification.notificationUserImageUrl}
                                     alt=''
                                     className=''
+                                    onClick={() =>
+                                      navigate(`/users/${notification?.userId}`)
+                                    }
                                   />
                                   <div className='content'>
                                     <div className=''>
-                                      <h3>{`${notification.notificationUserFirstName} ${notification.notificationUserSecondName}`}</h3>
+                                      <h3
+                                        onClick={() =>
+                                          navigate(
+                                            `/users/${notification?.userId}`
+                                          )
+                                        }
+                                      >{`${notification.notificationUserFirstName} ${notification.notificationUserSecondName}`}</h3>
                                       <h5>
                                         {content}
                                         <p>{remaining}</p>
@@ -159,17 +179,19 @@ const WhatsNew = () => {
               ) : (
                 <></>
               )}
-
-              <div className='load-more'>
-                <MainButton
-                  text={'Load more'}
-                  size={'small'}
-                  variant={'outlined'}
-                  onClick={() =>
-                    setNotificationsAmount(notificationsAmount + 1)
-                  }
-                />
-              </div>
+              {getAllNotifications.status === 'successful' &&
+                getAllNotifications.data.length > 3 && (
+                  <div className='load-more'>
+                    <MainButton
+                      text={'Load more'}
+                      size={'small'}
+                      variant={'outlined'}
+                      onClick={() =>
+                        setNotificationsAmount(notificationsAmount + 1)
+                      }
+                    />
+                  </div>
+                )}
             </div>
           </div>
         </div>

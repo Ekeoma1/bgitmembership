@@ -123,10 +123,9 @@ const CommunityForumsComponent = () => {
     <div className='community-forum-wrapper'>
       <div className='community-forum-card-wrapper shadow-sm'>
         <h3>Community Forums</h3>
-        {getAllForums.status === 'loading' ? (
-          <>
+        {getAllForums.status === 'base' ||
+        getAllForums.status === 'loading'? (
             <ForumCardsLoader />
-          </>
         ) : getAllForums.status === 'successful' &&
           Array.isArray(getAllForums.data.forums) ? (
           <>
