@@ -2,11 +2,13 @@ import React from "react";
 import "./../assets/scss/navFooter.scss";
 import Icon from "./Icon";
 import { Link } from "react-router-dom";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import { logout, resetSignIn, resetSignUp } from '../Features/auth/auth_slice';
 
 const MobileNav = ({ hide, nav }) => {
   const isLoggedIn = useSelector((state) => state.auth.isLoggedIn);
   const { getMyProfile } = useSelector((state) => state.users);
+  const dispatch=useDispatch()
   return (
     <div className={`mobile-nav shadow d-lg-none ${!nav && 'd-none'}`}>
       <button onClick={hide}>
@@ -23,7 +25,16 @@ const MobileNav = ({ hide, nav }) => {
           <div onClick={hide} className='mobile-menu-item'>
             <Link to='/settings'>Settings</Link>
           </div>
-          <button className='mobile-nav-log-out-btn'>Log Out</button>
+          <button
+            onClick={() => {
+              dispatch(logout());
+              dispatch(resetSignIn());
+              dispatch(resetSignUp());
+            }}
+            className='mobile-nav-log-out-btn'
+          >
+            Log Out
+          </button>
         </div>
       ) : (
         <div className=' text-center'>

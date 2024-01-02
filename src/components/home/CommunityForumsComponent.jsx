@@ -9,30 +9,31 @@ import {
   resetCanceljoinForumRequest,
   resetJoinForum,
   triggerGetAllForums,
+  triggerGetSuggestedForums,
 } from '../../Features/forums/forums_slice';
 import { ForumCard2 } from '../Molecules/ForumCard';
 import { renderToast } from '../Molecules/CustomToastify';
 
 const CommunityForumsComponent = () => {
-  const { getAllForums } = useSelector((state) => state.forums);
+  const { getSuggestedForums } = useSelector((state) => state.forums);
   const [pageNumber] = useState(1);
   const [pageSize] = useState(10);
   const dispatch = useDispatch();
   useEffect(() => {
     const data = { queryParams: { pageNumber, pageSize } };
-    dispatch(triggerGetAllForums(data));
+    dispatch(triggerGetSuggestedForums(data));
   }, []);
   const [getAllForumsLocal, setGetAllForumsLocal] = useState([]);
   const [activeForum, setActiveForum] = useState({});
 
   useEffect(() => {
     if (
-      getAllForums.status === 'successful' &&
-      Array.isArray(getAllForums.data.forums)
+      getSuggestedForums.status === 'successful' &&
+      Array.isArray(getSuggestedForums.data.forums)
     ) {
-      setGetAllForumsLocal(getAllForums.data.forums);
+      setGetAllForumsLocal(getSuggestedForums.data.forums);
     }
-  }, [getAllForums]);
+  }, [getSuggestedForums]);
   const { joinForum, cancelJoinForumRequest } = useSelector(
     (state) => state.forums
   );
@@ -123,11 +124,11 @@ const CommunityForumsComponent = () => {
     <div className='community-forum-wrapper'>
       <div className='community-forum-card-wrapper shadow-sm'>
         <h3>Community Forums</h3>
-        {getAllForums.status === 'base' ||
-        getAllForums.status === 'loading'? (
-            <ForumCardsLoader />
-        ) : getAllForums.status === 'successful' &&
-          Array.isArray(getAllForums.data.forums) ? (
+        {getSuggestedForums.status === 'base' ||
+        getSuggestedForums.status === 'loading' ? (
+          <ForumCardsLoader />
+        ) : getSuggestedForums.status === 'successful' &&
+          Array.isArray(getSuggestedForums.data.forums) ? (
           <>
             {getAllForumsLocal.length === 0 ? (
               <div className='empty-state'>
@@ -150,8 +151,8 @@ const CommunityForumsComponent = () => {
         ) : (
           <></>
         )}
-        {getAllForums.status === 'successful' &&
-          getAllForums?.data?.length > 3 && (
+        {getSuggestedForums.status === 'successful' &&
+          getSuggestedForums?.data?.forums?.length > 3 && (
             <div className='text-center my-4'>
               <Link
                 to='/forums'

@@ -9,7 +9,7 @@ import member5 from '../../../src/assets/images/member5.svg';
 import spinner from '../../../src/assets/images/spinner2.png';
 import forumDefault from '../../../src/assets/images/forumDefault.jpeg';
 import loadingDots from '../../../src/assets/images/loading_dots.gif';
-import { HiArrowLeft } from 'react-icons/hi';
+import { HiArrowLeft, HiUserGroup } from 'react-icons/hi';
 
 import { useNavigate, useParams } from 'react-router-dom';
 import { FaTimes } from 'react-icons/fa';
@@ -30,6 +30,13 @@ import { renderToast } from '../Molecules/CustomToastify';
 import SingleLineLoader, {
   SingleLineLoader2,
 } from '../Atoms/skeleton-loaders/SingleLineLoader';
+import { FaUserGroup } from 'react-icons/fa6';
+import { HiMiniUserGroup } from 'react-icons/hi2';
+import {
+  PiUsersFill,
+  PiUsersThreeBold,
+  PiUsersThreeFill,
+} from 'react-icons/pi';
 
 const Banner = ({
   setJoinForumRequestSuccessful,
@@ -128,21 +135,28 @@ const Banner = ({
               <div className='banner-bottom'>
                 <div className='members-wrapper'>
                   <div className='members-img'>
-                    <div className='image-con'>
-                      <img src={member1} alt='community-img-sm' />
-                    </div>
-                    <div className='image-con'>
-                      <img src={member2} alt='community-img-sm' />
-                    </div>
-                    <div className='image-con'>
-                      <img src={member3} alt='community-img-sm' />
-                    </div>
-                    <div className='image-con'>
-                      <img src={member4} alt='community-img-sm' />
-                    </div>
-                    <div className='image-con'>
-                      <img src={member5} alt='community-img-sm' />
-                    </div>
+                    {getForumById?.data[0]?.usersInForum.length === 0 ? (
+                      <>
+                        <div className='image-con icon-con'>
+                          {/* <FaUserGroup /> */}
+                          {/* <PiUsersThreeFill /> */}
+                          <HiMiniUserGroup />
+                        </div>
+                      </>
+                    ) : (
+                      <>
+                        {getForumById?.data[0]?.usersInForum?.map(
+                          (member, index) => (
+                            <div className='image-con'>
+                              <img
+                                src={member.user?.imageUrl}
+                                alt='community-img-sm'
+                              />
+                            </div>
+                          )
+                        )}
+                      </>
+                    )}
                   </div>
                   <div className='members-amount'>
                     <p>{getForumById?.data[0]?.userCount}</p>
@@ -161,6 +175,62 @@ const Banner = ({
                   ) : getForumConnectionStatusByForumId.status ===
                     'successful' ? (
                     <>
+                      {getForumConnectionStatusByForumId.data
+                        .membershipStatus === 'IsMember' ? (
+                        <button
+                          onClick={handleForumRequest}
+                          className={`reach-btn ${
+                            leaveForum.status === 'loading' && 'loading'
+                          } `}
+                        >
+                          {leaveForum.status === 'loading' ? (
+                            <img src={spinner} alt='spinner' />
+                          ) : (
+                            <>Leave Forum</>
+                          )}
+                        </button>
+                      ) : (
+                        <>
+                          <button
+                            onClick={handleForumRequest}
+                            className={`reach-btn ${
+                              (joinForum.status === 'loading' ||
+                                cancelJoinForumRequest.status === 'loading' ||
+                                leaveForum.status === 'loading') &&
+                              'loading'
+                            } ${
+                              getForumConnectionStatusByForumId.data
+                                ?.membershipStatus === 'Pending' && 'pending'
+                            }`}
+                          >
+                            {joinForum.status === 'loading' ||
+                            cancelJoinForumRequest.status === 'loading' ||
+                            leaveForum.status === 'loading' ? (
+                              <img src={spinner} alt='spinner' />
+                            ) : getForumConnectionStatusByForumId.data
+                                ?.membershipStatus === 'Pending' ? (
+                              <>
+                                <span className='pending-con'>
+                                  <IoCheckmarkSharp className='icon' />{' '}
+                                  {'Request sent'}
+                                </span>
+                                <span className='cancel-con'>
+                                  <FaTimes className='icon' />{' '}
+                                  {'Cancel Request'}
+                                </span>
+                              </>
+                            ) : getForumConnectionStatusByForumId.data
+                                ?.membershipStatus === 'Not a member' ? (
+                              '+ Join'
+                            ) : getForumConnectionStatusByForumId.data
+                                ?.membershipStatus === 'Member' ? (
+                              ' Leave forum'
+                            ) : (
+                              <></>
+                            )}
+                          </button>
+                        </>
+                      )}
                       <button
                         onClick={handleForumRequest}
                         className={`reach-btn ${

@@ -46,9 +46,9 @@ const Group = () => {
   useEffect(() => {
     if (
       getAllForums.status === 'successful' &&
-      Array.isArray(getAllForums.data)
+      Array.isArray(getAllForums.data.forums)
     ) {
-      setGetAllForumsLocal(getAllForums.data);
+      setGetAllForumsLocal(getAllForums.data.forums);
     }
   }, [getAllForums]);
   useEffect(() => {

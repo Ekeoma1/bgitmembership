@@ -103,7 +103,10 @@ const SeeMore = () => {
                     <h5 className='role'>
                       {getUserProfileById?.data?.profession}
                     </h5>
-                    <h5 className='connections'>
+                    <h5
+                      className='connections'
+                      onClick={() => navigate(`/connections/${param.id}`)}
+                    >
                       {getUserProfileById?.data?.connectionCount} Connections
                     </h5>
                   </div>

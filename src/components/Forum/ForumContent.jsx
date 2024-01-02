@@ -38,7 +38,7 @@ const ForumContent = ({ forum }) => {
   useEffect(() => {
     if (getAllForums.status === 'successful') {
       setRelatedGroups(
-        getAllForums.data?.filter((item) => item.forumId !== params.forumId)
+        getAllForums.data[0]?.filter((item) => item.forumId !== params.forumId)
       );
     }
   }, [getAllForums]);
@@ -46,85 +46,87 @@ const ForumContent = ({ forum }) => {
   console.log(activeForum);
 
   useEffect(() => {
-    const data = _.cloneDeep(relatedGroups);
-    const setBactToDefault = () => {
-      data.forEach((item) => {
-        if (item.forumId === activeForum.forumId) {
-          delete item.requestStatus;
-        }
-      });
-      setRelatedGroups(data);
-      setActiveForum({});
-    };
+    if (getAllForums.status === 'successful' && Array.isArray(relatedGroups)) {
+      const data = _.cloneDeep(relatedGroups);
+      const setBactToDefault = () => {
+        data.forEach((item) => {
+          if (item.forumId === activeForum.forumId) {
+            delete item.requestStatus;
+          }
+        });
+        setRelatedGroups(data);
+        setActiveForum({});
+      };
 
-    // join forum
-    if (joinForum.status === 'loading') {
-      data.forEach((item) => {
-        if (item.forumId === activeForum.forumId) {
-          item.requestStatus = 'loading';
+      // join forum
+      if (joinForum.status === 'loading') {
+        data.forEach((item) => {
+          if (item.forumId === activeForum.forumId) {
+            item.requestStatus = 'loading';
+          }
+        });
+        setRelatedGroups(data);
+      } else if (joinForum.status === 'successful') {
+        if (joinForum.data.status === 'error') {
+          renderToast({
+            status: 'error',
+            message: 'You are the admin of the forum.',
+          });
+        } else if (joinForum.data.status === 'success') {
+          renderToast({
+            status: 'success',
+            message: 'Join request sent successfully',
+          });
+          data.forEach((item) => {
+            if (item.forumId === activeForum.forumId) {
+              console.log('true###########################');
+              item.forumMembershipStatus = 'PendingRequest';
+            }
+          });
+          setRelatedGroups(data);
         }
-      });
-      setRelatedGroups(data);
-    } else if (joinForum.status === 'successful') {
-      if (joinForum.data.status === 'error') {
+        dispatch(resetJoinForum());
+        setBactToDefault();
+      } else if (joinForum.status === 'error') {
         renderToast({
           status: 'error',
-          message: 'You are the admin of the forum.',
+          message: 'Something went wrong',
         });
-      } else if (joinForum.data.status === 'success') {
-        renderToast({
-          status: 'success',
-          message: 'Join request sent successfully',
-        });
-        data.forEach((item) => {
-          if (item.forumId === activeForum.forumId) {
-            console.log('true###########################');
-            item.forumMembershipStatus = 'PendingRequest';
-          }
-        });
-        setRelatedGroups(data);
+        dispatch(resetJoinForum());
+        setBactToDefault();
       }
-      dispatch(resetJoinForum());
-      setBactToDefault();
-    } else if (joinForum.status === 'error') {
-      renderToast({
-        status: 'error',
-        message: 'Something went wrong',
-      });
-      dispatch(resetJoinForum());
-      setBactToDefault();
-    }
 
-    // cancel Join forum request
-    if (cancelJoinForumRequest.status === 'loading') {
-      data.forEach((item) => {
-        if (item.forumId === activeForum.forumId) {
-          item.requestStatus = 'loading';
-        }
-      });
-      setRelatedGroups(data);
-    } else if (cancelJoinForumRequest.status === 'successful') {
-      if (cancelJoinForumRequest.data.status === 'success') {
-        renderToast({
-          status: 'success',
-          message: 'Join request canceled successfully.',
-        });
+      // cancel Join forum request
+      if (cancelJoinForumRequest.status === 'loading') {
         data.forEach((item) => {
           if (item.forumId === activeForum.forumId) {
-            item.forumMembershipStatus = 'NotAMember';
+            item.requestStatus = 'loading';
           }
         });
         setRelatedGroups(data);
+      } else if (cancelJoinForumRequest.status === 'successful') {
+        if (cancelJoinForumRequest.data.status === 'success') {
+          renderToast({
+            status: 'success',
+            message: 'Join request canceled successfully.',
+          });
+          data.forEach((item) => {
+            if (item.forumId === activeForum.forumId) {
+              item.forumMembershipStatus = 'NotAMember';
+            }
+          });
+          setRelatedGroups(data);
+        }
+        dispatch(resetCanceljoinForumRequest());
+        setBactToDefault();
+      } else if (cancelJoinForumRequest.status === 'error') {
+        renderToast({
+          status: 'error',
+          message: 'Something went wrong',
+        });
+        dispatch(resetCanceljoinForumRequest());
+        setBactToDefault();
       }
-      dispatch(resetCanceljoinForumRequest());
-      setBactToDefault();
-    } else if (cancelJoinForumRequest.status === 'error') {
-      renderToast({
-        status: 'error',
-        message: 'Something went wrong',
-      });
-      dispatch(resetCanceljoinForumRequest());
-      setBactToDefault();
     }
   }, [joinForum.status, cancelJoinForumRequest.status]);
 

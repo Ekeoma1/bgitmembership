@@ -34,9 +34,9 @@ const Forum = () => {
   useEffect(() => {
     const data = { queryParams: { forumId: params?.forumId } };
     dispatch(triggerGetForumById(data));
+    // dispatch(triggerGetAllForums(data));
     dispatch(triggerGetForumConnectionStatusByForumId(data));
   }, [params]);
-
 
   return (
     <div className='forum-wrapper'>
@@ -44,8 +44,8 @@ const Forum = () => {
         setJoinForumRequestSuccessful={setJoinForumRequestSuccessful}
         joinForumRequestSuccessful={joinForumRequestSuccessful}
       />
-      {!getForumById.data[0]?.isCurrentUserMember && <ForumContent />}
       {getForumById.data[0]?.isCurrentUserMember && <ForumContentMain />}
+      {!getForumById.data[0]?.isCurrentUserMember && <ForumContent />}
     </div>
   );
 };
