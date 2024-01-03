@@ -23,8 +23,7 @@ const Apply = ({ setApply, jobSelected }) => {
   const [formData, setFormData] = useState({
     JobId: jobSelected.job?.jobId,
     UserId: getMyProfile?.data?.userId,
-    UserResumeUrl: '',
-    CoverLetterUrl: '',
+    PortfolioUrl: '',
     YearsOfExp: '',
     IsAllowedToWork: true,
     DateApplied: '',
@@ -62,15 +61,14 @@ const Apply = ({ setApply, jobSelected }) => {
       setFormData({
         JobId: jobSelected.job.jobId,
         UserId: getMyProfile?.data?.userId,
-        UserResumeUrl: '',
-        CoverLetterUrl: '',
+        PortfolioUrl: '',
         YearsOfExp: '',
         IsAllowedToWork: true,
         DateApplied: '',
         resume: '',
         CoverLetter: '',
       });
-       setApply(false);
+      setApply(false);
     } else if (applyForJob.status === 'error') {
       renderToast({
         status: 'error',
@@ -81,7 +79,8 @@ const Apply = ({ setApply, jobSelected }) => {
   }, [applyForJob]);
 
   // console.log('resume', resume);
-  console.log('formdata', formData);
+  // console.log('formdata', formData);
+  console.log('jobSelected', jobSelected);
   // console.log('formdata.coverLetter', formData.CoverLetter);
   // console.log(applyForJob);
   return (
@@ -90,11 +89,7 @@ const Apply = ({ setApply, jobSelected }) => {
         <div className='role-job-con'>
           <div className='role-con'>
             <h5 className='role'>{getMyProfile.data?.profession}</h5>
-            <h5 className='company'>Google</h5>
-          </div>
-          <div className='job-con'>
-            <p>View full job description</p>
-            <HiOutlineChevronDown className='icon' />
+            <h5 className='company'>{jobSelected?.job.company} </h5>
           </div>
         </div>
         <div className='img-wrapper'>
@@ -206,35 +201,21 @@ const Apply = ({ setApply, jobSelected }) => {
         </div>
       </div>
       <div className='add-qstns'>
+        <div className='qstn'>
+          <p className=''>Enter your portfolio url</p>
+          <div className='input-wrapper'>
+            <input
+              name='PortfolioUrl'
+              type='text'
+              className='input-component'
+              onChange={handleChange}
+              value={formData.PortfolioUrl}
+            />
+          </div>
+        </div>
         <p className='title'>Additional questions</p>
         <div className='qstn'>
-          <p className=''>Enter your resume url*</p>
-          <div className='input-wrapper'>
-            <input
-              name='UserResumeUrl'
-              type='text'
-              className='input-component'
-              onChange={handleChange}
-              value={formData.UserResumeUrl}
-            />
-          </div>
-        </div>
-        <div className='qstn'>
-          <p className=''>Enter your cover letter url*</p>
-          <div className='input-wrapper'>
-            <input
-              name='CoverLetterUrl'
-              type='text'
-              className='input-component'
-              onChange={handleChange}
-              value={formData.CoverLetterUrl}
-            />
-          </div>
-        </div>
-        <div className='qstn'>
-          <p className=''>
-            How many years of UX design experience do you have*
-          </p>
+          <p className=''>How many years of work experience do you have</p>
           <div className='input-wrapper'>
             <input
               name='YearsOfExp'
@@ -247,7 +228,7 @@ const Apply = ({ setApply, jobSelected }) => {
         </div>
         <div className='qstn'>
           <p className=''>
-            Do you have a right to work in {jobSelected?.job.location} without
+            Do you have a right to work in {jobSelected?.job.country} without
             restrictions*
           </p>
           <div className='input-wrapper radio'>
@@ -289,8 +270,7 @@ const Apply = ({ setApply, jobSelected }) => {
           disabled={
             formData.resume === '' ||
             formData.CoverLetter === '' ||
-            formData.CoverLetterUrl === '' ||
-            formData.UserResumeUrl === '' ||
+            formData.PortfolioUrl === '' ||
             formData.resume.size > 3000000 ||
             formData.CoverLetter.size > 3000000
           }

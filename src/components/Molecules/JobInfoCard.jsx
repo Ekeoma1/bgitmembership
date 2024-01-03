@@ -68,14 +68,7 @@ const JobInfoCard = ({
         <h3 className='title'>Overview</h3>
         {jobSelected.job.jobDescription}
       </div>
-      <div className='job-requirements'>
-        <h3 className='title'>Job Requirements</h3>
-        {jobSelected.requirements}
-      </div>
-      <div className='benefits'>
-        <h3 className='title'>Benefits</h3>
-        {jobSelected.benefits}
-      </div>
+
       <div className='btn'>
         <MainButton
           text={'Apply'}
