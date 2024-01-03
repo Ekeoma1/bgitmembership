@@ -19,8 +19,18 @@
       align-items: center;
       margin-bottom: 25px;
       position: relative;
+      @media screen and (max-width: '1000px') {
+        grid-template-columns: 1fr 1fr;
+      }
+      @media screen and (max-width: '800px') {
+        display: flex;
+        flex-direction: column;
+        row-gap: 2rem;
+        align-items: flex-start;
+      }
       .search-box-wrapper {
         position: relative;
+        width: 100%;
         .search-modal-con {
           position: absolute;
           top: 6rem;
@@ -40,67 +50,7 @@
             line-height: normal;
             margin-bottom: 1rem;
           }
-          .users {
-            .user-con {
-              display: flex;
-              align-items: flex-start;
-              column-gap: 1.87rem;
-              cursor: pointer;
-              padding: 1rem;
-              border-radius: 0.8rem;
-              &:hover {
-                background-color: #b3b0b92d;
-              }
-              img {
-                width: 55.226px;
-                height: 55.226px;
-                flex-shrink: 0;
-                border-radius: 50%;
-                overflow: hidden;
-                object-fit: cover;
-              }
-              .wrapper {
-                display: flex;
-                justify-content: space-between;
-                // background-color: red;
-                width: 100%;
-                .info {
-                  display: flex;
-                  // align-items: flex-start;
-                  flex-direction: column;
-                  // row-gap: .1rem;
-                  justify-content: space-between;
-                  width: 100%;
-                  // background-color: green;
-                  .name {
-                    font-weight: 600;
-                    font-family: 'THICCCBOI-SemiBold';
-                    color: #000;
-                    font-size: 17px;
-                    line-height: 20px;
-                  }
-                  .role {
-                    color: #807c8b;
-                    font-size: 15.463px;
-                    font-weight: 500;
-                    line-height: normal;
-
-                    font-size: 15.463px;
-                    color: #807c8b;
-                    font-family: 'THICCCBOI-Medium';
-                    font-weight: 500;
-                    line-height: 17px;
-                  }
-                }
-                .category {
-                  color: #807c8b;
-                  font-size: 13.254px;
-                  font-weight: 500;
-                  line-height: normal;
-                }
-              }
-            }
-          }
+          
           p {
             color: #000;
             font-feature-settings: 'clig' off, 'liga' off;

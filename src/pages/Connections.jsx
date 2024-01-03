@@ -11,6 +11,9 @@ import {
 } from '../Features/connections/connections_slice';
 import OutsideClickHandler from 'react-outside-click-handler';
 import { triggerGetForumMembersByForumId } from '../Features/forums-membership/forums_membership_slice';
+import BlockedUsersLoader from '../components/Atoms/skeleton-loaders/settings-page/BlockedUsersLoader';
+import SearchResult from '../components/Molecules/SearchResult';
+import ConnectionsLoader from '../components/Atoms/skeleton-loaders/connections-page/ConnectionsLoader';
 
 const Connections = () => {
   const params = useParams();
@@ -104,18 +107,32 @@ const Connections = () => {
   return (
     <section className='connection-page'>
       <div className='container'>
-        <button onClick={() => navigate(-1)}>
-          <HiArrowLeft className='text-color22' />
-        </button>
-        {location.pathname.includes('connection') ? (
+        <div className='top-page'>
+          <button className='back' onClick={() => navigate(-1)}>
+            <HiArrowLeft className='text-color22' />
+          </button>
+          {location.pathname.includes('connection') && (
+            <h2>
+              {getConnectionsByUserId.data?.connectionCount}{' '}
+              {`Connection${
+                getConnectionsByUserId.data?.connectionCount > 1 ? 's' : ''
+              }`}
+            </h2>
+          )}
+          {location.pathname.includes('forums') && (
+            <h2>
+              {getForumMembersByForumId.data?.connectionCount}{' '}
+              {`Forum Member${
+                getForumMembersByForumId.data?.connections?.length > 1
+                  ? 's'
+                  : ''
+              }`}
+            </h2>
+          )}
+        </div>
+        {location.pathname.includes('connection') && (
           <div className='connections-wrapper'>
             <div className='connection-head'>
-              <h2>
-                {getConnectionsByUserId.data?.connectionCount}{' '}
-                {`Connection${
-                  getConnectionsByUserId.data?.connectionCount > 1 ? 's' : ''
-                }`}
-              </h2>
               <div className='search-box-wrapper'>
                 {getConnectionsByUserId.status === 'base' ||
                 getConnectionsByUserId.status === 'loading' ? (
@@ -130,56 +147,38 @@ const Connections = () => {
                 ) : (
                   <></>
                 )}
-                {location.pathname.includes('connections') &&
-                  showSearchModal && (
-                    <OutsideClickHandler
-                      onOutsideClick={() => {
-                        setShowSearchModal(false);
-                      }}
-                    >
-                      <div className='search-modal-con shadow-sm'>
-                        {searchedUsers.length > 0 && (
-                          <div className='people'>
-                            <div className='users'>
-                              {searchedUsers.map((user, index) => (
-                                <div
-                                  onClick={() =>
-                                    navigate(`/users/${user.receiverUserId}`)
-                                  }
-                                  className='user-con'
-                                  key={index}
-                                >
-                                  <img
-                                    src={user.receiverImageUrl}
-                                    alt=''
-                                    className=''
-                                  />
-                                  <div className='wrapper'>
-                                    <div className='info'>
-                                      <div className='name'>{`${user.receiverFirstName} ${user.receiverSecondName}`}</div>
-                                      <div className='role'>
-                                        {user.receiverProfession}
-                                      </div>
-                                    </div>
-                                  </div>
-                                </div>
-                              ))}
-                            </div>
+                {showSearchModal && (
+                  <OutsideClickHandler
+                    onOutsideClick={() => {
+                      setShowSearchModal(false);
+                    }}
+                  >
+                    <div className='search-modal-con shadow-sm'>
+                      {searchedUsers.length > 0 && (
+                        <div className='people'>
+                          <div className='users'>
+                            {searchedUsers.map((user, index) => (
+                              <SearchResult
+                                key={index}
+                                to={`/users/${user.receiverUserId}`}
+                                imageUrl={user.receiverImageUrl}
+                                name={`${user.receiverFirstName} ${user.receiverSecondName}`}
+                                profession={user.receiverProfession}
+                              />
+                            ))}
                           </div>
-                        )}
-
-                        {searchedUsers.length === 0 && (
-                          <p>No results found1...</p>
-                        )}
-                      </div>
-                    </OutsideClickHandler>
-                  )}
+                        </div>
+                      )}
+                      {searchedUsers.length === 0 && <p>No results found...</p>}
+                    </div>
+                  </OutsideClickHandler>
+                )}
               </div>
             </div>
             <div className='connections-body'>
               {getConnectionsByUserId.status === 'base' ||
               getConnectionsByUserId.status === 'loading' ? (
-                <>Loading...</>
+                <ConnectionsLoader />
               ) : getConnectionsByUserId.status === 'successful' ? (
                 <>
                   {getConnectionsByUserId.data?.connections?.length === 0 ? (
@@ -199,15 +198,10 @@ const Connections = () => {
               )}
             </div>
           </div>
-        ) : location.pathname.includes('forums') ? (
+        )}
+        {location.pathname.includes('forums') && (
           <div className='connections-wrapper'>
             <div className='connection-head'>
-              <h2>
-                {getForumMembersByForumId.data?.connectionCount}{' '}
-                {`Forum Members${
-                  getForumMembersByForumId.data?.connectionCount > 1 ? 's' : ''
-                }`}
-              </h2>
               <div className='search-box-wrapper'>
                 {getForumMembersByForumId.status === 'base' ||
                 getForumMembersByForumId.status === 'loading' ? (
@@ -222,7 +216,7 @@ const Connections = () => {
                 ) : (
                   <></>
                 )}
-                {location.pathname.includes('forums') && showSearchModal && (
+                {showSearchModal && (
                   <OutsideClickHandler
                     onOutsideClick={() => {
                       setShowSearchModal(false);
@@ -233,33 +227,19 @@ const Connections = () => {
                         <div className='people'>
                           <div className='users'>
                             {searchedForumMembers.map((user, index) => (
-                              <div
-                                onClick={() =>
-                                  navigate(`/users/${user.userId}`)
-                                }
-                                className='user-con'
+                              <SearchResult
                                 key={index}
-                              >
-                                <img
-                                  src={user.user.imageUrl}
-                                  alt=''
-                                  className=''
-                                />
-                                <div className='wrapper'>
-                                  <div className='info'>
-                                    <div className='name'>{`${user.user.firstName} ${user.user.secondName}`}</div>
-                                    <div className='role'>
-                                      {user.user.profession}
-                                    </div>
-                                  </div>
-                                </div>
-                              </div>
+                                to={`/users/${user.userId}`}
+                                imageUrl={user.user.imageUrl}
+                                name={`${user.user.firstName} ${user.user.secondName}`}
+                                profession={user.user.profession}
+                              />
                             ))}
                           </div>
                         </div>
                       )}
                       {searchedForumMembers.length === 0 && (
-                        <p>No results found2...</p>
+                        <p>No results found...</p>
                       )}
                     </div>
                   </OutsideClickHandler>
@@ -268,12 +248,12 @@ const Connections = () => {
             </div>
             <div className='connections-body'>
               {getForumMembersByForumId.status === 'base' ||
-              getForumMembersByForumId.status === 'loading' ? (
-                <>Loading...</>
+              getForumMembersByForumId.status === 'loading'  ? (
+                <ConnectionsLoader />
               ) : getForumMembersByForumId.status === 'successful' ? (
                 <>
                   {getForumMembersByForumId.data?.connections?.length === 0 ? (
-                    <>No connections</>
+                    <>No user found..</>
                   ) : (
                     <>
                       {getForumMembersByForumId.data[0]?.usersInForum?.map(
@@ -293,8 +273,6 @@ const Connections = () => {
               )}
             </div>
           </div>
-        ) : (
-          <></>
         )}
       </div>
     </section>

@@ -77,9 +77,7 @@ const BlockedUser = () => {
       </p>
       {getBlockedUsers.status === 'base' ||
       getBlockedUsers.status === 'loading' ? (
-        <>
-          <BlockedUsersLoader />
-        </>
+        <BlockedUsersLoader />
       ) : getBlockedUsers.status === 'successful' ? (
         <>
           {getBlockedUsersLocal.length === 0 ? (
