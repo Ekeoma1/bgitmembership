@@ -132,7 +132,6 @@ const Group = () => {
       setBactToDefault();
     }
   }, [joinForum.status, cancelJoinForumRequest.status]);
-  console.log('getallfroumslocal', getAllForumsLocal);
   return (
     <div className='dashboard-card group-wrapper'>
       {getAllForums.status === 'base' || getAllForums.status === 'loading' ? (
@@ -144,7 +143,7 @@ const Group = () => {
           <div className='d-flex justify-content-between align-items-center'>
             <div className='dashboard-header'>Groups</div>
             {getAllForumsLocal.length > 2 && (
-              <div>
+              <div onClick={() => navigate('/forums/all')}>
                 <button className='dashboard-text'>See more</button>
               </div>
             )}

@@ -50,7 +50,7 @@ const Home = () => {
         )
         .slice(0, 3);
       setSearchedUsers(searchedUsers);
-      const forums = [...getAllForums.data];
+      const forums = [...getAllForums.data.forums];
       const searchedForums = forums
         ?.filter(
           (forum) =>

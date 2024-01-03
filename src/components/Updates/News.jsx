@@ -13,6 +13,7 @@ import { ForumCardsLoader2 } from '../Atoms/skeleton-loaders/ForumCardsLoader';
 
 const News = () => {
   const dispatch = useDispatch();
+  const navigate = useNavigate();
   const { getAllEvents } = useSelector((state) => state.events);
   const { getAllNews } = useSelector((state) => state.news);
   const [pageNumber] = useState(1);
@@ -51,7 +52,12 @@ const News = () => {
             Be sure to register ASAP and secure your tickets now.
           </p>
           <div className='cards-container'>
-            <div className='view-all'>
+            <div
+              onClick={() => {
+                navigate('/events-and-news');
+              }}
+              className='view-all'
+            >
               <button>View all</button>
             </div>
             <div className='cards-wrapper'>

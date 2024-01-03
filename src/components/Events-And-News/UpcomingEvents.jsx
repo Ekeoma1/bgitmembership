@@ -37,7 +37,8 @@ const UpcomingEvents = () => {
             <div className='col-md'>
               <h2>Upcoming Events</h2>
             </div>
-            <div className='col-md'>
+            {/* search-commented */}
+            {/* <div className='col-md'>
               <div className='search-wrapper'>
                 <div className='search-box-wrapper'>
                   <div className='search-box-con'>
@@ -45,7 +46,7 @@ const UpcomingEvents = () => {
                   </div>
                 </div>
               </div>
-            </div>
+            </div> */}
           </div>
           <div className='section-content'>
             <div className='cards-wrapper'>

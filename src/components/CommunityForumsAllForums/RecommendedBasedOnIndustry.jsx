@@ -31,9 +31,9 @@ const RecommendedBasedOnIndustry = ({ basedOn }) => {
   useEffect(() => {
     if (
       getAllForumsByIndustry.status === 'successful' &&
-      Array.isArray(getAllForumsByIndustry.data)
+      Array.isArray(getAllForumsByIndustry.data.forums)
     ) {
-      setGetAllForumsByIndustryLocal(getAllForumsByIndustry.data);
+      setGetAllForumsByIndustryLocal(getAllForumsByIndustry.data.forums);
     }
   }, [getAllForumsByIndustry]);
 

@@ -175,6 +175,9 @@
           column-gap: 7.26%;
           border-bottom: 1px solid #d8d1ef;
           padding: 2.1rem 0;
+          &.view {
+            cursor: pointer;
+          }
           .img-con {
             width: 3.7rem;
             height: 3.7rem;
@@ -369,6 +372,16 @@
   .apply {
     width: 87.3611%;
     margin: 5rem auto 0;
+    .back {
+      margin-bottom: 3rem;
+      font-size: 4rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 4rem;
+      height: 4rem;
+      cursor: pointer;
+    }
     .sec-1 {
       display: flex;
       justify-content: space-between;

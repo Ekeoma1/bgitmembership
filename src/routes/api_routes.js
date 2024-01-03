@@ -87,6 +87,7 @@ const apiRoutes = {
   getAllForums: '/Forums/GetAllForums',
   getSuggestedForums: '/Forums/GetSuggestedForums',
   getForumById: '/Forums/GetForumById',
+  getMyForums: '/Forums/GetMyForums',
   getForumConnectionStatusById: '/Forums/GetForumMembershipStatus',
   getAllForumsByIndustry: '/Forums/GetAllForumsByIndustry',
   getAllForumsByLocation: '/Forums/GetAllForumsByLocation',
@@ -94,7 +95,8 @@ const apiRoutes = {
   //Forums Membership
   acceptForumJoinRequest: '/ForumsMembership/AcceptForumJoinRequest',
   rejectForumJoinRequest: '/ForumsMembership/RejectForumJoinRequest',
-  getPendingJoinRequestsByForumId: '/ForumsMembership/GetPendingJoinRequestsByForumId',
+  getPendingJoinRequestsByForumId:
+    '/ForumsMembership/GetPendingJoinRequestsByForumId',
   getPendingJoinRequests: '/ForumsMembership/GetPendingJoinRequests',
   getForumMembersByForumId: '/ForumsMembership/GetForumMembersByForumId',
 

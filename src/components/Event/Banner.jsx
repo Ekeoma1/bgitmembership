@@ -21,14 +21,15 @@ const Banner = ({ tab }) => {
           style={{
             backgroundSize: 'cover',
             backgroundRepeat: 'no-repeat',
+            minHeight: '30vh',
             backgroundPosition: 'center',
             width: '100%',
-            background: `url(${getEventById?.data.imageUrl ?? `#bdc3c7`})`,
+            backgroundImage: `url(${getEventById?.data.imageUrl ?? `#bdc3c7`})`,
           }}
           className='banner-wrapper'
         >
           <div className='banner-content'>
-            <div className='arrow' onClick={() => navigate('/events-and-news')}>
+            <div className='arrow' onClick={() => navigate(-1)}>
               <HiArrowLeft />
             </div>
           </div>

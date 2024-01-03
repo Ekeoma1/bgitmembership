@@ -24,7 +24,9 @@ const IndividualEventTicket = () => {
   );
   const { getMyProfile } = useSelector((state) => state.users);
   const handleCancelOrder = () => {
-    dispatch(triggerCancelEventApplication({ eventId: getEventById?.data?.eventId }));
+    dispatch(
+      triggerCancelEventApplication({ eventId: getEventById?.data?.eventId })
+    );
   };
   useEffect(() => {
     const data = { queryParams: { eventId: params.id } };
@@ -50,7 +52,6 @@ const IndividualEventTicket = () => {
     }
   }, [cancelEventApplication]);
 
-  console.log('cancel order', cancelEventApplication);
   return (
     <div className='individual-event-ticket-page'>
       <div className='container'>
@@ -121,14 +122,37 @@ const IndividualEventTicket = () => {
 
                     <div className='general-admission-info'>
                       <div className='title'>
-                        First Name <span className='text-danger'>*</span>
+                        Event name <span className='text-danger'>*</span>
+                      </div>
+                      <div className='info'>{getEventById.data?.title}</div>
+                    </div>
+                    <div className='general-admission-info'>
+                      <div className='title'>
+                        Event date/time <span className='text-danger'>*</span>
+                      </div>
+                      <div className='info'>
+                        {moment(getEventById?.data?.eventDate).format(
+                          'Do MMMM YYYY'
+                        )}
+                        , {getEventById.data?.time}
+                      </div>
+                    </div>
+                    <div className='general-admission-info'>
+                      <div className='title'>
+                        Event location <span className='text-danger'>*</span>
+                      </div>
+                      <div className='info'>{getEventById.data?.location}</div>
+                    </div>
+                    <div className='general-admission-info'>
+                      <div className='title'>
+                        First name <span className='text-danger'>*</span>
                       </div>
                       <div className='info'>{getMyProfile.data?.firstName}</div>
                     </div>
 
                     <div className='general-admission-info'>
                       <div className='title'>
-                        SurName <span className='text-danger'>*</span>
+                        Surname <span className='text-danger'>*</span>
                       </div>
                       <div className='info'>
                         {getMyProfile.data?.secondName}

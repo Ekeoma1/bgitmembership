@@ -14,6 +14,7 @@ import {
 import SingleLineLoader from '../Atoms/skeleton-loaders/SingleLineLoader';
 import { renderToast } from '../Molecules/CustomToastify';
 import { useNavigate } from 'react-router-dom';
+import { IoArrowBackSharp } from 'react-icons/io5';
 const Apply = ({ setApply, jobSelected }) => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -85,6 +86,9 @@ const Apply = ({ setApply, jobSelected }) => {
   // console.log(applyForJob);
   return (
     <div className='apply'>
+      <div className='back' onClick={() => setApply(false)}>
+        <IoArrowBackSharp />
+      </div>
       <div className='sec-1'>
         <div className='role-job-con'>
           <div className='role-con'>

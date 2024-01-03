@@ -64,14 +64,10 @@ const AllForums = ({ setSearchMain }) => {
   const onChange = (e) => {
     setSearchValue(e.target.value);
   };
-  const handleSearch = () => {
-    // console.log("search", searchValue);
-  };
+  const handleSearch = () => {};
   const handleFilterBoxSearch = () => {
     setShowFilterBoxSection(false);
-    // console.log("filterData", filterData);
   };
-  // console.log('empty', showSearchEmptyState);
   const [searchTerm, setSearchTerm] = useState('');
   const [searchedUsers, setSearchedUsers] = useState([]);
   const [searchedForums, setSearchedForums] = useState([]);
@@ -97,7 +93,7 @@ const AllForums = ({ setSearchMain }) => {
       //   )
       //   .slice(0, 3);
       // setSearchedUsers(searchedUsers);
-      const forums = [...getAllForums.data];
+      const forums = [...getAllForums.data.forums];
       console.log('forums', forums);
       const searchedForums = forums
         ?.filter(
@@ -126,12 +122,10 @@ const AllForums = ({ setSearchMain }) => {
         <div className={`search-box-section mx-auto ${search && 'search'}`}>
           <div className='search-box-component-wrapper'>
             <SearchBox
-              onChange={handleChange}
-              value={searchTerm}
               placeholder='Search forums'
               height={'4.2rem'}
-              // enterKeyPressed={() => setDispatchSearch(true)}
-              // otherKeysPressed={() => setDispatchSearch(false)}
+              value={searchTerm}
+              setValue={setSearchTerm}
             />
             {showSearchModal && (
               <OutsideClickHandler

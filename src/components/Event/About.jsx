@@ -15,9 +15,11 @@ import {
 import { renderToast } from '../Molecules/CustomToastify';
 import SingleLineLoader from '../Atoms/skeleton-loaders/SingleLineLoader';
 import bgtCreator from '../../assets/images/bgtCreator.svg';
+import { useNavigate, useParams } from 'react-router-dom';
 const About = ({ setTab }) => {
   const dispatch = useDispatch();
-
+  const navigate = useNavigate();
+  const params = useParams();
   const { getEventById } = useSelector((state) => state.events);
   const { getUserProfileById } = useSelector((state) => state.users);
   const { applyForEvent } = useSelector((state) => state.events);
@@ -82,16 +84,26 @@ const About = ({ setTab }) => {
                 </div>
               </div>
               <div className='price-mobile'>
-                <button
-                  onClick={applyForEvent.status !== 'loading' && apply}
-                  className={` ${
-                    applyForEvent.status === 'loading' && 'loading'
-                  } `}
-                >
-                  {applyForEvent.status === 'loading'
-                    ? 'Loading...'
-                    : 'Get tickets'}
-                </button>
+                {getEventById.data?.eventApplyStatus ? (
+                  <button
+                    onClick={() =>
+                      navigate(`/events-and-news/event-tickets/${params.id}`)
+                    }
+                  >
+                    View ticket
+                  </button>
+                ) : (
+                  <button
+                    onClick={apply}
+                    className={` ${
+                      applyForEvent.status === 'loading' && 'loading'
+                    } `}
+                  >
+                    {applyForEvent.status === 'loading'
+                      ? 'Loading...'
+                      : 'Get tickets'}
+                  </button>
+                )}
               </div>
               <div className='about'>
                 <h3 className='title'>About</h3>
@@ -149,7 +161,13 @@ const About = ({ setTab }) => {
             <div className='price'>
               <div className='price-card'>
                 {getEventById.data?.eventApplyStatus ? (
-                  <button>Applied</button>
+                  <button
+                    onClick={() =>
+                      navigate(`/events-and-news/event-tickets/${params.id}`)
+                    }
+                  >
+                    View ticket
+                  </button>
                 ) : (
                   <button
                     onClick={apply}

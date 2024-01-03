@@ -28,6 +28,10 @@ const initialState = {
     status: states.BASE,
     data: [],
   },
+  getMyForums: {
+    status: states.BASE,
+    data: [],
+  },
   getForumById: {
     status: states.BASE,
     data: [],
@@ -129,6 +133,19 @@ export const triggerGetSuggestedForums = createAsyncThunk(
     }
   }
 );
+
+// get my forums
+export const triggerGetMyForums = createAsyncThunk(
+  'get-my-forums',
+  async (params, thunkAPI) => {
+    try {
+      return await ForumsService.getMyForums(params);
+    } catch (e) {
+      return thunkAPI.rejectWithValue(e.message);
+    }
+  }
+);
+
 // get forum by Id
 export const triggerGetForumById = createAsyncThunk(
   'get-forum-by-id',
@@ -201,7 +218,6 @@ const forumsSlice = createSlice({
   extraReducers: (builder) => {
     // Join forum
     builder.addCase(triggerJoinForum.pending, (state, action) => {
-      console.log('action.payload######################', action);
       state.joinForum.status = states.LOADING;
       state.joinForum.data = {};
       state.activeForumsCurrentRequests[`${action.meta.arg.forumId}`] = {
@@ -310,17 +326,17 @@ const forumsSlice = createSlice({
     });
 
     // get forums by ID
-    builder.addCase(triggerGetForumById.pending, (state) => {
-      state.getForumById.status = states.LOADING;
-      state.getForumById.data = {};
+    builder.addCase(triggerGetMyForums.pending, (state) => {
+      state.getMyForums.status = states.LOADING;
+      state.getMyForums.data = {};
     });
-    builder.addCase(triggerGetForumById.fulfilled, (state, action) => {
-      state.getForumById.status = states.SUCCESSFUL;
-      state.getForumById.data = action.payload;
+    builder.addCase(triggerGetMyForums.fulfilled, (state, action) => {
+      state.getMyForums.status = states.SUCCESSFUL;
+      state.getMyForums.data = action.payload;
     });
-    builder.addCase(triggerGetForumById.rejected, (state, action) => {
-      state.getForumById.status = states.ERROR;
-      state.getForumById.data = action.payload;
+    builder.addCase(triggerGetMyForums.rejected, (state, action) => {
+      state.getMyForums.status = states.ERROR;
+      state.getMyForums.data = action.payload;
     });
 
     // get forums by ID

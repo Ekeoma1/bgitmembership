@@ -47,6 +47,14 @@ export default class ForumsService {
     });
     return response;
   }
+  static async getMyForums(data) {
+    const response = await get({
+      url: apiRoutes.getMyForums,
+      data: { ...data },
+      queryParams: data.queryParams,
+    });
+    return response;
+  }
   static async getForumById(data) {
     const response = await get({
       url: apiRoutes.getForumById,

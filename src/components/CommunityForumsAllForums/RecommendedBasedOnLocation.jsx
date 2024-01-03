@@ -33,9 +33,9 @@ const RecommendedBasedOnLocation = ({ basedOn }) => {
   useEffect(() => {
     if (
       getAllForumsByLocation.status === 'successful' &&
-      Array.isArray(getAllForumsByLocation.data)
+      Array.isArray(getAllForumsByLocation.data.forums)
     ) {
-      setGetAllForumsByLocationLocal(getAllForumsByLocation.data);
+      setGetAllForumsByLocationLocal(getAllForumsByLocation.data.forums);
     }
   }, [getAllForumsByLocation]);
 

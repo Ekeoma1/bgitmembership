@@ -36,7 +36,8 @@ const LatestNews = () => {
             <div className='col-md'>
               <h2>Latest news</h2>
             </div>
-            <div className='col-md'>
+            {/* search-commented */}
+            {/* <div className='col-md'>
               <div className='search-wrapper'>
                 <div className='search-box-wrapper'>
                   <div className='search-box-con'>
@@ -44,7 +45,7 @@ const LatestNews = () => {
                   </div>
                 </div>
               </div>
-            </div>
+            </div> */}
           </div>
 
           <div className='section-content'>

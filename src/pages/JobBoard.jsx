@@ -80,29 +80,31 @@ const JobBoard = () => {
 
   return (
     <div className='job-board-wrapper'>
-      <div className='search-box-section mx-auto'>
-        <div className='search-box-component-wrapper'>
-          <SearchBox
-            onChange={onChange}
-            value={searchValue}
-            placeholder='Search'
-          />
+      {/* {!apply && (
+        <div className='search-box-section mx-auto'>
+          <div className='search-box-component-wrapper'>
+            <SearchBox
+              onChange={onChange}
+              value={searchValue}
+              placeholder='Search'
+            />
+          </div>
+          <button
+            onClick={() => {
+              setFilter(!filter);
+              setShowJobInfo(false);
+              // if (isMobile) {
+              // }
+            }}
+            type='submit'
+            className='primary-btn small-btn  filter-btn'
+          >
+            <VscSettings />
+            Filter
+            <HiOutlineChevronDown />
+          </button>
         </div>
-        <button
-          onClick={() => {
-            setFilter(!filter);
-            setShowJobInfo(false);
-            // if (isMobile) {
-            // }
-          }}
-          type='submit'
-          className='primary-btn small-btn  filter-btn'
-        >
-          <VscSettings />
-          Filter
-          <HiOutlineChevronDown />
-        </button>
-      </div>
+      )} */}
       {!filter && (
         <div className='tab-btns'>
           <button
@@ -231,10 +233,19 @@ const JobBoard = () => {
                           {getSavedJobs.data?.jobs?.map((item, index) => (
                             <div
                               key={index}
-                              className='saved-job'
+                              className={`saved-job ${
+                                !item.job?.isClosed &&
+                                !item?.job?.hasApplied &&
+                                'view'
+                              }`}
                               onClick={() => {
-                                setApply(true);
-                                setJobSelected(item);
+                                if (
+                                  !item.job?.isClosed &&
+                                  !item?.job?.hasApplied
+                                ) {
+                                  setApply(true);
+                                  setJobSelected(item);
+                                }
                               }}
                             >
                               <div className='img-con'>
@@ -262,12 +273,12 @@ const JobBoard = () => {
                                   </div>
                                   <span
                                     className={`status ${
-                                      !item.isJobOpen && 'closed'
+                                      item.job?.isClosed && 'closed'
                                     }`}
                                   >
-                                    {!item.ijob?.sJobOpen
+                                    {item.job?.isClosed
                                       ? 'Application closed'
-                                      : item.djob?.ateApplied
+                                      : item.job?.dateApplied
                                       ? `Applied ${moment(
                                           item?.job?.dateApplied
                                         ).fromNow()}`

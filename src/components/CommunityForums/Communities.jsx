@@ -1,21 +1,25 @@
-import React, { useState } from "react";
-import "../../../src/assets/scss/communityForums.scss";
-import "bootstrap/dist/js/bootstrap.bundle.min";
+import React, { useEffect, useState } from 'react';
+import '../../../src/assets/scss/communityForums.scss';
+import 'bootstrap/dist/js/bootstrap.bundle.min';
 
-import SearchBox from "../Molecules/SearchBox";
-import CommunityCard from "./CommunityCard";
-import community1 from "../../../src/assets/images/community1.svg";
-import community2 from "../../../src/assets/images/community2.svg";
-import community3 from "../../../src/assets/images/community3.svg";
-import EmptyState from "../Molecules/EmptyState";
-import Carousel from "react-multi-carousel";
-import "react-multi-carousel/lib/styles.css";
-import CreateCommunityModal from "./CreateCommunityModal";
+import SearchBox from '../Molecules/SearchBox';
+import CommunityCard from './CommunityCard';
+import community1 from '../../../src/assets/images/community1.svg';
+import community2 from '../../../src/assets/images/community2.svg';
+import community3 from '../../../src/assets/images/community3.svg';
+import EmptyState from '../Molecules/EmptyState';
+import Carousel from 'react-multi-carousel';
+import 'react-multi-carousel/lib/styles.css';
+import CreateCommunityModal from './CreateCommunityModal';
+import { useDispatch } from 'react-redux';
+import { triggerGetMyForums } from '../../Features/forums/forums_slice';
 
 const Communities = () => {
-  const [searchValue, setSearchValue] = useState("");
+  const [searchValue, setSearchValue] = useState('');
   const [userHasForums] = useState(false);
-
+  const dispatch = useDispatch();
+  const [pageNumber] = useState(1);
+  const [pageSize] = useState(10);
   const onChange = (e) => {
     setSearchValue(e.target.value);
   };
@@ -23,49 +27,49 @@ const Communities = () => {
     {
       community_img: community1,
       recently_joined: true,
-      community_name: "UX/UI Design",
+      community_name: 'UX/UI Design',
       community_members: 100,
       unreadMsg: false,
     },
     {
       community_img: community2,
       recently_joined: false,
-      community_name: "Engineer Girls",
+      community_name: 'Engineer Girls',
       community_members: 67,
       unreadMsg: true,
     },
     {
       community_img: community3,
       recently_joined: true,
-      community_name: "Data Babes 😍👩🏾‍💻",
+      community_name: 'Data Babes 😍👩🏾‍💻',
       community_members: 83,
       unreadMsg: true,
     },
     {
       community_img: community3,
       recently_joined: true,
-      community_name: "Data Babes 😍👩🏾‍💻",
+      community_name: 'Data Babes 😍👩🏾‍💻',
       community_members: 83,
       unreadMsg: true,
     },
     {
       community_img: community3,
       recently_joined: true,
-      community_name: "Data Babes 😍👩🏾‍💻",
+      community_name: 'Data Babes 😍👩🏾‍💻',
       community_members: 83,
       unreadMsg: true,
     },
     {
       community_img: community3,
       recently_joined: true,
-      community_name: "Data Babes 😍👩🏾‍💻",
+      community_name: 'Data Babes 😍👩🏾‍💻',
       community_members: 83,
       unreadMsg: true,
     },
     {
       community_img: community3,
       recently_joined: true,
-      community_name: "Data Babes 😍👩🏾‍💻",
+      community_name: 'Data Babes 😍👩🏾‍💻',
       community_members: 83,
       unreadMsg: true,
     },
@@ -84,24 +88,32 @@ const Communities = () => {
       items: 2,
     },
   };
+  useEffect(() => {
+    const data = { queryParams: { pageNumber, pageSize } };
+    dispatch(triggerGetMyForums(data));
+  }, []);
   return (
-    <div className="communities-wrapper">
-      <div className="container">
-        <div className="content-wrapper">
+    <div className='communities-wrapper'>
+      <div className='container'>
+        <div className='content-wrapper'>
           {/* create community modal */}
           <CreateCommunityModal />
           {userHasForums && (
-            <div className="forums-true">
-              <div className="search-box">
-                <div className="search-box-wrapper">
-                  <SearchBox onChange={onChange} value={searchValue} placeholder="Search" />
+            <div className='forums-true'>
+              <div className='search-box'>
+                <div className='search-box-wrapper'>
+                  <SearchBox
+                    onChange={onChange}
+                    value={searchValue}
+                    placeholder='Search'
+                  />
                 </div>
               </div>
-              <div className="section-title">
-                <h3 className="text-color22">Communities </h3>
-                <p className="text-color222"> (3)</p>
+              <div className='section-title'>
+                <h3 className='text-color22'>Communities </h3>
+                <p className='text-color222'> (3)</p>
               </div>
-              <div className="cards-wrapper">
+              <div className='cards-wrapper'>
                 <Carousel responsive={responsive}>
                   {communities.map((community, index) => (
                     <CommunityCard community={community} key={index} />
@@ -110,7 +122,12 @@ const Communities = () => {
               </div>
             </div>
           )}
-          {!userHasForums && <EmptyState title={"No forums yet?!"} info={"Search or browse suggested forums below."} />}
+          {!userHasForums && (
+            <EmptyState
+              title={'No forums yet?!'}
+              info={'Search or browse suggested forums below.'}
+            />
+          )}
         </div>
       </div>
     </div>

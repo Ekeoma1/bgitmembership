@@ -24,7 +24,7 @@ const About2 = ({}) => {
                 <div className=''>
                   <h5 className=''>Date</h5>
                   <p className=''>
-                    {moment(getNewsById?.data?.eventDate).format(
+                    {moment(getNewsById?.data?.createdDate).format(
                       'dddd, MMMM Do YYYY, h:mm:ss a'
                     )}
                   </p>

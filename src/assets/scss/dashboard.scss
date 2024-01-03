@@ -527,6 +527,7 @@
           border-radius: 50%;
           background-size: cover;
           background-position: center;
+          cursor: pointer;
         }
 
         .name {
@@ -535,6 +536,7 @@
           font-size: 17px;
           line-height: 23.42px;
           color: $header-text-color;
+          cursor: pointer;
         }
 
         .other-data {

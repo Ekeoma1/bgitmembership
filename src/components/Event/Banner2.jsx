@@ -21,6 +21,9 @@ const Banner2 = ({ tab }) => {
           style={{
             backgroundSize: 'cover',
             backgroundRepeat: 'no-repeat',
+            minHeight: '30vh',
+            backgroundPosition: 'center',
+            width: '100%',
             background: `${getNewsById?.data.imageUrl ?? `#bdc3c7`}`,
           }}
           className='banner-wrapper'

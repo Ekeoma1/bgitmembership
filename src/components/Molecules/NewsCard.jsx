@@ -7,7 +7,7 @@ import { useNavigate } from 'react-router-dom';
 
 const NewsCard = ({ news }) => {
   const [imgOnLoadStatus, setImgOnLoadStatus] = useState('base');
-
+  const navigate = useNavigate();
   return (
     <div className='news-card'>
       <div className='card-top'>
@@ -30,7 +30,7 @@ const NewsCard = ({ news }) => {
         <div className='btn-con'>
           <button
             onClick={() => {
-              console.log(news.newsId);
+              navigate(`/events-and-news/news/${news.newsId}`);
             }}
           >
             More info
