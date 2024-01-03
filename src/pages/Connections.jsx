@@ -25,6 +25,7 @@ const Connections = () => {
   const [searchTerm, setSearchTerm] = useState('');
   const [showSearchModal, setShowSearchModal] = useState(false);
   const [searchedUsers, setSearchedUsers] = useState([]);
+  const [searchedForumMembers, setSearchedForumMembers] = useState([]);
 
   useEffect(() => {
     if (location.pathname.includes('connections')) {
@@ -35,6 +36,7 @@ const Connections = () => {
       dispatch(triggerGetForumMembersByForumId(data));
     }
   }, []);
+
   useEffect(() => {
     if (location.pathname.includes('connections')) {
       if (searchTerm) {
@@ -63,15 +65,41 @@ const Connections = () => {
         setSearchedUsers([]);
       }
     } else if (location.pathname.includes('forums')) {
+      if (searchTerm) {
+        setShowSearchModal(true);
+        const members = [...getForumMembersByForumId.data[0]?.usersInForum];
+        const searchedMembers = members
+          ?.filter(
+            (member) =>
+              member.user.firstName
+                .toLowerCase()
+                .includes(searchTerm.toLowerCase()) ||
+              member.user.secondName
+                .toLowerCase()
+                .includes(searchTerm.toLowerCase()) ||
+              member.user.city
+                .toLowerCase()
+                .includes(searchTerm.toLowerCase()) ||
+              member.user.profession
+                .toLowerCase()
+                .includes(searchTerm.toLowerCase())
+          )
+          .slice(0, 3);
+        setSearchedForumMembers(searchedMembers);
+      } else {
+        setShowSearchModal(false);
+        setSearchedUsers([]);
+      }
     }
   }, [searchTerm]);
 
   // console.log('searchusers', searchedUsers);
   // console.log('params', params);
-  console.log('members', getForumMembersByForumId);
+  // console.log('members', getForumMembersByForumId);
 
   // console.log('getConnectionsByUserId', getConnectionsByUserId);
-  // console.log('searchTerm', searchTerm);
+  console.log('searchTerm', searchTerm);
+  console.log('searchedforummembers', searchedForumMembers);
 
   return (
     <section className='connection-page'>
@@ -102,47 +130,50 @@ const Connections = () => {
                 ) : (
                   <></>
                 )}
-                {showSearchModal && (
-                  <OutsideClickHandler
-                    onOutsideClick={() => {
-                      setShowSearchModal(false);
-                    }}
-                  >
-                    <div className='search-modal-con shadow-sm'>
-                      {searchedUsers.length > 0 && (
-                        <div className='people'>
-                          <div className='users'>
-                            {searchedUsers.map((user, index) => (
-                              <div
-                                onClick={() =>
-                                  navigate(`/users/${user.receiverUserId}`)
-                                }
-                                className='user-con'
-                                key={index}
-                              >
-                                <img
-                                  src={user.receiverImageUrl}
-                                  alt=''
-                                  className=''
-                                />
-                                <div className='wrapper'>
-                                  <div className='info'>
-                                    <div className='name'>{`${user.receiverFirstName} ${user.receiverSecondName}`}</div>
-                                    <div className='role'>
-                                      {user.receiverProfession}
+                {location.pathname.includes('connections') &&
+                  showSearchModal && (
+                    <OutsideClickHandler
+                      onOutsideClick={() => {
+                        setShowSearchModal(false);
+                      }}
+                    >
+                      <div className='search-modal-con shadow-sm'>
+                        {searchedUsers.length > 0 && (
+                          <div className='people'>
+                            <div className='users'>
+                              {searchedUsers.map((user, index) => (
+                                <div
+                                  onClick={() =>
+                                    navigate(`/users/${user.receiverUserId}`)
+                                  }
+                                  className='user-con'
+                                  key={index}
+                                >
+                                  <img
+                                    src={user.receiverImageUrl}
+                                    alt=''
+                                    className=''
+                                  />
+                                  <div className='wrapper'>
+                                    <div className='info'>
+                                      <div className='name'>{`${user.receiverFirstName} ${user.receiverSecondName}`}</div>
+                                      <div className='role'>
+                                        {user.receiverProfession}
+                                      </div>
                                     </div>
                                   </div>
                                 </div>
-                              </div>
-                            ))}
+                              ))}
+                            </div>
                           </div>
-                        </div>
-                      )}
+                        )}
 
-                      {searchedUsers.length === 0 && <p>No results found...</p>}
-                    </div>
-                  </OutsideClickHandler>
-                )}
+                        {searchedUsers.length === 0 && (
+                          <p>No results found1...</p>
+                        )}
+                      </div>
+                    </OutsideClickHandler>
+                  )}
               </div>
             </div>
             <div className='connections-body'>
@@ -157,7 +188,7 @@ const Connections = () => {
                     <>
                       {getConnectionsByUserId.data?.connections?.map(
                         (item, index) => (
-                          <ConnectionCard from={'connection'} key={index} user={item} />
+                          <ConnectionCard key={index} user={item} />
                         )
                       )}
                     </>
@@ -168,7 +199,7 @@ const Connections = () => {
               )}
             </div>
           </div>
-        ) : location.pathname.includes('members') ? (
+        ) : location.pathname.includes('forums') ? (
           <div className='connections-wrapper'>
             <div className='connection-head'>
               <h2>
@@ -191,34 +222,34 @@ const Connections = () => {
                 ) : (
                   <></>
                 )}
-                {showSearchModal && (
+                {location.pathname.includes('forums') && showSearchModal && (
                   <OutsideClickHandler
                     onOutsideClick={() => {
                       setShowSearchModal(false);
                     }}
                   >
                     <div className='search-modal-con shadow-sm'>
-                      {searchedUsers.length > 0 && (
+                      {searchedForumMembers.length > 0 && (
                         <div className='people'>
                           <div className='users'>
-                            {searchedUsers.map((user, index) => (
+                            {searchedForumMembers.map((user, index) => (
                               <div
                                 onClick={() =>
-                                  navigate(`/users/${user.receiverUserId}`)
+                                  navigate(`/users/${user.userId}`)
                                 }
                                 className='user-con'
                                 key={index}
                               >
                                 <img
-                                  src={user.receiverImageUrl}
+                                  src={user.user.imageUrl}
                                   alt=''
                                   className=''
                                 />
                                 <div className='wrapper'>
                                   <div className='info'>
-                                    <div className='name'>{`${user.receiverFirstName} ${user.receiverSecondName}`}</div>
+                                    <div className='name'>{`${user.user.firstName} ${user.user.secondName}`}</div>
                                     <div className='role'>
-                                      {user.receiverProfession}
+                                      {user.user.profession}
                                     </div>
                                   </div>
                                 </div>
@@ -227,8 +258,9 @@ const Connections = () => {
                           </div>
                         </div>
                       )}
-
-                      {searchedUsers.length === 0 && <p>No results found...</p>}
+                      {searchedForumMembers.length === 0 && (
+                        <p>No results found2...</p>
+                      )}
                     </div>
                   </OutsideClickHandler>
                 )}
@@ -246,7 +278,11 @@ const Connections = () => {
                     <>
                       {getForumMembersByForumId.data[0]?.usersInForum?.map(
                         (item, index) => (
-                          <ConnectionCard withoutAction key={index} user={item} />
+                          <ConnectionCard
+                            withoutAction
+                            key={index}
+                            user={item}
+                          />
                         )
                       )}
                     </>

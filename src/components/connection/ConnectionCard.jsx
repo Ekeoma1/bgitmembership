@@ -88,14 +88,14 @@ const ConnectionCard = ({ withoutAction, user }) => {
           <div className='connection-details'>
             <div
               className='connection-img'
-              onClick={() => navigate(`/users/${user?.receiverUserId}`)}
+              onClick={() => navigate(`/users/${user?.userId}`)}
             >
               <img src={user.user.imageUrl} alt='user' className='' />
             </div>
             <div className='nameRole-wrapper'>
               <h3
                 className='name'
-                onClick={() => navigate(`/users/${user?.receiverUserId}`)}
+                onClick={() => navigate(`/users/${user?.userId}`)}
               >{`${user.user.firstName} ${user.user.secondName}`}</h3>
               <div className='role'>{user.user.profession}</div>
             </div>
