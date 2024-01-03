@@ -4,30 +4,59 @@
 .connection-page {
   padding: 5rem 0;
   background-color: $body-bg;
-
-  .connections-wrapper {
+  .back {
+    margin-bottom: 3rem;
+    @media screen and (max-width: '1100px') {
+      display: none;
+    }
+  }
+  .top-page {
     width: 70%;
     margin: auto;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 25px;
+    display: grid;
+    grid-template-columns: 2fr 1fr;
+    // background-color: green;
+    
     @media screen and (max-width: '1100px') {
       width: 100%;
     }
+    position: relative;
+    @media screen and (max-width: '1000px') {
+      grid-template-columns: 1fr 1fr;
+    }
+    @media screen and (max-width: '800px') {
+      display: flex;
+      flex-direction: column;
+      row-gap: 2rem;
+      align-items: flex-start;
+    }
 
-    .connection-head {
-      display: grid;
-      grid-template-columns: 2fr 1fr;
+    .wrapper {
+      display: flex;
+      column-gap: 2rem;
+      align-items: center;
+      .back-mobile {
+        display: none;
+        @media screen and (max-width: '800px') {
+          display: flex;
+          align-items: center;
+          justify-content: center;
+        }
+      }
+      h2{
+   
+      }
+    }
+    .top-page-con {
+      display: flex;
       justify-content: space-between;
       align-items: center;
-      margin-bottom: 25px;
-      position: relative;
-      @media screen and (max-width: '1000px') {
-        grid-template-columns: 1fr 1fr;
-      }
-      @media screen and (max-width: '800px') {
-        display: flex;
-        flex-direction: column;
-        row-gap: 2rem;
-        align-items: flex-start;
-      }
+      width: 100%;
+
       .search-box-wrapper {
         position: relative;
         width: 100%;
@@ -50,7 +79,7 @@
             line-height: normal;
             margin-bottom: 1rem;
           }
-          
+
           p {
             color: #000;
             font-feature-settings: 'clig' off, 'liga' off;
@@ -64,6 +93,13 @@
           }
         }
       }
+    }
+  }
+  .connections-wrapper {
+    width: 70%;
+    margin: auto;
+    @media screen and (max-width: '1100px') {
+      width: 100%;
     }
     .connections-body {
       .connection-card {

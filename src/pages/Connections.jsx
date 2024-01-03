@@ -107,74 +107,135 @@ const Connections = () => {
   return (
     <section className='connection-page'>
       <div className='container'>
+        <button className='back' onClick={() => navigate(-1)}>
+          <HiArrowLeft className='text-color22' />
+        </button>
         <div className='top-page'>
-          <button className='back' onClick={() => navigate(-1)}>
-            <HiArrowLeft className='text-color22' />
-          </button>
-          {location.pathname.includes('connection') && (
-            <h2>
-              {getConnectionsByUserId.data?.connectionCount}{' '}
-              {`Connection${
-                getConnectionsByUserId.data?.connectionCount > 1 ? 's' : ''
-              }`}
-            </h2>
-          )}
           {location.pathname.includes('forums') && (
-            <h2>
-              {getForumMembersByForumId.data?.connectionCount}{' '}
-              {`Forum Member${
-                getForumMembersByForumId.data?.connections?.length > 1
-                  ? 's'
-                  : ''
-              }`}
-            </h2>
+            <>
+              <div className='wrapper'>
+                <button className='back-mobile' onClick={() => navigate(-1)}>
+                  <HiArrowLeft className='text-color22' />
+                </button>
+                <h2>
+                  {getForumMembersByForumId.data[0]?.usersInForum?.length}{' '}
+                  {`Forum Member${
+                    getForumMembersByForumId.data[0]?.usersInForum.length > 1
+                      ? 's'
+                      : ''
+                  }`}
+                </h2>
+              </div>
+              <div className='top-page-con'>
+                <div className='search-box-wrapper'>
+                  {getForumMembersByForumId.status === 'base' ||
+                  getForumMembersByForumId.status === 'loading' ? (
+                    <></>
+                  ) : getForumMembersByForumId.status === 'successful' ? (
+                    <SearchBox
+                      placeholder='Search members'
+                      name={'search-term'}
+                      value={searchTerm}
+                      setValue={setSearchTerm}
+                    />
+                  ) : (
+                    <></>
+                  )}
+                  {showSearchModal && (
+                    <OutsideClickHandler
+                      onOutsideClick={() => {
+                        setShowSearchModal(false);
+                      }}
+                    >
+                      <div className='search-modal-con shadow-sm'>
+                        {searchedForumMembers.length > 0 && (
+                          <div className='people'>
+                            <div className='users'>
+                              {searchedForumMembers.map((user, index) => (
+                                <SearchResult
+                                  key={index}
+                                  to={`/users/${user.userId}`}
+                                  imageUrl={user.user.imageUrl}
+                                  name={`${user.user.firstName} ${user.user.secondName}`}
+                                  profession={user.user.profession}
+                                />
+                              ))}
+                            </div>
+                          </div>
+                        )}
+                        {searchedForumMembers.length === 0 && (
+                          <p>No results found...</p>
+                        )}
+                      </div>
+                    </OutsideClickHandler>
+                  )}
+                </div>
+              </div>
+            </>
+          )}
+          {location.pathname.includes('connections') && (
+            <>
+              <div className='wrapper'>
+                <button className='back-mobile' onClick={() => navigate(-1)}>
+                  <HiArrowLeft className='text-color22' />
+                </button>
+                <h2>
+                  {getConnectionsByUserId.data?.connectionCount}{' '}
+                  {`Connection${
+                    getConnectionsByUserId.data?.connectionCount > 1 ? 's' : ''
+                  }`}
+                </h2>
+              </div>
+              <div className='top-page-con'>
+                <div className='search-box-wrapper'>
+                  {getConnectionsByUserId.status === 'base' ||
+                  getConnectionsByUserId.status === 'loading' ? (
+                    <></>
+                  ) : getConnectionsByUserId.status === 'successful' ? (
+                    <SearchBox
+                      placeholder='Search connections'
+                      name={'search-term'}
+                      value={searchTerm}
+                      setValue={setSearchTerm}
+                    />
+                  ) : (
+                    <></>
+                  )}
+                  {showSearchModal && (
+                    <OutsideClickHandler
+                      onOutsideClick={() => {
+                        setShowSearchModal(false);
+                      }}
+                    >
+                      <div className='search-modal-con shadow-sm'>
+                        {searchedUsers.length > 0 && (
+                          <div className='people'>
+                            <div className='users'>
+                              {searchedUsers.map((user, index) => (
+                                <SearchResult
+                                  key={index}
+                                  to={`/users/${user.receiverUserId}`}
+                                  imageUrl={user.receiverImageUrl}
+                                  name={`${user.receiverFirstName} ${user.receiverSecondName}`}
+                                  profession={user.receiverProfession}
+                                />
+                              ))}
+                            </div>
+                          </div>
+                        )}
+                        {searchedUsers.length === 0 && (
+                          <p>No results found...</p>
+                        )}
+                      </div>
+                    </OutsideClickHandler>
+                  )}
+                </div>
+              </div>
+            </>
           )}
         </div>
-        {location.pathname.includes('connection') && (
+        {location.pathname.includes('connections') && (
           <div className='connections-wrapper'>
-            <div className='connection-head'>
-              <div className='search-box-wrapper'>
-                {getConnectionsByUserId.status === 'base' ||
-                getConnectionsByUserId.status === 'loading' ? (
-                  <></>
-                ) : getConnectionsByUserId.status === 'successful' ? (
-                  <SearchBox
-                    placeholder='Search connections'
-                    name={'search-term'}
-                    value={searchTerm}
-                    setValue={setSearchTerm}
-                  />
-                ) : (
-                  <></>
-                )}
-                {showSearchModal && (
-                  <OutsideClickHandler
-                    onOutsideClick={() => {
-                      setShowSearchModal(false);
-                    }}
-                  >
-                    <div className='search-modal-con shadow-sm'>
-                      {searchedUsers.length > 0 && (
-                        <div className='people'>
-                          <div className='users'>
-                            {searchedUsers.map((user, index) => (
-                              <SearchResult
-                                key={index}
-                                to={`/users/${user.receiverUserId}`}
-                                imageUrl={user.receiverImageUrl}
-                                name={`${user.receiverFirstName} ${user.receiverSecondName}`}
-                                profession={user.receiverProfession}
-                              />
-                            ))}
-                          </div>
-                        </div>
-                      )}
-                      {searchedUsers.length === 0 && <p>No results found...</p>}
-                    </div>
-                  </OutsideClickHandler>
-                )}
-              </div>
-            </div>
             <div className='connections-body'>
               {getConnectionsByUserId.status === 'base' ||
               getConnectionsByUserId.status === 'loading' ? (
@@ -201,54 +262,9 @@ const Connections = () => {
         )}
         {location.pathname.includes('forums') && (
           <div className='connections-wrapper'>
-            <div className='connection-head'>
-              <div className='search-box-wrapper'>
-                {getForumMembersByForumId.status === 'base' ||
-                getForumMembersByForumId.status === 'loading' ? (
-                  <></>
-                ) : getForumMembersByForumId.status === 'successful' ? (
-                  <SearchBox
-                    placeholder='Search members'
-                    name={'search-term'}
-                    value={searchTerm}
-                    setValue={setSearchTerm}
-                  />
-                ) : (
-                  <></>
-                )}
-                {showSearchModal && (
-                  <OutsideClickHandler
-                    onOutsideClick={() => {
-                      setShowSearchModal(false);
-                    }}
-                  >
-                    <div className='search-modal-con shadow-sm'>
-                      {searchedForumMembers.length > 0 && (
-                        <div className='people'>
-                          <div className='users'>
-                            {searchedForumMembers.map((user, index) => (
-                              <SearchResult
-                                key={index}
-                                to={`/users/${user.userId}`}
-                                imageUrl={user.user.imageUrl}
-                                name={`${user.user.firstName} ${user.user.secondName}`}
-                                profession={user.user.profession}
-                              />
-                            ))}
-                          </div>
-                        </div>
-                      )}
-                      {searchedForumMembers.length === 0 && (
-                        <p>No results found...</p>
-                      )}
-                    </div>
-                  </OutsideClickHandler>
-                )}
-              </div>
-            </div>
             <div className='connections-body'>
               {getForumMembersByForumId.status === 'base' ||
-              getForumMembersByForumId.status === 'loading'  ? (
+              getForumMembersByForumId.status === 'loading' ? (
                 <ConnectionsLoader />
               ) : getForumMembersByForumId.status === 'successful' ? (
                 <>
