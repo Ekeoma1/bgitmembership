@@ -22,6 +22,7 @@ import { renderToast } from '../Molecules/CustomToastify';
 const Communities = () => {
   const { getMyForums, leaveForum } = useSelector((state) => state.forums);
   const [searchValue, setSearchValue] = useState('');
+  const [activeForum, setActiveForum] = useState({});
   const [userHasForums] = useState(false);
   const dispatch = useDispatch();
   const [pageNumber] = useState(1);
@@ -108,7 +109,7 @@ const Communities = () => {
     if (leaveForum.status === 'successful' && leaveForum.data) {
       const dataTemp = [...getMyForumsLocal];
       dataTemp.forEach((item) => {
-        if (item.forumId === leaveForum.forumId) {
+        if (item.forumId === activeForum.forumId) {
           item.forumMembershipStatus = 'NotAMember';
         }
       });
@@ -118,6 +119,7 @@ const Communities = () => {
         message: 'Forum left successfully',
       });
       dispatch(resetLeaveForum());
+      setActiveForum({});
     }
   }, [leaveForum]);
   console.log('local', getMyForumsLocal);
@@ -161,6 +163,7 @@ const Communities = () => {
                               community={community}
                               key={index}
                               setGetMyForumsLocal={setGetMyForumsLocal}
+                              setActiveForum={setActiveForum}
                             />
                           ))}
                         </Carousel>

@@ -10,10 +10,22 @@ import community1 from '../../../src/assets/images/community1.svg';
 import { HiOutlineChevronRight } from 'react-icons/hi';
 import { useNavigate } from 'react-router-dom';
 import OutsideClickHandler from 'react-outside-click-handler/build/OutsideClickHandler';
+import { useDispatch, useSelector } from 'react-redux';
+import { triggerLeaveForum } from '../../Features/forums/forums_slice';
 
-const CommunityCard = ({ community }) => {
+const CommunityCard = ({ community, setActiveForum }) => {
   const [more, setMore] = useState(false);
   const navigate = useNavigate();
+  const dispatch = useDispatch();
+  const { leaveForum } = useSelector((state) => state.forums);
+  const handleLeaveGroup = () => {
+    if (leaveForum.status === 'base') {
+      const values = { forumId: community.forumId };
+      dispatch(triggerLeaveForum(values));
+      setMore(false);
+      setActiveForum(community);
+    }
+  };
   return (
     <div className='community-card bg-color-card22'>
       <div className='card-body'>
@@ -76,7 +88,11 @@ const CommunityCard = ({ community }) => {
                 setMore(false);
               }}
             >
-              {more && <div className='leave-group'>Leave group</div>}
+              {more && (
+                <div onClick={handleLeaveGroup} className='leave-group'>
+                  Leave group
+                </div>
+              )}
             </OutsideClickHandler>
           }
         </div>
