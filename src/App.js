@@ -1,155 +1,164 @@
-import "./assets/scss/index.scss";
-import "bootstrap/dist/css/bootstrap.min.css";
-import { createBrowserRouter, RouterProvider, Navigate, Outlet } from "react-router-dom";
-import Layout from "./Layout";
-import ErrorPage from "./pages/ErrorPage";
-import LandingPage from "./pages/LandingPage";
-import Home from "./pages/Home";
-import Updates from "./pages/Updates";
-import Login from "./pages/Login";
-import SignUp from "./pages/SignUp";
-import ForgotPassword from "./pages/ForgotPassword";
-import { useSelector } from "react-redux";
-import Dashboard from "./pages/Dashboard";
-import Settings from "./pages/Settings";
-import JobBoard from "./pages/JobBoard";
-import Resources from "./pages/Resources";
-import EventsAndNews from "./pages/EventsAndNews";
-import Event from "./pages/Event";
-import CommunityForums from "./pages/CommunityForums";
-import CommunityForumsAllForums from "./pages/CommunityForumsAllForums";
-import Forum from "./pages/Forum";
-import User from "./pages/User";
-import { ThemeProvider } from "styled-components";
-import { useContext } from "react";
-import { AppContext } from "./context/Context";
-import { darkTheme, lightTheme } from "./utils/themes/themes";
-import { GlobalStyles } from "./utils/themes/themes";
-import { ToastContainer } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
-import SeeMore from "./pages/SeeMore";
-import ScrollToTop from "./components/Molecules/ScrollToTop";
-import Connections from "./pages/Connections";
-import EventTicket from "./pages/EventTicket";
-import IndividualEventTicket from "./pages/IndividualEventTicket";
-import ForumMembers from "./pages/ForumMembers";
+import './assets/scss/index.scss';
+import 'bootstrap/dist/css/bootstrap.min.css';
+import {
+  createBrowserRouter,
+  RouterProvider,
+  Navigate,
+  Outlet,
+} from 'react-router-dom';
+import Layout from './Layout';
+import ErrorPage from './pages/ErrorPage';
+import LandingPage from './pages/LandingPage';
+import Home from './pages/Home';
+import Updates from './pages/Updates';
+import Login from './pages/Login';
+import SignUp from './pages/SignUp';
+import ForgotPassword from './pages/ForgotPassword';
+import { useSelector } from 'react-redux';
+import Dashboard from './pages/Dashboard';
+import Settings from './pages/Settings';
+import JobBoard from './pages/JobBoard';
+import Resources from './pages/Resources';
+import EventsAndNews from './pages/EventsAndNews';
+import Event from './pages/Event';
+import CommunityForums from './pages/CommunityForums';
+import CommunityForumsAllForums from './pages/CommunityForumsAllForums';
+import Forum from './pages/Forum';
+import User from './pages/User';
+import { ThemeProvider } from 'styled-components';
+import { useContext } from 'react';
+import { AppContext } from './context/Context';
+import { darkTheme, lightTheme } from './utils/themes/themes';
+import { GlobalStyles } from './utils/themes/themes';
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+import SeeMore from './pages/SeeMore';
+import ScrollToTop from './components/Molecules/ScrollToTop';
+import Connections from './pages/Connections';
+import EventTicket from './pages/EventTicket';
+import IndividualEventTicket from './pages/IndividualEventTicket';
+import ForumMembers from './pages/ForumMembers';
 
 function App() {
   const isLoggedIn = useSelector((state) => state.auth.isLoggedIn);
   const { theme } = useContext(AppContext);
-  const themeMode = theme === "light" ? lightTheme : darkTheme;
+  const themeMode = theme === 'light' ? lightTheme : darkTheme;
   const PrivateRoute = () => {
-    return isLoggedIn ? <Outlet /> : <Navigate to="/landing" />;
+    return isLoggedIn ? <Outlet /> : <Navigate to='/landing' />;
   };
 
   const AuthRoute = () => {
-    return !isLoggedIn ? <Outlet /> : <Navigate to="/" />;
+    return !isLoggedIn ? <Outlet /> : <Navigate to='/' />;
   };
 
   const router = createBrowserRouter([
     {
-      path: "/",
+      path: '/',
       element: <Layout />,
       errorElement: <ErrorPage />,
       children: [
         {
-          path: "",
+          path: '',
           element: <PrivateRoute />,
 
           children: [
             {
-              path: "",
+              path: '',
               element: <Home />,
             },
             {
-              path: ":user",
+              path: ':user',
               element: <User />,
             },
             {
-              path: "updates",
+              path: 'updates',
               element: <Updates />,
             },
             {
-              path: "users/:id",
+              path: 'users/:id',
               element: <Dashboard />,
             },
             {
-              path: "users/:id/:more",
+              path: 'users/:id/:more',
               element: <SeeMore />,
             },
             {
-              path: "settings",
+              path: 'settings',
               element: <Settings />,
             },
             {
-              path: "forums",
+              path: 'forums',
               element: <CommunityForums />,
             },
             {
-              path: "forums/all",
+              path: 'forums/all',
               element: <CommunityForumsAllForums />,
             },
             {
-              path: "forums/members",
+              path: 'forums/members',
               element: <ForumMembers />,
             },
             {
-              path: "/forums/:forumId",
+              path: '/forums/:forumId',
               element: <Forum />,
             },
             {
-              path: "events-and-news",
+              path: 'forums/:id/members',
+              element: <Connections />,
+            },
+            {
+              path: 'events-and-news',
               element: <EventsAndNews />,
             },
             {
-              path: "events-and-news/event/:id",
+              path: 'events-and-news/event/:id',
               element: <Event />,
             },
             {
-              path: "events-and-news/news/:id",
+              path: 'events-and-news/news/:id',
               element: <Event />,
             },
             {
-              path: "events-and-news/event-tickets",
+              path: 'events-and-news/event-tickets',
               element: <EventTicket />,
             },
             {
-              path: "events-and-news/event-tickets/:id",
+              path: 'events-and-news/event-tickets/:id',
               element: <IndividualEventTicket />,
             },
             {
-              path: "job-board",
+              path: 'job-board',
               element: <JobBoard />,
             },
             {
-              path: "resources",
+              path: 'resources',
               element: <Resources />,
             },
             {
-              path: "connections/:id",
+              path: 'connections/:id',
               element: <Connections />,
             },
           ],
         },
 
         {
-          path: "",
+          path: '',
           element: <AuthRoute />,
           children: [
             {
-              path: "landing",
+              path: 'landing',
               element: <LandingPage />,
             },
             {
-              path: "login",
+              path: 'login',
               element: <Login />,
             },
             {
-              path: "register",
+              path: 'register',
               element: <SignUp />,
             },
             {
-              path: "forgot-password",
+              path: 'forgot-password',
               element: <ForgotPassword />,
             },
           ],
@@ -161,7 +170,11 @@ function App() {
   return (
     <div>
       <ThemeProvider theme={themeMode}>
-        <ToastContainer className={"custom-toastify"} position="top-center" autoClose={2000} />
+        <ToastContainer
+          className={'custom-toastify'}
+          position='top-center'
+          autoClose={2000}
+        />
         <ScrollToTop />
         <GlobalStyles />
         <RouterProvider router={router} />

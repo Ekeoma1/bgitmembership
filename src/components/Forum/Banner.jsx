@@ -66,12 +66,18 @@ const Banner = ({
       'Not a member'
     ) {
       dispatch(triggerJoinForum(values));
-    } else if (
-      getForumConnectionStatusByForumId.data?.membershipStatus === 'Member'
+    }
+  };
+
+  const handleLeaveForum = () => {
+    const values = { forumId: params.forumId };
+    if (
+      getForumConnectionStatusByForumId.data?.membershipStatus === 'IsMember'
     ) {
       dispatch(triggerLeaveForum(values));
     }
   };
+
   useEffect(() => {
     const data = { queryParams: { forumId: params?.forumId } };
     if (joinForum.status === 'successful') {
@@ -158,7 +164,16 @@ const Banner = ({
                       </>
                     )}
                   </div>
-                  <div className='members-amount'>
+                  <div
+                    onClick={() => {
+                      navigate(
+                        `/forums/${getForumById?.data[0]?.forumId}/members`
+                      );
+                    }}
+                    className={`members-amount ${
+                      getForumById?.data[0]?.userCount && 'view'
+                    }`}
+                  >
                     <p>{getForumById?.data[0]?.userCount}</p>
                     <p>Members</p>
                   </div>
@@ -166,10 +181,7 @@ const Banner = ({
                 <div className='btns'>
                   {getForumConnectionStatusByForumId.status === 'base' ||
                   getForumConnectionStatusByForumId.status === 'loading' ? (
-                    <button
-                      onClick={handleForumRequest}
-                      className={`reach-btn  loading`}
-                    >
+                    <button className={`reach-btn  loading`}>
                       <img src={spinner} alt='spinner' />
                     </button>
                   ) : getForumConnectionStatusByForumId.status ===
@@ -178,7 +190,7 @@ const Banner = ({
                       {getForumConnectionStatusByForumId.data
                         .membershipStatus === 'IsMember' ? (
                         <button
-                          onClick={handleForumRequest}
+                          onClick={handleLeaveForum}
                           className={`reach-btn ${
                             leaveForum.status === 'loading' && 'loading'
                           } `}
@@ -186,7 +198,7 @@ const Banner = ({
                           {leaveForum.status === 'loading' ? (
                             <img src={spinner} alt='spinner' />
                           ) : (
-                            <>Leave Forum</>
+                            <>Leave Forumm</>
                           )}
                         </button>
                       ) : (
@@ -231,43 +243,6 @@ const Banner = ({
                           </button>
                         </>
                       )}
-                      <button
-                        onClick={handleForumRequest}
-                        className={`reach-btn ${
-                          (joinForum.status === 'loading' ||
-                            cancelJoinForumRequest.status === 'loading' ||
-                            leaveForum.status === 'loading') &&
-                          'loading'
-                        } ${
-                          getForumConnectionStatusByForumId.data
-                            ?.membershipStatus === 'Pending' && 'pending'
-                        }`}
-                      >
-                        {joinForum.status === 'loading' ||
-                        cancelJoinForumRequest.status === 'loading' ||
-                        leaveForum.status === 'loading' ? (
-                          <img src={spinner} alt='spinner' />
-                        ) : getForumConnectionStatusByForumId.data
-                            ?.membershipStatus === 'Pending' ? (
-                          <>
-                            <span className='pending-con'>
-                              <IoCheckmarkSharp className='icon' />{' '}
-                              {'Request sent'}
-                            </span>
-                            <span className='cancel-con'>
-                              <FaTimes className='icon' /> {'Cancel Request'}
-                            </span>
-                          </>
-                        ) : getForumConnectionStatusByForumId.data
-                            ?.membershipStatus === 'Not a member' ? (
-                          '+ Join'
-                        ) : getForumConnectionStatusByForumId.data
-                            ?.membershipStatus === 'Member' ? (
-                          ' Leave forum'
-                        ) : (
-                          <></>
-                        )}
-                      </button>
                     </>
                   ) : (
                     <></>

@@ -114,19 +114,21 @@
                 display: flex;
                 align-items: center;
                 justify-content: center;
-                margin-bottom: .2rem;
+                margin-bottom: 0.2rem;
               }
             }
             .members-amount {
               display: flex;
               column-gap: 0.3rem;
               align-items: center;
-
               p {
                 font-size: 1.2833rem;
                 font-weight: 500;
                 line-height: normal;
                 margin: auto 0;
+              }
+              &.view {
+                cursor: pointer;
               }
             }
             .icon-con {

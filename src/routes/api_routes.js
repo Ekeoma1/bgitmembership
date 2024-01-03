@@ -91,6 +91,13 @@ const apiRoutes = {
   getAllForumsByIndustry: '/Forums/GetAllForumsByIndustry',
   getAllForumsByLocation: '/Forums/GetAllForumsByLocation',
 
+  //Forums Membership
+  acceptForumJoinRequest: '/ForumsMembership/AcceptForumJoinRequest',
+  rejectForumJoinRequest: '/ForumsMembership/RejectForumJoinRequest',
+  getPendingJoinRequestsByForumId: '/ForumsMembership/GetPendingJoinRequestsByForumId',
+  getPendingJoinRequests: '/ForumsMembership/GetPendingJoinRequests',
+  getForumMembersByForumId: '/ForumsMembership/GetForumMembersByForumId',
+
   // News
   getAllNews: '/News/GetAllNews',
   getNewsById: '/News/GetNewsById',
