@@ -10,6 +10,7 @@ import {
   triggerGetConnectionsByUserId,
 } from '../Features/connections/connections_slice';
 import OutsideClickHandler from 'react-outside-click-handler';
+import { triggerGetForumMembersByForumId } from '../Features/forums-membership/forums_membership_slice';
 
 const Connections = () => {
   const params = useParams();
@@ -17,22 +18,23 @@ const Connections = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const { getConnectionsByUserId } = useSelector((state) => state.connections);
+  const { getForumMembersByForumId } = useSelector(
+    (state) => state.forumsMembership
+  );
   const { getUserByProfileId } = useSelector((state) => state.users);
   const [searchTerm, setSearchTerm] = useState('');
-  console.log('params', params);
-  console.log('location', location);
-  useEffect(() => {
-    const data = { queryParams: { userId: params.id } };
-    if (location.pathname.includes('connections')) {
-      dispatch(triggerGetConnectionsByUserId(data));
-    } else if (location.pathname.includes('forums')) {
-      
-    }
-  }, []);
-  // console.log('getConnectionsByUserId', getConnectionsByUserId);
-  console.log('searchTerm', searchTerm);
   const [showSearchModal, setShowSearchModal] = useState(false);
   const [searchedUsers, setSearchedUsers] = useState([]);
+
+  useEffect(() => {
+    if (location.pathname.includes('connections')) {
+      const data = { queryParams: { userId: params.id } };
+      dispatch(triggerGetConnectionsByUserId(data));
+    } else if (location.pathname.includes('forums')) {
+      const data = { queryParams: { forumId: params.id } };
+      dispatch(triggerGetForumMembersByForumId(data));
+    }
+  }, []);
   useEffect(() => {
     if (location.pathname.includes('connections')) {
       if (searchTerm) {
@@ -64,7 +66,12 @@ const Connections = () => {
     }
   }, [searchTerm]);
 
-  console.log('searchusers', searchedUsers);
+  // console.log('searchusers', searchedUsers);
+  // console.log('params', params);
+  console.log('members', getForumMembersByForumId);
+
+  // console.log('getConnectionsByUserId', getConnectionsByUserId);
+  // console.log('searchTerm', searchTerm);
 
   return (
     <section className='connection-page'>
@@ -150,7 +157,7 @@ const Connections = () => {
                     <>
                       {getConnectionsByUserId.data?.connections?.map(
                         (item, index) => (
-                          <ConnectionCard key={index} user={item} />
+                          <ConnectionCard from={'connection'} key={index} user={item} />
                         )
                       )}
                     </>
@@ -165,16 +172,16 @@ const Connections = () => {
           <div className='connections-wrapper'>
             <div className='connection-head'>
               <h2>
-                {getConnectionsByUserId.data?.connectionCount}{' '}
-                {`Members${
-                  getConnectionsByUserId.data?.connectionCount > 1 ? 's' : ''
+                {getForumMembersByForumId.data?.connectionCount}{' '}
+                {`Forum Members${
+                  getForumMembersByForumId.data?.connectionCount > 1 ? 's' : ''
                 }`}
               </h2>
               <div className='search-box-wrapper'>
-                {getConnectionsByUserId.status === 'base' ||
-                getConnectionsByUserId.status === 'loading' ? (
+                {getForumMembersByForumId.status === 'base' ||
+                getForumMembersByForumId.status === 'loading' ? (
                   <></>
-                ) : getConnectionsByUserId.status === 'successful' ? (
+                ) : getForumMembersByForumId.status === 'successful' ? (
                   <SearchBox
                     placeholder='Search members'
                     name={'search-term'}
@@ -228,18 +235,18 @@ const Connections = () => {
               </div>
             </div>
             <div className='connections-body'>
-              {getConnectionsByUserId.status === 'base' ||
-              getConnectionsByUserId.status === 'loading' ? (
+              {getForumMembersByForumId.status === 'base' ||
+              getForumMembersByForumId.status === 'loading' ? (
                 <>Loading...</>
-              ) : getConnectionsByUserId.status === 'successful' ? (
+              ) : getForumMembersByForumId.status === 'successful' ? (
                 <>
-                  {getConnectionsByUserId.data?.connections?.length === 0 ? (
+                  {getForumMembersByForumId.data?.connections?.length === 0 ? (
                     <>No connections</>
                   ) : (
                     <>
-                      {getConnectionsByUserId.data?.connections?.map(
+                      {getForumMembersByForumId.data[0]?.usersInForum?.map(
                         (item, index) => (
-                          <ConnectionCard key={index} user={item} />
+                          <ConnectionCard withoutAction key={index} user={item} />
                         )
                       )}
                     </>

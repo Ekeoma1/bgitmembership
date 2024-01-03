@@ -20,7 +20,7 @@ const ConnectionCard = ({ withoutAction, user }) => {
   const toggleAction = () => {
     setShowAction(!showAction);
   };
-  console.log('user', user);
+  // console.log('user', user);
   const params = useParams();
   useEffect(() => {
     if (removeConnection.status === 'successful') {
@@ -33,51 +33,75 @@ const ConnectionCard = ({ withoutAction, user }) => {
       dispatch(triggerGetConnectionsByUserId(data));
     }
   }, [removeConnection]);
+
   return (
     <div className='connection-card shadow'>
-      <div className='connection-details'>
-        <div
-          className='connection-img'
-          onClick={() => navigate(`/users/${user?.receiverUserId}`)}
-        >
-          <img src={user.receiverImageUrl} alt='' className='' />
-        </div>
-        <div className='nameRole-wrapper'>
-          <h3
-            className='name'
-            onClick={() => navigate(`/users/${user?.receiverUserId}`)}
-          >{`${user.receiverFirstName} ${user.receiverSecondName}`}</h3>
-          <div className='role'>{user.receiverProfession}</div>
-        </div>
-      </div>
+      {!withoutAction ? (
+        <>
+          <div className='connection-details'>
+            <div
+              className='connection-img'
+              onClick={() => navigate(`/users/${user?.receiverUserId}`)}
+            >
+              <img src={user.receiverImageUrl} alt='' className='' />
+            </div>
+            <div className='nameRole-wrapper'>
+              <h3
+                className='name'
+                onClick={() => navigate(`/users/${user?.receiverUserId}`)}
+              >{`${user.receiverFirstName} ${user.receiverSecondName}`}</h3>
+              <div className='role'>{user.receiverProfession}</div>
+            </div>
+          </div>
+          <div className={`connection-action ${withoutAction && 'd-none'}`}>
+            <Link to='#'>
+              <div className='msg-btn d-lg-flex d-none'>Message</div>
+              <span className='d-lg-none'>
+                <Icon icon='envelope' />
+              </span>
+            </Link>
+            {getMyProfile.data?.userId === params.id && (
+              <button onClick={() => toggleAction()}>
+                <Icon icon='elipse-horizontal' />
+              </button>
+            )}
 
-      <div className={`connection-action ${withoutAction && 'd-none'}`}>
-        <Link to='#'>
-          <div className='msg-btn d-lg-flex d-none'>Message</div>
-          <span className='d-lg-none'>
-            <Icon icon='envelope' />
-          </span>
-        </Link>
-        {getMyProfile.data?.userId === params.id && (
-          <button onClick={() => toggleAction()}>
-            <Icon icon='elipse-horizontal' />
-          </button>
-        )}
-
-        <div
-          className={`delete-connection-wrapper ${!showAction && 'd-none'} `}
-          onClick={() => {
-            dispatch(
-              triggerRemoveConnection({
-                receiveruserId: user.receiverUserId,
-              })
-            );
-          }}
-        >
-          <Icon icon='deleteIcon' />
-          Remove connection
-        </div>
-      </div>
+            <div
+              className={`delete-connection-wrapper ${
+                !showAction && 'd-none'
+              } `}
+              onClick={() => {
+                dispatch(
+                  triggerRemoveConnection({
+                    receiveruserId: user.receiverUserId,
+                  })
+                );
+              }}
+            >
+              <Icon icon='deleteIcon' />
+              Remove connection
+            </div>
+          </div>
+        </>
+      ) : (
+        <>
+          <div className='connection-details'>
+            <div
+              className='connection-img'
+              onClick={() => navigate(`/users/${user?.receiverUserId}`)}
+            >
+              <img src={user.user.imageUrl} alt='user' className='' />
+            </div>
+            <div className='nameRole-wrapper'>
+              <h3
+                className='name'
+                onClick={() => navigate(`/users/${user?.receiverUserId}`)}
+              >{`${user.user.firstName} ${user.user.secondName}`}</h3>
+              <div className='role'>{user.user.profession}</div>
+            </div>
+          </div>
+        </>
+      )}
     </div>
   );
 };

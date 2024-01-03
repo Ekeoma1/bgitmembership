@@ -13,6 +13,7 @@ import newsReducer from './Features/news/news_slice';
 import eventsReducer from './Features/events/events_slice';
 import accountPrivaciesReducer from './Features/account-privacies/account_privacies_slice';
 import notificationReducer from './Features/notification/notification_slice';
+import forumsMembershipReducer from './Features/forums-membership/forums_membership_slice';
 
 export default configureStore({
   reducer: {
@@ -30,6 +31,7 @@ export default configureStore({
     events: eventsReducer,
     accountPrivacies: accountPrivaciesReducer,
     notification: notificationReducer,
+    forumsMembership: forumsMembershipReducer,
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({

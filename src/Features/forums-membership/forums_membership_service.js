@@ -39,6 +39,7 @@ export default class ConnectionsService {
     const response = await get({
       url: apiRoutes.getForumMembersByForumId,
       data: { ...data },
+      queryParams: data.queryParams,
     });
     return response;
   }
