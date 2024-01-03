@@ -11,10 +11,16 @@ import EmptyState from '../Molecules/EmptyState';
 import Carousel from 'react-multi-carousel';
 import 'react-multi-carousel/lib/styles.css';
 import CreateCommunityModal from './CreateCommunityModal';
-import { useDispatch } from 'react-redux';
-import { triggerGetMyForums } from '../../Features/forums/forums_slice';
+import { useDispatch, useSelector } from 'react-redux';
+import {
+  resetLeaveForum,
+  triggerGetMyForums,
+} from '../../Features/forums/forums_slice';
+import { ForumCardsLoader2 } from '../Atoms/skeleton-loaders/ForumCardsLoader';
+import { renderToast } from '../Molecules/CustomToastify';
 
 const Communities = () => {
+  const { getMyForums, leaveForum } = useSelector((state) => state.forums);
   const [searchValue, setSearchValue] = useState('');
   const [userHasForums] = useState(false);
   const dispatch = useDispatch();
@@ -88,45 +94,88 @@ const Communities = () => {
       items: 2,
     },
   };
+  const [getMyForumsLocal, setGetMyForumsLocal] = useState([]);
   useEffect(() => {
     const data = { queryParams: { pageNumber, pageSize } };
     dispatch(triggerGetMyForums(data));
   }, []);
+  useEffect(() => {
+    if (getMyForums.status === 'successful') {
+      setGetMyForumsLocal([...getMyForums.data.forums]);
+    }
+  }, [getMyForums.status]);
+  useEffect(() => {
+    if (leaveForum.status === 'successful' && leaveForum.data) {
+      const dataTemp = [...getMyForumsLocal];
+      dataTemp.forEach((item) => {
+        if (item.forumId === leaveForum.forumId) {
+          item.forumMembershipStatus = 'NotAMember';
+        }
+      });
+      setGetMyForumsLocal(dataTemp);
+      renderToast({
+        status: 'error',
+        message: 'Forum left successfully',
+      });
+      dispatch(resetLeaveForum());
+    }
+  }, [leaveForum]);
+  console.log('local', getMyForumsLocal);
+
   return (
     <div className='communities-wrapper'>
       <div className='container'>
         <div className='content-wrapper'>
           {/* create community modal */}
           <CreateCommunityModal />
-          {userHasForums && (
-            <div className='forums-true'>
-              <div className='search-box'>
-                <div className='search-box-wrapper'>
-                  <SearchBox
-                    onChange={onChange}
-                    value={searchValue}
-                    placeholder='Search'
-                  />
-                </div>
-              </div>
-              <div className='section-title'>
-                <h3 className='text-color22'>Communities </h3>
-                <p className='text-color222'> (3)</p>
-              </div>
-              <div className='cards-wrapper'>
-                <Carousel responsive={responsive}>
-                  {communities.map((community, index) => (
-                    <CommunityCard community={community} key={index} />
-                  ))}
-                </Carousel>
-              </div>
-            </div>
-          )}
-          {!userHasForums && (
-            <EmptyState
-              title={'No forums yet?!'}
-              info={'Search or browse suggested forums below.'}
-            />
+          {getMyForums.status === 'base' || getMyForums.status === 'loading' ? (
+            <ForumCardsLoader2 />
+          ) : getMyForums.status === 'successful' ? (
+            <>
+              {getMyForums.data ? (
+                <>
+                  {getMyForumsLocal.length === 0 ? (
+                    <EmptyState
+                      title={'No forums yet?!'}
+                      info={'Search or browse suggested forums below.'}
+                    />
+                  ) : (
+                    <div className='forums-true'>
+                      <div className='search-box'>
+                        <div className='search-box-wrapper'>
+                          <SearchBox
+                            onChange={onChange}
+                            value={searchValue}
+                            placeholder='Search'
+                          />
+                        </div>
+                      </div>
+                      <div className='section-title'>
+                        <h3 className='text-color22'>Communities </h3>
+                        <p className='text-color222'> (3)</p>
+                      </div>
+                      <div className='cards-wrapper'>
+                        <Carousel responsive={responsive}>
+                          {getMyForumsLocal.map((community, index) => (
+                            <CommunityCard
+                              community={community}
+                              key={index}
+                              setGetMyForumsLocal={setGetMyForumsLocal}
+                            />
+                          ))}
+                        </Carousel>
+                      </div>
+                    </div>
+                  )}
+                </>
+              ) : (
+                <></>
+              )}
+            </>
+          ) : getMyForums.status === 'error' ? (
+            <></>
+          ) : (
+            <></>
           )}
         </div>
       </div>

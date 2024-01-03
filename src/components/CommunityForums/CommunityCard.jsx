@@ -6,15 +6,26 @@ import member3 from '../../../src/assets/images/member3.svg';
 import member4 from '../../../src/assets/images/member4.svg';
 import member5 from '../../../src/assets/images/member5.svg';
 import msg from '../../../src/assets/images/message-icon.svg';
+import community1 from '../../../src/assets/images/community1.svg';
 import { HiOutlineChevronRight } from 'react-icons/hi';
+import { useNavigate } from 'react-router-dom';
+import OutsideClickHandler from 'react-outside-click-handler/build/OutsideClickHandler';
 
 const CommunityCard = ({ community }) => {
   const [more, setMore] = useState(false);
+  const navigate = useNavigate();
   return (
-    <div className='community-card bg-color-card'>
+    <div className='community-card bg-color-card22'>
       <div className='card-body'>
-        <img src={community.community_img} alt='community-img' className='' />
-        {community.recently_joined && (
+        <img
+          src={community.forumBackgroundImageUrl ?? community1}
+          onClick={() => {
+            navigate(`/forum/${community.forumId}`);
+          }}
+          alt='community-img'
+          className=''
+        />
+        {community.just_joined && (
           <div className='recently-joined'>
             <h5>Recently Joined</h5>
           </div>
@@ -22,41 +33,52 @@ const CommunityCard = ({ community }) => {
       </div>
       <div className='card-footer'>
         <div className='info'>
-          <h3 className='text-color-secondary-bold'>{community.community_name}</h3>
+          <h3
+            onClick={() => {
+              navigate(`/forum/${community.forumId}`);
+            }}
+            className='text-color-secondary-bold22'
+          >
+            {community.forumName}
+          </h3>
           <div className='members-wrapper'>
             <div className='members-img'>
-              <div className='image-con'>
-                <img src={member1} alt='community-img-sm' />
-              </div>
-              <div className='image-con'>
-                <img src={member2} alt='community-img-sm' />
-              </div>
-              <div className='image-con'>
-                <img src={member3} alt='community-img-sm' />
-              </div>
-              <div className='image-con'>
-                <img src={member4} alt='community-img-sm' />
-              </div>
-              <div className='image-con'>
-                <img src={member5} alt='community-img-sm' />
-              </div>
+              {community.usersInForum.map((item, index) => (
+                <div key={index} className='image-con'>
+                  <img src={item.user.imageUrl} alt='community-img-sm' />
+                </div>
+              ))}
             </div>
-            <div className='members-amount text-color-secondary-normal'>
-              <p>{community.community_members}</p>
+            <div
+              onClick={() => {
+                navigate(`/forums/${community.forumId}/members`);
+              }}
+              className='members-amount text-color-secondary-normal22'
+            >
+              <p>{community.userCount}</p>
               <p>Members</p>
             </div>
             <div className='icon-con'>
-              <img src={msg} alt='message-icon' className='icon-color' />
-              {community.unreadMsg && <div className='msg-circle'></div>}
+              <img src={msg} alt='message-icon' className='icon-color22' />
+              {/* {!community.unreadMsg && <div className='msg-circle'></div>} */}
             </div>
           </div>
         </div>
         <div className='more'>
-          <MdOutlineMoreHoriz className='icon secondary-text-color-normal' onClick={() => setMore(true)} />
-          <HiOutlineChevronRight
-            className='icon-mobile'
+          <MdOutlineMoreHoriz
+            className='icon secondary-text-color-normal22'
+            onClick={() => setMore(true)}
           />
-          {more && <div className='leave-group'>Leave group</div>}
+          <HiOutlineChevronRight className='icon-mobile' />
+          {
+            <OutsideClickHandler
+              onOutsideClick={() => {
+                setMore(false);
+              }}
+            >
+              {more && <div className='leave-group'>Leave group</div>}
+            </OutsideClickHandler>
+          }
         </div>
       </div>
     </div>
