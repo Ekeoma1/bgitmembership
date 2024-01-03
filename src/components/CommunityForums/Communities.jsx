@@ -13,14 +13,17 @@ import 'react-multi-carousel/lib/styles.css';
 import CreateCommunityModal from './CreateCommunityModal';
 import { useDispatch, useSelector } from 'react-redux';
 import {
+  resetJoinForum,
   resetLeaveForum,
   triggerGetMyForums,
 } from '../../Features/forums/forums_slice';
 import { ForumCardsLoader2 } from '../Atoms/skeleton-loaders/ForumCardsLoader';
 import { renderToast } from '../Molecules/CustomToastify';
+import SingleLineLoader from '../Atoms/skeleton-loaders/SingleLineLoader';
 
 const Communities = () => {
-  const { getMyForums, leaveForum } = useSelector((state) => state.forums);
+  const { getMyForums, leaveForum, joinForum, cancelJoinForumRequest } =
+    useSelector((state) => state.forums);
   const [searchValue, setSearchValue] = useState('');
   const [activeForum, setActiveForum] = useState({});
   const [userHasForums] = useState(false);
@@ -96,6 +99,7 @@ const Communities = () => {
     },
   };
   const [getMyForumsLocal, setGetMyForumsLocal] = useState([]);
+  const [myForumsLength, setMyForumsLength] = useState('');
   useEffect(() => {
     const data = { queryParams: { pageNumber, pageSize } };
     dispatch(triggerGetMyForums(data));
@@ -103,25 +107,115 @@ const Communities = () => {
   useEffect(() => {
     if (getMyForums.status === 'successful') {
       setGetMyForumsLocal([...getMyForums.data.forums]);
+      setMyForumsLength(getMyForums.data.forums.length);
     }
   }, [getMyForums.status]);
+
   useEffect(() => {
-    if (leaveForum.status === 'successful' && leaveForum.data) {
-      const dataTemp = [...getMyForumsLocal];
-      dataTemp.forEach((item) => {
+    // leave forum
+    if (leaveForum.status === 'loading') {
+      const data = getMyForumsLocal.map((item) => {
+        const obj = { ...item };
         if (item.forumId === activeForum.forumId) {
-          item.forumMembershipStatus = 'NotAMember';
+          obj.forumMembershipStatus = 'loading';
         }
+        return obj;
       });
-      setGetMyForumsLocal(dataTemp);
+      setGetMyForumsLocal(data);
+    } else if (leaveForum.status === 'successful' && leaveForum.data) {
+      const data = getMyForumsLocal.map((item) => {
+        const obj = { ...item };
+        if (item.forumId === activeForum.forumId) {
+          obj.forumMembershipStatus = 'NotAMember';
+        }
+        return obj;
+      });
+      setGetMyForumsLocal(data);
+      setMyForumsLength((prevState) => prevState - 1);
       renderToast({
-        status: 'error',
+        status: 'success',
         message: 'Forum left successfully',
       });
       dispatch(resetLeaveForum());
       setActiveForum({});
+    } else if (leaveForum.status === 'error') {
+      renderToast({
+        status: 'error',
+        message: 'Something went wrong',
+      });
+      dispatch(resetLeaveForum());
+      setActiveForum({});
     }
-  }, [leaveForum]);
+    // join forum
+    if (joinForum.status === 'loading') {
+      const data = getMyForumsLocal.map((item) => {
+        const obj = { ...item };
+        if (item.forumId === activeForum.forumId) {
+          obj.forumMembershipStatus = 'loading';
+        }
+        return obj;
+      });
+      setGetMyForumsLocal(data);
+    } else if (joinForum.status === 'successful' && joinForum.data) {
+      const data = getMyForumsLocal.map((item) => {
+        const obj = { ...item };
+        if (item.forumId === activeForum.forumId) {
+          obj.forumMembershipStatus = 'Pending';
+        }
+        return obj;
+      });
+      setGetMyForumsLocal(data);
+      renderToast({
+        status: 'success',
+        message: 'Join forum request sent successfully',
+      });
+      dispatch(resetJoinForum());
+      setActiveForum({});
+    } else if (joinForum.status === 'error') {
+      renderToast({
+        status: 'error',
+        message: 'Something went wrong',
+      });
+      dispatch(resetJoinForum());
+      setActiveForum({});
+    }
+    // cancel join forum request
+    if (cancelJoinForumRequest.status === 'loading') {
+      const data = getMyForumsLocal.map((item) => {
+        const obj = { ...item };
+        if (item.forumId === activeForum.forumId) {
+          obj.forumMembershipStatus = 'loading';
+        }
+        return obj;
+      });
+      setGetMyForumsLocal(data);
+    } else if (
+      cancelJoinForumRequest.status === 'successful' &&
+      cancelJoinForumRequest.data
+    ) {
+      const data = getMyForumsLocal.map((item) => {
+        const obj = { ...item };
+        if (item.forumId === activeForum.forumId) {
+          obj.forumMembershipStatus = 'Pending';
+        }
+        return obj;
+      });
+      setGetMyForumsLocal(data);
+      renderToast({
+        status: 'success',
+        message: 'Join forum request sent successfully',
+      });
+      dispatch(resetJoinForum());
+      setActiveForum({});
+    } else if (cancelJoinForumRequest.status === 'error') {
+      renderToast({
+        status: 'error',
+        message: 'Something went wrong',
+      });
+      dispatch(resetJoinForum());
+      setActiveForum({});
+    }
+  }, [leaveForum, joinForum, cancelJoinForumRequest]);
   console.log('local', getMyForumsLocal);
 
   return (
@@ -154,7 +248,16 @@ const Communities = () => {
                       </div>
                       <div className='section-title'>
                         <h3 className='text-color22'>Communities </h3>
-                        <p className='text-color222'> (3)</p>
+                        {getMyForums.status === 'base' ||
+                        getMyForums.status === 'loading' ? (
+                          <div className='loading-state'>
+                            <SingleLineLoader />
+                          </div>
+                        ) : getMyForums.status === 'successful' ? (
+                          <p className='text-color222'>({myForumsLength})</p>
+                        ) : (
+                          <></>
+                        )}
                       </div>
                       <div className='cards-wrapper'>
                         <Carousel responsive={responsive}>

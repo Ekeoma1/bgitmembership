@@ -190,6 +190,10 @@
             font-weight: 400;
             line-height: 117%;
           }
+          .loading-state {
+            width: 5rem;
+            height: 3rem;
+          }
         }
         .cards-wrapper {
           .community-card {
@@ -308,7 +312,7 @@
                         height: 100%;
                         min-width: 100%;
                         min-height: 100%;
-                        object-fit: cover ;
+                        object-fit: cover;
                       }
                     }
                   }
@@ -387,6 +391,72 @@
                   font-weight: 400;
                   line-height: 215.023%;
                   cursor: pointer;
+                }
+              }
+              .btn-con {
+                display: flex;
+                justify-content: center;
+                width: 100%;
+                margin-top: 2rem;
+                button {
+                  padding: 10px 0;
+                  background-color: $pri-color1;
+                  color: #fff;
+                  font-size: 12.44px;
+                  font-weight: 700;
+                  font-family: $thic700;
+                  border-radius: 30px;
+                  display: flex;
+                  align-items: center;
+                  justify-content: center;
+                  min-width: 18rem;
+                  min-height: 3.8rem;
+                  max-width: 18rem;
+                  max-height: 3.8rem;
+                  column-gap: 0.4rem;
+                  &.loading {
+                    cursor: default;
+                  }
+                  .pending-con {
+                    display: flex;
+                    align-items: center;
+                    column-gap: 0.5rem;
+                  }
+                  .cancel-con {
+                    display: none;
+                  }
+                  &.pending {
+                    &:hover {
+                      .pending-con {
+                        display: none;
+                      }
+                      .cancel-con {
+                        display: flex;
+                        align-items: center;
+                        column-gap: 0.5rem;
+                      }
+                    }
+                  }
+                  .icon {
+                    font-size: 1.6rem;
+                  }
+                  img {
+                    animation-iteration-count: infinite;
+                    animation-duration: 1s;
+                    animation-timing-function: linear;
+                    height: 2.2rem;
+                    width: 2.2rem;
+                    object-fit: contain;
+                    animation-name: rotate-s-loader;
+                  }
+                  @keyframes rotate-s-loader {
+                    from {
+                      transform: rotate(0);
+                    }
+                    to {
+                      transform: rotate(360deg);
+                    }
+                  }
                 }
               }
             }
