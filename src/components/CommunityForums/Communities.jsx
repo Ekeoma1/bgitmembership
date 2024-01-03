@@ -13,6 +13,7 @@ import 'react-multi-carousel/lib/styles.css';
 import CreateCommunityModal from './CreateCommunityModal';
 import { useDispatch, useSelector } from 'react-redux';
 import {
+  resetCanceljoinForumRequest,
   resetJoinForum,
   resetLeaveForum,
   triggerGetMyForums,
@@ -196,23 +197,23 @@ const Communities = () => {
       const data = getMyForumsLocal.map((item) => {
         const obj = { ...item };
         if (item.forumId === activeForum.forumId) {
-          obj.forumMembershipStatus = 'Pending';
+          obj.forumMembershipStatus = 'NotAMember';
         }
         return obj;
       });
       setGetMyForumsLocal(data);
       renderToast({
         status: 'success',
-        message: 'Join forum request sent successfully',
+        message: 'Cancelled join forum request',
       });
-      dispatch(resetJoinForum());
+      dispatch(resetCanceljoinForumRequest());
       setActiveForum({});
     } else if (cancelJoinForumRequest.status === 'error') {
       renderToast({
         status: 'error',
         message: 'Something went wrong',
       });
-      dispatch(resetJoinForum());
+      dispatch(resetCanceljoinForumRequest());
       setActiveForum({});
     }
   }, [leaveForum, joinForum, cancelJoinForumRequest]);
@@ -225,7 +226,9 @@ const Communities = () => {
           {/* create community modal */}
           <CreateCommunityModal />
           {getMyForums.status === 'base' || getMyForums.status === 'loading' ? (
-            <ForumCardsLoader2 />
+            <div className='loader'>
+              <ForumCardsLoader2 />
+            </div>
           ) : getMyForums.status === 'successful' ? (
             <>
               {getMyForums.data ? (
@@ -237,7 +240,7 @@ const Communities = () => {
                     />
                   ) : (
                     <div className='forums-true'>
-                      <div className='search-box'>
+                      {/* <div className='search-box'>
                         <div className='search-box-wrapper'>
                           <SearchBox
                             onChange={onChange}
@@ -245,7 +248,7 @@ const Communities = () => {
                             placeholder='Search'
                           />
                         </div>
-                      </div>
+                      </div> */}
                       <div className='section-title'>
                         <h3 className='text-color22'>Communities </h3>
                         {getMyForums.status === 'base' ||

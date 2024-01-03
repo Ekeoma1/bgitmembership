@@ -35,7 +35,7 @@ const CommunityCard = ({ community, setActiveForum }) => {
       const values = { forumId: community.forumId };
       setActiveForum(community);
       if (e.target.closest('.leave-group')) {
-        // dispatch(triggerLeaveForum(values));
+        dispatch(triggerLeaveForum(values));
         setMore(false);
         console.log('yeap');
       } else if (e.target.closest('.join-group')) {
@@ -129,7 +129,7 @@ const CommunityCard = ({ community, setActiveForum }) => {
               <img src={spinner} alt='spinner' />
             </button>
           </div>
-        ) : community.forumMembershipStatus === 'NotAMembers' ? (
+        ) : community.forumMembershipStatus === 'NotAMember' ? (
           <div className='btn-con'>
             <button
               onClick={(e) => handleRequest(e)}
@@ -138,9 +138,12 @@ const CommunityCard = ({ community, setActiveForum }) => {
               + Join forum
             </button>
           </div>
-        ) : community.forumMembershipStatus === 'Pending' || true ? (
+        ) : community.forumMembershipStatus === 'Pending' ? (
           <div className='btn-con'>
-            <button className='cancel-request reach-btn'>
+            <button
+              onClick={(e) => handleRequest(e)}
+              className='cancel-request reach-btn'
+            >
               <FaTimes />
               Cancel request
             </button>
