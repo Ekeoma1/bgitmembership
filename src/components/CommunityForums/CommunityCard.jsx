@@ -51,7 +51,7 @@ const CommunityCard = ({ community, setActiveForum }) => {
         <img
           src={community.forumBackgroundImageUrl ?? community1}
           onClick={() => {
-            navigate(`/forum/${community.forumId}`);
+            navigate(`/forums/${community.forumId}`);
           }}
           alt='community-img'
           className=''
@@ -63,12 +63,13 @@ const CommunityCard = ({ community, setActiveForum }) => {
         )}
       </div>
       <div className='card-footer'>
-        {community.forumMembershipStatus === 'AMember' ? (
+        {community.forumMembershipStatus === 'AMember' ||
+        community.isCurrentUserAdmin ? (
           <>
             <div className='info'>
               <h3
                 onClick={() => {
-                  navigate(`/forum/${community.forumId}`);
+                  navigate(`/forums/${community.forumId}`);
                 }}
                 className='text-color-secondary-bold22'
               >

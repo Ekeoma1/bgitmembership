@@ -1,5 +1,4 @@
 import { configureStore } from '@reduxjs/toolkit';
-// import eventReducer from './Features/eventSlice';
 import authReducer from './Features/auth/auth_slice';
 import connectionsReducer from './Features/connections/connections_slice';
 import jobsReducer from './Features/jobs/jobs_slice';
@@ -14,10 +13,9 @@ import eventsReducer from './Features/events/events_slice';
 import accountPrivaciesReducer from './Features/account-privacies/account_privacies_slice';
 import notificationReducer from './Features/notification/notification_slice';
 import forumsMembershipReducer from './Features/forums-membership/forums_membership_slice';
-
+import forumsPostReducer from './Features/forums-post/forums_post_slice';
 export default configureStore({
   reducer: {
-    // event: eventReducer,
     auth: authReducer,
     connections: connectionsReducer,
     jobs: jobsReducer,
@@ -32,6 +30,7 @@ export default configureStore({
     accountPrivacies: accountPrivaciesReducer,
     notification: notificationReducer,
     forumsMembership: forumsMembershipReducer,
+    forumsPost: forumsPostReducer,
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({

@@ -325,7 +325,7 @@ const forumsSlice = createSlice({
       state.getSuggestedForums.data = action.payload;
     });
 
-    // get forums by ID
+    // get my forums
     builder.addCase(triggerGetMyForums.pending, (state) => {
       state.getMyForums.status = states.LOADING;
       state.getMyForums.data = {};
@@ -338,8 +338,21 @@ const forumsSlice = createSlice({
       state.getMyForums.status = states.ERROR;
       state.getMyForums.data = action.payload;
     });
-
     // get forums by ID
+    builder.addCase(triggerGetForumById.pending, (state) => {
+      state.getForumById.status = states.LOADING;
+      state.getForumById.data = {};
+    });
+    builder.addCase(triggerGetForumById.fulfilled, (state, action) => {
+      state.getForumById.status = states.SUCCESSFUL;
+      state.getForumById.data = action.payload;
+    });
+    builder.addCase(triggerGetForumById.rejected, (state, action) => {
+      state.getForumById.status = states.ERROR;
+      state.getForumById.data = action.payload;
+    });
+
+    // get forum connection status
     builder.addCase(
       triggerGetForumConnectionStatusByForumId.pending,
       (state) => {

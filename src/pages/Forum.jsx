@@ -37,15 +37,17 @@ const Forum = () => {
     // dispatch(triggerGetAllForums(data));
     dispatch(triggerGetForumConnectionStatusByForumId(data));
   }, [params]);
-
+  // console.log(getForumById?.data?.forum?.[0]?.isCurrentUserMember);
   return (
     <div className='forum-wrapper'>
       <Banner
         setJoinForumRequestSuccessful={setJoinForumRequestSuccessful}
         joinForumRequestSuccessful={joinForumRequestSuccessful}
       />
-      {getForumById.data[0]?.isCurrentUserMember && <ForumContentMain />}
-      {!getForumById.data[0]?.isCurrentUserMember && <ForumContent />}
+      {getForumById?.data?.forum?.[0]?.isCurrentUserMember && (
+        <ForumContentMain />
+      )}
+      {!getForumById.data?.forum?.[0]?.isCurrentUserMember && <ForumContent />}
     </div>
   );
 };

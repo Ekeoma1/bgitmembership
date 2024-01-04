@@ -17,7 +17,7 @@ const ForumContentMain = ({ forum }) => {
         <div className='row mt-lg-5'>
           <div className='col-3 d-lg-block d-none'>
             {/* <Info forum={forum} /> */}
-            <MyUpdates />
+            <MyUpdates forum />
             <Resources />
           </div>
           <div className='col-lg-9 col-12'>

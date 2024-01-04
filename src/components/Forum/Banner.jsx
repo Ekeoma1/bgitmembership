@@ -122,7 +122,8 @@ const Banner = ({
         <div
           style={{
             backgroundImage: `url(${
-              getForumById?.data?.forumBackgroundImageUrl ?? forumDefault
+              getForumById?.data?.forum[0]?.forumBackgroundImageUrl ??
+              forumDefault
             })`,
             backgroundSize: 'cover',
             backgroundRepeat: 'no-repeat',
@@ -135,13 +136,13 @@ const Banner = ({
                 <HiArrowLeft />
               </div>
               <h2>
-                {getForumById?.data[0]?.forumName}
+                {getForumById?.data?.forum[0]?.forumName}
                 <img src={msg} alt='message-icon' className='icon-color2' />
               </h2>
               <div className='banner-bottom'>
                 <div className='members-wrapper'>
                   <div className='members-img'>
-                    {getForumById?.data[0]?.usersInForum.length === 0 ? (
+                    {getForumById?.data?.forum[0]?.usersInForum.length === 0 ? (
                       <>
                         <div className='image-con icon-con'>
                           {/* <FaUserGroup /> */}
@@ -151,7 +152,7 @@ const Banner = ({
                       </>
                     ) : (
                       <>
-                        {getForumById?.data[0]?.usersInForum?.map(
+                        {getForumById?.data?.forum[0]?.usersInForum?.map(
                           (member, index) => (
                             <div className='image-con'>
                               <img
@@ -167,14 +168,14 @@ const Banner = ({
                   <div
                     onClick={() => {
                       navigate(
-                        `/forums/${getForumById?.data[0]?.forumId}/members`
+                        `/forums/${getForumById?.data?.forum[0]?.forumId}/members`
                       );
                     }}
                     className={`members-amount ${
-                      getForumById?.data[0]?.userCount && 'view'
+                      getForumById?.data?.forum[0]?.userCount && 'view'
                     }`}
                   >
-                    <p>{getForumById?.data[0]?.userCount}</p>
+                    <p>{getForumById?.data?.forum[0]?.userCount}</p>
                     <p>Members</p>
                   </div>
                 </div>

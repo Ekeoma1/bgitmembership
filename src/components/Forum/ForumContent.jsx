@@ -38,7 +38,7 @@ const ForumContent = ({ forum }) => {
   useEffect(() => {
     if (getAllForums.status === 'successful') {
       setRelatedGroups(
-        getAllForums.data[0]?.filter((item) => item.forumId !== params.forumId)
+        getAllForums.data?.forums?.filter((item) => item.forumId !== params.forumId)
       );
     }
   }, [getAllForums]);
@@ -152,14 +152,14 @@ const ForumContent = ({ forum }) => {
                   <div className='info'>
                     <h3>Info</h3>
                     <ol>
-                      {getForumById?.data[0]?.info?.map((info, index) => (
+                      {getForumById?.data?.forum[0]?.info?.map((info, index) => (
                         <li key={index}>{info}</li>
                       ))}
                     </ol>
                   </div>
                   <div className='section-bottom'>
                     <div className='content'>
-                      {getForumById?.data[0]?.visibility !== 'Private' ? (
+                      {getForumById?.data?.forum[0]?.visibility !== 'Private' ? (
                         <div className='private'>
                           <CgLock className='icon' />
                           <div className=''>
@@ -176,7 +176,7 @@ const ForumContent = ({ forum }) => {
                           </div>
                         </div>
                       )}
-                      {getForumById?.data[0]?.dateCreated && (
+                      {getForumById?.data?.forum[0]?.dateCreated && (
                         <div className='history'>
                           <TbClockHour9 className='icon' />
                           <div className=''>
@@ -197,12 +197,12 @@ const ForumContent = ({ forum }) => {
                   <h3>Admin</h3>
                   <div className='content'>
                     <img
-                      src={getForumById?.data[0]?.forumAdmin?.imageUrl}
+                      src={getForumById?.data?.forum[0]?.forumAdmin?.imageUrl}
                       alt='admin'
                     />
                     <div className=''>
-                      <h5>{`${getForumById?.data[0]?.forumAdmin?.firstName} ${getForumById?.data[0]?.forumAdmin?.secondName}`}</h5>
-                      <p>{getForumById?.data[0]?.forumAdmin?.profession}</p>
+                      <h5>{`${getForumById.data?.forum[0]?.forumAdmin?.firstName} ${getForumById.data?.forum[0]?.forumAdmin?.secondName}`}</h5>
+                      <p>{getForumById.data?.forum[0]?.forumAdmin?.profession}</p>
                     </div>
                   </div>
                 </div>

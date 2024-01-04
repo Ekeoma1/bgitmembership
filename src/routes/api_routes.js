@@ -54,6 +54,21 @@ const apiRoutes = {
   savePost: '/Posts/SavePost',
   unsavePost: '/Posts/UnsavePost',
 
+  // forums post
+  createForumPost: '/ForumsPost/CreateForumPost',
+  likeForumPost: '/ForumsPost/LikeForumPost',
+  unlikeForumPost: '/ForumsPost/UnlikeForumPost',
+  getForumPostsByForumId: '/ForumsPost/GetForumPostsByForumId',
+  createComment: '/ForumsPost/CreateComment',
+  replyComment: '/ForumsPost/ReplyComment',
+  likeReply: '/ForumsPost/LikeReply',
+  unlikReply: '/ForumsPost/UnlikeReply',
+  likeForumPostComment: '/ForumsPost/LikeForumPostComment',
+  unlikeForumPostComment: '/ForumsPost/UnlikeForumPostComment',
+  saveForumPost: '/ForumsPost/SaveForumPost',
+  unsaveForumPost: '/ForumsPost/UnsaveForumPost',
+  getAllCommentsByForumPostId: '/ForumsPost/GetAllCommentsByForumPostId',
+
   // reports
   reportUser: '/Reports/ReportUser',
   getAllReports: '/Reports/GetAllReports',
@@ -91,7 +106,6 @@ const apiRoutes = {
   getForumConnectionStatusById: '/Forums/GetForumMembershipStatus',
   getAllForumsByIndustry: '/Forums/GetAllForumsByIndustry',
   getAllForumsByLocation: '/Forums/GetAllForumsByLocation',
-
   //Forums Membership
   acceptForumJoinRequest: '/ForumsMembership/AcceptForumJoinRequest',
   rejectForumJoinRequest: '/ForumsMembership/RejectForumJoinRequest',
