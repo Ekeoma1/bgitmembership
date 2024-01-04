@@ -8,13 +8,15 @@ const URL =
 
 async function ajax({ method = 'GET', url, data, queryParams }) {
   // console.log('query##### ', queryParams);
-  // console.log('data http ', data);
+  console.log('data http ', data);
   let result, contentType;
   if (
     data?.photo ||
     data?.postImageUrl ||
     data?.postVideoUrl ||
     data?.content ||
+    data?.postPhoto ||
+    data?.postVideo ||
     data?.resume ||
     data?.profilePicture ||
     data?.backgroundImage ||

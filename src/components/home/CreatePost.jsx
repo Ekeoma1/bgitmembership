@@ -63,7 +63,7 @@ const CreatePost = ({ forum }) => {
       const data = { ...values, forumId: params?.forumId };
       dispatch(triggerCreateForumPost(data));
     } else {
-      console.log('else');
+      console.log('else create post', values);
       dispatch(triggerCreatePost(values));
     }
   };

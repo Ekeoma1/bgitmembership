@@ -32,12 +32,18 @@ import user from '../../assets/images/author1.png';
 import SingleComment from './SingleComment';
 import CommentInput from './CommentInput';
 import MainButton from './MainButton';
-import { triggerLikeForumPost, triggerSaveForumPost, triggerUnlikeForumPost, triggerUnsaveForumPost } from '../../Features/forums-post/forums_post_slice';
+import {
+  triggerLikeForumPost,
+  triggerSaveForumPost,
+  triggerUnlikeForumPost,
+  triggerUnsaveForumPost,
+} from '../../Features/forums-post/forums_post_slice';
 const PostCardForumsPage = ({
   post,
   getAllPostsLocal,
   setGetAllPostsLocal,
 }) => {
+  console.log('postcardforums page');
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const {
@@ -157,6 +163,7 @@ const PostCardForumsPage = ({
   };
   const [commentType, setCommentType] = useState('');
   const handleSubmit = (name, post) => {
+    console.log('submit postcard forums page');
     setActivePostTemp(post);
     if (name === 'comment') {
       const data = {

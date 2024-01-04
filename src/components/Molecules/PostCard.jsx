@@ -154,8 +154,9 @@ const PostCard = ({ post, getAllPostsLocal, setGetAllPostsLocal }) => {
   };
   const [commentType, setCommentType] = useState('');
   const handleSubmit = (name, post) => {
+     console.log('submit postcard ');
     setActivePostTemp(post);
-    if (name === 'comment') {
+    if (name === 'comment' && comment !== '') {
       const data = {
         postId: post.postId,
         content: comment,
@@ -164,7 +165,7 @@ const PostCard = ({ post, getAllPostsLocal, setGetAllPostsLocal }) => {
       setCommentType('comment');
       setPreloaderComment(comment);
       setComment('');
-    } else if (name === 'reply') {
+    } else if (name === 'reply' && reply !== '') {
       const data = {
         commentId: commentThatIsBeingReplied.commentId,
         content: reply,

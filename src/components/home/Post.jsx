@@ -25,7 +25,10 @@ const Post = ({ forum }) => {
     setPageNumber((prevState) => prevState + 1);
   };
   useEffect(() => {
-    if (createPost.status === 'successful') {
+    if (
+      createPost.status === 'successful' &&
+      createPost.data.title !== 'One or more validation errors occurred.'
+    ) {
       const post = createPost?.data;
       setGetAllPostsLocal([post, ...getAllPostsLocal]);
     }
@@ -100,7 +103,7 @@ const Post = ({ forum }) => {
     getAllPosts?.status,
     getForumPostsByForumId.status,
   ]);
-
+  console.log('forum', forum);
   return (
     <div className='post-wrapper'>
       <div className='d-lg-block d-none'>

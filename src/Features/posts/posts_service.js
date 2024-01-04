@@ -4,6 +4,7 @@ import { get, post } from '../../network/https';
 export default class PostsService {
   //  create post
   static async createPost(data) {
+    console.log('data posts service',data);
     const response = await post({
       url: apiRoutes.createPost,
       data: { ...data },
