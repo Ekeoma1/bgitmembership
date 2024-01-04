@@ -32,7 +32,7 @@ import user from '../../assets/images/author1.png';
 import SingleComment from './SingleComment';
 import CommentInput from './CommentInput';
 import MainButton from './MainButton';
-import { triggerLikeForumPost, triggerUnlikeForumPost } from '../../Features/forums-post/forums_post_slice';
+import { triggerLikeForumPost, triggerSaveForumPost, triggerUnlikeForumPost, triggerUnsaveForumPost } from '../../Features/forums-post/forums_post_slice';
 const PostCardForumsPage = ({
   post,
   getAllPostsLocal,
@@ -75,7 +75,6 @@ const PostCardForumsPage = ({
   );
   const timeoutIdRef2 = useRef(null);
   const handleLikeUnlikePost = (postParam) => {
-    console.log('likepost##############', postParam);
     const data = _.cloneDeep(getAllPostsLocal);
     const startTimeout = () => {
       timeoutIdRef2.current = setTimeout(() => {
@@ -115,11 +114,11 @@ const PostCardForumsPage = ({
     const data = _.cloneDeep(getAllPostsLocal);
     const startTimeout = () => {
       timeoutIdRef.current = setTimeout(() => {
-        const values = { queryParams: { postId: postParam.postId } };
+        const values = { queryParams: { forumPostId: postParam.forumPostId } };
         if (!saveCurrentPost) {
-          dispatch(triggerSavePost(values));
+          dispatch(triggerSaveForumPost(values));
         } else {
-          dispatch(triggerUnsavePost(values));
+          dispatch(triggerUnsaveForumPost(values));
         }
       }, 3000);
     };
@@ -131,7 +130,7 @@ const PostCardForumsPage = ({
     clearTimeoutIfNeeded();
     startTimeout();
     data.forEach((item) => {
-      if (item.postId === postParam.postId) {
+      if (item.forumPostId === postParam.forumPostId) {
         setSaveCurrentPost(!saveCurrentPost);
         item.isSavedByCurrentUser = !item.isSavedByCurrentUser;
         item.saveCount = item.isSavedByCurrentUser
