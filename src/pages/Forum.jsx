@@ -34,10 +34,10 @@ const Forum = () => {
   useEffect(() => {
     const data = { queryParams: { forumId: params?.forumId } };
     dispatch(triggerGetForumById(data));
-    // dispatch(triggerGetAllForums(data));
     dispatch(triggerGetForumConnectionStatusByForumId(data));
   }, [params]);
   // console.log(getForumById?.data?.forum?.[0]?.isCurrentUserMember);
+
   return (
     <div className='forum-wrapper'>
       <Banner

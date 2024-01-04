@@ -20,7 +20,7 @@ const ForumContentMain = ({ forum }) => {
             <MyUpdates forum />
           </div>
           <div className='col-lg-9 col-12'>
-            <Post />
+            <Post forum />
           </div>
           {/* <div className='col-3 d-lg-block d-none'>
             <CommunityForums />

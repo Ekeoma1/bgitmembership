@@ -61,7 +61,6 @@ export default class ForumsService {
       data: { ...data },
       queryParams: data.queryParams,
     });
-    console.log('response#######', response);
     return response;
   }
   static async getForumConnectionStatusByForumId(data) {

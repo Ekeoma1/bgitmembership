@@ -11,9 +11,12 @@ import {
   resetCreateForumPost,
   triggerCreateForumPost,
 } from '../../Features/forums-post/forums_post_slice';
+import { useParams } from 'react-router-dom';
 
 const CreatePost = ({ forum }) => {
+  console.log('forum######', forum);
   const dispatch = useDispatch();
+  const params = useParams();
   const { createPost } = useSelector((state) => state.posts);
   const { createForumPost } = useSelector((state) => state.forumsPost);
   const { getForumById } = useSelector((state) => state.forums);
@@ -57,12 +60,11 @@ const CreatePost = ({ forum }) => {
       }
     }
     if (forum) {
-      const forumId = getForumById.data?.forum?.[0]?.forumId;
-      values.forumId = forumId;
-      console.log('forumid', forumId);
-      console.log('values', values);
-      dispatch(triggerCreateForumPost(values));
+      console.log('true');
+      const data = { ...values, forumId: params?.forumId };
+      dispatch(triggerCreateForumPost(data));
     } else {
+      console.log('else');
       dispatch(triggerCreatePost(values));
     }
   };

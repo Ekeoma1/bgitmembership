@@ -31,9 +31,11 @@ export default class PostsService {
   }
 
   //  getForumPostsByForumId
-  static async getForumPostsByForumId() {
+  static async getForumPostsByForumId(data) {
     const response = await get({
       url: apiRoutes.getForumPostsByForumId,
+      data: { ...data },
+      queryParams: data.queryParams,
     });
     return response;
   }
