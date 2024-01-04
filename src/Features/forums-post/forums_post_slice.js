@@ -178,6 +178,7 @@ export const triggerUnsaveForumPost = createAsyncThunk(
     }
   }
 );
+
 export const triggerGetAllCommentsByForumPostId = createAsyncThunk(
   'get-all-comments-by-forum-post-id',
   async (params, thunkAPI) => {
@@ -193,41 +194,8 @@ const postsSlice = createSlice({
   name: 'posts',
   initialState,
   reducers: {
-    resetCreatePost: (state) => {
-      state.createPost = initialState.createPost;
-    },
-    resetLikePost: (state) => {
-      state.likePost = initialState.likePost;
-    },
-    resetUnlikePost: (state) => {
-      state.unLikePost = initialState.unLikePost;
-    },
-    resetSavePost: (state) => {
-      state.savePost = initialState.savePost;
-    },
-    resteUnsavePost: (state) => {
-      state.unsavePost = initialState.unsavePost;
-    },
-    resetLikeComment: (state) => {
-      state.likeComment = initialState.likeComment;
-    },
-    resetUnlikeComment: (state) => {
-      state.unlikeComment = initialState.unlikeComment;
-    },
-    setActivePostIdForOngoingRequest: (state, action) => {
-      state.activePostIdForOngoingRequest = action.payload;
-    },
-    resetActivePostIdForOngoingRequest: (state) => {
-      state.activePostIdForOngoingRequest = '';
-    },
-    resetCreateComment: (state) => {
-      state.createComment = initialState.createComment;
-    },
-    resetReplyComment: (state) => {
-      state.replyComment = initialState.replyComment;
-    },
-    resetGetCommentsByPostId: (state) => {
-      state.getCommentsByPostId = initialState.getCommentsByPostId;
+    resetCreateForumPost: (state) => {
+      state.createForumPost = initialState.createForumPost;
     },
   },
   extraReducers: (builder) => {
@@ -428,17 +396,4 @@ const postsSlice = createSlice({
 });
 
 export default postsSlice.reducer;
-export const {
-  resetCreatePost,
-  resetLikePost,
-  resetUnlikePost,
-  resetLikeComment,
-  resetUnlikeComment,
-  resetSavePost,
-  resteUnsavePost,
-  setActivePostIdForOngoingRequest,
-  resetActivePostIdForOngoingRequest,
-  resetCreateComment,
-  resetReplyComment,
-  resetGetCommentsByPostId,
-} = postsSlice.actions;
+export const { resetCreateForumPost } = postsSlice.actions;

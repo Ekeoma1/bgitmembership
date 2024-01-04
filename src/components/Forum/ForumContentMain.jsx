@@ -18,7 +18,6 @@ const ForumContentMain = ({ forum }) => {
           <div className='col-3 d-lg-block d-none'>
             {/* <Info forum={forum} /> */}
             <MyUpdates forum />
-            <Resources />
           </div>
           <div className='col-lg-9 col-12'>
             <Post />

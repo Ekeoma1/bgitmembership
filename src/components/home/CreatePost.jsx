@@ -7,10 +7,16 @@ import {
 } from '../../Features/posts/posts_slice';
 import { renderToast } from '../Molecules/CustomToastify';
 import MainButton from '../Molecules/MainButton';
+import {
+  resetCreateForumPost,
+  triggerCreateForumPost,
+} from '../../Features/forums-post/forums_post_slice';
 
-const CreatePost = () => {
+const CreatePost = ({ forum }) => {
   const dispatch = useDispatch();
   const { createPost } = useSelector((state) => state.posts);
+  const { createForumPost } = useSelector((state) => state.forumsPost);
+  const { getForumById } = useSelector((state) => state.forums);
   const [postContent, setPostContent] = useState('');
   const [selectedMedia, setSelectedMedia] = useState(null);
   const [selectedMediaDispatch, setSelectedMediaDispatch] = useState(null);
@@ -50,22 +56,49 @@ const CreatePost = () => {
         values = { ...values, postVideo: selectedMediaDispatch };
       }
     }
-    // console.log('values', values);
-    dispatch(triggerCreatePost(values));
+    if (forum) {
+      const forumId = getForumById.data?.forum?.[0]?.forumId;
+      values.forumId = forumId;
+      console.log('forumid', forumId);
+      console.log('values', values);
+      dispatch(triggerCreateForumPost(values));
+    } else {
+      dispatch(triggerCreatePost(values));
+    }
   };
   useEffect(() => {
     if (createPost.status === 'successful') {
-      renderToast({
-        status: 'success',
-        message: 'post added',
-      });
+      if (createPost.data) {
+        renderToast({
+          status: 'success',
+          message: 'post added',
+        });
+      }
       setPostContent('');
       setSelectedMedia(null);
       setSelectedMediaDispatch(null);
       // setPostReach('anyone');
       dispatch(resetCreatePost());
     }
-  }, [createPost.status]);
+    if (createForumPost.status === 'successful') {
+      if (createForumPost.data === 'Forum not found.') {
+        renderToast({
+          status: 'error',
+          message: createForumPost.data,
+        });
+      } else {
+        renderToast({
+          status: 'success',
+          message: 'forum post added',
+        });
+      }
+      setPostContent('');
+      setSelectedMedia(null);
+      setSelectedMediaDispatch(null);
+      // setPostReach('anyone');
+      dispatch(resetCreateForumPost());
+    }
+  }, [createPost.status, createForumPost.status]);
 
   return (
     <div className='create-post-card shadow-sm mx-auto '>

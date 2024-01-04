@@ -55,7 +55,7 @@ const Post = () => {
   return (
     <div className='post-wrapper'>
       <div className='d-lg-block d-none'>
-        <CreatePost />
+        <CreatePost forum />
       </div>
       <div className='post-card-wrapper'>
         {(getAllPosts.status === 'base' || getAllPosts.status === 'loading') &&
