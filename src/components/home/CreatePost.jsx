@@ -14,7 +14,6 @@ import {
 import { useParams } from 'react-router-dom';
 
 const CreatePost = ({ forum }) => {
-  console.log('forum######', forum);
   const dispatch = useDispatch();
   const params = useParams();
   const { createPost } = useSelector((state) => state.posts);

@@ -42,8 +42,8 @@ const ForumContent = ({ forum }) => {
       );
     }
   }, [getAllForums]);
-  console.log(relatedGroups);
-  console.log(activeForum);
+  // console.log(relatedGroups);
+  // console.log(activeForum);
 
   useEffect(() => {
     if (getAllForums.status === 'successful' && Array.isArray(relatedGroups)) {

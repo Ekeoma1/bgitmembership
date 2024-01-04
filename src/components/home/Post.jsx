@@ -7,9 +7,9 @@ import PostsLoader from '../Atoms/skeleton-loaders/home-page/PostsLoader';
 import MainButton from '../Molecules/MainButton';
 import { triggerGetForumPostsByForumId } from '../../Features/forums-post/forums_post_slice';
 import { useParams } from 'react-router-dom';
+import PostCardForumsPage from '../Molecules/PostCardForumsPage';
 
 const Post = ({ forum }) => {
-  console.log('forum on post', forum);
   const dispatch = useDispatch();
   const params = useParams();
   const { getAllPosts, createPost } = useSelector((state) => state.posts);
@@ -37,16 +37,14 @@ const Post = ({ forum }) => {
 
   useEffect(() => {
     const data = { queryParams: { pageNumber, pageSize } };
-    console.log('params', params);
+    // console.log('params', params);
 
     if (forum) {
       const values = {
         queryParams: { pageNumber, pageSize, forumId: params.forumId },
       };
-      console.log(values);
       dispatch(triggerGetForumPostsByForumId(values));
     } else {
-      console.log(data);
       dispatch(triggerGetAllPosts(data));
     }
   }, [pageNumber]);
@@ -102,7 +100,6 @@ const Post = ({ forum }) => {
     getAllPosts?.status,
     getForumPostsByForumId.status,
   ]);
-  console.log(getAllPostsLocal);
 
   return (
     <div className='post-wrapper'>
@@ -189,7 +186,7 @@ const Post = ({ forum }) => {
                       <>
                         {getAllPostsLocal?.map((post, key) => {
                           return (
-                            <PostCard
+                            <PostCardForumsPage
                               key={key}
                               post={post}
                               getAllPostsLocal={getAllPostsLocal}

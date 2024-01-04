@@ -32,8 +32,12 @@ import user from '../../assets/images/author1.png';
 import SingleComment from './SingleComment';
 import CommentInput from './CommentInput';
 import MainButton from './MainButton';
-const PostCard = ({ post, getAllPostsLocal, setGetAllPostsLocal }) => {
-  console.log('postcard');
+import { triggerLikeForumPost, triggerUnlikeForumPost } from '../../Features/forums-post/forums_post_slice';
+const PostCardForumsPage = ({
+  post,
+  getAllPostsLocal,
+  setGetAllPostsLocal,
+}) => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const {
@@ -71,15 +75,15 @@ const PostCard = ({ post, getAllPostsLocal, setGetAllPostsLocal }) => {
   );
   const timeoutIdRef2 = useRef(null);
   const handleLikeUnlikePost = (postParam) => {
-    console.log('postParam', postParam);
+    console.log('likepost##############', postParam);
     const data = _.cloneDeep(getAllPostsLocal);
     const startTimeout = () => {
       timeoutIdRef2.current = setTimeout(() => {
-        const values = { queryParams: { postId: postParam.postId } };
+        const values = { queryParams: { forumPostId: postParam.forumPostId } };
         if (!likeCurrentPost) {
-          dispatch(triggerLikePost(values));
+          dispatch(triggerLikeForumPost(values));
         } else {
-          dispatch(triggerUnlikePost(values));
+          dispatch(triggerUnlikeForumPost(values));
         }
       }, 3000);
     };
@@ -91,7 +95,7 @@ const PostCard = ({ post, getAllPostsLocal, setGetAllPostsLocal }) => {
     clearTimeoutIfNeeded();
     startTimeout();
     data.forEach((item) => {
-      if (item.postId === postParam.postId) {
+      if (item.forumPostId === postParam.forumPostId) {
         setLikeCurrentPost(!likeCurrentPost);
         item.isLikedByCurrentUser = !item.isLikedByCurrentUser;
         item.likeCount = item.isLikedByCurrentUser
@@ -212,7 +216,7 @@ const PostCard = ({ post, getAllPostsLocal, setGetAllPostsLocal }) => {
       setCommentThatIsBeingReplied('');
     }
   }, [dispatch, getAllPostsLocal, getCommentsByPostId, setGetAllPostsLocal]);
-  // console.log('getallpostslocal', getAllPostsLocal);
+  console.log('getallpostslocal', getAllPostsLocal);
   return (
     <div className='post-card shadow-sm mx-auto'>
       <div className='post-card-header'>
@@ -484,4 +488,4 @@ const PostCard = ({ post, getAllPostsLocal, setGetAllPostsLocal }) => {
   );
 };
 
-export default PostCard;
+export default PostCardForumsPage;
