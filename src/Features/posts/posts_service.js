@@ -4,11 +4,17 @@ import { get, post } from '../../network/https';
 export default class PostsService {
   //  create post
   static async createPost(data) {
-    console.log('data posts service',data);
     const response = await post({
       url: apiRoutes.createPost,
       data: { ...data },
     });
+    if (response === 'An error occurred while creating post') {
+      throw new Error('Something went wrong');
+    }
+    // if (response.status !== 'success') {
+    //   throw new Error('Something went wrong');
+    // }
+    // return response.data;
     return response;
   }
 

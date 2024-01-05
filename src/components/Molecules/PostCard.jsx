@@ -7,11 +7,6 @@ import moment from 'moment';
 import { UserProfilePhotoLoader2 } from '../Atoms/skeleton-loaders/dashboard-page/UserProfilePhotoLoader';
 import MediaLoader from '../Atoms/skeleton-loaders/home-page/MediaLoader';
 import {
-  // resetActivePostIdForOngoingRequest,
-  // resetSaveCurrentPost,
-  // resetLikePost,
-  // setActivePostIdForOngoingRequest,
-  // setSaveCurrentPost,
   triggerLikePost,
   triggerSavePost,
   triggerUnsavePost,
@@ -25,22 +20,21 @@ import {
 } from '../../Features/posts/posts_slice';
 import { useDispatch, useSelector } from 'react-redux';
 import { FaRegBookmark, FaBookmark } from 'react-icons/fa';
-
 import OutsideClickHandler from 'react-outside-click-handler';
 import ShareModal from '../Modals/ShareModal';
-import user from '../../assets/images/author1.png';
 import SingleComment from './SingleComment';
 import CommentInput from './CommentInput';
-import MainButton from './MainButton';
-const PostCard = ({ post, getAllPostsLocal, setGetAllPostsLocal }) => {
-  console.log('postcard');
+import {
+  triggerLikeForumPost,
+  triggerSaveForumPost,
+  triggerUnlikeForumPost,
+  triggerUnsaveForumPost,
+} from '../../Features/forums-post/forums_post_slice';
+
+const PostCard = ({ post, getAllPostsLocal, setGetAllPostsLocal, forum }) => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const {
-    likePost,
-    savePost,
-    unsavePost,
-    activePostIdForOngoingRequest,
     createComment,
     replyComment: replyCommentRedux,
     getCommentsByPostId,
@@ -51,10 +45,7 @@ const PostCard = ({ post, getAllPostsLocal, setGetAllPostsLocal }) => {
   const [preloaderComment, setPreloaderComment] = useState('');
   const [reply, setReply] = useState('');
   const [preloaderCommentReply, setPreloaderCommentReply] = useState('');
-  const [numberOfComments, setNumberOfComments] = useState(2);
   const [numOfCommentsCon, setNumOfCommentsCon] = useState([]);
-  // console.log('numOfCommentsCon', numOfCommentsCon);
-  const [replyComment, setReplyComment] = useState(false);
   const [replyChildComment, setReplyChildComment] = useState(false);
   const [commentThatIsBeingReplied, setCommentThatIsBeingReplied] = useState(
     {}
@@ -64,22 +55,20 @@ const PostCard = ({ post, getAllPostsLocal, setGetAllPostsLocal }) => {
   const [profileImgOnLoadStatus, setProfileImgOnLoadStatus] = useState('base');
   const [postImgOnLoadStatus, setPostImgOnLoadStatus] = useState('base');
   const [postVideoOnLoadStatus, setPostVideoOnLoadStatus] = useState('base');
+  const idType = forum ? 'forumPostId' : 'postId';
 
   // Like unlike post
-  const [likeCurrentPost, setLikeCurrentPost] = useState(
-    post?.isLikedByCurrentUser
-  );
   const timeoutIdRef2 = useRef(null);
   const handleLikeUnlikePost = (postParam) => {
-    console.log('postParam', postParam);
-    const data = _.cloneDeep(getAllPostsLocal);
     const startTimeout = () => {
       timeoutIdRef2.current = setTimeout(() => {
-        const values = { queryParams: { postId: postParam.postId } };
-        if (!likeCurrentPost) {
-          dispatch(triggerLikePost(values));
+        const values = { queryParams: { [idType]: postParam[idType] } };
+        if (!post?.isLikedByCurrentUser) {
+          !forum && dispatch(triggerLikePost(values));
+          forum && dispatch(triggerLikeForumPost(values));
         } else {
-          dispatch(triggerUnlikePost(values));
+          !forum && dispatch(triggerUnlikePost(values));
+          forum && dispatch(triggerUnlikeForumPost(values));
         }
       }, 3000);
     };
@@ -90,32 +79,32 @@ const PostCard = ({ post, getAllPostsLocal, setGetAllPostsLocal }) => {
     };
     clearTimeoutIfNeeded();
     startTimeout();
-    data.forEach((item) => {
-      if (item.postId === postParam.postId) {
-        setLikeCurrentPost(!likeCurrentPost);
-        item.isLikedByCurrentUser = !item.isLikedByCurrentUser;
-        item.likeCount = item.isLikedByCurrentUser
-          ? item.likeCount + 1
-          : item.likeCount - 1;
+
+    const data = getAllPostsLocal.map((item) => {
+      const post = { ...item };
+      if (item[idType] === postParam[idType]) {
+        post.isLikedByCurrentUser = !post.isLikedByCurrentUser;
+        post.likeCount = post.isLikedByCurrentUser
+          ? post.likeCount + 1
+          : post.likeCount - 1;
       }
+      return post;
     });
     setGetAllPostsLocal(data);
   };
 
   // Save unsave post
-  const [saveCurrentPost, setSaveCurrentPost] = useState(
-    post?.isSavedByCurrentUser
-  );
   const timeoutIdRef = useRef(null);
   const handleSaveUnsavePost = (postParam) => {
-    const data = _.cloneDeep(getAllPostsLocal);
     const startTimeout = () => {
       timeoutIdRef.current = setTimeout(() => {
-        const values = { queryParams: { postId: postParam.postId } };
-        if (!saveCurrentPost) {
-          dispatch(triggerSavePost(values));
+        const values = { queryParams: { [idType]: postParam[idType] } };
+        if (!post?.isSavedByCurrentUser) {
+          !forum && dispatch(triggerSavePost(values));
+          forum && dispatch(triggerSaveForumPost(values));
         } else {
-          dispatch(triggerUnsavePost(values));
+          !forum && dispatch(triggerUnsavePost(values));
+          forum && dispatch(triggerUnsaveForumPost(values));
         }
       }, 3000);
     };
@@ -126,14 +115,15 @@ const PostCard = ({ post, getAllPostsLocal, setGetAllPostsLocal }) => {
     };
     clearTimeoutIfNeeded();
     startTimeout();
-    data.forEach((item) => {
-      if (item.postId === postParam.postId) {
-        setSaveCurrentPost(!saveCurrentPost);
-        item.isSavedByCurrentUser = !item.isSavedByCurrentUser;
-        item.saveCount = item.isSavedByCurrentUser
-          ? item.saveCount + 1
-          : item.saveCount - 1;
+    const data = getAllPostsLocal.map((item) => {
+      const post = { ...item };
+      if (item[idType] === postParam[idType]) {
+        post.isSavedByCurrentUser = !post.isSavedByCurrentUser;
+        post.saveCount = post.isSavedByCurrentUser
+          ? post.saveCount + 1
+          : post.saveCount - 1;
       }
+      return post;
     });
     setGetAllPostsLocal(data);
   };
@@ -147,21 +137,19 @@ const PostCard = ({ post, getAllPostsLocal, setGetAllPostsLocal }) => {
     }
   };
   const handleReplyComment = (comment) => {
-    // console.log('comment', comment);
-    setReplyComment(true);
     setCommentThatIsBeingReplied(comment);
     setReplyChildComment(true);
   };
   const [commentType, setCommentType] = useState('');
   const handleSubmit = (name, post) => {
-     console.log('submit postcard ');
     setActivePostTemp(post);
     if (name === 'comment' && comment !== '') {
       const data = {
-        postId: post.postId,
+        [idType]: post[idType],
         content: comment,
       };
-      dispatch(triggerCreateComment(data));
+      !forum && dispatch(triggerCreateComment(data));
+      // forum && dispatch(triggerCreateComment(data));
       setCommentType('comment');
       setPreloaderComment(comment);
       setComment('');
@@ -170,7 +158,8 @@ const PostCard = ({ post, getAllPostsLocal, setGetAllPostsLocal }) => {
         commentId: commentThatIsBeingReplied.commentId,
         content: reply,
       };
-      dispatch(triggerReplyComment(data));
+      !forum && dispatch(triggerReplyComment(data));
+      // forum && dispatch(triggerReplyComment(data));
       setCommentType('reply');
       setPreloaderCommentReply(reply);
       setReply('');
@@ -195,15 +184,22 @@ const PostCard = ({ post, getAllPostsLocal, setGetAllPostsLocal }) => {
 
   useEffect(() => {
     if (getCommentsByPostId.status === 'successful') {
-      const data = _.cloneDeep(getAllPostsLocal);
-      // Find the object with the matching ID
-      const updatedArray = data.map((obj) =>
-        obj.postId === getCommentsByPostId.data.postId
-          ? { ...obj, ...getCommentsByPostId.data }
-          : obj
-      );
+      // const data = _.cloneDeep(getAllPostsLocal);
+      // // Find the object with the matching ID
+      // const updatedArray = data.map((obj) =>
+      //   obj.postId === getCommentsByPostId.data.postId
+      //     ? { ...obj, ...getCommentsByPostId.data }
+      //     : obj
+      // );
       // console.log('dataupdated#############', updatedArray);
-      setGetAllPostsLocal([...updatedArray]);
+
+      const data = getAllPostsLocal.map((item) => {
+        if (item[idType] === getCommentsByPostId.data.postId) {
+          item = { ...getCommentsByPostId.data };
+        }
+        return item;
+      });
+      setGetAllPostsLocal([...data]);
       dispatch(resetCreateComment());
       dispatch(resetReplyComment());
       dispatch(resetGetCommentsByPostId());
@@ -213,7 +209,7 @@ const PostCard = ({ post, getAllPostsLocal, setGetAllPostsLocal }) => {
       setCommentThatIsBeingReplied('');
     }
   }, [dispatch, getAllPostsLocal, getCommentsByPostId, setGetAllPostsLocal]);
-  // console.log('getallpostslocal', getAllPostsLocal);
+  console.log('getallpostslocal', getAllPostsLocal);
   return (
     <div className='post-card shadow-sm mx-auto'>
       <div className='post-card-header'>
@@ -429,11 +425,11 @@ const PostCard = ({ post, getAllPostsLocal, setGetAllPostsLocal }) => {
                             comment.replies
                               // .slice()
                               // .reverse()
-                              .slice(
-                                -numOfCommentsCon.find(
-                                  (item) => item.commentId === comment.commentId
-                                )?.numberOfComments || -2
-                              )
+                              // .slice(
+                              //   -numOfCommentsCon.find(
+                              //     (item) => item.commentId === comment.commentId
+                              //   )?.numberOfComments || -2
+                              // )
                               .map((item, index) => (
                                 <SingleComment
                                   key={index}

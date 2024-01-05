@@ -156,7 +156,6 @@ const PostCardForumsPage = ({
     }
   };
   const handleReplyComment = (comment) => {
-    // console.log('comment', comment);
     setReplyComment(true);
     setCommentThatIsBeingReplied(comment);
     setReplyChildComment(true);

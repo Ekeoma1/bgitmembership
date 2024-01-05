@@ -36,9 +36,7 @@ const CreatePost = ({ forum }) => {
       };
       reader.readAsDataURL(file);
       setSelectedMediaDispatch(file);
-      // Get the file extension from the file name
       const fileExtension = file.name.split('.').pop().toLowerCase();
-      // Check if the file is an image or a video based on the extension
       const isImage = ['jpg', 'jpeg', 'png', 'gif', 'webp', 'svg'].includes(
         fileExtension
       );
@@ -46,25 +44,27 @@ const CreatePost = ({ forum }) => {
       setMediaType(isImage ? 'image' : isVideo ? 'video' : 'unknown');
     }
   };
-
+  const setBackToDefault = () => {
+    setPostContent('');
+    setSelectedMedia(null);
+    setSelectedMediaDispatch(null);
+  };
   const handleSubmit = (e) => {
     e.preventDefault();
+    setBackToDefault();
     let values = { content: postContent, postPhoto: '', postVideo: '' };
     if (selectedMediaDispatch) {
-      // console.log('selected media dispatch');
       if (mediaType === 'image') {
         values = { ...values, postPhoto: selectedMediaDispatch };
       } else if (mediaType === 'video') {
         values = { ...values, postVideo: selectedMediaDispatch };
       }
     }
-    if (forum) {
-      console.log('true');
+    if (!forum) {
+      dispatch(triggerCreatePost(values));
+    } else {
       const data = { ...values, forumId: params?.forumId };
       dispatch(triggerCreateForumPost(data));
-    } else {
-      console.log('else create post', values);
-      dispatch(triggerCreatePost(values));
     }
   };
   useEffect(() => {
@@ -75,9 +75,6 @@ const CreatePost = ({ forum }) => {
           message: 'post added',
         });
       }
-      setPostContent('');
-      setSelectedMedia(null);
-      setSelectedMediaDispatch(null);
       // setPostReach('anyone');
       dispatch(resetCreatePost());
     }
@@ -93,9 +90,6 @@ const CreatePost = ({ forum }) => {
           message: 'forum post added',
         });
       }
-      setPostContent('');
-      setSelectedMedia(null);
-      setSelectedMediaDispatch(null);
       // setPostReach('anyone');
       dispatch(resetCreateForumPost());
     }
@@ -105,7 +99,6 @@ const CreatePost = ({ forum }) => {
     <div className='create-post-card shadow-sm mx-auto '>
       <div className='d-flex flex-wrap gap-2 align-items-center'>
         <h2>Create a Post</h2>
-
         <select
           // onChange={(e) => setPostReach(e.target.value)}
           name='postReach'

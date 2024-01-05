@@ -103,7 +103,7 @@ const Post = ({ forum }) => {
     getAllPosts?.status,
     getForumPostsByForumId.status,
   ]);
-  console.log('forum', forum);
+  // console.log('forum', forum);
   return (
     <div className='post-wrapper'>
       <div className='d-lg-block d-none'>
@@ -189,11 +189,12 @@ const Post = ({ forum }) => {
                       <>
                         {getAllPostsLocal?.map((post, key) => {
                           return (
-                            <PostCardForumsPage
+                            <PostCard
                               key={key}
                               post={post}
                               getAllPostsLocal={getAllPostsLocal}
                               setGetAllPostsLocal={setGetAllPostsLocal}
+                              forum
                             />
                           );
                         })}
