@@ -19,19 +19,19 @@ const initialState = {
     status: states.BASE,
     data: {},
   },
-  createComment: {
+  createCommentForumsPost: {
     status: states.BASE,
     data: {},
   },
-  replyComment: {
+  replyCommentForumsPost: {
     status: states.BASE,
     data: {},
   },
-  likeReply: {
+  likeReplyForumsPost: {
     status: states.BASE,
     data: {},
   },
-  unlikeReply: {
+  unlikeReplyForumsPost: {
     status: states.BASE,
     data: {},
   },
@@ -98,7 +98,7 @@ export const triggerGetForumPostsByForumId = createAsyncThunk(
     }
   }
 );
-export const triggerCreateComment = createAsyncThunk(
+export const triggerCreateCommentForumsPost = createAsyncThunk(
   'create-forum-comment',
   async (params, thunkAPI) => {
     try {
@@ -108,7 +108,7 @@ export const triggerCreateComment = createAsyncThunk(
     }
   }
 );
-export const triggerReplyComment = createAsyncThunk(
+export const triggerReplyCommentForumsPost = createAsyncThunk(
   'reply-forum-comment',
   async (params, thunkAPI) => {
     try {
@@ -118,7 +118,7 @@ export const triggerReplyComment = createAsyncThunk(
     }
   }
 );
-export const triggerLikeReply = createAsyncThunk(
+export const triggerLikeReplyForumsPost = createAsyncThunk(
   'like-forum-reply',
   async (params, thunkAPI) => {
     try {
@@ -128,7 +128,7 @@ export const triggerLikeReply = createAsyncThunk(
     }
   }
 );
-export const triggerUnlikeReply = createAsyncThunk(
+export const triggerUnlikeReplyForumsPost = createAsyncThunk(
   'unlike-forum-reply',
   async (params, thunkAPI) => {
     try {
@@ -197,6 +197,12 @@ const postsSlice = createSlice({
     resetCreateForumPost: (state) => {
       state.createForumPost = initialState.createForumPost;
     },
+    resetCreateCommentForumsPost: (state) => {
+      state.createCommentForumsPost = initialState.createCommentForumsPost;
+    },
+    resetReplyCommentForumsPost: (state) => {
+      state.createCommentForumsPost = initialState.createCommentForumsPost;
+    },
   },
   extraReducers: (builder) => {
     //create forum post
@@ -259,59 +265,64 @@ const postsSlice = createSlice({
     });
 
     // create comment
-    builder.addCase(triggerCreateComment.pending, (state) => {
-      state.createComment.status = states.LOADING;
-      state.createComment.data = {};
+    builder.addCase(triggerCreateCommentForumsPost.pending, (state) => {
+      state.createCommentForumsPost.status = states.LOADING;
+      state.createCommentForumsPost.data = {};
     });
-    builder.addCase(triggerCreateComment.fulfilled, (state, action) => {
-      state.createComment.status = states.SUCCESSFUL;
-      state.createComment.data = action.payload;
+    builder.addCase(
+      triggerCreateCommentForumsPost.fulfilled,
+      (state, action) => {
+        state.createCommentForumsPost.status = states.SUCCESSFUL;
+        state.createCommentForumsPost.data = action.payload;
+      }
+    );
+    builder.addCase(triggerCreateCommentForumsPost.rejected, (state) => {
+      state.createCommentForumsPost.status = states.ERROR;
+      state.createCommentForumsPost.data = {};
     });
-    builder.addCase(triggerCreateComment.rejected, (state) => {
-      state.createComment.status = states.ERROR;
-      state.createComment.data = {};
-    });
-
     // reply comment
-    builder.addCase(triggerReplyComment.pending, (state) => {
-      state.replyComment.status = states.LOADING;
-      state.replyComment.data = {};
+    builder.addCase(triggerReplyCommentForumsPost.pending, (state) => {
+      state.replyCommentForumsPost.status = states.LOADING;
+      state.replyCommentForumsPost.data = {};
     });
-    builder.addCase(triggerReplyComment.fulfilled, (state, action) => {
-      state.replyComment.status = states.SUCCESSFUL;
-      state.replyComment.data = action.payload;
-    });
-    builder.addCase(triggerReplyComment.rejected, (state) => {
-      state.replyComment.status = states.ERROR;
-      state.replyComment.data = {};
+    builder.addCase(
+      triggerReplyCommentForumsPost.fulfilled,
+      (state, action) => {
+        state.replyCommentForumsPost.status = states.SUCCESSFUL;
+        state.replyCommentForumsPost.data = action.payload;
+      }
+    );
+    builder.addCase(triggerReplyCommentForumsPost.rejected, (state) => {
+      state.replyCommentForumsPost.status = states.ERROR;
+      state.replyCommentForumsPost.data = {};
     });
 
     // like reply
-    builder.addCase(triggerLikeReply.pending, (state) => {
-      state.likeReply.status = states.LOADING;
-      state.likeReply.data = {};
+    builder.addCase(triggerLikeReplyForumsPost.pending, (state) => {
+      state.likeReplyForumsPost.status = states.LOADING;
+      state.likeReplyForumsPost.data = {};
     });
-    builder.addCase(triggerLikeReply.fulfilled, (state, action) => {
-      state.likeReply.status = states.SUCCESSFUL;
-      state.likeReply.data = action.payload;
+    builder.addCase(triggerLikeReplyForumsPost.fulfilled, (state, action) => {
+      state.likeReplyForumsPost.status = states.SUCCESSFUL;
+      state.likeReplyForumsPost.data = action.payload;
     });
-    builder.addCase(triggerLikeReply.rejected, (state, action) => {
-      state.likeReply.status = states.ERROR;
-      state.likeReply.data = action.payload;
+    builder.addCase(triggerLikeReplyForumsPost.rejected, (state, action) => {
+      state.likeReplyForumsPost.status = states.ERROR;
+      state.likeReplyForumsPost.data = action.payload;
     });
 
     // unlike reply
-    builder.addCase(triggerUnlikeReply.pending, (state) => {
-      state.unlikeReply.status = states.LOADING;
-      state.unlikeReply.data = {};
+    builder.addCase(triggerUnlikeReplyForumsPost.pending, (state) => {
+      state.unlikeReplyForumsPost.status = states.LOADING;
+      state.unlikeReplyForumsPost.data = {};
     });
-    builder.addCase(triggerUnlikeReply.fulfilled, (state, action) => {
-      state.unlikeReply.status = states.SUCCESSFUL;
-      state.unlikeReply.data = action.payload;
+    builder.addCase(triggerUnlikeReplyForumsPost.fulfilled, (state, action) => {
+      state.unlikeReplyForumsPost.status = states.SUCCESSFUL;
+      state.unlikeReplyForumsPost.data = action.payload;
     });
-    builder.addCase(triggerUnlikeReply.rejected, (state, action) => {
-      state.unlikeReply.status = states.ERROR;
-      state.unlikeReply.data = action.payload;
+    builder.addCase(triggerUnlikeReplyForumsPost.rejected, (state, action) => {
+      state.unlikeReplyForumsPost.status = states.ERROR;
+      state.unlikeReplyForumsPost.data = action.payload;
     });
 
     // like forumpost comment
@@ -396,4 +407,8 @@ const postsSlice = createSlice({
 });
 
 export default postsSlice.reducer;
-export const { resetCreateForumPost } = postsSlice.actions;
+export const {
+  resetCreateForumPost,
+  resetCreateCommentForumsPost,
+  resetReplyCommentForumsPost,
+} = postsSlice.actions;

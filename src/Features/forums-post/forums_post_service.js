@@ -42,18 +42,18 @@ export default class PostsService {
 
   // createComment
   static async createComment(data) {
-    const response = await get({
+    const response = await post({
       url: apiRoutes.createCommentForumsPost,
       data: { ...data },
-      queryParams: data.queryParams,
     });
     return response;
   }
 
   // replyComment
-  static async replyComment() {
-    const response = await get({
+  static async replyComment(data) {
+    const response = await post({
       url: apiRoutes.replyCommentForumsPost,
+      data: { ...data },
     });
     return response;
   }
@@ -63,6 +63,7 @@ export default class PostsService {
     const response = await post({
       url: apiRoutes.likeReplyForumsPost,
       data: { ...data },
+      queryParams: data.queryParams,
     });
     return response;
   }
@@ -72,6 +73,7 @@ export default class PostsService {
     const response = await post({
       url: apiRoutes.unlikeReplyForumsPost,
       data: { ...data },
+      queryParams: data.queryParams,
     });
     return response;
   }

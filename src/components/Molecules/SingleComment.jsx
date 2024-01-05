@@ -18,6 +18,7 @@ import { FaRegBookmark, FaBookmark, FaRegSmile } from 'react-icons/fa';
 import { TbPhoto } from 'react-icons/tb';
 import { FaHeart } from 'react-icons/fa';
 import { FaRegHeart } from 'react-icons/fa';
+import { triggerLikeForumPostComment, triggerLikeReplyForumsPost, triggerUnlikeForumPostComment, triggerUnlikeReplyForumsPost } from '../../Features/forums-post/forums_post_slice';
 
 const SingleComment = ({
   img,
@@ -28,22 +29,19 @@ const SingleComment = ({
   setReplyComment,
   loader,
   comment2,
+  forum,
+  idType,
 }) => {
   const dispatch = useDispatch();
   const [commentLocal, setCommentLocal] = useState({ ...comment2 });
   const [childCommentLocal, setChildCommentLocal] = useState({ ...comment2 });
   const [activeComment, setActiveComment] = useState({});
-  // const [likedComment, setLikedComment] = useState(false);
-  // const handleLikeComment = () => {
-  //   setLikedComment(!likedComment);
-  // };
-  // Like unlike comment
-  const [likeCurrentComment, setLikeCurrentComment] = useState(
-    comment2?.isCommentLikedByCurrentUser
-  );
-  const [likeCount, setlikeCount] = useState(
-    !childComment ? comment2?.commentLikeCount : comment2?.likeCount
-  );
+  // const [likeCurrentComment, setLikeCurrentComment] = useState(
+  //   comment2?.isCommentLikedByCurrentUser
+  // );
+  // const [likeCount, setlikeCount] = useState(
+  //   !childComment ? comment2?.commentLikeCount : comment2?.likeCount
+  // );
   const timeoutIdRef = useRef(null);
   const timeoutIdRef2 = useRef(null);
   const handleLikeUnlikeComment = (commentParam) => {
@@ -54,11 +52,11 @@ const SingleComment = ({
         timeoutIdRef.current = setTimeout(() => {
           const values = { queryParams: { commentId: commentLocal.commentId } };
           if (!commentLocal.isCommentLikedByCurrentUser) {
-            console.log('like');
-            dispatch(triggerLikeComment(values));
+            !forum && dispatch(triggerLikeComment(values));
+            forum && dispatch(triggerLikeForumPostComment(values));
           } else {
-            console.log('unlike');
-            dispatch(triggerUnlikeComment(values));
+            !forum && dispatch(triggerUnlikeComment(values));
+            forum && dispatch(triggerUnlikeForumPostComment(values));
           }
         }, 3000);
       };
@@ -89,10 +87,12 @@ const SingleComment = ({
           };
           if (!childCommentLocal.isReplyLikedByCurrentUser) {
             console.log('like');
-            dispatch(triggerLikeReply(values));
+            !forum && dispatch(triggerLikeReply(values));
+            forum && dispatch(triggerLikeReplyForumsPost(values));
           } else {
             console.log('unlike');
-            dispatch(triggerUnlikeReply(values));
+            !forum && dispatch(triggerUnlikeReply(values));
+            forum && dispatch(triggerUnlikeReplyForumsPost(values));
           }
         }, 3000);
       };
@@ -110,7 +110,6 @@ const SingleComment = ({
           ? childCommentLocal.likeCount - 1
           : childCommentLocal.likeCount + 1,
       };
-      console.log('temp###############', temp);
       setChildCommentLocal(temp);
     }
   };
@@ -141,9 +140,9 @@ const SingleComment = ({
                   {commentLocal.commentLikeCount > 0 && (
                     <div className='no-of-likes-wrapper'>
                       {commentLocal.isCommentLikedByCurrentUser ? (
-                        <FaHeart className='icon' />
+                        <FaHeart className='icon active' />
                       ) : (
-                        <FaRegHeart />
+                        <FaRegHeart className='icon' />
                       )}
 
                       <p className='no-of-likes'>
@@ -158,9 +157,9 @@ const SingleComment = ({
                   {childCommentLocal.likeCount > 0 && (
                     <div className='no-of-likes-wrapper'>
                       {childCommentLocal.isReplyLikedByCurrentUser ? (
-                        <FaHeart className='icon' />
+                        <FaHeart className='icon active' />
                       ) : (
-                        <FaRegHeart className='icon' />
+                        <FaRegHeart className='icon ' />
                       )}
 
                       <p className='no-of-likes'>

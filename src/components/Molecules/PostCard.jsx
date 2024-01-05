@@ -25,7 +25,13 @@ import ShareModal from '../Modals/ShareModal';
 import SingleComment from './SingleComment';
 import CommentInput from './CommentInput';
 import {
+  resetCreateCommentForumPost,
+  resetCreateCommentForumsPost,
+  resetReplyCommentForumsPost,
+  triggerCreateCommentForumsPost,
+  triggerGetAllCommentsByForumPostId,
   triggerLikeForumPost,
+  triggerReplyCommentForumsPost,
   triggerSaveForumPost,
   triggerUnlikeForumPost,
   triggerUnsaveForumPost,
@@ -39,6 +45,11 @@ const PostCard = ({ post, getAllPostsLocal, setGetAllPostsLocal, forum }) => {
     replyComment: replyCommentRedux,
     getCommentsByPostId,
   } = useSelector((state) => state.posts);
+  const {
+    createCommentForumsPost,
+    getAllCommentsByForumPostId,
+    replyCommentForumsPost,
+  } = useSelector((state) => state.forumsPost);
   const { getMyProfile } = useSelector((state) => state.users);
   const [showCommentsSection, setShowCommentsSection] = useState(false);
   const [comment, setComment] = useState('');
@@ -149,7 +160,7 @@ const PostCard = ({ post, getAllPostsLocal, setGetAllPostsLocal, forum }) => {
         content: comment,
       };
       !forum && dispatch(triggerCreateComment(data));
-      // forum && dispatch(triggerCreateComment(data));
+      forum && dispatch(triggerCreateCommentForumsPost(data));
       setCommentType('comment');
       setPreloaderComment(comment);
       setComment('');
@@ -159,7 +170,7 @@ const PostCard = ({ post, getAllPostsLocal, setGetAllPostsLocal, forum }) => {
         content: reply,
       };
       !forum && dispatch(triggerReplyComment(data));
-      // forum && dispatch(triggerReplyComment(data));
+      forum && dispatch(triggerReplyCommentForumsPost(data));
       setCommentType('reply');
       setPreloaderCommentReply(reply);
       setReply('');
@@ -168,48 +179,79 @@ const PostCard = ({ post, getAllPostsLocal, setGetAllPostsLocal, forum }) => {
   // comment
   const [activePostTemp, setActivePostTemp] = useState({});
   useEffect(() => {
-    if (createComment.status === 'successful') {
-      if (activePostTemp.postId === post.postId) {
-        const data = { queryParams: { postId: activePostTemp?.postId } };
-        dispatch(triggerGetCommentsByPostId(data));
+    if (
+      createComment.status === 'successful' ||
+      createCommentForumsPost.status === 'successful' ||
+      replyCommentRedux.status === 'successful' ||
+      replyCommentForumsPost.status === 'successful'
+    ) {
+      if (activePostTemp[idType] === post[idType]) {
+        const data = { queryParams: { [idType]: activePostTemp[idType] } };
+        !forum && dispatch(triggerGetCommentsByPostId(data));
+        forum && dispatch(triggerGetAllCommentsByForumPostId(data));
       }
     }
-    if (replyCommentRedux.status === 'successful') {
-      if (activePostTemp.postId === post.postId) {
-        const data = { queryParams: { postId: activePostTemp?.postId } };
-        dispatch(triggerGetCommentsByPostId(data));
-      }
-    }
-  }, [createComment, replyCommentRedux]);
+    // if (
+    //   replyCommentRedux.status === 'successful' ||
+    //   replyCommentForumsPost.status === 'successful'
+    // ) {
+    //   if (activePostTemp[idType] === post[idType]) {
+    //     const data = { queryParams: { [idType]: activePostTemp[idType] } };
+    //     !forum && dispatch(triggerGetCommentsByPostId(data));
+    //     forum && dispatch(triggerGetAllCommentsByForumPostId(data));
+    //   }
+    // }
+  }, [
+    createComment,
+    replyCommentRedux,
+    createCommentForumsPost,
+    replyCommentForumsPost,
+  ]);
 
   useEffect(() => {
-    if (getCommentsByPostId.status === 'successful') {
-      // const data = _.cloneDeep(getAllPostsLocal);
-      // // Find the object with the matching ID
-      // const updatedArray = data.map((obj) =>
-      //   obj.postId === getCommentsByPostId.data.postId
-      //     ? { ...obj, ...getCommentsByPostId.data }
-      //     : obj
-      // );
-      // console.log('dataupdated#############', updatedArray);
-
-      const data = getAllPostsLocal.map((item) => {
-        if (item[idType] === getCommentsByPostId.data.postId) {
-          item = { ...getCommentsByPostId.data };
-        }
-        return item;
-      });
+    if (
+      (getCommentsByPostId.status === 'successful' ||
+        getAllCommentsByForumPostId.status === 'successful') &&
+      post[idType] === activePostTemp[idType]
+    ) {
+      let data;
+      if (!forum) {
+        data = getAllPostsLocal.map((item) => {
+          if (item[idType] === getCommentsByPostId.data[idType]) {
+            item = { ...getCommentsByPostId.data };
+          }
+          return item;
+        });
+      } else if (forum) {
+        data = getAllPostsLocal.map((item) => {
+          if (item[idType] === getAllCommentsByForumPostId.data[idType]) {
+            item = { ...getAllCommentsByForumPostId.data };
+          }
+          return item;
+        });
+      }
       setGetAllPostsLocal([...data]);
       dispatch(resetCreateComment());
       dispatch(resetReplyComment());
+      dispatch(resetCreateCommentForumsPost());
+      dispatch(resetReplyCommentForumsPost());
       dispatch(resetGetCommentsByPostId());
       setPreloaderComment('');
       setPreloaderCommentReply('');
       setCommentType('');
       setCommentThatIsBeingReplied('');
+      setActivePostTemp({});
     }
-  }, [dispatch, getAllPostsLocal, getCommentsByPostId, setGetAllPostsLocal]);
-  console.log('getallpostslocal', getAllPostsLocal);
+  }, [
+    dispatch,
+    getAllPostsLocal,
+    getCommentsByPostId,
+    setGetAllPostsLocal,
+    getAllCommentsByForumPostId,
+  ]);
+
+  // console.log('getallpostslocal', getAllPostsLocal);
+
   return (
     <div className='post-card shadow-sm mx-auto'>
       <div className='post-card-header'>
@@ -377,6 +419,8 @@ const PostCard = ({ post, getAllPostsLocal, setGetAllPostsLocal, forum }) => {
                       comment2={comment}
                       // setLikeComment={setLikeComment}
                       setReplyComment={() => handleReplyComment(comment)}
+                      forum={forum}
+                      idType={idType}
                     />
                     <>
                       <div className='child-comments-wrapper'>
@@ -443,6 +487,8 @@ const PostCard = ({ post, getAllPostsLocal, setGetAllPostsLocal, forum }) => {
                                     setReplyChildComment(true);
                                     setCommentThatIsBeingReplied(comment);
                                   }}
+                                  forum={forum}
+                                  idType={idType}
                                 />
                               ))}
                           {commentType === 'reply' &&
