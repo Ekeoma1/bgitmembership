@@ -42,8 +42,8 @@
     "yup": "^1.2.0"
   },
   "scripts": {
-    "start": "REACT_APP_NODE_ENV=development react-scripts start",
-    "build": "REACT_APP_NODE_ENV=production react-scripts build",
+    "start": "react-scripts start",
+    "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject"
   },
