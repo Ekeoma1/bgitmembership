@@ -1,9 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import '../../../src/assets/scss/updates.scss';
 import _ from 'lodash';
-import request1 from '../../../src/assets/images/request1.svg';
-import request2 from '../../../src/assets/images/request2.svg';
-import request3 from '../../../src/assets/images/request3.svg';
 import RequestCard from '../Molecules/RequestCard';
 import Carousel from 'react-multi-carousel';
 import 'react-multi-carousel/lib/styles.css';
@@ -18,17 +15,27 @@ import {
   resetAcceptConnectionRequest,
   resetRejectConnectionRequest,
 } from '../../Features/connections/connections_slice';
+import { useParams } from 'react-router-dom';
 
-const Requests = ({ basedOn }) => {
+const Requests = ({ forum }) => {
   const dispatch = useDispatch();
+  const params = useParams();
+  console.log(params);
   const {
     getPendingRequestConnections,
     acceptConnectionRequest,
     rejectConnectionRequest,
   } = useSelector((state) => state.connections);
+  const { getPendingJoinRequestsByForumId } = useSelector(
+    (state) => state.forumsMembership
+  );
   const [
     getPendingRequestConnectionsLocal,
     setGetPendingRequestConnectionsLocal,
+  ] = useState([]);
+  const [
+    getPendingJoinRequestsByForumIdLocal,
+    setGetPendingJoinRequestsByForumIdLocal,
   ] = useState([]);
   const [activeRequest, setActiveRequest] = useState({});
   useEffect(() => {
@@ -37,7 +44,12 @@ const Requests = ({ basedOn }) => {
         getPendingRequestConnections.data.pendingRequests
       );
     }
-  }, [getPendingRequestConnections]);
+    if (getPendingJoinRequestsByForumId.status === 'successful') {
+      setGetPendingJoinRequestsByForumIdLocal(
+        getPendingJoinRequestsByForumId.data.pendingRequests
+      );
+    }
+  }, [getPendingRequestConnections, getPendingJoinRequestsByForumId]);
   useEffect(() => {
     const data = _.cloneDeep(getPendingRequestConnectionsLocal);
     const setBactToDefault = () => {
@@ -128,60 +140,119 @@ const Requests = ({ basedOn }) => {
       items: 2,
     },
   };
-  console.log('local', getPendingRequestConnectionsLocal);
+  console.log('local', getPendingJoinRequestsByForumIdLocal);
   return (
     <div className='requests-wrapper'>
       <div className='container'>
         <div className='requests-section-content'>
-          <div className='section-title-wrapper'>
-            <h5 className=''>
-              Requests{' '}
-              {getPendingRequestConnections.status === 'base' ||
-              getPendingRequestConnections.status === 'loading' ? (
-                <div className='loader'>
-                  <SingleLineLoader />
-                </div>
-              ) : getPendingRequestConnections.status === 'successful' ? (
-                <span>{`(${getPendingRequestConnections.data?.pendingRequests?.length})`}</span>
-              ) : (
-                <></>
-              )}
-            </h5>
-          </div>
-          <div className='requests-cards-wrapper'>
-            {getPendingRequestConnections.status === 'base' ||
-            getPendingRequestConnections.status === 'loading'? (
-              <div className='container loader-con'>
-                <ForumCardsLoader2 />
+          {!forum && (
+            <>
+              <div className='section-title-wrapper'>
+                <h5 className=''>
+                  Requests{' '}
+                  {getPendingRequestConnections.status === 'base' ||
+                  getPendingRequestConnections.status === 'loading' ? (
+                    <div className='loader'>
+                      <SingleLineLoader />
+                    </div>
+                  ) : getPendingRequestConnections.status === 'successful' ? (
+                    <span>{`(${getPendingRequestConnections.data?.pendingRequests?.length})`}</span>
+                  ) : (
+                    <></>
+                  )}
+                </h5>
               </div>
-            ) : getPendingRequestConnections.status === 'successful' ? (
-              <>
-                {getPendingRequestConnectionsLocal.length === 0 ? (
-                  <EmptyState
-                    title={'No connection requests'}
-                    info={'See our latest News & Events below.'}
-                    height={'50rem'}
-                  />
-                ) : (
+              <div className='requests-cards-wrapper'>
+                {getPendingRequestConnections.status === 'base' ||
+                getPendingRequestConnections.status === 'loading' ? (
+                  <div className='container loader-con'>
+                    <ForumCardsLoader2 />
+                  </div>
+                ) : getPendingRequestConnections.status === 'successful' ? (
                   <>
-                    <Carousel responsive={responsive}>
-                      {getPendingRequestConnectionsLocal.map(
-                        (request, index) => (
-                          <RequestCard
-                            key={request.connectionId}
-                            request={request}
-                            setActiveRequest={setActiveRequest}
-                          />
-                        )
-                      )}
-                    </Carousel>
+                    {getPendingRequestConnectionsLocal.length === 0 ? (
+                      <EmptyState
+                        title={'No connection requests'}
+                        info={'See our latest News & Events below.'}
+                        height={'50rem'}
+                      />
+                    ) : (
+                      <>
+                        <Carousel responsive={responsive}>
+                          {getPendingRequestConnectionsLocal.map(
+                            (request, index) => (
+                              <RequestCard
+                                key={request.connectionId}
+                                request={request}
+                                setActiveRequest={setActiveRequest}
+                              />
+                            )
+                          )}
+                        </Carousel>
+                      </>
+                    )}
                   </>
+                ) : (
+                  <></>
                 )}
-              </>
-            ) : (
-              <></>
-            )}
-          </div>
+              </div>
+            </>
+          )}
+          {forum && (
+            <>
+              <div className='section-title-wrapper'>
+                <h5 className=''>
+                  Forum Requests{' '}
+                  {getPendingJoinRequestsByForumId.status === 'base' ||
+                  getPendingJoinRequestsByForumId.status === 'loading' ? (
+                    <div className='loader'>
+                      <SingleLineLoader />
+                    </div>
+                  ) : getPendingJoinRequestsByForumId.status ===
+                    'successful' ? (
+                    <span>{`(${getPendingJoinRequestsByForumId.data?.pendingRequests?.length})`}</span>
+                  ) : (
+                    <></>
+                  )}
+                </h5>
+              </div>
+              <div className='requests-cards-wrapper'>
+                {getPendingJoinRequestsByForumId.status === 'base' ||
+                getPendingJoinRequestsByForumId.status === 'loading' ? (
+                  <div className='container loader-con'>
+                    <ForumCardsLoader2 />
+                  </div>
+                ) : getPendingJoinRequestsByForumId.status === 'successful' ? (
+                  <>
+                    {getPendingJoinRequestsByForumIdLocal.length === 0 ? (
+                      <EmptyState
+                        title={'No connection requests'}
+                        info={'See our latest News & Events below.'}
+                        height={'50rem'}
+                      />
+                    ) : (
+                      <>
+                        <Carousel responsive={responsive}>
+                          {getPendingJoinRequestsByForumIdLocal.map(
+                            (request, index) => (
+                              <RequestCard
+                                key={index}
+                                request={request}
+                                setActiveRequest={setActiveRequest}
+                                forum={forum}
+                              />
+                            )
+                          )}
+                        </Carousel>
+                      </>
+                    )}
+                  </>
+                ) : (
+                  <></>
+                )}
+              </div>
+            </>
+          )}
         </div>
       </div>
     </div>

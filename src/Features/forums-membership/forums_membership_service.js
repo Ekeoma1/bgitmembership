@@ -23,6 +23,7 @@ export default class ConnectionsService {
     const response = await get({
       url: apiRoutes.getPendingJoinRequestsByForumId,
       data: { ...data },
+      queryParams: data.queryParams,
     });
     return response;
   }

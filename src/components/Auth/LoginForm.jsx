@@ -103,11 +103,13 @@ const LoginForm = ({ forLogin, regFirstStep }) => {
               label='Email'
               type='email'
               placeholder='Input your email here'
+              forLogin
             />
             <PasswordInput
               name='Password'
               label='Password'
               placeholder='Input your password here'
+              forLogin
             />
 
             {forLogin && (

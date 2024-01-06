@@ -2,7 +2,7 @@ import React from 'react';
 import { useField } from 'formik';
 import Icon from '../Icon';
 
-const TextInput = ({ label, ...props }) => {
+const TextInput = ({ label, forLogin, ...props }) => {
   // console.log('props', props);
   const [field, meta, helpers] = useField(props);
   // console.log(field, meta, helpers);
@@ -18,6 +18,7 @@ const TextInput = ({ label, ...props }) => {
           className={meta.touched && meta.error ? 'input-error' : ''}
           {...field}
           {...props}
+          // onBlur={forLogin ? handleBlur : null}
           onBlur={handleBlur}
         />
         <div className='input-icon'>
@@ -30,5 +31,4 @@ const TextInput = ({ label, ...props }) => {
     </div>
   );
 };
-
 export default TextInput;

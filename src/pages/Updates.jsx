@@ -1,27 +1,30 @@
 import React, { useState, useEffect } from 'react';
 import '../../src/assets/scss/updates.scss';
 import { HiArrowLeft } from 'react-icons/hi';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import Requests from '../components/Updates/Requests';
 import WhatsNew from '../components/Updates/WhatsNew';
 import News from '../components/Updates/News';
 import EmptyState from '../components/Molecules/EmptyState';
 import { useDispatch, useSelector } from 'react-redux';
-import { triggerGetAllNews } from '../Features/news/news_slice';
-import { triggerGetAllEvents } from '../Features/events/events_slice';
 import { triggerGetPendingRequestConnections } from '../Features/connections/connections_slice';
 import { ForumCardsLoader2 } from '../components/Atoms/skeleton-loaders/ForumCardsLoader';
+import { triggerGetPendingJoinRequestsByForumId } from '../Features/forums-membership/forums_membership_slice';
 
 const Updates = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const [emptyState] = useState(false);
-
+  const params = useParams();
   useEffect(() => {
     window.scrollTo(0, 0);
   }, []);
   useEffect(() => {
-    dispatch(triggerGetPendingRequestConnections());
+    if (params.type === 'user') {
+      dispatch(triggerGetPendingRequestConnections());
+    } else if (params.type === 'forum') {
+      const data = { queryParams: { forumId: params.id } };
+      dispatch(triggerGetPendingJoinRequestsByForumId(data));
+    }
   }, []);
   return (
     <div className='updates-wrapper bg-color22'>
@@ -37,19 +40,9 @@ const Updates = () => {
           </div>
         </div>
       </div>
-      {emptyState && (
-        <EmptyState
-          title={'No updates just yet.'}
-          info={'See our latest News & Events below.'}
-        />
-      )}
-      {!emptyState && (
-        <>
-          <Requests />
-          <WhatsNew />
-        </>
-      )}
-      <News />
+      <Requests forum={params.type === 'forum'} />
+      {/* <WhatsNew />
+      <News /> */}
     </div>
   );
 };

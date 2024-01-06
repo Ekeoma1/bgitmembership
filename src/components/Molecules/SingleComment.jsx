@@ -18,7 +18,12 @@ import { FaRegBookmark, FaBookmark, FaRegSmile } from 'react-icons/fa';
 import { TbPhoto } from 'react-icons/tb';
 import { FaHeart } from 'react-icons/fa';
 import { FaRegHeart } from 'react-icons/fa';
-import { triggerLikeForumPostComment, triggerLikeReplyForumsPost, triggerUnlikeForumPostComment, triggerUnlikeReplyForumsPost } from '../../Features/forums-post/forums_post_slice';
+import {
+  triggerLikeForumPostComment,
+  triggerLikeReplyForumsPost,
+  triggerUnlikeForumPostComment,
+  triggerUnlikeReplyForumsPost,
+} from '../../Features/forums-post/forums_post_slice';
 
 const SingleComment = ({
   img,
@@ -52,6 +57,7 @@ const SingleComment = ({
         timeoutIdRef.current = setTimeout(() => {
           const values = { queryParams: { commentId: commentLocal.commentId } };
           if (!commentLocal.isCommentLikedByCurrentUser) {
+            console.log('like main');
             !forum && dispatch(triggerLikeComment(values));
             forum && dispatch(triggerLikeForumPostComment(values));
           } else {

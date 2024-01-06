@@ -14,18 +14,30 @@ import {
 import { triggerAcceptConnectionRequest } from '../../Features/connections/connections_slice';
 import { renderToast } from './CustomToastify';
 
-const RequestCard = ({ request, setActiveRequest }) => {
+const RequestCard = ({ request, setActiveRequest, forum }) => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const handleRejectConnection = () => {
-    const values = { connectionId: request.connectionId };
-    dispatch(triggerRejectConnectionRequest(values));
-    setActiveRequest(request);
+  const handleReject = () => {
+    if (!forum) {
+      const values = { connectionId: request.connectionId };
+      dispatch(triggerRejectConnectionRequest(values));
+      setActiveRequest(request);
+    } else {
+      const values = { connectionId: request.connectionId };
+      dispatch(triggerRejectConnectionRequest(values));
+      setActiveRequest(request);
+    }
   };
-  const handleAcceptConnection = () => {
-    const values = { connectionId: request.connectionId };
-    dispatch(triggerAcceptConnectionRequest(values));
-    setActiveRequest(request);
+  const handleAccept = () => {
+    if (!forum) {
+      const values = { connectionId: request.connectionId };
+      dispatch(triggerAcceptConnectionRequest(values));
+      setActiveRequest(request);
+    } else {
+      const values = { connectionId: request.connectionId };
+      dispatch(triggerAcceptConnectionRequest(values));
+      setActiveRequest(request);
+    }
   };
   return (
     <div className='request-card bg-color-cardd'>
@@ -35,19 +47,34 @@ const RequestCard = ({ request, setActiveRequest }) => {
         Joined: {moment(item.senderCreateDate).fromNow()}
       </h5> */}
         <img
-          onClick={() => navigate(`/users/${request?.senderUserId}`)}
+          onClick={() =>
+            navigate(
+              `/users/${forum ? request?.senderUserId : request.senderUserId}`
+            )
+          }
           src={request.senderImageUrl}
           alt='forum-img'
           className=''
         />
         <h3
-          onClick={() => navigate(`/users/${request?.senderUserId}`)}
-        >{`${request.senderFirstName} ${request.senderSecondName}`}</h3>
-        <p>Interests: {request.senderProfession}</p>
+          onClick={() =>
+            navigate(
+              `/users/${forum ? request?.senderUserId : request.senderUserId}`
+            )
+          }
+        >
+          {forum
+            ? `${request.senderFirstName} ${request.senderSecondName}`
+            : `${request.senderFirstName} ${request.senderSecondName}`}
+        </h3>
+        <p>
+          Interests:{' '}
+          {forum ? request.senderProfession : request.senderProfession}
+        </p>
       </div>
       <>
         <div className='btns'>
-          {request.requestStatus === 'loading'  ? (
+          {request.requestStatus === 'loading' ? (
             <div className='connection loading'>
               Loading <img src={loadingDots} alt='loader' />
             </div>
@@ -57,10 +84,10 @@ const RequestCard = ({ request, setActiveRequest }) => {
             <div className='connection connection-status'>Request rejected</div>
           ) : (
             <>
-              <button className='reject' onClick={handleRejectConnection}>
+              <button className='reject' onClick={handleReject}>
                 <LiaTimesSolid className='icon' />
               </button>
-              <button className='accept' onClick={handleAcceptConnection}>
+              <button className='accept' onClick={handleAccept}>
                 <TfiCheck className='icon' />
               </button>
             </>

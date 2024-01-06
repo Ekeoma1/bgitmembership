@@ -152,7 +152,7 @@ export const triggerUnlikeForumPostComment = createAsyncThunk(
   'unlike-forum-post-comment',
   async (params, thunkAPI) => {
     try {
-      return await PostsService.unlikeComment(params);
+      return await PostsService.unlikeForumPostComment(params);
     } catch (e) {
       return thunkAPI.rejectWithValue(e.message);
     }

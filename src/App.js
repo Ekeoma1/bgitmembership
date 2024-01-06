@@ -71,7 +71,7 @@ function App() {
               element: <User />,
             },
             {
-              path: 'updates',
+              path: 'updates/:type/:id',
               element: <Updates />,
             },
             {
