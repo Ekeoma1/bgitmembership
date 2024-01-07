@@ -79,8 +79,11 @@ const forumsMembershipSlice = createSlice({
   name: 'forums-membership',
   initialState,
   reducers: {
-    resetSendConnectionRequest: (state) => {
-      state.sendConnectionRequest = initialState.sendConnectionRequest;
+    resetAcceptForumJoinRequest: (state) => {
+      state.acceptForumJoinRequest = initialState.acceptForumJoinRequest;
+    },
+    resetRejectForumJoinRequest: (state) => {
+      state.rejectForumJoinRequest = initialState.rejectForumJoinRequest;
     },
   },
   extraReducers: (builder) => {
@@ -178,4 +181,5 @@ const forumsMembershipSlice = createSlice({
 });
 
 export default forumsMembershipSlice.reducer;
-export const { resetSendConnectionRequest } = forumsMembershipSlice.actions;
+export const { resetAcceptForumJoinRequest, resetRejectForumJoinRequest } =
+  forumsMembershipSlice.actions;

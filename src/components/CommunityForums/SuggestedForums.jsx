@@ -30,7 +30,7 @@ const SuggestedForums = () => {
   useEffect(() => {
     const data = { queryParams: { pageNumber, pageSize } };
     dispatch(triggerGetSuggestedForums(data));
-    dispatch(triggerGetAllForums(data));
+    // dispatch(triggerGetAllForums(data));
   }, []);
   useEffect(() => {
     if (

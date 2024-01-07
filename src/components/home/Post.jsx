@@ -183,7 +183,7 @@ const Post = ({ forum }) => {
                     {getAllPostsLocal.length === 0 ? (
                       <EmptyState
                         title={'No posts on this forum yet'}
-                        info={'Create a post'}
+                        info={'Create a post, contribute to the community!'}
                         padding={'0px'}
                         height={'60rem'}
                       />

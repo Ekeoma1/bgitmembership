@@ -3,7 +3,10 @@ import { useDispatch, useSelector } from 'react-redux';
 import SocialLinksLoader from '../Atoms/skeleton-loaders/dashboard-page/SocialLinksLoader';
 import useWindowSize from '../../hooks/useWindowSize';
 import { renderToast } from '../Molecules/CustomToastify';
-import { resetAddSocialLinks } from '../../Features/social-links/social_links_slice';
+import {
+  resetAddSocialLinks,
+  triggerGetSocialLinks,
+} from '../../Features/social-links/social_links_slice';
 import { triggerGetMyProfile } from '../../Features/users/users_slice';
 import OutsideClickHandler from 'react-outside-click-handler';
 import AddSocialLinksModalModal, {
@@ -14,19 +17,18 @@ const SocialLinksCard = ({ othersView, data }) => {
   const { isMobile } = useWindowSize();
   const dispatch = useDispatch();
   const { getMyProfile } = useSelector((state) => state.users);
-  const { addSocialLinks } = useSelector((state) => state.socialLinks);
+  const { addSocialLinks, getSocialLinks } = useSelector(
+    (state) => state.socialLinks
+  );
   const [showSocialLinksModal, setShowSocialLinksModal] = useState(false);
 
-  const [formData, setFormData] = useState({
-    url: '',
-    title: '',
-    userId: getMyProfile.data?.userId,
-  });
   const handleChange = (e) => {
-    setFormData({
-      ...formData,
-      [e.target.name]: e.target.value,
+    const data = formData.map((item) => {
+      if (item.Title === e.target.name) {
+        item.Url = e.target.value;
+      }
     });
+    setFormData(data);
   };
   const handleClearValues = () => {
     setFormData({ ...formData, url: '' });
@@ -55,6 +57,31 @@ const SocialLinksCard = ({ othersView, data }) => {
       dispatch(resetAddSocialLinks());
     }
   }, [addSocialLinks.status]);
+
+  useEffect(() => {
+    dispatch(triggerGetSocialLinks());
+  }, []);
+
+  const [formData, setFormData] = useState([
+    { title: 'Facebook', Url: '' },
+    { title: 'Twitter', Url: '' },
+    { title: 'Instagram', Url: '' },
+    { title: 'LinkedIn', Url: '' },
+    { title: 'Dribble', Url: '' },
+  ]);
+
+  useEffect(() => {
+    if (getSocialLinks.status === 'successful') {
+      // const formDataTemp = [...formData];
+      // const data = getSocialLinks.data.forEach((item, index) => {
+      //   formDataTemp[item.title] = item.Url;
+      // });
+      console.log('formDataTemp########', getSocialLinks.data);
+      setFormData(getSocialLinks.data);
+    }
+  }, [getSocialLinks]);
+  console.log('formData', formData);
+  console.log('getSocialLinks', getSocialLinks);
 
   return (
     <div className='dashboard-card'>
@@ -86,29 +113,31 @@ const SocialLinksCard = ({ othersView, data }) => {
             <div className='add-text-btn-wrapper'>
               {data?.data?.userId && (
                 <div className='con'>
-                  <button
-                    onClick={() => {
-                      addSocialLinks.status !== 'loading' &&
-                        setShowSocialLinksModal(true);
-                    }}
-                    className={`add-text-btn ${
-                      addSocialLinks.status === 'loading' && 'add-text-btn-2'
-                    } `}
-                  >
-                    {addSocialLinks.status === 'loading'
-                      ? 'Adding Social link..'
-                      : '+ Add Social Link'}
-                  </button>
+                  {getSocialLinks.status === 'successful' && (
+                    <button
+                      onClick={() => {
+                        addSocialLinks.status !== 'loading' &&
+                          setShowSocialLinksModal(true);
+                      }}
+                      className={`add-text-btn ${
+                        addSocialLinks.status === 'loading' && 'add-text-btn-2'
+                      } `}
+                    >
+                      {addSocialLinks.status === 'loading'
+                        ? 'Adding Social link..'
+                        : '+ Add Social Link'}
+                    </button>
+                  )}
                   <div className='social-links'>
                     <div className='social-links-modal-wrapper'>
-                      {showSocialLinksModal && (
+                      {(showSocialLinksModal || true) && (
                         <OutsideClickHandler
                           onOutsideClick={() => {
                             setShowSocialLinksModal(false);
                           }}
                         >
                           <AddSocialLinksModalModal
-                            onChange={handleChange}
+                            // onChange={handleChange}
                             onCancel={() => {
                               setShowSocialLinksModal(false);
                             }}

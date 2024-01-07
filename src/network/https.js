@@ -5,7 +5,7 @@ const URL = process.env.REACT_APP_URL ?? '';
 
 async function ajax({ method = 'GET', url, data, queryParams }) {
   // console.log('query##### ', queryParams);
-  console.log('data http ', data);
+  // console.log('data http ', data);
   let result, contentType;
   if (
     data?.photo ||

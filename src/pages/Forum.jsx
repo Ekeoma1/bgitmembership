@@ -44,9 +44,10 @@ const Forum = () => {
         setJoinForumRequestSuccessful={setJoinForumRequestSuccessful}
         joinForumRequestSuccessful={joinForumRequestSuccessful}
       />
-      {!getForumById.data?.forum?.[0]?.isCurrentUserMember && <ForumContent />}
-      {getForumById?.data?.forum?.[0]?.isCurrentUserMember && (
+      {getForumById?.data?.forum?.[0]?.isCurrentUserMember ? (
         <ForumContentMain />
+      ) : (
+        <ForumContent />
       )}
     </div>
   );

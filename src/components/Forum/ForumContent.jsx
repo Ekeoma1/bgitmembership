@@ -12,6 +12,7 @@ import {
   resetJoinForum,
   triggerGetAllForums,
   triggerGetForumById,
+  triggerGetSuggestedForums,
 } from '../../Features/forums/forums_slice';
 import ForumCardsLoader from '../Atoms/skeleton-loaders/ForumCardsLoader';
 import { Link, useNavigate, useParams } from 'react-router-dom';
@@ -25,7 +26,7 @@ const ForumContent = ({ forum }) => {
   const params = useParams();
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const { joinForum, cancelJoinForumRequest, getForumById, getAllForums } =
+  const { joinForum, cancelJoinForumRequest, getForumById, getSuggestedForums } =
     useSelector((state) => state.forums);
   const [pageNumber] = useState(1);
   const [pageSize] = useState(10);
@@ -33,23 +34,23 @@ const ForumContent = ({ forum }) => {
   const [activeForum, setActiveForum] = useState({});
   useEffect(() => {
     const data = { queryParams: { pageNumber, pageSize } };
-    dispatch(triggerGetAllForums(data));
+    dispatch(triggerGetSuggestedForums(data));
   }, [params]);
 
   useEffect(() => {
-    if (getAllForums.status === 'successful') {
+    if (getSuggestedForums.status === 'successful') {
       setRelatedGroups(
-        getAllForums.data?.forums?.filter(
+        getSuggestedForums.data?.forums?.filter(
           (item) => item.forumId !== params.forumId
         )
       );
     }
-  }, [getAllForums]);
+  }, [getSuggestedForums]);
   // console.log(relatedGroups);
   // console.log(activeForum);
 
   useEffect(() => {
-    if (getAllForums.status === 'successful' && Array.isArray(relatedGroups)) {
+    if (getSuggestedForums.status === 'successful' && Array.isArray(relatedGroups)) {
       const data = _.cloneDeep(relatedGroups);
       const setBactToDefault = () => {
         data.forEach((item) => {
@@ -231,15 +232,17 @@ const ForumContent = ({ forum }) => {
             )}
           </div>
           <div className='related-groups-wrapper'>
-            <h3 className='text-color22'>Related groups</h3>
+            {getSuggestedForums.status === 'successful' && (
+              <h3 className='text-color22'>Related groups</h3>
+            )}
             <div className='forum-cards'>
-              {getAllForums.status === 'loading' ? (
+              {getSuggestedForums.status === 'loading' ? (
                 <div className='loader-con'>
                   <ForumCardsLoader />
                 </div>
-              ) : getAllForums.status === 'successful' ? (
+              ) : getSuggestedForums.status === 'successful' ? (
                 <>
-                  {getAllForums.data?.length === 0 ? (
+                  {getSuggestedForums.data?.length === 0 ? (
                     <>
                       <div className='empty-state'>Empty forums</div>
                     </>
@@ -262,12 +265,14 @@ const ForumContent = ({ forum }) => {
               )}
             </div>
             <div className='text-center my-4'>
+              {relatedGroups.length>2&&
               <Link
                 to='/forums'
                 className='sec-btn mx-auto c-gap-5 smallert-text added-width d-flex align-items-center justify-content-center'
               >
                 <span>See More</span> <Icon icon='arrowRight' />
               </Link>
+              }
             </div>
           </div>
         </div>

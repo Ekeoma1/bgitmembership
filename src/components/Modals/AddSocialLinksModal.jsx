@@ -14,9 +14,16 @@ const AddSocialLinksModalModal = ({
 }) => {
   const dispatch = useDispatch();
   const handleSubmit = () => {
+    console.log(formData);
     dispatch(triggerAddSocialLink(formData));
     onCancel();
-    setFormData({ url: '', title: '' });
+    // setFormData([
+    //   { Title: 'Facebook', Url: '' },
+    //   { Title: 'Twitter', Url: '' },
+    //   { Title: 'Instagram', Url: '' },
+    //   { Title: 'LinkedIn', Url: '' },
+    //   { Title: 'Dribble', Url: '' },
+    // ]);
   };
   return (
     <div className='add-social-links-modal shadow'>
@@ -26,8 +33,46 @@ const AddSocialLinksModalModal = ({
         <p onClick={handleSubmit}>Done</p>
       </div>
       <div className='form'>
-        <div className='input-con'>
-          <p>URL</p>
+        {formData.map((item, index) => (
+          <div className='input-con' key={index}>
+            <p>{item?.title}</p>
+            <div className='input-wrapper'>
+              <input
+                type='text'
+                name={item?.title}
+                onChange={(e) => {
+                  const data = formData.map((item) => {
+                    const obj = { ...item };
+                    if (item.title === e.target.name) {
+                      obj.url = e.target.value;
+                    }
+                    return obj;
+                  });
+                  setFormData(data);
+                }}
+                value={item?.url}
+                className='input-2'
+              />
+              <div
+                className='icon-wrapper'
+                onClick={(obj) => {
+                  const data = formData.map((item2) => {
+                    const obj = { ...item2 };
+                    if (item2.title === item.title) {
+                      obj.url = '';
+                    }
+                    return obj;
+                  });
+                  setFormData(data);
+                }}
+              >
+                <FaTimes />
+              </div>
+            </div>
+          </div>
+        ))}
+        {/* <div className='input-con'>
+          <p>Twitter</p>
           <div className='input-wrapper'>
             <input
               type='text'
@@ -42,16 +87,35 @@ const AddSocialLinksModalModal = ({
           </div>
         </div>
         <div className='input-con'>
-          <p>Title</p>
+          <p>Instagram</p>
           <div className='input-wrapper'>
             <input
               type='text'
-              name='title'
+              name='url'
               onChange={onChange}
-              value={formData.title}
+              value={formData.url}
+              className='input-2'
             />
+            <div className='icon-wrapper' onClick={onClearValues}>
+              <FaTimes />
+            </div>
           </div>
         </div>
+        <div className='input-con'>
+          <p>Dribble</p>
+          <div className='input-wrapper'>
+            <input
+              type='text'
+              name='url'
+              onChange={onChange}
+              value={formData.url}
+              className='input-2'
+            />
+            <div className='icon-wrapper' onClick={onClearValues}>
+              <FaTimes />
+            </div>
+          </div>
+        </div> */}
       </div>
     </div>
   );

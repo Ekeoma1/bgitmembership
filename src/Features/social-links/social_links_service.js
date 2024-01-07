@@ -5,7 +5,7 @@ export default class SocialLinksService {
   static async addSocialLinks(data) {
     const response = await post({
       url: apiRoutes.addSocialLinks,
-      data: { ...data },
+      data,
     });
     return response;
   }

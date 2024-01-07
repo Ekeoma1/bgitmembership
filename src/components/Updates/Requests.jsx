@@ -16,6 +16,7 @@ import {
   resetRejectConnectionRequest,
 } from '../../Features/connections/connections_slice';
 import { useParams } from 'react-router-dom';
+import { resetAcceptForumJoinRequest, resetRejectForumJoinRequest } from '../../Features/forums-membership/forums_membership_slice';
 
 const Requests = ({ forum }) => {
   const dispatch = useDispatch();
@@ -26,9 +27,11 @@ const Requests = ({ forum }) => {
     acceptConnectionRequest,
     rejectConnectionRequest,
   } = useSelector((state) => state.connections);
-  const { getPendingJoinRequestsByForumId } = useSelector(
-    (state) => state.forumsMembership
-  );
+  const {
+    getPendingJoinRequestsByForumId,
+    rejectForumJoinRequest,
+    acceptForumJoinRequest,
+  } = useSelector((state) => state.forumsMembership);
   const [
     getPendingRequestConnectionsLocal,
     setGetPendingRequestConnectionsLocal,
@@ -41,15 +44,16 @@ const Requests = ({ forum }) => {
   useEffect(() => {
     if (getPendingRequestConnections.status === 'successful') {
       setGetPendingRequestConnectionsLocal(
-        getPendingRequestConnections.data.pendingRequests
+        getPendingRequestConnections.data?.pendingRequests
       );
     }
     if (getPendingJoinRequestsByForumId.status === 'successful') {
       setGetPendingJoinRequestsByForumIdLocal(
-        getPendingJoinRequestsByForumId.data.pendingRequests
+        getPendingJoinRequestsByForumId.data?.pendingRequests
       );
     }
   }, [getPendingRequestConnections, getPendingJoinRequestsByForumId]);
+
   useEffect(() => {
     const data = _.cloneDeep(getPendingRequestConnectionsLocal);
     const setBactToDefault = () => {
@@ -126,6 +130,112 @@ const Requests = ({ forum }) => {
     }
   }, [acceptConnectionRequest, rejectConnectionRequest]);
 
+  // forum requests
+  useEffect(() => {
+    const setBactToDefault = () => {
+      const data = getPendingJoinRequestsByForumIdLocal.map((item) => {
+        const obj = { ...item };
+        if (
+          item.pendingRequest.forumMemberId ===
+          activeRequest.pendingRequest.forumMemberId
+        ) {
+          delete obj.requestStatus;
+        }
+        return obj;
+      });
+      setGetPendingJoinRequestsByForumIdLocal(data);
+      setActiveRequest({});
+    };
+
+    // accept join forum request
+    if (acceptForumJoinRequest.status === 'loading') {
+      console.log('######loading');
+
+      const data = getPendingJoinRequestsByForumIdLocal.map((item) => {
+        const obj = { ...item };
+        if (
+          item.pendingRequest.forumMemberId ===
+          activeRequest.pendingRequest.forumMemberId
+        ) {
+          console.log('true##');
+          obj.requestStatus = 'loading';
+        }
+        return obj;
+      });
+      console.log('dtat temp', data);
+      setGetPendingJoinRequestsByForumIdLocal(data);
+    } else if (acceptForumJoinRequest.status === 'successful') {
+      if (acceptForumJoinRequest.data.status === 'success') {
+        renderToast({
+          status: 'success',
+          message: 'Forum join request accepted successfully',
+        });
+        const data = getPendingJoinRequestsByForumIdLocal.map((item) => {
+          const obj = { ...item };
+          if (
+            item.pendingRequest.forumMemberId ===
+            activeRequest.pendingRequest.forumMemberId
+          ) {
+            obj.connectionStatus = 'Connected';
+          }
+          return obj;
+        });
+        setGetPendingJoinRequestsByForumIdLocal(data);
+      }
+      dispatch(resetAcceptForumJoinRequest());
+      setBactToDefault();
+    } else if (acceptForumJoinRequest.status === 'error') {
+      renderToast({
+        status: 'error',
+        message: 'Something went wrong',
+      });
+      dispatch(resetAcceptForumJoinRequest());
+      setBactToDefault();
+    }
+
+    // reject join forum request
+    if (rejectForumJoinRequest.status === 'loading') {
+      const data = getPendingJoinRequestsByForumIdLocal.map((item) => {
+        const obj = { ...item };
+        if (
+          item.pendingRequest.forumMemberId ===
+          activeRequest.pendingRequest.forumMemberId
+        ) {
+          obj.requestStatus = 'loading';
+        }
+        return obj;
+      });
+      setGetPendingJoinRequestsByForumIdLocal(data);
+    } else if (rejectForumJoinRequest.status === 'successful') {
+      if (rejectForumJoinRequest.data.status === 'success') {
+        renderToast({
+          status: 'success',
+          message: 'Connection rejected successfully',
+        });
+        const data = getPendingJoinRequestsByForumIdLocal.map((item) => {
+          const obj = { ...item };
+          if (
+            item.pendingRequest.forumMemberId ===
+            activeRequest.pendingRequest.forumMemberId
+          ) {
+            obj.connectionStatus = 'Not Connected';
+          }
+          return obj;
+        });
+        setGetPendingJoinRequestsByForumIdLocal(data);
+      }
+      dispatch(resetRejectForumJoinRequest());
+      setBactToDefault();
+    } else if (rejectForumJoinRequest.status === 'error') {
+      renderToast({
+        status: 'error',
+        message: 'Something went wrong',
+      });
+      dispatch(resetRejectForumJoinRequest());
+      setBactToDefault();
+    }
+  }, [acceptForumJoinRequest, rejectForumJoinRequest]);
+
   const responsive = {
     desktop: {
       breakpoint: { max: 4000, min: 1024 },
@@ -141,6 +251,7 @@ const Requests = ({ forum }) => {
     },
   };
   console.log('local', getPendingJoinRequestsByForumIdLocal);
+  console.log('active', activeRequest);
   return (
     <div className='requests-wrapper'>
       <div className='container'>
@@ -224,7 +335,7 @@ const Requests = ({ forum }) => {
                   </div>
                 ) : getPendingJoinRequestsByForumId.status === 'successful' ? (
                   <>
-                    {getPendingJoinRequestsByForumIdLocal.length === 0 ? (
+                    {getPendingJoinRequestsByForumIdLocal?.length === 0 ? (
                       <EmptyState
                         title={'No connection requests'}
                         info={'See our latest News & Events below.'}
@@ -234,14 +345,17 @@ const Requests = ({ forum }) => {
                       <>
                         <Carousel responsive={responsive}>
                           {getPendingJoinRequestsByForumIdLocal.map(
-                            (request, index) => (
-                              <RequestCard
-                                key={index}
-                                request={request}
-                                setActiveRequest={setActiveRequest}
-                                forum={forum}
-                              />
-                            )
+                            (request, index) => {
+                              console.log('request', request);
+                              return (
+                                <RequestCard
+                                  key={index}
+                                  request={request}
+                                  setActiveRequest={setActiveRequest}
+                                  forum={forum}
+                                />
+                              );
+                            }
                           )}
                         </Carousel>
                       </>

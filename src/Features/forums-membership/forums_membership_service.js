@@ -4,17 +4,19 @@ import { get, post } from '../../network/https';
 export default class ConnectionsService {
   //  accept forum join requests
   static async acceptForumJoinRequest(data) {
-    const response = await get({
+    const response = await post({
       url: apiRoutes.acceptForumJoinRequest,
       data: { ...data },
+      queryParams: data.queryParams,
     });
     return response;
   }
   //  reject forum join requests
   static async rejectForumJoinRequest(data) {
-    const response = await get({
+    const response = await post({
       url: apiRoutes.rejectForumJoinRequest,
       data: { ...data },
+      queryParams: data.queryParams,
     });
     return response;
   }

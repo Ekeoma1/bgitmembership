@@ -13,6 +13,10 @@ import {
 } from '../../Features/connections/connections_slice';
 import { triggerAcceptConnectionRequest } from '../../Features/connections/connections_slice';
 import { renderToast } from './CustomToastify';
+import {
+  triggerAcceptForumJoinRequest,
+  triggerRejectForumJoinRequest,
+} from '../../Features/forums-membership/forums_membership_slice';
 
 const RequestCard = ({ request, setActiveRequest, forum }) => {
   const dispatch = useDispatch();
@@ -23,8 +27,11 @@ const RequestCard = ({ request, setActiveRequest, forum }) => {
       dispatch(triggerRejectConnectionRequest(values));
       setActiveRequest(request);
     } else {
-      const values = { connectionId: request.connectionId };
-      dispatch(triggerRejectConnectionRequest(values));
+      const values = { forumMemberId: request.pendingRequest.forumMemberId };
+      const data = {
+        queryParams: { forumMemberId: request.pendingRequest.forumMemberId },
+      };
+      dispatch(triggerRejectForumJoinRequest(values));
       setActiveRequest(request);
     }
   };
@@ -34,8 +41,11 @@ const RequestCard = ({ request, setActiveRequest, forum }) => {
       dispatch(triggerAcceptConnectionRequest(values));
       setActiveRequest(request);
     } else {
-      const values = { connectionId: request.connectionId };
-      dispatch(triggerAcceptConnectionRequest(values));
+      const values = { forumMemberId: request.pendingRequest.forumMemberId };
+      const data = {
+        queryParams: { forumMemberId: request.pendingRequest.forumMemberId },
+      };
+      dispatch(triggerAcceptForumJoinRequest(values));
       setActiveRequest(request);
     }
   };
@@ -49,27 +59,30 @@ const RequestCard = ({ request, setActiveRequest, forum }) => {
         <img
           onClick={() =>
             navigate(
-              `/users/${forum ? request?.senderUserId : request.senderUserId}`
+              `/users/${
+                forum ? request?.pendingRequest.userId : request.senderUserId
+              }`
             )
           }
-          src={request.senderImageUrl}
+          src={request.imageUrl}
           alt='forum-img'
           className=''
         />
         <h3
           onClick={() =>
             navigate(
-              `/users/${forum ? request?.senderUserId : request.senderUserId}`
+              `/users/${
+                forum ? request?.pendingRequest.userId : request.senderUserId
+              }`
             )
           }
         >
           {forum
-            ? `${request.senderFirstName} ${request.senderSecondName}`
+            ? `${request.firstName} ${request.secondName}`
             : `${request.senderFirstName} ${request.senderSecondName}`}
         </h3>
         <p>
-          Interests:{' '}
-          {forum ? request.senderProfession : request.senderProfession}
+          Interests: {forum ? request.profession : request.senderProfession}
         </p>
       </div>
       <>

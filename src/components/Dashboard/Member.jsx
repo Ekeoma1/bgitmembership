@@ -162,9 +162,9 @@ const Member = ({ from, setFrom }) => {
       setBactToDefault();
     }
   }, [sendConnectionRequest.status, cancelConnectionRequest.status]);
-  console.log('get users', getUsers);
-  console.log('get usersLocal', getUsersLocal);
-  console.log('activeuser', activeUser);
+  // console.log('get users', getUsers);
+  // console.log('get usersLocal', getUsersLocal);
+  // console.log('activeuser', activeUser);
   return (
     <div className='members-you-may-know-wrapper'>
       <div className='header text-center'>Members you may know</div>

@@ -294,12 +294,12 @@ const ProfileBanner = ({ data, from, setFrom }) => {
   // connection status
   useEffect(() => {
     const data = { queryParams: { userId: param?.id } };
-    console.log('trigger');
+    // console.log('trigger');
     dispatch(triggerGetConnectionStatusByUserId(data));
   }, [param?.id]);
 
-  console.log('dataLocal', dataLocal);
-  console.log('data', data);
+  // console.log('dataLocal', dataLocal);
+  // console.log('data', data);
   return (
     <div className='profile-banner-wrapper'>
       {/* cover photo */}
@@ -624,8 +624,11 @@ const ProfileBanner = ({ data, from, setFrom }) => {
                   </>
                 ) : getConnectionStatusByUserId.status === 'successful' ? (
                   <>
-                    {getConnectionStatusByUserId.data === 'Request Sent' ? (
-                      <></>
+                    {getConnectionStatusByUserId.data.connectionStatus ===
+                    'Request Sent' ? (
+                      <button className={`reach-btn loading`}>
+                       bb
+                      </button>
                     ) : (
                       <button
                         onClick={handleConnect}

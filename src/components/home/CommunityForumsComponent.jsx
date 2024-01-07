@@ -13,6 +13,7 @@ import {
 } from '../../Features/forums/forums_slice';
 import { ForumCard2 } from '../Molecules/ForumCard';
 import { renderToast } from '../Molecules/CustomToastify';
+import EmptyState from '../Molecules/EmptyState';
 
 const CommunityForumsComponent = () => {
   const { getSuggestedForums } = useSelector((state) => state.forums);
@@ -132,7 +133,12 @@ const CommunityForumsComponent = () => {
           <>
             {getAllForumsLocal.length === 0 ? (
               <div className='empty-state'>
-                <p>No forums yet...</p>
+                <EmptyState
+                  title={'No forums yet'}
+                  info={'No suggested forums yet'}
+                  height={'50rem'}
+                  padding={'0'}
+                />
               </div>
             ) : (
               <>
