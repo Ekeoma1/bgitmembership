@@ -143,9 +143,11 @@ const SuggestedForums = () => {
       <div className='container'>
         <div className='content-wrapper'>
           <h3 className='section-title text-color22'> Suggested Forums</h3>
-          <div className='view-all'>
-            <button onClick={() => navigate('/forums/all')}>View all</button>
-          </div>
+          {getAllForumsLocal.length > 4 && (
+            <div className='view-all'>
+              <button onClick={() => navigate('/forums/all')}>View all</button>
+            </div>
+          )}
           <div className='forums-cards-wrapper'>
             {getSuggestedForums.status === 'base' ||
             getSuggestedForums.status === 'loading' ? (

@@ -14,7 +14,7 @@ import {
   triggerGetForumById,
 } from '../../Features/forums/forums_slice';
 import ForumCardsLoader from '../Atoms/skeleton-loaders/ForumCardsLoader';
-import { Link, useParams } from 'react-router-dom';
+import { Link, useNavigate, useParams } from 'react-router-dom';
 import Icon from '../Icon';
 import moment from 'moment';
 import { PiUsersThreeFill } from 'react-icons/pi';
@@ -24,6 +24,7 @@ import { renderToast } from '../Molecules/CustomToastify';
 const ForumContent = ({ forum }) => {
   const params = useParams();
   const dispatch = useDispatch();
+  const navigate = useNavigate();
   const { joinForum, cancelJoinForumRequest, getForumById, getAllForums } =
     useSelector((state) => state.forums);
   const [pageNumber] = useState(1);
@@ -38,7 +39,9 @@ const ForumContent = ({ forum }) => {
   useEffect(() => {
     if (getAllForums.status === 'successful') {
       setRelatedGroups(
-        getAllForums.data?.forums?.filter((item) => item.forumId !== params.forumId)
+        getAllForums.data?.forums?.filter(
+          (item) => item.forumId !== params.forumId
+        )
       );
     }
   }, [getAllForums]);
@@ -152,14 +155,17 @@ const ForumContent = ({ forum }) => {
                   <div className='info'>
                     <h3>Info</h3>
                     <ol>
-                      {getForumById?.data?.forum[0]?.info?.map((info, index) => (
-                        <li key={index}>{info}</li>
-                      ))}
+                      {getForumById?.data?.forum[0]?.info?.map(
+                        (info, index) => (
+                          <li key={index}>{info}</li>
+                        )
+                      )}
                     </ol>
                   </div>
                   <div className='section-bottom'>
                     <div className='content'>
-                      {getForumById?.data?.forum[0]?.visibility !== 'Private' ? (
+                      {getForumById?.data?.forum[0]?.visibility !==
+                      'Private' ? (
                         <div className='private'>
                           <CgLock className='icon' />
                           <div className=''>
@@ -197,12 +203,25 @@ const ForumContent = ({ forum }) => {
                   <h3>Admin</h3>
                   <div className='content'>
                     <img
+                      onClick={() =>
+                        navigate(
+                          `/users/${getForumById?.data?.forum[0]?.forumAdmin?.userId}`
+                        )
+                      }
                       src={getForumById?.data?.forum[0]?.forumAdmin?.imageUrl}
                       alt='admin'
                     />
                     <div className=''>
-                      <h5>{`${getForumById.data?.forum[0]?.forumAdmin?.firstName} ${getForumById.data?.forum[0]?.forumAdmin?.secondName}`}</h5>
-                      <p>{getForumById.data?.forum[0]?.forumAdmin?.profession}</p>
+                      <h5
+                        onClick={() =>
+                          navigate(
+                            `/users/${getForumById?.data?.forum[0]?.forumAdmin?.userId}`
+                          )
+                        }
+                      >{`${getForumById.data?.forum[0]?.forumAdmin?.firstName} ${getForumById.data?.forum[0]?.forumAdmin?.secondName}`}</h5>
+                      <p>
+                        {getForumById.data?.forum[0]?.forumAdmin?.profession}
+                      </p>
                     </div>
                   </div>
                 </div>

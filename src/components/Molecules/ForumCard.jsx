@@ -141,10 +141,19 @@ export const ForumCard2 = ({ forum, setActiveForum }) => {
 
   return (
     <div className='forum-card-2' onClick={(e) => handleClick(e)}>
-      <h4 className='mt-3'>{forum.forumName}</h4>
-      <div className='community-forum-content'>{forum.details}</div>
+      <h4 className='mt-3'>
+        {forum.forumName?.length > 25
+          ? `${forum.forumName?.substring(0, 25)}...`
+          : `${forum.forumName}`}
+      </h4>
+      <div className='community-forum-content'>
+        {' '}
+        {forum.details?.length > 180
+          ? `${forum.details?.substring(0, 180)}...`
+          : forum.details}
+      </div>
       <div className='text-center'>
-        {forum.forumMembershipStatus === 'PendingRequest'? (
+        {forum.forumMembershipStatus === 'PendingRequest' ? (
           <>
             <button
               className={`smaller-text community-forum-btn forum-card-btn joined pending ${
