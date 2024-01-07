@@ -147,7 +147,7 @@ const ForumContent = ({ forum }) => {
                 <div className='about-section'>
                   <div className='about'>
                     <h3>About</h3>
-                    <p>{getForumById.data[0]?.details}</p>
+                    <p>{getForumById?.data?.[0]?.details}</p>
                   </div>
                   <div className='info'>
                     <h3>Info</h3>

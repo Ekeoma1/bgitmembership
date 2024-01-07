@@ -14,6 +14,7 @@ import CreateCommunityModal from './CreateCommunityModal';
 import { useDispatch, useSelector } from 'react-redux';
 import {
   resetCanceljoinForumRequest,
+  resetCreateForum,
   resetJoinForum,
   resetLeaveForum,
   triggerGetMyForums,
@@ -23,8 +24,13 @@ import { renderToast } from '../Molecules/CustomToastify';
 import SingleLineLoader from '../Atoms/skeleton-loaders/SingleLineLoader';
 
 const Communities = () => {
-  const { getMyForums, leaveForum, joinForum, cancelJoinForumRequest } =
-    useSelector((state) => state.forums);
+  const {
+    getMyForums,
+    leaveForum,
+    joinForum,
+    cancelJoinForumRequest,
+    createForum,
+  } = useSelector((state) => state.forums);
   const [searchValue, setSearchValue] = useState('');
   const [activeForum, setActiveForum] = useState({});
   const [userHasForums] = useState(false);
@@ -34,57 +40,7 @@ const Communities = () => {
   const onChange = (e) => {
     setSearchValue(e.target.value);
   };
-  const communities = [
-    {
-      community_img: community1,
-      recently_joined: true,
-      community_name: 'UX/UI Design',
-      community_members: 100,
-      unreadMsg: false,
-    },
-    {
-      community_img: community2,
-      recently_joined: false,
-      community_name: 'Engineer Girls',
-      community_members: 67,
-      unreadMsg: true,
-    },
-    {
-      community_img: community3,
-      recently_joined: true,
-      community_name: 'Data Babes 😍👩🏾‍💻',
-      community_members: 83,
-      unreadMsg: true,
-    },
-    {
-      community_img: community3,
-      recently_joined: true,
-      community_name: 'Data Babes 😍👩🏾‍💻',
-      community_members: 83,
-      unreadMsg: true,
-    },
-    {
-      community_img: community3,
-      recently_joined: true,
-      community_name: 'Data Babes 😍👩🏾‍💻',
-      community_members: 83,
-      unreadMsg: true,
-    },
-    {
-      community_img: community3,
-      recently_joined: true,
-      community_name: 'Data Babes 😍👩🏾‍💻',
-      community_members: 83,
-      unreadMsg: true,
-    },
-    {
-      community_img: community3,
-      recently_joined: true,
-      community_name: 'Data Babes 😍👩🏾‍💻',
-      community_members: 83,
-      unreadMsg: true,
-    },
-  ];
+
   const responsive = {
     desktop: {
       breakpoint: { max: 4000, min: 1024 },
@@ -105,6 +61,13 @@ const Communities = () => {
     const data = { queryParams: { pageNumber, pageSize } };
     dispatch(triggerGetMyForums(data));
   }, []);
+  useEffect(() => {
+    if (createForum.status === 'successful') {
+      const data = { queryParams: { pageNumber, pageSize } };
+      dispatch(triggerGetMyForums(data));
+      dispatch(resetCreateForum());
+    }
+  }, [createForum]);
   useEffect(() => {
     if (getMyForums.status === 'successful') {
       setGetMyForumsLocal([...getMyForums.data.forums]);
@@ -225,22 +188,8 @@ const Communities = () => {
         <div className='content-wrapper'>
           {/* create community modal */}
           <CreateCommunityModal />
-          {getMyForums.status === 'base' || getMyForums.status === 'loading' ? (
-            <div className='loader'>
-              <ForumCardsLoader2 />
-            </div>
-          ) : getMyForums.status === 'successful' ? (
-            <>
-              {getMyForums.data ? (
-                <>
-                  {getMyForumsLocal.length === 0 ? (
-                    <EmptyState
-                      title={'No forums yet?!'}
-                      info={'Search or browse suggested forums below.'}
-                    />
-                  ) : (
-                    <div className='forums-true'>
-                      {/* <div className='search-box'>
+          <div className='forums-true'>
+            {/* <div className='search-box'>
                         <div className='search-box-wrapper'>
                           <SearchBox
                             onChange={onChange}
@@ -249,20 +198,35 @@ const Communities = () => {
                           />
                         </div>
                       </div> */}
-                      <div className='section-title'>
-                        <h3 className='text-color22'>Communities </h3>
-                        {getMyForums.status === 'base' ||
-                        getMyForums.status === 'loading' ? (
-                          <div className='loading-state'>
-                            <SingleLineLoader />
-                          </div>
-                        ) : getMyForums.status === 'successful' ? (
-                          <p className='text-color222'>({myForumsLength})</p>
-                        ) : (
-                          <></>
-                        )}
-                      </div>
-                      <div className='cards-wrapper'>
+            <div className='section-title'>
+              <h3 className='text-color22'>Communities </h3>
+              {getMyForums.status === 'base' ||
+              getMyForums.status === 'loading' ? (
+                <div className='loading-state'>
+                  <SingleLineLoader />
+                </div>
+              ) : getMyForums.status === 'successful' ? (
+                <p className='text-color222'>({myForumsLength})</p>
+              ) : (
+                <></>
+              )}
+            </div>
+            <div className='cards-wrapper'>
+              {getMyForums.status === 'base' ||
+              getMyForums.status === 'loading' ? (
+                <div className='loader'>
+                  <ForumCardsLoader2 />
+                </div>
+              ) : getMyForums.status === 'successful' ? (
+                <>
+                  {getMyForums.data ? (
+                    <>
+                      {getMyForumsLocal.length === 0 ? (
+                        <EmptyState
+                          title={'No forums yet?!'}
+                          info={'Search or browse suggested forums below.'}
+                        />
+                      ) : (
                         <Carousel responsive={responsive}>
                           {getMyForumsLocal.map((community, index) => (
                             <CommunityCard
@@ -273,19 +237,19 @@ const Communities = () => {
                             />
                           ))}
                         </Carousel>
-                      </div>
-                    </div>
+                      )}
+                    </>
+                  ) : (
+                    <></>
                   )}
                 </>
+              ) : getMyForums.status === 'error' ? (
+                <></>
               ) : (
                 <></>
               )}
-            </>
-          ) : getMyForums.status === 'error' ? (
-            <></>
-          ) : (
-            <></>
-          )}
+            </div>
+          </div>
         </div>
       </div>
     </div>

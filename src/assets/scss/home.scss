@@ -129,46 +129,6 @@
     }
   }
 
-  .post-wrapper {
-    .post-card-wrapper {
-      .empty-state,
-      .internet-error-state,
-      .server-error-state {
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        height: 40rem;
-        border-radius: 33.136px;
-        box-shadow: 0px 5.969581604003906px 16.714828491210938px 0px
-          rgba(8, 15, 52, 0.04);
-        background-color: #fff;
-        padding: 0;
-        p {
-          color: #000;
-          font-size: 14.863px;
-          font-weight: 400;
-          line-height: 23.12px;
-        }
-      }
-    }
-    .btn-con {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-    }
-  }
-  .post {
-    background-color: rgba(0, 128, 0, 0.2);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    height: 40rem;
-    border-radius: 33.136px;
-    box-shadow: 0px 5.969581604003906px 16.714828491210938px 0px
-      rgba(8, 15, 52, 0.04);
-    background-color: #fff;
-    padding: 0;
-  }
   .community-forum-wrapper {
     .community-forum-card-wrapper {
       padding: 48px 15px 20px;
@@ -219,4 +179,44 @@
       padding: 10px 0 !important;
     }
   }
+}
+.post-wrapper {
+  .post-card-wrapper {
+    .empty-state,
+    .internet-error-state,
+    .server-error-state {
+      // display: flex;
+      // align-items: center;
+      // justify-content: center;
+      height: 40rem;
+      border-radius: 33.136px;
+      box-shadow: 0px 5.969581604003906px 16.714828491210938px 0px
+        rgba(8, 15, 52, 0.04);
+      background-color: #fff;
+      padding: 0;
+      p {
+        color: #000;
+        font-size: 14.863px;
+        font-weight: 400;
+        line-height: 23.12px;
+      }
+    }
+  }
+  .btn-con {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+}
+.post {
+  background-color: rgba(0, 128, 0, 0.2);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 40rem;
+  border-radius: 33.136px;
+  box-shadow: 0px 5.969581604003906px 16.714828491210938px 0px
+    rgba(8, 15, 52, 0.04);
+  background-color: #fff;
+  padding: 0;
 }

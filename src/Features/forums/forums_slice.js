@@ -214,6 +214,9 @@ const forumsSlice = createSlice({
     resetCanceljoinForumRequest: (state) => {
       state.cancelJoinForumRequest = initialState.cancelJoinForumRequest;
     },
+    resetCreateForum: (state) => {
+      state.createForum = initialState.createForum;
+    },
   },
   extraReducers: (builder) => {
     // Join forum
@@ -419,4 +422,5 @@ export const {
   setActiveForumsForOngoingRequest,
   resetActiveForumIdForOngoingRequest,
   resetCanceljoinForumRequest,
+  resetCreateForum,
 } = forumsSlice.actions;

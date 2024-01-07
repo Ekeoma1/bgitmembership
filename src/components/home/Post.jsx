@@ -8,6 +8,7 @@ import MainButton from '../Molecules/MainButton';
 import { triggerGetForumPostsByForumId } from '../../Features/forums-post/forums_post_slice';
 import { useParams } from 'react-router-dom';
 import PostCardForumsPage from '../Molecules/PostCardForumsPage';
+import EmptyState from '../Molecules/EmptyState';
 
 const Post = ({ forum }) => {
   const dispatch = useDispatch();
@@ -121,11 +122,11 @@ const Post = ({ forum }) => {
                 {getAllPosts.data ? (
                   <>
                     {getAllPostsLocal.length === 0 ? (
-                      <>
-                        <div className='empty-state'>
-                          <p>No posts to show...</p>
-                        </div>
-                      </>
+                      <EmptyState
+                        title={'No posts to show yet'}
+                        info={'Make a post, contribute to the platform'}
+                        height={'70rem'}
+                      />
                     ) : (
                       <>
                         {getAllPostsLocal?.map((post, key) => {
@@ -154,7 +155,7 @@ const Post = ({ forum }) => {
                 <div className='server-error-state'>Something went wrong</div>
               </>
             )}
-            {pageNumber < 10 && (
+            {pageNumber < 10 && getAllPosts.data?.posts?.length > 10 && (
               <div className='btn-con'>
                 <MainButton
                   text={'Load more'}
@@ -180,11 +181,12 @@ const Post = ({ forum }) => {
                 {getForumPostsByForumId.data ? (
                   <>
                     {getAllPostsLocal.length === 0 ? (
-                      <>
-                        <div className='empty-state'>
-                          <p>No posts to show...</p>
-                        </div>
-                      </>
+                      <EmptyState
+                        title={'No posts on this forum yet'}
+                        info={'Create a post'}
+                        padding={'0px'}
+                        height={'60rem'}
+                      />
                     ) : (
                       <>
                         {getAllPostsLocal?.map((post, key) => {
@@ -214,7 +216,7 @@ const Post = ({ forum }) => {
                 <div className='server-error-state'>Something went wrong</div>
               </>
             )}
-            {pageNumber < 10 && (
+            {pageNumber < 10 && getAllPostsLocal.length > 5 && (
               <div className='btn-con'>
                 <MainButton
                   text={'Load more'}

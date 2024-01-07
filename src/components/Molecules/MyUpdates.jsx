@@ -168,7 +168,7 @@ const MyUpdates = ({ forum }) => {
                     </div>
                   ) : getAllNotifications.status === 'successful' ? (
                     <>{`(${
-                      getAllNotifications.data?.filter(
+                      Array.isArray(getAllNotifications.data) && getAllNotifications.data?.filter(
                         (item) => item.notificationType === 'COMMENT'
                       )?.length
                     })`}</>

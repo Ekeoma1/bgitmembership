@@ -624,44 +624,48 @@ const ProfileBanner = ({ data, from, setFrom }) => {
                   </>
                 ) : getConnectionStatusByUserId.status === 'successful' ? (
                   <>
-                    <button
-                      onClick={handleConnect}
-                      className={`reach-btn ${
-                        (sendConnectionRequest.status === 'loading' ||
+                    {getConnectionStatusByUserId.data === 'Request Sent' ? (
+                      <></>
+                    ) : (
+                      <button
+                        onClick={handleConnect}
+                        className={`reach-btn ${
+                          (sendConnectionRequest.status === 'loading' ||
+                            cancelConnectionRequest.status === 'loading' ||
+                            removeConnection.status === 'loading') &&
+                          from === 'profile-banner' &&
+                          'loading'
+                        } ${
+                          getConnectionStatusByUserId.data?.connectionStatus ===
+                            'Pending' && 'pending'
+                        }`}
+                      >
+                        {(sendConnectionRequest.status === 'loading' ||
                           cancelConnectionRequest.status === 'loading' ||
                           removeConnection.status === 'loading') &&
-                        from === 'profile-banner' &&
-                        'loading'
-                      } ${
-                        getConnectionStatusByUserId.data?.connectionStatus ===
-                          'Pending' && 'pending'
-                      }`}
-                    >
-                      {(sendConnectionRequest.status === 'loading' ||
-                        cancelConnectionRequest.status === 'loading' ||
-                        removeConnection.status === 'loading') &&
-                      from === 'profile-banner' ? (
-                        <img src={spinner} alt='spinner' />
-                      ) : getConnectionStatusByUserId.data?.connectionStatus ===
-                        'Pending' ? (
-                        <>
-                          <span className='pending-con'>
-                            <FaUserClock className='icon' /> {'Pending'}
-                          </span>
-                          <span className='cancel-con'>
-                            <FaUserTimes className='icon' /> {'Cancel'}
-                          </span>
-                        </>
-                      ) : getConnectionStatusByUserId.data?.connectionStatus ===
-                        'Not Connected' ? (
-                        '+ Connect'
-                      ) : getConnectionStatusByUserId.data?.connectionStatus ===
-                        'Connected' ? (
-                        'Remove Connection'
-                      ) : (
-                        <></>
-                      )}
-                    </button>
+                        from === 'profile-banner' ? (
+                          <img src={spinner} alt='spinner' />
+                        ) : getConnectionStatusByUserId.data
+                            ?.connectionStatus === 'Pending' ? (
+                          <>
+                            <span className='pending-con'>
+                              <FaUserClock className='icon' /> {'Pending'}
+                            </span>
+                            <span className='cancel-con'>
+                              <FaUserTimes className='icon' /> {'Cancel'}
+                            </span>
+                          </>
+                        ) : getConnectionStatusByUserId.data
+                            ?.connectionStatus === 'Not Connected' ? (
+                          '+ Connect'
+                        ) : getConnectionStatusByUserId.data
+                            ?.connectionStatus === 'Connected' ? (
+                          'Remove Connection'
+                        ) : (
+                          <></>
+                        )}
+                      </button>
+                    )}
                   </>
                 ) : (
                   <></>
