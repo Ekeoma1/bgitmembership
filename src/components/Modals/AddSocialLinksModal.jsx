@@ -15,15 +15,13 @@ const AddSocialLinksModalModal = ({
   const dispatch = useDispatch();
   const handleSubmit = () => {
     console.log(formData);
-    dispatch(triggerAddSocialLink(formData));
+    const values = formData.map((item) => {
+      const obj = { ...item };
+      delete obj.userId;
+      return obj;
+    });
+    dispatch(triggerAddSocialLink(values));
     onCancel();
-    // setFormData([
-    //   { Title: 'Facebook', Url: '' },
-    //   { Title: 'Twitter', Url: '' },
-    //   { Title: 'Instagram', Url: '' },
-    //   { Title: 'LinkedIn', Url: '' },
-    //   { Title: 'Dribble', Url: '' },
-    // ]);
   };
   return (
     <div className='add-social-links-modal shadow'>

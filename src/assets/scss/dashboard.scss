@@ -350,6 +350,22 @@
       font-size: 17.2px;
       color: $header-text-color;
     }
+    .social-links-con {
+      display: flex !important;
+      flex-direction: row !important;
+      align-items: center;
+      column-gap: 1rem;
+      row-gap: 1.2rem;
+      margin-top: 1rem;
+      flex-wrap: wrap;
+      // background-color: green;
+
+      a{
+        display: flex;
+        align-items: center;
+        column-gap: .2rem;
+      }
+    }
     .dashboard-text {
       font-size: 14px;
       color: $alt-text-color;
