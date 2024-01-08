@@ -33,7 +33,8 @@ const ConnectionCard = ({ withoutAction, user }) => {
       dispatch(triggerGetConnectionsByUserId(data));
     }
   }, [removeConnection]);
-
+  console.log('id params', params.id);
+  console.log('id user', getMyProfile.data.userId);
   return (
     <div className='connection-card shadow'>
       {!withoutAction ? (
@@ -54,7 +55,7 @@ const ConnectionCard = ({ withoutAction, user }) => {
             </div>
           </div>
           <div className={`connection-action ${withoutAction && 'd-none'}`}>
-            {getMyProfile.data?.userId === params.id && (
+            {getMyProfile.data?.userId !== user.receiverUserId && (
               <>
                 <Link to='#'>
                   <div className='msg-btn d-lg-flex d-none'>Message</div>
