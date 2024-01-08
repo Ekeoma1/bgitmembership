@@ -54,16 +54,18 @@ const ConnectionCard = ({ withoutAction, user }) => {
             </div>
           </div>
           <div className={`connection-action ${withoutAction && 'd-none'}`}>
-            <Link to='#'>
-              <div className='msg-btn d-lg-flex d-none'>Message</div>
-              <span className='d-lg-none'>
-                <Icon icon='envelope' />
-              </span>
-            </Link>
             {getMyProfile.data?.userId === params.id && (
-              <button onClick={() => toggleAction()}>
-                <Icon icon='elipse-horizontal' />
-              </button>
+              <>
+                <Link to='#'>
+                  <div className='msg-btn d-lg-flex d-none'>Message</div>
+                  <span className='d-lg-none'>
+                    <Icon icon='envelope' />
+                  </span>
+                </Link>
+                <button onClick={() => toggleAction()}>
+                  <Icon icon='elipse-horizontal' />
+                </button>
+              </>
             )}
 
             <div

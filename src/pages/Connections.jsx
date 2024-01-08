@@ -24,7 +24,7 @@ const Connections = () => {
   const { getForumMembersByForumId } = useSelector(
     (state) => state.forumsMembership
   );
-  const { getUserByProfileId } = useSelector((state) => state.users);
+  const { getMyProfile } = useSelector((state) => state.users);
   const [searchTerm, setSearchTerm] = useState('');
   const [showSearchModal, setShowSearchModal] = useState(false);
   const [searchedUsers, setSearchedUsers] = useState([]);
