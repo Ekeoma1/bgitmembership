@@ -5,6 +5,7 @@ import useWindowSize from '../../hooks/useWindowSize';
 import { renderToast } from '../Molecules/CustomToastify';
 import {
   resetAddSocialLinks,
+  resetUpdateSocialLinks,
   triggerGetSocialLinks,
 } from '../../Features/social-links/social_links_slice';
 import { triggerGetMyProfile } from '../../Features/users/users_slice';
@@ -26,7 +27,7 @@ const SocialLinksCard = ({ othersView, data }) => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const { getMyProfile } = useSelector((state) => state.users);
-  const { addSocialLinks, getSocialLinks } = useSelector(
+  const { addSocialLinks, getSocialLinks, updateSocialLinks } = useSelector(
     (state) => state.socialLinks
   );
   const [showSocialLinksModal, setShowSocialLinksModal] = useState(false);
@@ -65,28 +66,54 @@ const SocialLinksCard = ({ othersView, data }) => {
       });
       dispatch(resetAddSocialLinks());
     }
-  }, [addSocialLinks.status]);
+    // update social links
+    if (updateSocialLinks.status === 'successful') {
+      if (updateSocialLinks.data.status === 400) {
+        renderToast({
+          status: 'error',
+          message: 'Social Link could not be added',
+        });
+      } else {
+        renderToast({
+          status: 'success',
+          message: 'Social Link successfully added',
+        });
+        dispatch(triggerGetSocialLinks());
+      }
+      dispatch(resetUpdateSocialLinks());
+    } else if (updateSocialLinks.status === 'error') {
+      renderToast({
+        status: 'error',
+        message: 'Social Link could not be added',
+      });
+      dispatch(resetUpdateSocialLinks());
+    }
+  }, [addSocialLinks.status, updateSocialLinks.status]);
 
   useEffect(() => {
     dispatch(triggerGetSocialLinks());
   }, []);
 
   const [formData, setFormData] = useState([
-    { title: 'Facebook', Url: '' },
-    { title: 'Twitter', Url: '' },
-    { title: 'Instagram', Url: '' },
-    { title: 'LinkedIn', Url: '' },
-    { title: 'Dribble', Url: '' },
+    { title: 'facebook', url: '' },
+    { title: 'twitter', url: '' },
+    { title: 'instagram', url: '' },
+    { title: 'linkedIn', url: '' },
+    { title: 'dribble', url: '' },
   ]);
 
   useEffect(() => {
     if (getSocialLinks.status === 'successful') {
       console.log('formDataTemp########', getSocialLinks.data);
-      setFormData(getSocialLinks.data);
+      if (getSocialLinks.data?.length === 0) {
+        // console.log('0##############');
+      } else {
+        setFormData(getSocialLinks.data);
+      }
     }
   }, [getSocialLinks]);
-  console.log('formData', formData);
-  console.log('getSocialLinks', getSocialLinks);
+  // console.log('formData', formData);
+  // console.log('getSocialLinks', getSocialLinks);
 
   return (
     <div className='dashboard-card social-links-wrapper'>
@@ -120,18 +147,17 @@ const SocialLinksCard = ({ othersView, data }) => {
                           className=''
                           rel='noreferrer'
                         > */}
-                        {/* <img width={30} src={link.logo} alt='logo' /> */}
                         <div className=''>
                           <Link to={`${link.url}`} target='_blank'>
-                            {link.title === 'Facebook' ? (
+                            {link.title === 'facebook' ? (
                               <FaFacebook />
-                            ) : link.title === 'Twitter' ? (
+                            ) : link.title === 'twitter' ? (
                               <FaTwitter />
-                            ) : link.title === 'LinkedIn' ? (
+                            ) : link.title === 'linkedIn' ? (
                               <FaLinkedin />
-                            ) : link.title === 'Dribble' ? (
+                            ) : link.title === 'dribble' ? (
                               <FaDribbble />
-                            ) : link.title === 'Instagram' ? (
+                            ) : link.title === 'instagram' ? (
                               <FaInstagram />
                             ) : (
                               ''
@@ -163,12 +189,15 @@ const SocialLinksCard = ({ othersView, data }) => {
                             setShowSocialLinksModal(true);
                         }}
                         className={`add-text-btn ${
-                          addSocialLinks.status === 'loading' &&
+                          (addSocialLinks.status === 'loading' ||
+                            updateSocialLinks.status === 'loading') &&
                           'add-text-btn-2'
                         } `}
                       >
                         {addSocialLinks.status === 'loading'
-                          ? 'Adding Social link..'
+                          ? 'Adding Social links..'
+                          : updateSocialLinks.status === 'loading'
+                          ? 'Updating Social links..'
                           : '+ Add Social Link'}
                       </button>
                     )}

@@ -70,6 +70,9 @@ const socialLinksSlice = createSlice({
     resetAddSocialLinks: (state) => {
       state.addSocialLinks = initialState.addSocialLinks;
     },
+    resetUpdateSocialLinks: (state) => {
+      state.updateSocialLinks = initialState.updateSocialLinks;
+    },
   },
   extraReducers: (builder) => {
     // add social links
@@ -131,4 +134,5 @@ const socialLinksSlice = createSlice({
 });
 
 export default socialLinksSlice.reducer;
-export const { resetAddSocialLinks } = socialLinksSlice.actions;
+export const { resetAddSocialLinks, resetUpdateSocialLinks } =
+  socialLinksSlice.actions;

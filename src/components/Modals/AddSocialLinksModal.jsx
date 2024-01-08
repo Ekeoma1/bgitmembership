@@ -3,7 +3,10 @@ import '../../assets/scss/modal.scss';
 
 import { FaTimes } from 'react-icons/fa';
 import { useDispatch, useSelector } from 'react-redux';
-import { triggerAddSocialLink } from '../../Features/social-links/social_links_slice';
+import {
+  triggerAddSocialLink,
+  triggerUpdateSocialLinks,
+} from '../../Features/social-links/social_links_slice';
 
 const AddSocialLinksModalModal = ({
   onChange,
@@ -13,6 +16,7 @@ const AddSocialLinksModalModal = ({
   setFormData,
 }) => {
   const dispatch = useDispatch();
+  const { getSocialLinks } = useSelector((state) => state.socialLinks);
   const handleSubmit = () => {
     console.log(formData);
     const values = formData.map((item) => {
@@ -20,7 +24,13 @@ const AddSocialLinksModalModal = ({
       delete obj.userId;
       return obj;
     });
-    dispatch(triggerAddSocialLink(values));
+    if (getSocialLinks.data.length === 0) {
+      console.log('data add', values);
+      dispatch(triggerAddSocialLink(values));
+    } else {
+      console.log('data update', values);
+      dispatch(triggerUpdateSocialLinks(values));
+    }
     onCancel();
   };
   return (

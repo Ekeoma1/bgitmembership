@@ -43,7 +43,7 @@ export default class ConnectionsService {
     const response = await post({
       url: apiRoutes.sendConnectionRequest,
       data: { ...data },
-      queryParams: data.queryParams,
+      // queryParams: data.queryParams,
     });
     return response;
   }
@@ -72,6 +72,7 @@ export default class ConnectionsService {
     const response = await post({
       url: apiRoutes.acceptConnectionRequest,
       data: { ...data },
+      queryParams: data.queryParams,
     });
     return response;
   }
@@ -81,6 +82,7 @@ export default class ConnectionsService {
     const response = await post({
       url: apiRoutes.rejectConnectionRequest,
       data: { ...data },
+      queryParams: data.queryParams,
     });
     return response;
   }

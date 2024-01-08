@@ -21,7 +21,7 @@ export default class SocialLinksService {
   static async updateSocialLinks(data) {
     const response = await post({
       url: apiRoutes.updateSocialLinks,
-      data: { ...data },
+      data,
     });
     return response;
   }

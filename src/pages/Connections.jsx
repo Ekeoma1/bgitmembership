@@ -101,8 +101,8 @@ const Connections = () => {
   // console.log('members', getForumMembersByForumId);
 
   // console.log('getConnectionsByUserId', getConnectionsByUserId);
-  console.log('searchTerm', searchTerm);
-  console.log('searchedforummembers', searchedForumMembers);
+  // console.log('searchTerm', searchTerm);
+  // console.log('searchedforummembers', searchedForumMembers);
 
   return (
     <section className='connection-page'>

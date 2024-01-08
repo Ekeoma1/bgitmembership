@@ -64,7 +64,7 @@ const RequestCard = ({ request, setActiveRequest, forum }) => {
               }`
             )
           }
-          src={request.imageUrl}
+          src={forum ? request.imageUrl : request.senderImageUrl}
           alt='forum-img'
           className=''
         />
