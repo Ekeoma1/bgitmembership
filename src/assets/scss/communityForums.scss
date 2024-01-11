@@ -199,6 +199,14 @@
           }
         }
         .cards-wrapper {
+          .mobile-view {
+            .btn-wrapper {
+              display: flex;
+              justify-content: center;
+              margin: 5rem 0;
+              // background-color: green;
+            }
+          }
           .community-card {
             max-width: 34.0246rem;
             height: 35.3524rem;
@@ -207,14 +215,17 @@
             flex-direction: column;
             box-shadow: 0.8083395957946777px 0.8083395957946777px
               9.700075149536133px 0px rgba(51, 36, 106, 0.12);
-            @media screen and (max-width: '600px') {
+            @media screen and (max-width: '800px') {
               flex-direction: row;
               min-height: 7rem !important;
+              height: 7rem !important;
               overflow: hidden;
               border-radius: 1.2rem;
               box-shadow: 0.0083395957946777px 0.2083395957946777px 0px
                 rgba(51, 36, 106, 0.12);
               max-width: 100%;
+              margin-bottom: 2.4rem;
+              // background-color: blue;
             }
             .card-body {
               border-radius: 2.4896rem 2.4896rem 0 0;
@@ -222,18 +233,19 @@
               width: 34.0246rem;
               height: 24.3152rem;
               position: relative;
-              @media screen and (max-width: '600px') {
+              @media screen and (max-width: '800px') {
                 max-width: 7rem;
                 height: 7rem;
                 border-radius: 1.2rem 0 0 1.2rem;
               }
               img {
-                min-width: 10rem;
-                min-height: 100%;
+                // min-width: 50rem;
+                // min-height: 20rem;
                 width: 100%;
                 height: 100%;
                 object-fit: cover;
                 cursor: pointer;
+                // display: none;
               }
 
               .recently-joined {
@@ -251,7 +263,7 @@
                 background: #fff;
                 box-shadow: 0.8083395957946777px 0.8083395957946777px
                   9.700075149536133px 0px rgba(51, 36, 106, 0.12);
-                @media screen and (max-width: '600px') {
+                @media screen and (max-width: '800px') {
                   display: none;
                 }
                 h5 {
@@ -272,13 +284,13 @@
               display: flex;
               align-items: center;
               justify-content: space-between;
-              @media screen and (max-width: '600px') {
+              @media screen and (max-width: '800px') {
                 height: 7rem;
                 border-radius: 0 1.2rem 1.2rem 0;
                 width: 100%;
               }
               .info {
-                @media screen and (max-width: '600px') {
+                @media screen and (max-width: '800px') {
                   display: flex;
                   align-items: center;
                   column-gap: 2rem;
@@ -289,7 +301,7 @@
                   font-weight: 700;
                   line-height: 100%;
                   cursor: pointer;
-                  @media screen and (max-width: '600px') {
+                  @media screen and (max-width: '800px') {
                     margin-bottom: 0;
                   }
                 }
@@ -302,7 +314,7 @@
                     display: flex;
                     flex-direction: row-reverse;
                     z-index: 3;
-                    @media screen and (max-width: '600px') {
+                    @media screen and (max-width: '800px') {
                       display: none;
                     }
                     .image-con {
@@ -327,7 +339,7 @@
                     column-gap: 0.3rem;
                     align-items: center;
                     cursor: pointer;
-                    @media screen and (max-width: '600px') {
+                    @media screen and (max-width: '800px') {
                       display: none;
                     }
                     p {
@@ -363,13 +375,13 @@
                 .icon {
                   display: block;
                   color: rgba(51, 36, 106, 1);
-                  @media screen and (max-width: '600px') {
+                  @media screen and (max-width: '800px') {
                     display: none;
                   }
                 }
                 .icon-mobile {
                   display: none;
-                  @media screen and (max-width: '600px') {
+                  @media screen and (max-width: '800px') {
                     display: block;
                     color: rgba(51, 36, 106, 1);
                     font-size: 3rem;

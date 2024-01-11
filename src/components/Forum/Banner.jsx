@@ -167,12 +167,13 @@ const Banner = ({
                   </div>
                   <div
                     onClick={() => {
-                      navigate(
-                        `/forums/${getForumById?.data?.forum[0]?.forumId}/members`
-                      );
+                      getForumById?.data?.forum[0]?.userCount > 0 &&
+                        navigate(
+                          `/forums/${getForumById?.data?.forum[0]?.forumId}/members`
+                        );
                     }}
                     className={`members-amount ${
-                      getForumById?.data?.forum[0]?.userCount && 'view'
+                      getForumById?.data?.forum[0]?.userCount > 0 && 'view'
                     }`}
                   >
                     <p>{getForumById?.data?.forum[0]?.userCount}</p>

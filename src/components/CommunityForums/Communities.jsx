@@ -22,6 +22,8 @@ import {
 import { ForumCardsLoader2 } from '../Atoms/skeleton-loaders/ForumCardsLoader';
 import { renderToast } from '../Molecules/CustomToastify';
 import SingleLineLoader from '../Atoms/skeleton-loaders/SingleLineLoader';
+import useWindowSize from '../../hooks/useWindowSize';
+import MainButton from '../Molecules/MainButton';
 
 const Communities = () => {
   const {
@@ -31,8 +33,10 @@ const Communities = () => {
     cancelJoinForumRequest,
     createForum,
   } = useSelector((state) => state.forums);
+  const { isMobile, windowSize } = useWindowSize();
   const [searchValue, setSearchValue] = useState('');
   const [activeForum, setActiveForum] = useState({});
+  const [numOfCommunitiesToDisplay, setNumOfCommunitiesToDisplay] = useState(5);
   const [userHasForums] = useState(false);
   const dispatch = useDispatch();
   const [pageNumber] = useState(1);
@@ -180,7 +184,7 @@ const Communities = () => {
       setActiveForum({});
     }
   }, [leaveForum, joinForum, cancelJoinForumRequest]);
-  console.log('local', getMyForumsLocal);
+  console.log('windowSize', windowSize);
 
   return (
     <div className='communities-wrapper'>
@@ -227,16 +231,51 @@ const Communities = () => {
                           info={'Search or browse suggested forums below.'}
                         />
                       ) : (
-                        <Carousel responsive={responsive}>
-                          {getMyForumsLocal.map((community, index) => (
-                            <CommunityCard
-                              community={community}
-                              key={index}
-                              setGetMyForumsLocal={setGetMyForumsLocal}
-                              setActiveForum={setActiveForum}
-                            />
-                          ))}
-                        </Carousel>
+                        <>
+                          {windowSize.width < 800 ? (
+                            <div className='mobile-view'>
+                              {getMyForumsLocal
+                                ?.slice(0, numOfCommunitiesToDisplay)
+                                .map((community, index) => (
+                                  <CommunityCard
+                                    community={community}
+                                    key={index}
+                                    setGetMyForumsLocal={setGetMyForumsLocal}
+                                    setActiveForum={setActiveForum}
+                                  />
+                                ))}
+                              <div className='btn-wrapper'>
+                                <MainButton
+                                  text={'Show more communities'}
+                                  onClick={() =>
+                                    setNumOfCommunitiesToDisplay(
+                                      (prevState) => prevState + 2
+                                    )
+                                  }
+                                  disabled={
+                                    numOfCommunitiesToDisplay ===
+                                    getMyForumsLocal.length
+                                  }
+                                  padding={'0'}
+                                  width={'30rem'}
+                                />
+                              </div>
+                            </div>
+                          ) : (
+                            <>
+                              <Carousel responsive={responsive}>
+                                {getMyForumsLocal.map((community, index) => (
+                                  <CommunityCard
+                                    community={community}
+                                    key={index}
+                                    setGetMyForumsLocal={setGetMyForumsLocal}
+                                    setActiveForum={setActiveForum}
+                                  />
+                                ))}
+                              </Carousel>
+                            </>
+                          )}
+                        </>
                       )}
                     </>
                   ) : (

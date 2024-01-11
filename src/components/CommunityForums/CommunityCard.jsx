@@ -37,7 +37,6 @@ const CommunityCard = ({ community, setActiveForum }) => {
       if (e.target.closest('.leave-group')) {
         dispatch(triggerLeaveForum(values));
         setMore(false);
-        console.log('yeap');
       } else if (e.target.closest('.join-group')) {
         dispatch(triggerJoinForum(values));
       } else if (e.target.closest('.cancel-request')) {
@@ -73,7 +72,9 @@ const CommunityCard = ({ community, setActiveForum }) => {
                 }}
                 className='text-color-secondary-bold22'
               >
-                {community.forumName}
+                {community.forumName.length > 30
+                  ? `${community.forumName.substring(0, 30)}...`
+                  : community.forumName}
               </h3>
               <div className='members-wrapper'>
                 <div className='members-img'>
@@ -105,7 +106,10 @@ const CommunityCard = ({ community, setActiveForum }) => {
                   onClick={() => setMore(true)}
                 />
               )}
-              <HiOutlineChevronRight className='icon-mobile' />
+              <HiOutlineChevronRight
+                onClick={() => navigate(`/forums/${community.forumId}`)}
+                className='icon-mobile'
+              />
               {
                 <OutsideClickHandler
                   onOutsideClick={() => {

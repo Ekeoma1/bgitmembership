@@ -14,6 +14,7 @@ import { triggerGetForumMembersByForumId } from '../Features/forums-membership/f
 import BlockedUsersLoader from '../components/Atoms/skeleton-loaders/settings-page/BlockedUsersLoader';
 import SearchResult from '../components/Molecules/SearchResult';
 import ConnectionsLoader from '../components/Atoms/skeleton-loaders/connections-page/ConnectionsLoader';
+import EmptyState from '../components/Molecules/EmptyState';
 
 const Connections = () => {
   const params = useParams();
@@ -119,11 +120,7 @@ const Connections = () => {
                 </button>
                 <h2>
                   {getForumMembersByForumId.data[0]?.usersInForum?.length}{' '}
-                  {`Forum Member${
-                    getForumMembersByForumId.data[0]?.usersInForum.length > 1
-                      ? 's'
-                      : ''
-                  }`}
+                  {`Forum Members`}
                 </h2>
               </div>
               <div className='top-page-con'>
@@ -180,10 +177,7 @@ const Connections = () => {
                   <HiArrowLeft className='text-color22' />
                 </button>
                 <h2>
-                  {getConnectionsByUserId.data?.connectionCount}{' '}
-                  {`Connection${
-                    getConnectionsByUserId.data?.connectionCount > 1 ? 's' : ''
-                  }`}
+                  {getConnectionsByUserId.data?.connectionCount} {`Connections`}
                 </h2>
               </div>
               <div className='top-page-con'>
@@ -243,7 +237,10 @@ const Connections = () => {
               ) : getConnectionsByUserId.status === 'successful' ? (
                 <>
                   {getConnectionsByUserId.data?.connections?.length === 0 ? (
-                    <>No connections</>
+                    <EmptyState
+                      title={'No connections..'}
+                      info={'This user has no connections yet'}
+                    />
                   ) : (
                     <>
                       {getConnectionsByUserId.data?.connections?.map(
@@ -268,8 +265,12 @@ const Connections = () => {
                 <ConnectionsLoader />
               ) : getForumMembersByForumId.status === 'successful' ? (
                 <>
-                  {getForumMembersByForumId.data?.connections?.length === 0 ? (
-                    <>No user found..</>
+                  {getForumMembersByForumId.data[0]?.usersInForum?.length ===
+                  0 ? (
+                    <EmptyState
+                      title={'No members on this forum..'}
+                      info={'This forum has no members yet'}
+                    />
                   ) : (
                     <>
                       {getForumMembersByForumId.data[0]?.usersInForum?.map(

@@ -63,9 +63,11 @@ const ConnectionCard = ({ withoutAction, user }) => {
                     <Icon icon='envelope' />
                   </span>
                 </Link>
-                <button onClick={() => toggleAction()}>
-                  <Icon icon='elipse-horizontal' />
-                </button>
+                {getMyProfile.data?.userId === params.id && (
+                  <button onClick={() => toggleAction()}>
+                    <Icon icon='elipse-horizontal' />
+                  </button>
+                )}
               </>
             )}
 

@@ -38,6 +38,7 @@ const LoginForm = ({ forLogin, regFirstStep }) => {
       regFirstStep(true);
     }
   };
+  
   useEffect(() => {
     if (signin.status === 'successful') {
       if (signin.data?.token) {

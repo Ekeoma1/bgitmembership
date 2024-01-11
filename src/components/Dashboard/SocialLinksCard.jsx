@@ -23,7 +23,6 @@ import {
 import { Link, useNavigate } from 'react-router-dom';
 
 const SocialLinksCard = ({ othersView, data }) => {
-  const { isMobile } = useWindowSize();
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const { getMyProfile } = useSelector((state) => state.users);
