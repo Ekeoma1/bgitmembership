@@ -60,9 +60,9 @@ const Navbar = () => {
           </div>
 
           <div className='d-lg-none menu-btn-wrapper'>
-            <button>
+            {/* <button>
               <Icon icon='envelope' />
-            </button>
+            </button> */}
             <button onClick={showMobNav}>
               <Icon icon='menu' />
             </button>

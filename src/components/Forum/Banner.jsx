@@ -154,7 +154,7 @@ const Banner = ({
                       <>
                         {getForumById?.data?.forum[0]?.usersInForum?.map(
                           (member, index) => (
-                            <div className='image-con'>
+                            <div className='image-con' key={index}>
                               <img
                                 src={member.user?.imageUrl}
                                 alt='community-img-sm'
