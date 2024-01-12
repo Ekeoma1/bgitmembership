@@ -18,6 +18,15 @@ export default class SocialLinksService {
     return response;
   }
 
+  static async getSocialLinksByUserId(data) {
+    const response = await get({
+      url: apiRoutes.getSocialLinksByUserId,
+      data: { ...data },
+      queryParams: data.queryParams,
+    });
+    return response;
+  }
+
   static async updateSocialLinks(data) {
     const response = await post({
       url: apiRoutes.updateSocialLinks,

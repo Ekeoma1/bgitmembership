@@ -7,6 +7,7 @@ import {
   resetAddSocialLinks,
   resetUpdateSocialLinks,
   triggerGetSocialLinks,
+  triggerGetSocialLinksByUserId,
 } from '../../Features/social-links/social_links_slice';
 import { triggerGetMyProfile } from '../../Features/users/users_slice';
 import OutsideClickHandler from 'react-outside-click-handler';
@@ -20,25 +21,16 @@ import {
   FaLinkedin,
   FaTwitter,
 } from 'react-icons/fa';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, useNavigate, useParams } from 'react-router-dom';
 
 const SocialLinksCard = ({ othersView, data }) => {
   const navigate = useNavigate();
+  const params = useParams();
   const dispatch = useDispatch();
   const { getMyProfile } = useSelector((state) => state.users);
-  const { addSocialLinks, getSocialLinks, updateSocialLinks } = useSelector(
-    (state) => state.socialLinks
-  );
+  const { addSocialLinks, getSocialLinksByUserId, updateSocialLinks } =
+    useSelector((state) => state.socialLinks);
   const [showSocialLinksModal, setShowSocialLinksModal] = useState(false);
-
-  const handleChange = (e) => {
-    const data = formData.map((item) => {
-      if (item.Title === e.target.name) {
-        item.Url = e.target.value;
-      }
-    });
-    setFormData(data);
-  };
   const handleClearValues = () => {
     setFormData({ ...formData, url: '' });
   };
@@ -65,6 +57,7 @@ const SocialLinksCard = ({ othersView, data }) => {
       });
       dispatch(resetAddSocialLinks());
     }
+
     // update social links
     if (updateSocialLinks.status === 'successful') {
       if (updateSocialLinks.data.status === 400) {
@@ -90,8 +83,9 @@ const SocialLinksCard = ({ othersView, data }) => {
   }, [addSocialLinks.status, updateSocialLinks.status]);
 
   useEffect(() => {
-    dispatch(triggerGetSocialLinks());
-  }, []);
+    const data = { queryParams: { userId: params.id } };
+    dispatch(triggerGetSocialLinksByUserId(data));
+  }, [params.id]);
 
   const [formData, setFormData] = useState([
     { title: 'facebook', url: '' },
@@ -102,15 +96,15 @@ const SocialLinksCard = ({ othersView, data }) => {
   ]);
 
   useEffect(() => {
-    if (getSocialLinks.status === 'successful') {
-      console.log('formDataTemp########', getSocialLinks.data);
-      if (getSocialLinks.data?.length === 0) {
+    if (getSocialLinksByUserId.status === 'successful') {
+      console.log('formDataTemp########', getSocialLinksByUserId.data);
+      if (getSocialLinksByUserId.data?.length === 0) {
         // console.log('0##############');
       } else {
-        setFormData(getSocialLinks.data);
+        setFormData(getSocialLinksByUserId.data);
       }
     }
-  }, [getSocialLinks]);
+  }, [getSocialLinksByUserId]);
   // console.log('formData', formData);
   // console.log('getSocialLinks', getSocialLinks);
 
@@ -118,14 +112,15 @@ const SocialLinksCard = ({ othersView, data }) => {
     <div className='dashboard-card social-links-wrapper'>
       <>
         <div className='dashboard-header'>Social Links</div>
-        {getSocialLinks.status === 'base' ||
-        getSocialLinks.status === 'loading' ? (
+        {getSocialLinksByUserId.status === 'base' ||
+        getSocialLinksByUserId.status === 'loading' ? (
           <SocialLinksLoader />
-        ) : getSocialLinks.status === 'successful' ? (
+        ) : getSocialLinksByUserId.status === 'successful' ? (
           <>
-            {getSocialLinks.data?.length > 0 ? (
+            {Array.isArray(getSocialLinksByUserId.data) &&
+            getSocialLinksByUserId.data?.length > 0 ? (
               <div className='social-links-con'>
-                {getSocialLinks?.data?.map((link, key) => {
+                {getSocialLinksByUserId?.data?.map((link, key) => {
                   if (link.url !== '') {
                     return (
                       <div
@@ -181,7 +176,7 @@ const SocialLinksCard = ({ othersView, data }) => {
               <div className='add-text-btn-wrapper'>
                 {data?.data?.userId && (
                   <div className='con'>
-                    {getSocialLinks.status === 'successful' && (
+                    {getSocialLinksByUserId.status === 'successful' && (
                       <button
                         onClick={() => {
                           addSocialLinks.status !== 'loading' &&

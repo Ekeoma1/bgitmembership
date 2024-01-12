@@ -11,6 +11,10 @@ const initialState = {
     status: states.BASE,
     data: {},
   },
+  getSocialLinksByUserId: {
+    status: states.BASE,
+    data: {},
+  },
   updateSocialLinks: {
     status: states.BASE,
     data: {},
@@ -33,7 +37,7 @@ export const triggerAddSocialLink = createAsyncThunk(
 );
 
 export const triggerGetSocialLinks = createAsyncThunk(
-  'get-social-link',
+  'get-social-links',
   async (params, thunkAPI) => {
     try {
       return await SocialLinksService.getSocialLinks(params);
@@ -42,6 +46,17 @@ export const triggerGetSocialLinks = createAsyncThunk(
     }
   }
 );
+export const triggerGetSocialLinksByUserId = createAsyncThunk(
+  'get-social-links-by-user-id',
+  async (params, thunkAPI) => {
+    try {
+      return await SocialLinksService.getSocialLinksByUserId(params);
+    } catch (e) {
+      return thunkAPI.rejectWithValue(e.message);
+    }
+  }
+);
+
 export const triggerUpdateSocialLinks = createAsyncThunk(
   'update-social-links',
   async (params, thunkAPI) => {
@@ -101,6 +116,20 @@ const socialLinksSlice = createSlice({
     builder.addCase(triggerGetSocialLinks.rejected, (state) => {
       state.getSocialLinks.status = states.ERROR;
       state.getSocialLinks.data = {};
+    });
+
+    // get social links by user id
+    builder.addCase(triggerGetSocialLinksByUserId.pending, (state) => {
+      state.getSocialLinksByUserId.status = states.LOADING;
+      state.getSocialLinksByUserId.data = {};
+    });
+    builder.addCase(triggerGetSocialLinksByUserId.fulfilled, (state, action) => {
+      state.getSocialLinksByUserId.status = states.SUCCESSFUL;
+      state.getSocialLinksByUserId.data = action.payload;
+    });
+    builder.addCase(triggerGetSocialLinksByUserId.rejected, (state) => {
+      state.getSocialLinksByUserId.status = states.ERROR;
+      state.getSocialLinksByUserId.data = {};
     });
 
     // update social links

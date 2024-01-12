@@ -76,6 +76,7 @@ const apiRoutes = {
   // social links
   addSocialLinks: '/SocialLinks/AddSocialLinks',
   getSocialLinks: '/SocialLinks/GetSocialLinks',
+  getSocialLinksByUserId: '/SocialLinks/GetSocialLinksByUserId',
   updateSocialLinks: '/SocialLinks/UpdateSocialLinks',
   deleteSocialLink: 'SocialLinks/DeleteSocialLink',
 

@@ -29,6 +29,7 @@ const Dashboard = () => {
   useEffect(() => {
     const data = { queryParams: { userId: param?.id } };
     dispatch(triggerGetUserProfileById(data));
+
     const data2 = { queryParams: { pageNumber, pageSize } };
     dispatch(triggerGetAllForums(data2));
   }, [param?.id]);
