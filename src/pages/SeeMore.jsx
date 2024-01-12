@@ -51,7 +51,7 @@ const SeeMore = () => {
       setGetAllPostsByUserIdLocal([...getAllPostsByUserId.data?.posts]);
     }
   }, [getAllPostsByUserId?.status]);
-  // console.log('params', param);
+  // console.log('params', param); 
   return (
     <div className='see-more'>
       <div className='container'>

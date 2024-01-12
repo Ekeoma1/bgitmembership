@@ -48,7 +48,7 @@ const Posts = () => {
           <>
             {getAllPostsByUserId?.data?.posts?.length === 0 ? (
               <>
-                <div className='empty'>No posts...</div>
+                <div className='dashboard-text'>No posts</div>
               </>
             ) : (
               <div className='post-cards-con'>
