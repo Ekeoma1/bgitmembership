@@ -8,7 +8,11 @@ export default class AuthService {
       url: apiRoutes.signup,
       data: { ...data },
     });
-    return response;
+    if (response.isSuccess === false) {
+      throw new Error(response.message);
+    } else {
+      return response;
+    }
   }
 
   // sign in

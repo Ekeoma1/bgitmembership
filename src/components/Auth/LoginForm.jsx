@@ -27,7 +27,8 @@ const LoginForm = ({ forLogin, regFirstStep }) => {
       .matches(
         /^(?=.*\d)(?=.*[A-Z])(?=.*[^A-Za-z0-9]).*$/,
         'Must contain at least one number, one uppercase letter, and one special character'
-      ),
+      )
+      .min(8, 'Password must be at least 8 characters long'),
   });
 
   const handleSubmit = (values) => {
@@ -38,7 +39,7 @@ const LoginForm = ({ forLogin, regFirstStep }) => {
       regFirstStep(true);
     }
   };
-  
+
   useEffect(() => {
     if (signin.status === 'successful') {
       if (signin.data?.token) {
@@ -106,6 +107,7 @@ const LoginForm = ({ forLogin, regFirstStep }) => {
               placeholder='Input your email here'
               forLogin
             />
+
             <PasswordInput
               name='Password'
               label='Password'

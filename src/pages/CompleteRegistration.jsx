@@ -9,7 +9,7 @@ import { Stepper } from "react-form-stepper";
 
 const CompleteRegistration = () => {
   const [currentTab, setCurrentTab] = useState(0);
-
+ 
   const changeTab = (num) => {
     setCurrentTab(num);
   };

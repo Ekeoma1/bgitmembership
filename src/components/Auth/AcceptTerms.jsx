@@ -28,31 +28,24 @@ const AcceptTerms = () => {
   };
   useEffect(() => {
     if (signup.status === 'successful') {
-      if (signup.data?.status === 'Success') {
-        renderToast({
-          status: 'success',
-          message: signup.data?.message,
-        });
-        setTimeout(() => {
-          navigate('/login');
-        }, [3000]);
-        dispatch(resetSignUpFormData());
-        dispatch(resetSignUp());
-      } else {
-        renderToast({
-          status: 'error',
-          message: signup.data,
-        });
-        setTimeout(() => {
-          navigate('/register');
-        }, [3000]);
-        dispatch(resetSignUp());
-      }
+      renderToast({
+        status: 'success',
+        message: signup.data?.message,
+      });
+      setTimeout(() => {
+        navigate('/login');
+      }, [3000]);
+      dispatch(resetSignUpFormData());
+      dispatch(resetSignUp());
     } else if (signup.status === 'error') {
       renderToast({
         status: 'error',
-        message: signup.status,
+        message: signup.data,
       });
+      setTimeout(() => {
+        navigate('/login');
+      }, [3000]);
+      dispatch(resetSignUp());
     }
   }, [signup.data?.data, signup.data?.status, signup.status]);
 

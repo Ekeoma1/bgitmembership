@@ -112,8 +112,9 @@ const authSlice = createSlice({
       state.signup.data = action.payload;
     });
     builder.addCase(triggerSignup.rejected, (state, action) => {
+      console.log('action#####', action);
       state.signup.status = states.ERROR;
-      state.signup.data = {};
+      state.signup.data = action.payload;
     });
 
     //   sign in

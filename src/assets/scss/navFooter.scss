@@ -17,13 +17,14 @@ nav {
     }
 
     .contact-btn {
-      padding: 12px 23px;
       background-color: $pri-color2;
       border-radius: 78px;
       color: #fff;
       font-weight: 500;
-      font-family: $thic500;
-      font-size: 10px;
+      font-family: $thic700;
+      min-height: 5rem ;
+      padding: 17px 35px;
+      font-size: 14px;
     }
 
     .menu-item {
