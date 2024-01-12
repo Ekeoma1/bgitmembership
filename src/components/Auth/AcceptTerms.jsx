@@ -10,7 +10,7 @@ import {
 import { renderToast } from '../Molecules/CustomToastify';
 import MainButton from '../Molecules/MainButton';
 
-const AcceptTerms = () => {
+const AcceptTerms = ({ tabChanger, setStep1 }) => {
   const [agreement, setAgreement] = useState(false);
   const { signup, signUpFormData } = useSelector((state) => state.auth);
   const navigate = useNavigate();
@@ -43,7 +43,7 @@ const AcceptTerms = () => {
         message: signup.data,
       });
       setTimeout(() => {
-        navigate('/login');
+       setStep1(false)
       }, [3000]);
       dispatch(resetSignUp());
     }

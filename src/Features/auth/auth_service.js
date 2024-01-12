@@ -13,6 +13,10 @@ export default class AuthService {
     } else {
       return response;
     }
+    // if (response.status !== 'success') {
+    //   throw new Error('Something went wrong');
+    // }
+    // return response.data;
   }
 
   // sign in

@@ -11,6 +11,7 @@ export default class PostsService {
     if (response === 'An error occurred while creating post') {
       throw new Error('Something went wrong');
     }
+
     return response;
   }
 
