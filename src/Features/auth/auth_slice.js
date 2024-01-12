@@ -33,10 +33,8 @@ export const triggerSignup = createAsyncThunk(
   'sign-up',
   async (params, thunkAPI) => {
     try {
-      // console.log('sign up params', params);
       return await AuthService.signup(params);
     } catch (e) {
-      // console.log('reject error', e);
       return thunkAPI.rejectWithValue(e.message);
     }
   }

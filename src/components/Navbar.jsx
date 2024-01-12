@@ -35,7 +35,7 @@ const Navbar = () => {
   };
 
   const toggleDropdown = () => {
-    setShowDropdown(!showDropdown);
+    getMyProfile.status === 'successful' && setShowDropdown(!showDropdown);
   };
 
   const hideDropdown = () => {
@@ -87,7 +87,8 @@ const Navbar = () => {
                       isActive ? 'active-link' : 'menu-item'
                     }
                   >
-                    Events & News <FiChevronDown />
+                    Events & News
+                    {/* <FiChevronDown /> */}
                   </NavLink>
                 </div>
                 <div className='col-2 px-0 text-center'>
@@ -107,7 +108,8 @@ const Navbar = () => {
                       isActive ? 'active-link' : 'menu-item'
                     }
                   >
-                    Resources <FiChevronDown />
+                    Resources
+                    {/* <FiChevronDown /> */}
                   </NavLink>
                 </div>
               </>
@@ -131,40 +133,53 @@ const Navbar = () => {
                 >
                   <div className='left-menu-border-content'>
                     <div className='d-flex align-items-end justify-content-center'>
-                      <div
-                        onClick={toggleDropdown}
-                        className='user-profile-image'
-                      >
-                        {getMyProfile.status === 'base' ||
-                        getMyProfile.status === 'loading' ? (
-                          <>
-                            <UserProfilePhotoLoader2 />
-                          </>
-                        ) : (
-                          <>
-                            <img
-                              src={getMyProfile.data?.imageUrl}
-                              alt='post-img'
-                              className={`${
-                                profileImgOnLoadStatus === 'success'
-                                  ? 'd-block'
-                                  : 'd-none'
-                              }`}
-                              onLoad={() =>
-                                setProfileImgOnLoadStatus('success')
-                              }
-                              onError={() => setProfileImgOnLoadStatus('error')}
-                            />
-                            {profileImgOnLoadStatus === 'base' && (
+                      <div className='user-profile-image-con d-flex align-items-end justify-content-center'>
+                        <div
+                          onClick={toggleDropdown}
+                          className='user-profile-image'
+                        >
+                          {getMyProfile.status === 'base' ||
+                          getMyProfile.status === 'loading' ? (
+                            <>
                               <UserProfilePhotoLoader2 />
-                            )}
-                            {profileImgOnLoadStatus === 'error' && (
-                              <div className='error-img'>couldn't load img</div>
-                            )}
-                          </>
-                        )}
+                            </>
+                          ) : (
+                            <>
+                              <img
+                                src={getMyProfile.data?.imageUrl}
+                                alt='post-img'
+                                className={`${
+                                  profileImgOnLoadStatus === 'success'
+                                    ? 'd-block'
+                                    : 'd-none'
+                                }`}
+                                onLoad={() =>
+                                  setProfileImgOnLoadStatus('success')
+                                }
+                                onError={() =>
+                                  setProfileImgOnLoadStatus('error')
+                                }
+                              />
+                              {profileImgOnLoadStatus === 'base' && (
+                                <UserProfilePhotoLoader2 />
+                              )}
+                              {profileImgOnLoadStatus === 'error' && (
+                                <div className='error-img'>
+                                  couldn't load img
+                                </div>
+                              )}
+                            </>
+                          )}
+                        </div>
+                        <div
+                          onClick={toggleDropdown}
+                          className={`icon-con ${
+                            getMyProfile.status === 'successful' && 'show'
+                          }`}
+                        >
+                          <Icon icon='triDown' />
+                        </div>
                       </div>
-                      <Icon icon='triDown' />
                       <div
                         className={`user-profile-dropdown shadow-sm ${
                           !showDropdown && 'd-none'

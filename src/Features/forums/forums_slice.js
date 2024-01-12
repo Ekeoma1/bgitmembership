@@ -48,6 +48,14 @@ const initialState = {
     status: states.BASE,
     data: [],
   },
+  getForumsByUserId: {
+    status: states.BASE,
+    data: [],
+  },
+  getForumMembershipStatus: {
+    status: states.BASE,
+    data: [],
+  },
   activeForumIdForOngoingRequest: '',
   activeForumsForOngoingRequest: [],
   activeForumsCurrentRequests: {},
@@ -185,6 +193,28 @@ export const triggerGetAllForumsByLocation = createAsyncThunk(
   async (params, thunkAPI) => {
     try {
       return await ForumsService.getAllForumsByLocation(params);
+    } catch (e) {
+      return thunkAPI.rejectWithValue(e.message);
+    }
+  }
+);
+// get forums by user id
+export const triggerGetForumsByUserId= createAsyncThunk(
+  'get-forums-by-user-id',
+  async (params, thunkAPI) => {
+    try {
+      return await ForumsService.getForumsByUserId(params);
+    } catch (e) {
+      return thunkAPI.rejectWithValue(e.message);
+    }
+  }
+);
+// get forum membership status
+export const triggerGetForumMembershipStatus= createAsyncThunk(
+  'get-forum-membership-status',
+  async (params, thunkAPI) => {
+    try {
+      return await ForumsService.getForumMembershipStatus(params);
     } catch (e) {
       return thunkAPI.rejectWithValue(e.message);
     }
@@ -410,6 +440,40 @@ const forumsSlice = createSlice({
     builder.addCase(triggerGetAllForumsByLocation.rejected, (state, action) => {
       state.getAllForumsByLocation.status = states.ERROR;
       state.getAllForumsByLocation.data = action.payload;
+    });
+
+    // get forums by user id
+    builder.addCase(triggerGetForumsByUserId.pending, (state) => {
+      state.getForumsByUserId.status = states.LOADING;
+      state.getForumsByUserId.data = {};
+    });
+    builder.addCase(
+      triggerGetForumsByUserId.fulfilled,
+      (state, action) => {
+        state.getForumsByUserId.status = states.SUCCESSFUL;
+        state.getForumsByUserId.data = action.payload;
+      }
+    );
+    builder.addCase(triggerGetForumsByUserId.rejected, (state, action) => {
+      state.getForumsByUserId.status = states.ERROR;
+      state.getForumsByUserId.data = action.payload;
+    });
+
+    // get forum membership status
+    builder.addCase(triggerGetForumMembershipStatus.pending, (state) => {
+      state.getForumMembershipStatus.status = states.LOADING;
+      state.getForumMembershipStatus.data = {};
+    });
+    builder.addCase(
+      triggerGetForumMembershipStatus.fulfilled,
+      (state, action) => {
+        state.getForumMembershipStatus.status = states.SUCCESSFUL;
+        state.getForumMembershipStatus.data = action.payload;
+      }
+    );
+    builder.addCase(triggerGetForumMembershipStatus.rejected, (state, action) => {
+      state.getForumMembershipStatus.status = states.ERROR;
+      state.getForumMembershipStatus.data = action.payload;
     });
   },
 });

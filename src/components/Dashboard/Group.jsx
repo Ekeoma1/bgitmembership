@@ -13,15 +13,17 @@ import {
   resetLeaveForum,
   triggerCancelJoinForumRequest,
   triggerGetAllForums,
+  triggerGetForumsByUserId,
   triggerJoinForum,
 } from '../../Features/forums/forums_slice';
 import { renderToast } from '../Molecules/CustomToastify';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 
 const Group = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const { getAllForums, joinForum, cancelJoinForumRequest } = useSelector(
+  const params = useParams();
+  const { getForumsByUserId, joinForum, cancelJoinForumRequest } = useSelector(
     (state) => state.forums
   );
 
@@ -44,13 +46,18 @@ const Group = () => {
     }
   };
   useEffect(() => {
+    const data2 = { queryParams: { pageNumber, pageSize, userId: params.id } };
+    dispatch(triggerGetForumsByUserId(data2));
+  }, [params?.id]);
+
+  useEffect(() => {
     if (
-      getAllForums.status === 'successful' &&
-      Array.isArray(getAllForums.data.forums)
+      getForumsByUserId.status === 'successful' &&
+      Array.isArray(getForumsByUserId.data.forums)
     ) {
-      setGetAllForumsLocal(getAllForums.data.forums);
+      setGetAllForumsLocal(getForumsByUserId.data.forums);
     }
-  }, [getAllForums]);
+  }, [getForumsByUserId]);
   useEffect(() => {
     const data = _.cloneDeep(getAllForumsLocal);
     const setBactToDefault = () => {
@@ -134,102 +141,112 @@ const Group = () => {
   }, [joinForum.status, cancelJoinForumRequest.status]);
   return (
     <div className='dashboard-card group-wrapper'>
-      {getAllForums.status === 'base' || getAllForums.status === 'loading' ? (
-        <>
-          <GroupLoader />
-        </>
-      ) : getAllForums.status === 'successful' ? (
-        <>
-          <div className='d-flex justify-content-between align-items-center'>
-            <div className='dashboard-header'>Groups</div>
-            {getAllForumsLocal.length > 2 && (
-              <div onClick={() => navigate('/forums/all')}>
-                <button className='dashboard-text'>See more</button>
-              </div>
-            )}
-          </div>
-          <div className='row mt-2 gap-md-0 gap-3 flex-wrap'>
-            {getAllForumsLocal.slice(0, 2)?.map((group, index) => (
-              <div key={index} className='col-md'>
-                <div className='d-flex gap-3 flex-wrap align-items-start'>
-                  <div
-                    className='group-image'
-                    onClick={() => navigate(`/forums/${group.forumId}`)}
-                  >
-                    <img
-                      src={group.imageUrl ?? forumDefault}
-                      alt='group-img'
-                      className=''
-                    />
-                  </div>
-                  <div>
-                    <div
-                      onClick={() => navigate(`/forums/${group.forumId}`)}
-                      className='dashboard-header forum-name'
-                    >
-                      {group.forumName}
-                    </div>
-                    <div className='d-flex justify-content-between'>
-                      <div className='dashboard-text'>
-                        {group.userCount}{' '}
-                        {`Member${group.userCount > 0 ? 's' : ''}`}
-                      </div>
-                      <div className='d-xl-none'>
-                        {group.requestStatus === 'loading' ? (
-                          <button className='join-btn join-btn-2'>
-                            Loading...
-                          </button>
-                        ) : group.forumMembershipStatus === 'NotAMember' ? (
-                          <button
-                            className={`join-btn join-btn-2 not-a-member`}
-                            onClick={(e) => handleJoinForum(e, group)}
+      <>
+        <div className='d-flex justify-content-between align-items-center'>
+          <div className='dashboard-header'>Groups</div>
+          {getAllForumsLocal.length > 2 && (
+            <div onClick={() => navigate('/forums/all')}>
+              <button className='dashboard-text'>See more</button>
+            </div>
+          )}
+        </div>
+        <div className='row mt-2 gap-md-0 gap-3 flex-wrap'>
+          {getForumsByUserId.status === 'base' ||
+          getForumsByUserId.status === 'loading' ? (
+            <GroupLoader />
+          ) : getForumsByUserId.status === 'successful' ? (
+            <>
+              {getAllForumsLocal.length === 0  || true? (
+                <div className='dashboard-text'>No groups</div>
+              ) : (
+                <>
+                  {getAllForumsLocal.slice(0, 2)?.map((group, index) => (
+                    <div key={index} className='col-md'>
+                      <div className='d-flex gap-3 flex-wrap align-items-start'>
+                        <div
+                          className='group-image'
+                          onClick={() => navigate(`/forums/${group.forumId}`)}
+                        >
+                          <img
+                            src={group.imageUrl ?? forumDefault}
+                            alt='group-img'
+                            className=''
+                          />
+                        </div>
+                        <div>
+                          <div
+                            onClick={() => navigate(`/forums/${group.forumId}`)}
+                            className='dashboard-header forum-name'
                           >
-                            + Join
-                          </button>
-                        ) : group.forumMembershipStatus === 'PendingRequest' ? (
-                          <button
-                            className={`join-btn join-btn-2 pending `}
-                            onClick={(e) => handleJoinForum(e, group)}
-                          >
-                            Cancel Request
-                          </button>
-                        ) : (
-                          <></>
-                        )}
+                            {group.forumName}
+                          </div>
+                          <div className='d-flex justify-content-between'>
+                            <div className='dashboard-text'>
+                              {group.userCount}{' '}
+                              {`Member${group.userCount > 0 ? 's' : ''}`}
+                            </div>
+                            <div className='d-xl-none'>
+                              {group.requestStatus === 'loading' ? (
+                                <button className='join-btn join-btn-2'>
+                                  Loading...
+                                </button>
+                              ) : group.forumMembershipStatus ===
+                                'NotAMember' ? (
+                                <button
+                                  className={`join-btn join-btn-2 not-a-member`}
+                                  onClick={(e) => handleJoinForum(e, group)}
+                                >
+                                  + Join
+                                </button>
+                              ) : group.forumMembershipStatus ===
+                                'PendingRequest' ? (
+                                <button
+                                  className={`join-btn join-btn-2 pending `}
+                                  onClick={(e) => handleJoinForum(e, group)}
+                                >
+                                  Cancel Request
+                                </button>
+                              ) : (
+                                <></>
+                              )}
+                            </div>
+                          </div>
+                        </div>
+                        <div className='d-xl-block d-none'>
+                          {group.requestStatus === 'loading' ? (
+                            <button className='join-btn join-btn-2'>
+                              Loading...
+                            </button>
+                          ) : group.forumMembershipStatus === 'NotAMember' ? (
+                            <button
+                              className={`join-btn join-btn-2 not-a-member`}
+                              onClick={(e) => handleJoinForum(e, group)}
+                            >
+                              + Join
+                            </button>
+                          ) : group.forumMembershipStatus ===
+                            'PendingRequest' ? (
+                            <button
+                              className={`join-btn join-btn-2 pending `}
+                              onClick={(e) => handleJoinForum(e, group)}
+                            >
+                              Cancel Request
+                            </button>
+                          ) : (
+                            <></>
+                          )}
+                        </div>
                       </div>
                     </div>
-                  </div>
-                  <div className='d-xl-block d-none'>
-                    {group.requestStatus === 'loading' ? (
-                      <button className='join-btn join-btn-2'>
-                        Loading...
-                      </button>
-                    ) : group.forumMembershipStatus === 'NotAMember' ? (
-                      <button
-                        className={`join-btn join-btn-2 not-a-member`}
-                        onClick={(e) => handleJoinForum(e, group)}
-                      >
-                        + Join
-                      </button>
-                    ) : group.forumMembershipStatus === 'PendingRequest' ? (
-                      <button
-                        className={`join-btn join-btn-2 pending `}
-                        onClick={(e) => handleJoinForum(e, group)}
-                      >
-                        Cancel Request
-                      </button>
-                    ) : (
-                      <></>
-                    )}
-                  </div>
-                </div>
-              </div>
-            ))}
-          </div>
-        </>
-      ) : (
-        <></>
-      )}
+                  ))}
+                </>
+              )}
+            </>
+          ) : (
+            <></>
+          )}
+        </div>
+      </>
     </div>
   );
 };

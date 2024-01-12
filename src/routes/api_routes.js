@@ -107,6 +107,9 @@ const apiRoutes = {
   getForumConnectionStatusById: '/Forums/GetForumMembershipStatus',
   getAllForumsByIndustry: '/Forums/GetAllForumsByIndustry',
   getAllForumsByLocation: '/Forums/GetAllForumsByLocation',
+  getForumsByUserId: '/Forums/GetForumsByUserId',
+  getForumMembershipStatus: '/Forums/GetForumMembershipStatus',
+
   //Forums Membership
   acceptForumJoinRequest: '/ForumsMembership/AcceptForumJoinRequest',
   rejectForumJoinRequest: '/ForumsMembership/RejectForumJoinRequest',

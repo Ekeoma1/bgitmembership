@@ -22,16 +22,15 @@ const Dashboard = () => {
 
   const [pageNumber] = useState(1);
   const [pageSize] = useState(10);
+
   useEffect(() => {
     window.scrollTo(0, 0);
   }, []);
   const [from, setFrom] = useState('');
+
   useEffect(() => {
     const data = { queryParams: { userId: param?.id } };
     dispatch(triggerGetUserProfileById(data));
-
-    const data2 = { queryParams: { pageNumber, pageSize } };
-    dispatch(triggerGetAllForums(data2));
   }, [param?.id]);
 
   useEffect(() => {

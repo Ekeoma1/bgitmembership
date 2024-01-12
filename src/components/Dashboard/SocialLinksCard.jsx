@@ -99,14 +99,11 @@ const SocialLinksCard = ({ othersView, data }) => {
     if (getSocialLinksByUserId.status === 'successful') {
       console.log('formDataTemp########', getSocialLinksByUserId.data);
       if (getSocialLinksByUserId.data?.length === 0) {
-        // console.log('0##############');
       } else {
         setFormData(getSocialLinksByUserId.data);
       }
     }
   }, [getSocialLinksByUserId]);
-  // console.log('formData', formData);
-  // console.log('getSocialLinks', getSocialLinks);
 
   return (
     <div className='dashboard-card social-links-wrapper'>

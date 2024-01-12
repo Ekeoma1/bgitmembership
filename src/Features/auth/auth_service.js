@@ -13,12 +13,10 @@ export default class AuthService {
 
   // sign in
   static async signin(data) {
-    // console.log('trying to sign in');
     const response = await post({
       url: apiRoutes.signin,
       data: { ...data },
     });
-    // console.log('resopnse here', response);
     this._saveToken(response);
     return response;
   }
@@ -40,6 +38,10 @@ export default class AuthService {
     });
     return response;
   }
+  // static _getToken() {
+  //   const token = JSON.parse(localStorage.getItem('token'));
+  //   return token;
+  // }
 
   static _saveToken(data) {
     localStorage.setItem('token', JSON.stringify(data.token));

@@ -87,13 +87,20 @@ export default class ForumsService {
     });
     return response;
   }
-
-  static _getToken() {
-    const token = JSON.parse(localStorage.getItem('token'));
-    return token;
+  static async getForumsByUserId(data) {
+    const response = await get({
+      url: apiRoutes.getForumsByUserId,
+      data: { ...data },
+      queryParams: data.queryParams,
+    });
+    return response;
   }
-
-  static _removeToken() {
-    localStorage.removeItem('token');
+  static async getForumMembershipStatus(data) {
+    const response = await get({
+      url: apiRoutes.getForumMembershipStatus,
+      data: { ...data },
+      queryParams: data.queryParams,
+    });
+    return response;
   }
 }
