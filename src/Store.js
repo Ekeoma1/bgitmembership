@@ -14,6 +14,7 @@ import accountPrivaciesReducer from './Features/account-privacies/account_privac
 import notificationReducer from './Features/notification/notification_slice';
 import forumsMembershipReducer from './Features/forums-membership/forums_membership_slice';
 import forumsPostReducer from './Features/forums-post/forums_post_slice';
+import otherReducer from './Features/other/other_slice';
 export default configureStore({
   reducer: {
     auth: authReducer,
@@ -31,6 +32,7 @@ export default configureStore({
     notification: notificationReducer,
     forumsMembership: forumsMembershipReducer,
     forumsPost: forumsPostReducer,
+    other: otherReducer,
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({

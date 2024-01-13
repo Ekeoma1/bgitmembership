@@ -275,17 +275,19 @@ const PostCard = ({ post, getAllPostsLocal, setGetAllPostsLocal, forum }) => {
             )}
           </div>
           <div>
-            <div className='d-flex align-items-center'>
+            <div className='d-flex align-items-start'>
               <span
                 className='name'
                 onClick={() => navigate(`/users/${post?.userId}`)}
               >
                 {post?.firstName} {post?.secondName}
               </span>
-              <span className='small-circle'></span>
-              <span className='follow-btn'>
-                {post?.following ? 'following' : 'follow'}
-              </span>
+              <div className='d-flex align-items-center'>
+                <span className='small-circle'></span>
+                <span className='follow-btn'>
+                  {post?.following ? 'following' : 'follow'}
+                </span>
+              </div>
             </div>
             <div className='job-role'>{post?.userProfession}</div>
             <div className='post-time'>

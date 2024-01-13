@@ -12,6 +12,7 @@ import {
   triggerCreateForumPost,
 } from '../../Features/forums-post/forums_post_slice';
 import { useParams } from 'react-router-dom';
+import { resetShowPostModalMobile } from '../../Features/other/other_slice';
 
 const CreatePost = ({ forum }) => {
   const dispatch = useDispatch();
@@ -48,6 +49,7 @@ const CreatePost = ({ forum }) => {
     setPostContent('');
     setSelectedMedia(null);
     setSelectedMediaDispatch(null);
+    dispatch(resetShowPostModalMobile());
   };
   const handleSubmit = (e) => {
     e.preventDefault();

@@ -2,10 +2,14 @@ import React from 'react';
 import '../assets/scss/navFooter.scss';
 import Icon from './Icon';
 import { Link, NavLink } from 'react-router-dom';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
+import { setShowPostModalMobile } from '../Features/other/other_slice';
+import CreateCommunityModal from './home/PostModal';
+import PostModal from './home/PostModal';
 
 const MobileFooterNav = () => {
   const { getMyProfile } = useSelector((state) => state.users);
+  const dispatch = useDispatch();
   return (
     <div className='mobile-footer-nav-wrapper d-lg-none'>
       <div className='mobile-footer-nav'>
@@ -35,8 +39,10 @@ const MobileFooterNav = () => {
             isActive ? 'menu-item-wrapper active' : 'menu-item-wrapper'
           }
         >
-          <Icon icon='postAddIcon' />
-          <div className='menu-item'>Post</div>
+          <div onClick={() => dispatch(setShowPostModalMobile())} className=''>
+            <Icon icon='postAddIcon' />
+            <div className='menu-item'>Post</div>
+          </div>
         </NavLink>
 
         <NavLink
