@@ -13,6 +13,10 @@ import OutsideClickHandler from 'react-outside-click-handler';
 import { UserProfilePhotoLoader2 } from './Atoms/skeleton-loaders/dashboard-page/UserProfilePhotoLoader';
 import { triggerGetMyProfile } from '../Features/users/users_slice';
 import { triggerGetAllPosts } from '../Features/posts/posts_slice';
+import {
+  resetShowMobileNav,
+  setShowMobileNav,
+} from '../Features/other/other_slice';
 
 const Navbar = () => {
   // const { toggleTheme, theme } = useContext(AppContext);
@@ -28,10 +32,12 @@ const Navbar = () => {
 
   const hideMobNav = () => {
     setMobNav(false);
+    dispatch(resetShowMobileNav());
   };
 
   const showMobNav = () => {
     setMobNav(true);
+    dispatch(setShowMobileNav());
   };
 
   const toggleDropdown = () => {

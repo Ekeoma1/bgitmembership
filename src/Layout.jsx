@@ -8,12 +8,17 @@ import PostModal from './components/home/PostModal';
 
 const Layout = () => {
   const isLoggedIn = useSelector((state) => state.auth.isLoggedIn);
-  const { showPostModalMobile } = useSelector((state) => state.other);
+  const { showPostModalMobile, showMobileNav } = useSelector(
+    (state) => state.other
+  );
 
   return (
     <div
       className='layout'
-      style={{ position: showPostModalMobile ? 'fixed' : '' }}
+      style={{
+        position: showPostModalMobile || showMobileNav ? 'fixed' : '',
+        width: '100%',
+      }}
     >
       <PostModal />
       <Navbar />

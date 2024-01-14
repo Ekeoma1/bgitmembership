@@ -2,6 +2,7 @@ import { createSlice } from '@reduxjs/toolkit';
 
 const initialState = {
   showPostModalMobile: false,
+  showMobileNav: false,
 };
 
 const otherSlice = createSlice({
@@ -14,8 +15,18 @@ const otherSlice = createSlice({
     resetShowPostModalMobile: (state) => {
       state.showPostModalMobile = false;
     },
+    setShowMobileNav: (state) => {
+      state.showMobileNav = true;
+    },
+    resetShowMobileNav: (state) => {
+      state.showMobileNav = false;
+    },
   },
 });
-export const { setShowPostModalMobile, resetShowPostModalMobile } =
-  otherSlice.actions;
+export const {
+  setShowPostModalMobile,
+  resetShowPostModalMobile,
+  setShowMobileNav,
+  resetShowMobileNav,
+} = otherSlice.actions;
 export default otherSlice.reducer;

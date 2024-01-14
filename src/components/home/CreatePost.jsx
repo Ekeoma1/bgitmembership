@@ -20,6 +20,7 @@ const CreatePost = ({ forum }) => {
   const { createPost } = useSelector((state) => state.posts);
   const { createForumPost } = useSelector((state) => state.forumsPost);
   const { getForumById } = useSelector((state) => state.forums);
+  const { getMyProfile } = useSelector((state) => state.users);
   const [postContent, setPostContent] = useState('');
   const [selectedMedia, setSelectedMedia] = useState(null);
   const [selectedMediaDispatch, setSelectedMediaDispatch] = useState(null);
@@ -109,6 +110,22 @@ const CreatePost = ({ forum }) => {
           <option value='anyone'>Anyone</option>
           <option value='onlyFriends'>Only Friends</option>
         </select>
+      </div>
+      <div className='user-details-wrapper'>
+        <img src={getMyProfile.data.imageUrl} alt='user' />
+        <div className='details'>
+          <h5>{`${getMyProfile.data.firstName ?? ''} ${
+            getMyProfile.data.secondName ?? ''
+          }`}</h5>
+          <select
+            // onChange={(e) => setPostReach(e.target.value)}
+            name='postReach'
+            id=''
+          >
+            <option value='anyone'>Anyone</option>
+            <option value='onlyFriends'>Only Friends</option>
+          </select>
+        </div>
       </div>
 
       <div className='form'>
