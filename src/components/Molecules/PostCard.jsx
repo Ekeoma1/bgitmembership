@@ -411,7 +411,7 @@ const PostCard = ({ post, getAllPostsLocal, setGetAllPostsLocal, forum }) => {
                 .reverse()
                 .slice(0, 10)
                 .map((comment, index) => (
-                  <>
+                  <div className='single-comments-wrapper'>
                     <SingleComment
                       key={index}
                       img={comment.userProfilePicture}
@@ -429,7 +429,7 @@ const PostCard = ({ post, getAllPostsLocal, setGetAllPostsLocal, forum }) => {
                         <div className='hidden'></div>
                         <div className='con'>
                           {comment?.replies?.length > 2 && (
-                            <div className='btn-wrapper'>
+                            <div className='prev-posts-btn-wrapper'>
                               <p
                                 onClick={() => {
                                   const newObj = {
@@ -519,7 +519,7 @@ const PostCard = ({ post, getAllPostsLocal, setGetAllPostsLocal, forum }) => {
                         </div>
                       </div>
                     </>
-                  </>
+                  </div>
                 ))}
             </div>
           </div>

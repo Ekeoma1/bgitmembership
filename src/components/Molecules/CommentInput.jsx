@@ -4,7 +4,7 @@ import { FaRegSmile } from 'react-icons/fa';
 import { TbPhoto } from 'react-icons/tb';
 import { useSelector } from 'react-redux';
 import { BsSend } from 'react-icons/bs';
-const CommentInput = ({
+const CommentInput = ({ 
   name,
   value,
   onChange,
@@ -21,7 +21,7 @@ const CommentInput = ({
     }
   }, [focus]);
   return (
-    <div className='comment-input-box-component'>
+    <div className={`comment-input-box-component ${name==='reply' && 'mt-4'}`}>
       <div className='input-box'>
         <img src={getMyProfile.data?.imageUrl} alt='user-img' className='' />
         <div className='input-wrapper'>
