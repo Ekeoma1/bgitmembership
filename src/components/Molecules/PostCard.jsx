@@ -396,132 +396,136 @@ const PostCard = ({ post, getAllPostsLocal, setGetAllPostsLocal, forum }) => {
               onSubmit={() => handleSubmit('comment', post)}
               value={comment}
             />
-            <div className='comments-box'>
-              {commentType === 'comment' && (
-                <SingleComment
-                  img={getMyProfile.data?.imageUrl}
-                  name={`${getMyProfile.data?.firstName} ${getMyProfile.data?.secondName}`}
-                  role={getMyProfile.data?.profession || ''}
-                  comment={preloaderComment}
-                  loader
-                />
-              )}
-              {post.commentedUsers
-                ?.slice()
-                .reverse()
-                .slice(0, 10)
-                .map((comment, index) => (
-                  <div className='single-comments-wrapper'>
+            {(commentType === 'comment' || post.commentedUsers.length > 0) && (
+              <>
+                <div className='comments-box'>
+                  {commentType === 'comment' && (
                     <SingleComment
-                      key={index}
-                      img={comment.userProfilePicture}
-                      name={comment.userName}
-                      role={comment.profession}
-                      comment={comment.content}
-                      comment2={comment}
-                      // setLikeComment={setLikeComment}
-                      setReplyComment={() => handleReplyComment(comment)}
-                      forum={forum}
-                      idType={idType}
+                      img={getMyProfile.data?.imageUrl}
+                      name={`${getMyProfile.data?.firstName} ${getMyProfile.data?.secondName}`}
+                      role={getMyProfile.data?.profession || ''}
+                      comment={preloaderComment}
+                      loader
                     />
-                    <>
-                      <div className='child-comments-wrapper'>
-                        <div className='hidden'></div>
-                        <div className='con'>
-                          {comment?.replies?.length > 2 && (
-                            <div className='prev-posts-btn-wrapper'>
-                              <p
-                                onClick={() => {
-                                  const newObj = {
-                                    commentId: comment.commentId,
-                                    numberOfComments: 3,
-                                  };
-                                  const numOfCommentsConTemp = [
-                                    ...numOfCommentsCon,
-                                  ];
-                                  const itemExits = numOfCommentsCon.find(
-                                    (item) =>
-                                      item.commentId === comment.commentId
-                                  );
-                                  if (!itemExits) {
-                                    numOfCommentsConTemp.push(newObj);
-                                  } else {
-                                    numOfCommentsConTemp.forEach((item) => {
-                                      if (
-                                        item.commentId === comment.commentId
-                                      ) {
-                                        item.numberOfComments =
-                                          item.numberOfComments + 1;
+                  )}
+                  {post.commentedUsers
+                    ?.slice()
+                    .reverse()
+                    .slice(0, 10)
+                    .map((comment, index) => (
+                      <div className='single-comments-wrapper'>
+                        <SingleComment
+                          key={index}
+                          img={comment.userProfilePicture}
+                          name={comment.userName}
+                          role={comment.profession}
+                          comment={comment.content}
+                          comment2={comment}
+                          // setLikeComment={setLikeComment}
+                          setReplyComment={() => handleReplyComment(comment)}
+                          forum={forum}
+                          idType={idType}
+                        />
+                        <>
+                          <div className='child-comments-wrapper'>
+                            <div className='hidden'></div>
+                            <div className='con'>
+                              {comment?.replies?.length > 2 && (
+                                <div className='prev-posts-btn-wrapper'>
+                                  <p
+                                    onClick={() => {
+                                      const newObj = {
+                                        commentId: comment.commentId,
+                                        numberOfComments: 3,
+                                      };
+                                      const numOfCommentsConTemp = [
+                                        ...numOfCommentsCon,
+                                      ];
+                                      const itemExits = numOfCommentsCon.find(
+                                        (item) =>
+                                          item.commentId === comment.commentId
+                                      );
+                                      if (!itemExits) {
+                                        numOfCommentsConTemp.push(newObj);
+                                      } else {
+                                        numOfCommentsConTemp.forEach((item) => {
+                                          if (
+                                            item.commentId === comment.commentId
+                                          ) {
+                                            item.numberOfComments =
+                                              item.numberOfComments + 1;
+                                          }
+                                        });
                                       }
-                                    });
-                                  }
-                                  console.log(
-                                    'numOfCommentsConTemp',
-                                    numOfCommentsConTemp
-                                  );
-                                  setNumOfCommentsCon(numOfCommentsConTemp);
-                                  setCommentThatIsBeingReplied(comment);
-                                }}
-                              >
-                                Load prev comments
-                              </p>
+                                      console.log(
+                                        'numOfCommentsConTemp',
+                                        numOfCommentsConTemp
+                                      );
+                                      setNumOfCommentsCon(numOfCommentsConTemp);
+                                      setCommentThatIsBeingReplied(comment);
+                                    }}
+                                  >
+                                    Load prev comments
+                                  </p>
+                                </div>
+                              )}
+                              {Array.isArray(comment.replies) &&
+                                comment.replies
+                                  // .slice()
+                                  // .reverse()
+                                  // .slice(
+                                  //   -numOfCommentsCon.find(
+                                  //     (item) => item.commentId === comment.commentId
+                                  //   )?.numberOfComments || -2
+                                  // )
+                                  .map((item, index) => (
+                                    <SingleComment
+                                      key={index}
+                                      img={item.userProfilePicture}
+                                      name={`${item.firstName} ${item.secondName}`}
+                                      role={item.profession ?? 'test'}
+                                      comment={item.content}
+                                      comment2={item}
+                                      childComment
+                                      setReplyComment={() => {
+                                        setReplyChildComment(true);
+                                        setCommentThatIsBeingReplied(comment);
+                                      }}
+                                      forum={forum}
+                                      idType={idType}
+                                    />
+                                  ))}
+                              {commentType === 'reply' &&
+                                commentThatIsBeingReplied.commentId ===
+                                  comment.commentId && (
+                                  <SingleComment
+                                    img={getMyProfile.data?.imageUrl}
+                                    name={`${getMyProfile.data?.firstName} ${getMyProfile.data?.secondName}`}
+                                    role={getMyProfile.data?.profession || ''}
+                                    comment={preloaderCommentReply}
+                                    childComment
+                                    loader
+                                  />
+                                )}
+                              {replyChildComment &&
+                                commentThatIsBeingReplied.commentId ===
+                                  comment.commentId && (
+                                  <CommentInput
+                                    name={'reply'}
+                                    onChange={handleChange}
+                                    onSubmit={() => handleSubmit('reply', post)}
+                                    value={reply}
+                                    focus={replyChildComment}
+                                  />
+                                )}
                             </div>
-                          )}
-                          {Array.isArray(comment.replies) &&
-                            comment.replies
-                              // .slice()
-                              // .reverse()
-                              // .slice(
-                              //   -numOfCommentsCon.find(
-                              //     (item) => item.commentId === comment.commentId
-                              //   )?.numberOfComments || -2
-                              // )
-                              .map((item, index) => (
-                                <SingleComment
-                                  key={index}
-                                  img={item.userProfilePicture}
-                                  name={`${item.firstName} ${item.secondName}`}
-                                  role={item.profession ?? 'test'}
-                                  comment={item.content}
-                                  comment2={item}
-                                  childComment
-                                  setReplyComment={() => {
-                                    setReplyChildComment(true);
-                                    setCommentThatIsBeingReplied(comment);
-                                  }}
-                                  forum={forum}
-                                  idType={idType}
-                                />
-                              ))}
-                          {commentType === 'reply' &&
-                            commentThatIsBeingReplied.commentId ===
-                              comment.commentId && (
-                              <SingleComment
-                                img={getMyProfile.data?.imageUrl}
-                                name={`${getMyProfile.data?.firstName} ${getMyProfile.data?.secondName}`}
-                                role={getMyProfile.data?.profession || ''}
-                                comment={preloaderCommentReply}
-                                childComment
-                                loader
-                              />
-                            )}
-                          {replyChildComment &&
-                            commentThatIsBeingReplied.commentId ===
-                              comment.commentId && (
-                              <CommentInput
-                                name={'reply'}
-                                onChange={handleChange}
-                                onSubmit={() => handleSubmit('reply', post)}
-                                value={reply}
-                                focus={replyChildComment}
-                              />
-                            )}
-                        </div>
+                          </div>
+                        </>
                       </div>
-                    </>
-                  </div>
-                ))}
-            </div>
+                    ))}
+                </div>
+              </>
+            )}
           </div>
         )}
       </div>
