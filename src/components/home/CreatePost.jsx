@@ -106,12 +106,13 @@ const CreatePost = ({ forum }) => {
           // onChange={(e) => setPostReach(e.target.value)}
           name='postReach'
           id=''
+          className='desktop-view-postreach'
         >
           <option value='anyone'>Anyone</option>
           <option value='onlyFriends'>Only Friends</option>
         </select>
       </div>
-      <div className='user-details-wrapper'>
+      <div className='mobile-view-user-details-wrapper'>
         <img src={getMyProfile.data.imageUrl} alt='user' />
         <div className='details'>
           <h5>{`${getMyProfile.data.firstName ?? ''} ${

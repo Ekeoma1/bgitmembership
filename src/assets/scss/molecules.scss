@@ -1245,13 +1245,22 @@
     padding: 0 5px;
     font-size: 12px;
     border-radius: 30px;
+    &.desktop-view-postreach {
+      display: block;
+      @media screen and (max-width: '900px') {
+        display: none;
+      }
+    }
   }
 
-  .user-details-wrapper {
+  .mobile-view-user-details-wrapper {
+    display: none;
     margin-top: 2rem;
-    display: flex;
     align-items: center;
-    column-gap: 2rem;
+    column-gap: 1.5rem;
+    @media screen and (max-width: '900px') {
+      display: flex;
+    }
     img {
       width: 49px;
       height: 49px;
@@ -1260,8 +1269,7 @@
       border-radius: 50%;
       object-fit: cover;
     }
-    .details{
-      
+    .details {
     }
   }
 
