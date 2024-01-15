@@ -40,11 +40,6 @@ const MyUpdates = ({ forum }) => {
     }
   }, []);
 
-  console.log(
-    'getPendingJoinRequestsByForumId',
-    getPendingJoinRequestsByForumId
-  );
-
   return (
     <div className='my-updates-wrapper shadow-sm'>
       {!forum && (

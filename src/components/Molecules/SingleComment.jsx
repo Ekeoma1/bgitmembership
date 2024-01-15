@@ -36,11 +36,16 @@ const SingleComment = ({
   comment2,
   forum,
   idType,
+  getAllPostsLocal,
+  setGetAllPostsLocal,
+  post,
+  activePostThatIsBeingReplied,
 }) => {
   const dispatch = useDispatch();
   const [commentLocal, setCommentLocal] = useState({ ...comment2 });
   const [childCommentLocal, setChildCommentLocal] = useState({ ...comment2 });
-  const [activeComment, setActiveComment] = useState({});
+  const [activePost, setActivePost] = useState({});
+  // const [activeComment, setActiveComment] = useState({});
   // const [likeCurrentComment, setLikeCurrentComment] = useState(
   //   comment2?.isCommentLikedByCurrentUser
   // );
@@ -51,7 +56,7 @@ const SingleComment = ({
   const timeoutIdRef2 = useRef(null);
   const handleLikeUnlikeComment = (commentParam) => {
     if (!childComment) {
-      setActiveComment(commentParam);
+      // setActiveComment(commentParam);
       // const data = _.cloneDeep(getAllPostsLocal);
       const startTimeout = () => {
         timeoutIdRef.current = setTimeout(() => {
@@ -83,7 +88,7 @@ const SingleComment = ({
       console.log('temp', temp);
       setCommentLocal(temp);
     } else {
-      setActiveComment(commentParam);
+      // setActiveComment(commentParam);
       console.log('childcomment');
       // const data = _.cloneDeep(getAllPostsLocal);
       const startTimeout = () => {
@@ -116,7 +121,51 @@ const SingleComment = ({
           ? childCommentLocal.likeCount - 1
           : childCommentLocal.likeCount + 1,
       };
+      console.log('temp############', temp);
       setChildCommentLocal(temp);
+
+      const getallpostslocalTemp = getAllPostsLocal.map((item) => {
+        const objMain = { ...item };
+        if ((item.postId = activePostThatIsBeingReplied.postId)) {
+          console.log('activepostthatisbeingreplied');
+          const commentedUsers = objMain.commentedUsers?.map((user) => {
+            let obj = { ...user };
+            if (user.commentId === temp.commentId) {
+              obj = temp;
+            }
+            return obj;
+          });
+          objMain.commentedUsers = [...commentedUsers];
+        }
+        return objMain;
+      });
+
+      // setGetAllPostsLocal(getallpostslocalTemp);
+
+      // const getAllPostsLocalTemp = getAllPostsLocal.map((item) => {
+      //   const objMain = { ...item };
+
+      //   if (item.postId === activePostThatIsBeingReplied.postId) {
+      //     console.log('activepostthatisbeingreplied');
+      //     const commentedUsers = objMain.commentedUsers.map((commentedUser) => {
+      //       const obj = {
+      //         ...commentedUser,
+      //       };
+      //       if (commentedUser.commentId === comment.commentId) {
+      //         console.log('#######second');
+      //         if (obj.numberOfRepliesToDisplay) {
+      //           obj.numberOfRepliesToDisplay = obj.numberOfRepliesToDisplay + 1;
+      //         } else {
+      //           obj.numberOfRepliesToDisplay = 3;
+      //         }
+      //       }
+      //       return obj;
+      //     });
+      //     objMain.commentedUsers = [...commentedUsers];
+      //   }
+
+      //   return objMain;
+      // });
     }
   };
 

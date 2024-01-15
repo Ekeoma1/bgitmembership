@@ -36,6 +36,7 @@ import {
   triggerUnlikeForumPost,
   triggerUnsaveForumPost,
 } from '../../Features/forums-post/forums_post_slice';
+import MainButton from './MainButton';
 
 const PostCard = ({ post, getAllPostsLocal, setGetAllPostsLocal, forum }) => {
   const navigate = useNavigate();
@@ -249,8 +250,18 @@ const PostCard = ({ post, getAllPostsLocal, setGetAllPostsLocal, forum }) => {
     setGetAllPostsLocal,
     getAllCommentsByForumPostId,
   ]);
+  const [activePostThatIsBeingReplied, setActivePostThatIsBeingReplied] =
+    useState({});
+  const [numberOfCommentsToDisplay, setNumberOfCommentsToDisplay] = useState(2);
+  const [numberOfRepliesToDisplay, setNumberOfRepliesToDisplay] = useState(2);
+  const [commentedUsersState, setCommentedUsersState] = useState([]);
 
-  // console.log('getallpostslocal', getAllPostsLocal);
+  if (post.postId === '06642326-4034-4d74-41bc-08dc1532c7c5') {
+    console.log('getallpostslocal post', post);
+  }
+  if (post.postId === '06642326-4034-4d74-41bc-08dc1532c7c5') {
+    console.log('commentedUsersState', commentedUsersState);
+  }
 
   return (
     <div className='post-card shadow-sm mx-auto'>
@@ -355,6 +366,7 @@ const PostCard = ({ post, getAllPostsLocal, setGetAllPostsLocal, forum }) => {
             <button
               onClick={() => {
                 setShowCommentsSection(!showCommentsSection);
+                setActivePostThatIsBeingReplied(post);
               }}
             >
               <Icon icon='comment' />
@@ -396,7 +408,7 @@ const PostCard = ({ post, getAllPostsLocal, setGetAllPostsLocal, forum }) => {
               onSubmit={() => handleSubmit('comment', post)}
               value={comment}
             />
-            {(commentType === 'comment' || post.commentedUsers.length > 0) && (
+            {(commentType === 'comment' || post.commentedUsers?.length > 0) && (
               <>
                 <div className='comments-box'>
                   {commentType === 'comment' && (
@@ -411,118 +423,171 @@ const PostCard = ({ post, getAllPostsLocal, setGetAllPostsLocal, forum }) => {
                   {post.commentedUsers
                     ?.slice()
                     .reverse()
-                    .slice(0, 10)
-                    .map((comment, index) => (
-                      <div className='single-comments-wrapper'>
-                        <SingleComment
-                          key={index}
-                          img={comment.userProfilePicture}
-                          name={comment.userName}
-                          role={comment.profession}
-                          comment={comment.content}
-                          comment2={comment}
-                          // setLikeComment={setLikeComment}
-                          setReplyComment={() => handleReplyComment(comment)}
-                          forum={forum}
-                          idType={idType}
-                        />
-                        <>
-                          <div className='child-comments-wrapper'>
-                            <div className='hidden'></div>
-                            <div className='con'>
-                              {comment?.replies?.length > 2 && (
-                                <div className='prev-posts-btn-wrapper'>
-                                  <p
-                                    onClick={() => {
-                                      const newObj = {
-                                        commentId: comment.commentId,
-                                        numberOfComments: 3,
-                                      };
-                                      const numOfCommentsConTemp = [
-                                        ...numOfCommentsCon,
-                                      ];
-                                      const itemExits = numOfCommentsCon.find(
-                                        (item) =>
-                                          item.commentId === comment.commentId
-                                      );
-                                      if (!itemExits) {
-                                        numOfCommentsConTemp.push(newObj);
-                                      } else {
-                                        numOfCommentsConTemp.forEach((item) => {
-                                          if (
-                                            item.commentId === comment.commentId
-                                          ) {
-                                            item.numberOfComments =
-                                              item.numberOfComments + 1;
-                                          }
-                                        });
-                                      }
-                                      console.log(
-                                        'numOfCommentsConTemp',
-                                        numOfCommentsConTemp
-                                      );
-                                      setNumOfCommentsCon(numOfCommentsConTemp);
-                                      setCommentThatIsBeingReplied(comment);
-                                    }}
-                                  >
-                                    Load prev comments
-                                  </p>
-                                </div>
-                              )}
-                              {Array.isArray(comment.replies) &&
-                                comment.replies
-                                  // .slice()
-                                  // .reverse()
-                                  // .slice(
-                                  //   -numOfCommentsCon.find(
-                                  //     (item) => item.commentId === comment.commentId
-                                  //   )?.numberOfComments || -2
-                                  // )
-                                  .map((item, index) => (
-                                    <SingleComment
-                                      key={index}
-                                      img={item.userProfilePicture}
-                                      name={`${item.firstName} ${item.secondName}`}
-                                      role={item.profession ?? 'test'}
-                                      comment={item.content}
-                                      comment2={item}
-                                      childComment
-                                      setReplyComment={() => {
-                                        setReplyChildComment(true);
-                                        setCommentThatIsBeingReplied(comment);
+                    .slice(0, numberOfCommentsToDisplay)
+                    .map((comment, index) => {
+                      return (
+                        <div className='single-comments-wrapper'>
+                          <SingleComment
+                            key={index}
+                            img={comment.userProfilePicture}
+                            name={comment.userName}
+                            role={comment.profession}
+                            comment={comment.content}
+                            comment2={comment}
+                            // setLikeComment={setLikeComment}
+                            setReplyComment={() => handleReplyComment(comment)}
+                            forum={forum}
+                            idType={idType}
+                          />
+                          <>
+                            <div className='child-comments-wrapper'>
+                              <div className='hidden'></div>
+                              <div className='con'>
+                                {comment?.replies?.length > 2 && (
+                                  <div className='prev-posts-btn-wrapper'>
+                                    <p
+                                      onClick={() => {
+                                        const getAllPostsLocalTemp =
+                                          getAllPostsLocal.map((item) => {
+                                            const objMain = { ...item };
+
+                                            if (item.postId === post.postId) {
+                                              console.log('#######first');
+                                              const commentedUsers =
+                                                objMain.commentedUsers.map(
+                                                  (commentedUser) => {
+                                                    const obj = {
+                                                      ...commentedUser,
+                                                    };
+                                                    if (
+                                                      commentedUser.commentId ===
+                                                      comment.commentId
+                                                    ) {
+                                                      console.log(
+                                                        '#######second'
+                                                      );
+                                                      if (
+                                                        obj.numberOfRepliesToDisplay
+                                                      ) {
+                                                        obj.numberOfRepliesToDisplay =
+                                                          obj.numberOfRepliesToDisplay +
+                                                          1;
+                                                      } else {
+                                                        obj.numberOfRepliesToDisplay = 3;
+                                                      }
+                                                    }
+                                                    return obj;
+                                                  }
+                                                );
+                                              objMain.commentedUsers = [
+                                                ...commentedUsers,
+                                              ];
+                                            }
+
+                                            return objMain;
+                                          });
+                                        console.log(
+                                          'getAllPostsLocalTemp',
+                                          getAllPostsLocalTemp
+                                        );
+                                        setGetAllPostsLocal(
+                                          getAllPostsLocalTemp
+                                        );
+                                        // setNumberOfRepliesToDisplay(
+                                        //   (prevState) => prevState + 1
+                                        // );
                                       }}
-                                      forum={forum}
-                                      idType={idType}
+                                    >
+                                      Load prev comments
+                                    </p>
+                                  </div>
+                                )}
+                                {Array.isArray(comment.replies) &&
+                                  comment.replies
+                                    // .slice()
+                                    // .reverse()
+                                    // .slice(
+                                    //   -numOfCommentsCon.find(
+                                    //     (item) => item.commentId === comment.commentId
+                                    //   )?.numberOfComments || -2
+                                    // )
+                                    // ?.slice()
+                                    // .reverse()
+                                    .slice(
+                                      -comment.numberOfRepliesToDisplay || -2
+                                    )
+                                    .map((item, index) => (
+                                      <SingleComment
+                                        key={index}
+                                        img={item.userProfilePicture}
+                                        name={`${item.firstName} ${item.secondName}`}
+                                        role={item.profession ?? 'test'}
+                                        comment={item.content}
+                                        comment2={item}
+                                        childComment
+                                        setReplyComment={() => {
+                                          setReplyChildComment(true);
+                                          setCommentThatIsBeingReplied(comment);
+                                        }}
+                                        forum={forum}
+                                        idType={idType}
+                                        post={post}
+                                        getAllPostsLocal={getAllPostsLocal}
+                                        setGetAllPostsLocal={
+                                          setGetAllPostsLocal
+                                        }
+                                        activePostThatIsBeingReplied={
+                                          activePostThatIsBeingReplied
+                                        }
+                                      />
+                                    ))}
+                                {commentType === 'reply' &&
+                                  commentThatIsBeingReplied.commentId ===
+                                    comment.commentId && (
+                                    <SingleComment
+                                      img={getMyProfile.data?.imageUrl}
+                                      name={`${getMyProfile.data?.firstName} ${getMyProfile.data?.secondName}`}
+                                      role={getMyProfile.data?.profession || ''}
+                                      comment={preloaderCommentReply}
+                                      childComment
+                                      loader
                                     />
-                                  ))}
-                              {commentType === 'reply' &&
-                                commentThatIsBeingReplied.commentId ===
-                                  comment.commentId && (
-                                  <SingleComment
-                                    img={getMyProfile.data?.imageUrl}
-                                    name={`${getMyProfile.data?.firstName} ${getMyProfile.data?.secondName}`}
-                                    role={getMyProfile.data?.profession || ''}
-                                    comment={preloaderCommentReply}
-                                    childComment
-                                    loader
-                                  />
-                                )}
-                              {replyChildComment &&
-                                commentThatIsBeingReplied.commentId ===
-                                  comment.commentId && (
-                                  <CommentInput
-                                    name={'reply'}
-                                    onChange={handleChange}
-                                    onSubmit={() => handleSubmit('reply', post)}
-                                    value={reply}
-                                    focus={replyChildComment}
-                                  />
-                                )}
+                                  )}
+                                {replyChildComment &&
+                                  commentThatIsBeingReplied.commentId ===
+                                    comment.commentId && (
+                                    <CommentInput
+                                      name={'reply'}
+                                      onChange={handleChange}
+                                      onSubmit={() =>
+                                        handleSubmit('reply', post)
+                                      }
+                                      value={reply}
+                                      focus={replyChildComment}
+                                    />
+                                  )}
+                              </div>
                             </div>
-                          </div>
-                        </>
-                      </div>
-                    ))}
+                          </>
+                        </div>
+                      );
+                    })}
+                  {post.commentedUsers.length > 2 && (
+                    <MainButton
+                      text={'Show more'}
+                      onClick={() =>
+                        setNumberOfCommentsToDisplay(
+                          (prevState) => prevState + 1
+                        )
+                      }
+                      disabled={
+                        post.commentedUsers.length === numberOfCommentsToDisplay
+                      }
+                      size={'small'}
+                      // padding={'0'}
+                      width={'30rem'}
+                    />
+                  )}
                 </div>
               </>
             )}

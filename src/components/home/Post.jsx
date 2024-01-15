@@ -121,7 +121,7 @@ const Post = ({ forum }) => {
               <>
                 {getAllPosts.data ? (
                   <>
-                    {getAllPostsLocal.length === 0 ? (
+                    {getAllPostsLocal?.length === 0 ? (
                       <EmptyState
                         title={'No posts to show yet'}
                         info={'Make a post, contribute to the platform'}
