@@ -110,6 +110,7 @@ const CreateCommunityModal = () => {
       }));
     }
   };
+  
   const handleInputChange = (event) => {
     const { value } = event.target;
     if (value === '.') {
