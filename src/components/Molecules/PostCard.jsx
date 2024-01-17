@@ -262,7 +262,7 @@ const PostCard = ({ post, getAllPostsLocal, setGetAllPostsLocal, forum }) => {
   if (post.postId === '06642326-4034-4d74-41bc-08dc1532c7c5') {
     console.log('commentedUsersState', commentedUsersState);
   }
-
+  // console.log('getPostsLocal', getAllPostsLocal);
   return (
     <div className='post-card shadow-sm mx-auto'>
       <div className='post-card-header'>
