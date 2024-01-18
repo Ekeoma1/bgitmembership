@@ -217,7 +217,7 @@ const CreateCommunityModal = () => {
                     </div>
 
                     <textarea
-                      placeholder='Rules about the group (seperate each rule with a comma)'
+                      placeholder='Rules about the group (seperate each rule with a fullstop)'
                       onChange={handleInputChange}
                       onKeyPress={handleKeyPress}
                       name='infoJson'
