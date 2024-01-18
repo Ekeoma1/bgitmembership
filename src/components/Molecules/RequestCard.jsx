@@ -85,7 +85,7 @@ const RequestCard = ({ request, setActiveRequest, forum }) => {
             : `${request.senderFirstName} ${request.senderSecondName}`.length > 40
             ? `${request.senderFirstName} ${request.senderSecondName}`.substring(0, 40) +
               '...'
-            : `${request.senderFirstName} ${request.senderSecondName}`}
+            : `${request.senderFirstName} ${request.senderSecondName}`} 
         </h3>
         <p>
           Interests: {forum ? request.profession : request.senderProfession}
