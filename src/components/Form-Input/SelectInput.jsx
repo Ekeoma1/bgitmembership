@@ -36,8 +36,10 @@ const SelectInput = ({ name, ...props }) => {
   // }, []);
 
   const handleChange = (event) => {
-    const selectedValue = Number(event.target.value);
-    setFieldValue(name, selectedValue);
+    if (event.target.value !== 'select-option') {
+      const selectedValue = Number(event.target.value);
+      setFieldValue(name, selectedValue);
+    }
   };
 
   return (
@@ -51,7 +53,7 @@ const SelectInput = ({ name, ...props }) => {
         {...props}
         onChange={handleChange}
       >
-        <option value=''>Select an option</option>
+        <option value='select-option'>Select an option</option>
         {options.map((option) => (
           <option key={option.id} value={Number(option.id)}>
             {option.label}
