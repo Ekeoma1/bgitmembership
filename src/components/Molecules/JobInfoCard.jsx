@@ -2,6 +2,7 @@ import moment from 'moment';
 import '../../assets/scss/molecules.scss';
 import Icon from '../Icon';
 import MainButton from './MainButton';
+import { FaBookmark, FaRegBookmark } from 'react-icons/fa';
 
 const JobInfoCard = ({
   jobSelected,
@@ -11,6 +12,7 @@ const JobInfoCard = ({
   getAllJobsLocal,
   setGetAllJobsLocal,
 }) => {
+  console.log('jobSelected', jobSelected);
   return (
     <div className='job-info'>
       <div className='back' onClick={() => setShowJobInfo(false)}>
@@ -20,14 +22,18 @@ const JobInfoCard = ({
         <div className='role-con'>
           <h4 className='role'>{jobSelected?.job?.jobTitle}</h4>
           <p className='company'>{jobSelected?.job?.company}</p>
-          <p className='location'>{jobSelected?.job?.location}</p>
         </div>
         <div className='hybrid'>
-          <div className='icon'>
-            <Icon icon={'tag'} />
-          </div>
-          <p>{jobSelected?.job?.workPlacePolicy}</p>
+          {jobSelected?.isSaved ? (
+            <FaBookmark className='icon active' />
+          ) : (
+            <FaRegBookmark className='icon' />
+          )}
         </div>
+      </div>
+      <div className='location-con'>
+        <p className=''>{jobSelected?.job?.location}</p>
+        <p>{jobSelected?.job?.workPlacePolicy}</p>
       </div>
       <div className='sec-2'>
         <div className='detail d-flex gap-4'>
@@ -70,11 +76,13 @@ const JobInfoCard = ({
       </div>
 
       <div className='btn'>
-        <MainButton
-          text={'Apply'}
-          size={'small'}
-          onClick={() => setApply(true)}
-        />
+        {!jobSelected.hasApplied && (
+          <MainButton
+            text={'Apply'}
+            size={'small'}
+            onClick={() => setApply(true)}
+          />
+        )}
         <MainButton
           text={'Cancel'}
           size={'small'}

@@ -282,19 +282,18 @@
               font-weight: 600;
               line-height: normal;
             }
-            .location {
-              color: rgba(0, 0, 0, 0.81);
-              font-size: 1.8rem;
-              font-style: normal;
-              font-weight: 500;
-              line-height: normal;
-            }
           }
           .hybrid {
             display: flex;
             flex-direction: column;
             align-items: flex-end;
             row-gap: 5.1rem;
+            .icon {
+              font-size: 4rem;
+              &.active {
+                color: #ff66c4;
+              }
+            }
             p {
               color: rgba(0, 0, 0, 0.81);
               font-size: 1.8rem;
@@ -302,6 +301,18 @@
               font-weight: 500;
               line-height: normal;
             }
+          }
+        }
+        .location-con {
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+          p {
+            color: rgba(0, 0, 0, 0.81);
+            font-size: 1.8rem;
+            font-style: normal;
+            font-weight: 500;
+            line-height: normal;
           }
         }
         .sec-2 {
