@@ -41,8 +41,8 @@ const Updates = () => {
         </div>
       </div>
       <Requests forum={params.type === 'forum'} />
-      {/* <WhatsNew />
-      <News /> */}
+      <WhatsNew />
+      <News />
     </div>
   );
 };

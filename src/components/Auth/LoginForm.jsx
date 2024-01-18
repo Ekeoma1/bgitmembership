@@ -63,7 +63,7 @@ const LoginForm = ({ forLogin, regFirstStep }) => {
     } else if (signin.status === 'error') {
       renderToast({
         status: 'error',
-        message: 'Something went wrong. Check your internet and try again',
+        message: 'Username or password incorrect',
       });
       dispatch(resetSignIn());
     }

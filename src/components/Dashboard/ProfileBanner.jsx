@@ -34,6 +34,7 @@ import {
   triggerAcceptConnectionRequest,
   triggerRejectConnectionRequest,
   resetAcceptConnectionRequest,
+  resetRejectConnectionRequest,
 } from '../../Features/connections/connections_slice';
 import { resetReportUser } from '../../Features/reports/reports_slice';
 import { renderToast } from '../Molecules/CustomToastify';
@@ -227,7 +228,7 @@ const ProfileBanner = ({ data, from, setFrom }) => {
         });
         const data = { queryParams: { userId: param?.id } };
         dispatch(triggerGetConnectionStatusByUserId(data));
-        dispatch(resetAcceptConnectionRequest());
+        dispatch(resetRejectConnectionRequest());
       }
     }
 
@@ -576,7 +577,8 @@ const ProfileBanner = ({ data, from, setFrom }) => {
                 <div className='row gap-md-0 gap-2'>
                   <div className='col-md-6'>
                     <h2 className='profile-name'>
-                      {data?.data?.firstName} {data?.data?.secondName}
+                      {data?.data?.firstName} {data?.data?.additionalName || ''}
+                      {data?.data?.secondName}
                     </h2>
                     {/* Added  this so users can see their emails as well. It's not on the original design. Remove if it's not okay*/}
                     <div className='email'>{data?.data?.email}</div>

@@ -78,7 +78,13 @@ const RequestCard = ({ request, setActiveRequest, forum }) => {
           }
         >
           {forum
-            ? `${request.firstName} ${request.secondName}`
+            ? `${request.firstName} ${request.secondName}`.length > 40
+              ? `${request.firstName} ${request.secondName}`.substring(0, 40) +
+                '...'
+              : `${request.firstName} ${request.secondName}`
+            : `${request.senderFirstName} ${request.senderSecondName}`.length > 40
+            ? `${request.senderFirstName} ${request.senderSecondName}`.substring(0, 40) +
+              '...'
             : `${request.senderFirstName} ${request.senderSecondName}`}
         </h3>
         <p>
