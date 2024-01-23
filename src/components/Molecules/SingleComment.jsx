@@ -31,27 +31,17 @@ const SingleComment = ({
   loader,
   comment2,
   forum,
-  idType,
   getAllPostsLocal,
   setGetAllPostsLocal,
   post,
   loaderContent,
-  activePostThatIsBeingReplied,
 }) => {
   const dispatch = useDispatch();
   const { getMyProfile } = useSelector((state) => state.users);
-  const [childCommentLocal, setChildCommentLocal] = useState({ ...comment2 });
-  const [activePost, setActivePost] = useState({});
-  // const [activeComment, setActiveComment] = useState({});
-  // const [likeCurrentComment, setLikeCurrentComment] = useState(
-  //   comment2?.isCommentLikedByCurrentUser
-  // );
-  // const [likeCount, setlikeCount] = useState(
-  //   !childComment ? comment2?.commentLikeCount : comment2?.likeCount
-  // );
+
   const timeoutIdRef = useRef(null);
   const timeoutIdRef2 = useRef(null);
-  const handleLikeUnlikeComment = (commentParam) => {
+  const handleLikeUnlikeComment = () => {
     if (!childComment) {
       const startTimeout = () => {
         timeoutIdRef.current = setTimeout(() => {
@@ -158,7 +148,6 @@ const SingleComment = ({
       setGetAllPostsLocal(getAllPostsLocalTemp);
     }
   };
-  // console.log('getAllPostsLocal########', getAllPostsLocal);
 
   return (
     <div

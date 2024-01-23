@@ -1,17 +1,5 @@
-import React, { useEffect, useRef, useState } from 'react';
-import _ from 'lodash';
-import Icon from '../Icon';
-import '../../assets/scss/molecules.scss';
-import { useNavigate } from 'react-router-dom';
-import moment from 'moment';
-import { UserProfilePhotoLoader2 } from '../Atoms/skeleton-loaders/dashboard-page/UserProfilePhotoLoader';
-import MediaLoader from '../Atoms/skeleton-loaders/home-page/MediaLoader';
+import React, { useEffect, useState } from 'react';
 import {
-  triggerLikePost,
-  triggerSavePost,
-  triggerUnsavePost,
-  triggerUnlikePost,
-  triggerCreateComment,
   triggerReplyComment,
   resetCreateComment,
   resetReplyComment,
@@ -19,22 +7,13 @@ import {
   resetGetCommentsByPostId,
 } from '../../Features/posts/posts_slice';
 import { useDispatch, useSelector } from 'react-redux';
-import { FaRegBookmark, FaBookmark } from 'react-icons/fa';
-import OutsideClickHandler from 'react-outside-click-handler';
-import ShareModal from '../Modals/ShareModal';
 import SingleComment from './SingleComment';
 import CommentInput from './CommentInput';
 import {
-  resetCreateCommentForumPost,
   resetCreateCommentForumsPost,
   resetReplyCommentForumsPost,
-  triggerCreateCommentForumsPost,
   triggerGetAllCommentsByForumPostId,
-  triggerLikeForumPost,
   triggerReplyCommentForumsPost,
-  triggerSaveForumPost,
-  triggerUnlikeForumPost,
-  triggerUnsaveForumPost,
 } from '../../Features/forums-post/forums_post_slice';
 import SingleCommentRepliesWrapper from './SingleCommentRepliesWrapper';
 
@@ -45,37 +24,18 @@ const CommentedUser = ({
   post,
   forum,
   idType,
-  replyChildCommentMain,
-  setReplyChildCommentMain,
   createNewComment,
   setCreateNewComment,
 }) => {
-  const {
-    createComment,
-    replyComment: replyCommentRedux,
-    getCommentsByPostId,
-  } = useSelector((state) => state.posts);
-  const {
-    createCommentForumsPost,
-    getAllCommentsByForumPostId,
-    replyCommentForumsPost,
-  } = useSelector((state) => state.forumsPost);
+  const { replyComment: replyCommentRedux, getCommentsByPostId } = useSelector(
+    (state) => state.posts
+  );
+  const { getAllCommentsByForumPostId, replyCommentForumsPost } = useSelector(
+    (state) => state.forumsPost
+  );
   const dispatch = useDispatch();
   const { getMyProfile } = useSelector((state) => state.users);
-
-  const [comment, setComment] = useState('');
   const [preloaderCommentReply, setPreloaderCommentReply] = useState('');
-  const [replyChildComment, setReplyChildComment] = useState(
-    replyChildCommentMain ? false : false
-  );
-  const [commentThatIsBeingReplied, setCommentThatIsBeingReplied] = useState(
-    {}
-  );
-
-  const [actionAcctModal, setActionAcctModal] = useState(false);
-  const [profileImgOnLoadStatus, setProfileImgOnLoadStatus] = useState('base');
-  const [postImgOnLoadStatus, setPostImgOnLoadStatus] = useState('base');
-  const [postVideoOnLoadStatus, setPostVideoOnLoadStatus] = useState('base');
 
   const [reply, setReply] = useState('');
   const [replyPreloaderContent, setReplyPreloaderContent] = useState('');
@@ -83,7 +43,6 @@ const CommentedUser = ({
   const handleReplyComment = (commentedUserParam) => {
     setCreateNewComment(false);
     setActiveCommentedUser(commentedUser);
-    console.log('commentedUserParam', commentedUserParam);
     const getAllPostsLocalTemp = getAllPostsLocal.map((postItem) => {
       const postObj = { ...postItem };
       if (postItem.postId === post.postId) {
@@ -106,7 +65,6 @@ const CommentedUser = ({
       }
       return postObj;
     });
-    console.log('getAllPostsLocalTempcommentedUser', getAllPostsLocalTemp);
     setGetAllPostsLocal(getAllPostsLocalTemp);
   };
   const handleSubmit = (name, post) => {
@@ -169,7 +127,6 @@ const CommentedUser = ({
       setGetAllPostsLocal([...data]);
       dispatch(resetGetCommentsByPostId());
       setPreloaderCommentReply('');
-      setCommentThatIsBeingReplied('');
       dispatch(resetReplyComment());
       // new
       setShowLoader(false);
@@ -217,15 +174,8 @@ const CommentedUser = ({
       dispatch(resetReplyCommentForumsPost());
       dispatch(resetGetCommentsByPostId());
       setPreloaderCommentReply('');
-      setCommentThatIsBeingReplied('');
     }
   }, [getAllCommentsByForumPostId]);
-  // console.log('replyChildComment', replyChildComment);
-  // console.log(
-  //   'commentThatIsBeingReplied.commentId ',
-  //   commentThatIsBeingReplied.commentId
-  // );
-  console.log('ccreate new comment', createNewComment);
 
   return (
     <div className='single-comments-wrapper'>

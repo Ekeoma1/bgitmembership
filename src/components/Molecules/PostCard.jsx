@@ -12,7 +12,6 @@ import {
   triggerUnsavePost,
   triggerUnlikePost,
   triggerCreateComment,
-  triggerReplyComment,
   resetCreateComment,
   resetReplyComment,
   triggerGetCommentsByPostId,
@@ -25,13 +24,11 @@ import ShareModal from '../Modals/ShareModal';
 import SingleComment from './SingleComment';
 import CommentInput from './CommentInput';
 import {
-  resetCreateCommentForumPost,
   resetCreateCommentForumsPost,
   resetReplyCommentForumsPost,
   triggerCreateCommentForumsPost,
   triggerGetAllCommentsByForumPostId,
   triggerLikeForumPost,
-  triggerReplyCommentForumsPost,
   triggerSaveForumPost,
   triggerUnlikeForumPost,
   triggerUnsaveForumPost,
@@ -48,21 +45,13 @@ const PostCard = ({ post, getAllPostsLocal, setGetAllPostsLocal, forum }) => {
     replyComment: replyCommentRedux,
     getCommentsByPostId,
   } = useSelector((state) => state.posts);
-  const {
-    createCommentForumsPost,
-    getAllCommentsByForumPostId,
-    replyCommentForumsPost,
-  } = useSelector((state) => state.forumsPost);
-  const { getMyProfile } = useSelector((state) => state.users);
+  const { createCommentForumsPost, getAllCommentsByForumPostId } = useSelector(
+    (state) => state.forumsPost
+  );
   const [showCommentsSection, setShowCommentsSection] = useState(false);
   const [comment, setComment] = useState('');
   const [preloaderComment, setPreloaderComment] = useState('');
   const [reply, setReply] = useState('');
-  const [preloaderCommentReply, setPreloaderCommentReply] = useState('');
-  const [numOfCommentsCon, setNumOfCommentsCon] = useState([]);
-  const [commentThatIsBeingReplied, setCommentThatIsBeingReplied] = useState(
-    {}
-  );
 
   const [actionAcctModal, setActionAcctModal] = useState(false);
   const [profileImgOnLoadStatus, setProfileImgOnLoadStatus] = useState('base');
@@ -177,7 +166,6 @@ const PostCard = ({ post, getAllPostsLocal, setGetAllPostsLocal, forum }) => {
         !forum && dispatch(triggerGetCommentsByPostId(data));
         forum && dispatch(triggerGetAllCommentsByForumPostId(data));
       }
-      // setCreateNewComment(true);
     }
   }, [createComment, createCommentForumsPost]);
 
@@ -234,7 +222,6 @@ const PostCard = ({ post, getAllPostsLocal, setGetAllPostsLocal, forum }) => {
           return item;
         });
       }
-      console.log('useeffect data', data);
       setGetAllPostsLocal([...data]);
       dispatch(resetCreateComment());
       dispatch(resetReplyComment());
@@ -242,9 +229,7 @@ const PostCard = ({ post, getAllPostsLocal, setGetAllPostsLocal, forum }) => {
       dispatch(resetReplyCommentForumsPost());
       dispatch(resetGetCommentsByPostId());
       setPreloaderComment('');
-      setPreloaderCommentReply('');
       setCommentType('');
-      setCommentThatIsBeingReplied('');
       // new
       setNumberOfCommentsToDisplay((prevState) => prevState + 1);
     }
@@ -255,23 +240,8 @@ const PostCard = ({ post, getAllPostsLocal, setGetAllPostsLocal, forum }) => {
     setGetAllPostsLocal,
     getAllCommentsByForumPostId,
   ]);
-  const [activePostThatIsBeingReplied, setActivePostThatIsBeingReplied] =
-    useState({});
   const [numberOfCommentsToDisplay, setNumberOfCommentsToDisplay] = useState(2);
-  const [numberOfRepliesToDisplay, setNumberOfRepliesToDisplay] = useState(2);
-  const [commentedUsersState, setCommentedUsersState] = useState([]);
 
-  // if (post.postId === '06642326-4034-4d74-41bc-08dc1532c7c5') {
-  //   console.log('getallpostslocal post', post);
-  // }
-  // if (post.postId === '06642326-4034-4d74-41bc-08dc1532c7c5') {
-  //   console.log('commentedUsersState', commentedUsersState);
-  // }
-  //   const [arrayOfReplies, setArrayOfReplies] = useState([]);
-  //   useEffect(()=>{
-  // const replies=post
-  //   },getAllPostsLocal)
-  // console.log('getPostsLocalpostcard', getAllPostsLocal);
   return (
     <div className='post-card shadow-sm mx-auto'>
       <div className='post-card-header'>
@@ -444,20 +414,23 @@ const PostCard = ({ post, getAllPostsLocal, setGetAllPostsLocal, forum }) => {
                       );
                     })}
                   {post.commentedUsers?.length > 2 && (
-                    <MainButton
-                      text={'Show more'}
-                      onClick={() =>
-                        setNumberOfCommentsToDisplay(
-                          (prevState) => prevState + 1
-                        )
-                      }
-                      disabled={
-                        post.commentedUsers.length === numberOfCommentsToDisplay
-                      }
-                      size={'small'}
-                      // padding={'0'}
-                      width={'30rem'}
-                    />
+                    <div className='show-more-btn'>
+                      <MainButton
+                        text={'Load more comments'}
+                        onClick={() =>
+                          setNumberOfCommentsToDisplay(
+                            (prevState) => prevState + 1
+                          )
+                        }
+                        disabled={
+                          post.commentedUsers.length ===
+                          numberOfCommentsToDisplay
+                        }
+                        size={'small'}
+                        // padding={'0'}
+                        width={'30rem'}
+                      />
+                    </div>
                   )}
                 </div>
               </>
