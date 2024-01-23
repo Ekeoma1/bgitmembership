@@ -47,6 +47,8 @@ const CommentedUser = ({
   idType,
   replyChildCommentMain,
   setReplyChildCommentMain,
+  createNewComment,
+  setCreateNewComment,
 }) => {
   const {
     createComment,
@@ -77,8 +79,10 @@ const CommentedUser = ({
 
   const [reply, setReply] = useState('');
   const [replyPreloaderContent, setReplyPreloaderContent] = useState('');
+  const [activeCommentedUser, setActiveCommentedUser] = useState({});
   const handleReplyComment = (commentedUserParam) => {
-    // setReplyChildComment(true);
+    setCreateNewComment(false);
+    setActiveCommentedUser(commentedUser);
     console.log('commentedUserParam', commentedUserParam);
     const getAllPostsLocalTemp = getAllPostsLocal.map((postItem) => {
       const postObj = { ...postItem };
@@ -221,7 +225,7 @@ const CommentedUser = ({
   //   'commentThatIsBeingReplied.commentId ',
   //   commentThatIsBeingReplied.commentId
   // );
-  // console.log('comment.commentId ', comment.commentId);
+  console.log('ccreate new comment', createNewComment);
 
   return (
     <div className='single-comments-wrapper'>
@@ -238,55 +242,58 @@ const CommentedUser = ({
         <div className='child-comments-wrapper'>
           <div className='hidden'></div>
           <div className='con'>
-            {commentedUser?.replies?.length > 2 && (
-              <div className='prev-posts-btn-wrapper'>
-                <p
-                  onClick={() => {
-                    // const getAllPostsLocalTemp = [...getAllPostsLocal];
-                    console.log('########################main');
-                    const getAllPostsLocalTemp = getAllPostsLocal.map(
-                      (item) => {
-                        const postObj = { ...item };
+            {commentedUser?.replies?.length > 2 &&
+              commentedUser.numberOfRepliesToDisplay <
+                commentedUser.replies.length && (
+                <div className='prev-posts-btn-wrapper'>
+                  <p
+                    onClick={() => {
+                      // const getAllPostsLocalTemp = [...getAllPostsLocal];
+                      console.log('########################main');
+                      const getAllPostsLocalTemp = getAllPostsLocal.map(
+                        (item) => {
+                          const postObj = { ...item };
 
-                        if (item.postId === post.postId) {
-                          console.log('#######first');
-                          const commentedUsers = postObj.commentedUsers.map(
-                            (commentedUserItem) => {
-                              const commentedUserObj = {
-                                ...commentedUserItem,
-                              };
-                              if (
-                                commentedUserItem.commentId ===
-                                commentedUser.commentId
-                              ) {
-                                console.log('#######second');
-                                commentedUserObj.numberOfRepliesToDisplay =
-                                  commentedUserObj.numberOfRepliesToDisplay + 1;
+                          if (item.postId === post.postId) {
+                            console.log('#######first');
+                            const commentedUsers = postObj.commentedUsers.map(
+                              (commentedUserItem) => {
+                                const commentedUserObj = {
+                                  ...commentedUserItem,
+                                };
+                                if (
+                                  commentedUserItem.commentId ===
+                                  commentedUser.commentId
+                                ) {
+                                  console.log('#######second');
+                                  commentedUserObj.numberOfRepliesToDisplay =
+                                    commentedUserObj.numberOfRepliesToDisplay +
+                                    1;
+                                }
+                                return commentedUserObj;
                               }
-                              return commentedUserObj;
-                            }
-                          );
-                          postObj.commentedUsers = [...commentedUsers];
-                        }
+                            );
+                            postObj.commentedUsers = [...commentedUsers];
+                          }
 
-                        return postObj;
-                      }
-                    );
-                    console.log('getAllPostsLocalTemp2', getAllPostsLocalTemp);
-                    setGetAllPostsLocal(getAllPostsLocalTemp);
-                  }}
-                >
-                  Load prev comments
-                </p>
-              </div>
-            )}
+                          return postObj;
+                        }
+                      );
+                      console.log(
+                        'getAllPostsLocalTemp2',
+                        getAllPostsLocalTemp
+                      );
+                      setGetAllPostsLocal(getAllPostsLocalTemp);
+                    }}
+                  >
+                    Load prev comments
+                  </p>
+                </div>
+              )}
             <SingleCommentRepliesWrapper
               commentedUser={commentedUser}
               childComment
-              setReplyComment={() => {
-                setReplyChildComment(true);
-                setCommentThatIsBeingReplied(comment);
-              }}
+              setReplyComment={() => handleReplyComment()}
               forum={forum}
               idType={idType}
               post={post}
@@ -312,7 +319,11 @@ const CommentedUser = ({
                 }}
                 onSubmit={() => handleSubmit('reply', commentedUser)}
                 value={reply}
-                focus={replyChildComment}
+                focus={
+                  commentedUser.showReplyCommentBox &&
+                  !createNewComment &&
+                  commentedUser.commentId === activeCommentedUser.commentId
+                }
               />
             )}
           </div>

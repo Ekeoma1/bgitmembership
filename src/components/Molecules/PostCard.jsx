@@ -140,7 +140,7 @@ const PostCard = ({ post, getAllPostsLocal, setGetAllPostsLocal, forum }) => {
     });
     setGetAllPostsLocal(data);
   };
-  const [replyChildCommentMain, setReplyChildCommentMain] = useState(false);
+  const [createNewComment, setCreateNewComment] = useState(false);
   // comment and reply
   const handleChange = (e) => {
     if (e.target.name === 'comment') {
@@ -163,6 +163,7 @@ const PostCard = ({ post, getAllPostsLocal, setGetAllPostsLocal, forum }) => {
       setCommentType('comment');
       setPreloaderComment(comment);
       setComment('');
+      setCreateNewComment(true);
     }
   };
   // comment
@@ -176,7 +177,7 @@ const PostCard = ({ post, getAllPostsLocal, setGetAllPostsLocal, forum }) => {
         !forum && dispatch(triggerGetCommentsByPostId(data));
         forum && dispatch(triggerGetAllCommentsByForumPostId(data));
       }
-      // setReplyChildCommentMain(false);
+      // setCreateNewComment(true);
     }
   }, [createComment, createCommentForumsPost]);
 
@@ -437,8 +438,8 @@ const PostCard = ({ post, getAllPostsLocal, setGetAllPostsLocal, forum }) => {
                           post={post}
                           forum={forum}
                           idType={idType}
-                          replyChildCommentMain={replyChildCommentMain}
-                          setReplyChildCommentMain={setReplyChildCommentMain}
+                          createNewComment={createNewComment}
+                          setCreateNewComment={setCreateNewComment}
                         />
                       );
                     })}

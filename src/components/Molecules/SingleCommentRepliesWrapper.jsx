@@ -3,39 +3,9 @@ import _ from 'lodash';
 import Icon from '../Icon';
 import '../../assets/scss/molecules.scss';
 import { useNavigate } from 'react-router-dom';
-import moment from 'moment';
-import { UserProfilePhotoLoader2 } from '../Atoms/skeleton-loaders/dashboard-page/UserProfilePhotoLoader';
-import MediaLoader from '../Atoms/skeleton-loaders/home-page/MediaLoader';
-import {
-  triggerLikePost,
-  triggerSavePost,
-  triggerUnsavePost,
-  triggerUnlikePost,
-  triggerCreateComment,
-  triggerReplyComment,
-  resetCreateComment,
-  resetReplyComment,
-  triggerGetCommentsByPostId,
-  resetGetCommentsByPostId,
-} from '../../Features/posts/posts_slice';
+
 import { useDispatch, useSelector } from 'react-redux';
-import { FaRegBookmark, FaBookmark } from 'react-icons/fa';
-import OutsideClickHandler from 'react-outside-click-handler';
-import ShareModal from '../Modals/ShareModal';
 import SingleComment from './SingleComment';
-import CommentInput from './CommentInput';
-import {
-  resetCreateCommentForumPost,
-  resetCreateCommentForumsPost,
-  resetReplyCommentForumsPost,
-  triggerCreateCommentForumsPost,
-  triggerGetAllCommentsByForumPostId,
-  triggerLikeForumPost,
-  triggerReplyCommentForumsPost,
-  triggerSaveForumPost,
-  triggerUnlikeForumPost,
-  triggerUnsaveForumPost,
-} from '../../Features/forums-post/forums_post_slice';
 
 const SingleCommentRepliesWrapper = ({
   commentedUser,
@@ -44,8 +14,7 @@ const SingleCommentRepliesWrapper = ({
   post,
   forum,
   idType,
-  activePostThatIsBeingReplied,
-  handleSubmit,
+  setReplyComment,
 }) => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
@@ -70,24 +39,6 @@ const SingleCommentRepliesWrapper = ({
   const [commentThatIsBeingReplied, setCommentThatIsBeingReplied] = useState(
     {}
   );
-
-  const [actionAcctModal, setActionAcctModal] = useState(false);
-  const [profileImgOnLoadStatus, setProfileImgOnLoadStatus] = useState('base');
-  const [postImgOnLoadStatus, setPostImgOnLoadStatus] = useState('base');
-  const [postVideoOnLoadStatus, setPostVideoOnLoadStatus] = useState('base');
-
-  // comment and reply
-  const handleChange = (e) => {
-    if (e.target.name === 'comment') {
-      setComment(e.target.value);
-    } else if (e.target.name === 'reply') {
-      setReply(e.target.value);
-    }
-  };
-  const handleReplyComment = (comment) => {
-    setCommentThatIsBeingReplied(comment);
-    setReplyChildComment(true);
-  };
   return (
     <div className='single-comment-replies-wrapper'>
       {Array.isArray(commentedUser.replies) &&
@@ -98,10 +49,7 @@ const SingleCommentRepliesWrapper = ({
               key={index}
               comment2={item}
               childComment
-              setReplyComment={() => {
-                setReplyChildComment(true);
-                setCommentThatIsBeingReplied(comment);
-              }}
+              setReplyComment={() => setReplyComment()}
               forum={forum}
               idType={idType}
               post={post}
