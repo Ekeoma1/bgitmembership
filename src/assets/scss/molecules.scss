@@ -316,7 +316,7 @@
 .forum-card-2 {
   max-width: 285px;
   padding: 20px 30px;
-  border: 0.78px solid #9d8dd8;
+  border: 1px solid #807c8b40;
   border-radius: 30px;
   margin-top: 20px;
   cursor: pointer;
@@ -1150,7 +1150,7 @@
     justify-content: space-between;
     .role {
       color: #000;
-      font-size: 2.4rem;
+      font-size: 1.7rem;
       font-style: normal;
       font-weight: 700;
       line-height: 0;
@@ -1162,7 +1162,7 @@
     }
     .company {
       color: #000;
-      font-size: 2.4rem;
+      font-size: 1.6rem;
       font-style: normal;
       font-weight: 600;
       line-height: normal;
@@ -1173,14 +1173,14 @@
     }
     .location {
       color: rgba(0, 0, 0, 0.81);
-      font-size: 1.8rem;
+      font-size: 1.4rem;
       font-style: normal;
       font-weight: 500;
       margin-bottom: 1.3rem;
-      @media screen and (max-width: '1100px') {
-        font-size: 1.5463rem;
-        margin-bottom: 2rem;
-      }
+      // @media screen and (max-width: '1100px') {
+      //   font-size: 1.5463rem;
+      //   margin-bottom: 2rem;
+      // }
     }
     .salary-type {
       display: flex;
@@ -1195,6 +1195,9 @@
         align-items: center !important;
         column-gap: 0.7rem;
         .icon-con {
+          svg{
+            width: 16px;
+          }
           @media screen and (max-width: '1100px') {
             height: 1.5rem;
             width: 1.5rem;
@@ -1209,7 +1212,7 @@
         }
         h5 {
           color: #33246a;
-          font-size: 1.8rem;
+          font-size: 1.4rem;
           font-style: normal;
           font-weight: 400;
           line-height: 0;
@@ -1222,7 +1225,7 @@
     }
     .just-posted {
       color: rgba(0, 0, 0, 0.81);
-      font-size: 1.8rem;
+      font-size: 1.3rem;
       font-weight: 500;
       line-height: normal;
       text-transform: capitalize;
@@ -1309,6 +1312,9 @@
       color: #000;
       font-size: 14px;
       border-radius: 4px;
+      &:focus{
+        outline: none;
+      }
       @media screen and (max-width: '900px') {
         height: 8rem;
       }
@@ -1392,11 +1398,11 @@
     .big-text {
       margin-bottom: 0.5rem;
       a {
-        font-size: 20px;
-        font-weight: 400;
-        color: #b3b0b9;
+        font-size:15px;
+        font-weight: 500;
+        color: #000;
         span {
-          font-weight: 600;
+          font-weight: 500;
           color: #000;
         }
       }

@@ -9,28 +9,29 @@ const EventCard = ({ event, news, item }) => {
   const navigate = useNavigate();
   return (
     <div
-      className="event-card shadow"
+      className="event-card"
       onClick={() => navigate(news ? `/events-and-news/news/${item.newsId}` : `/events-and-news/event/${item.eventId}`)}
     >
       <div className="card-main">
-        <div className="card-info">
-          <h2 className="mt-lg-0 mt-3">{item?.title}</h2>
-          <p className="date">{item?.date}</p>
-          {event?.location && <p className="location">{item?.location}</p>}
-          <p className="info">{item?.content}</p>
-        </div>
         <div className="card-img mt-lg-5 m-0">
           <img src={item?.imageUrl || news ? newsImg : newsImg} alt="event-people" className="img-card" />
         </div>
+        <div className="card-info">
+          <div className="title">{item?.title}</div>
+          <div className="date">{item?.date}</div>
+          {event?.location && <div className="location">{item?.location}</div>}
+          <div className="content">{item?.content}</div>
+        </div>
+
       </div>
-      <div className="card-footer">
+      {/* <div className="card-footer">
         <div className="icon-wrapper">
           <Icon icon="bookmark" />
         </div>
         <div className="icon-wrapper">
           <Icon icon="share" />
         </div>
-      </div>
+      </div> */}
     </div>
   );
 };

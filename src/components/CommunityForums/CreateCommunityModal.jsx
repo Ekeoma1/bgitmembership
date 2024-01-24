@@ -119,17 +119,13 @@ const CreateCommunityModal = () => {
       setInfoJsonCurrentInput(value);
     }
   };
-  console.log(formData);
-  
-  // console.log('infoJsonCurrentInput', infoJsonCurrentInput);
-  // const handleKeyPress = (event) => {};
 
   return (
     <>
       <button
         data-bs-toggle='modal'
         data-bs-target='#exampleModal'
-        className='alt-btn small-btn'
+        className='create-com-modal-btn'
       >
         Create Community
       </button>
@@ -225,6 +221,7 @@ const CreateCommunityModal = () => {
                       value={infoJsonCurrentInput}
                     ></textarea>
                   </div>
+                  <div className='outside-placeholder-text'>Seperate each rule with a fullstop</div>
                   {errors.infoJson && (
                     <div className='error-message'>{errors.infoJson}</div>
                   )}

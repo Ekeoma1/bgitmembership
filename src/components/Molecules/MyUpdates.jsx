@@ -44,7 +44,7 @@ const MyUpdates = ({ forum }) => {
     <div className='my-updates-wrapper shadow-sm'>
       {!forum && (
         <>
-          <h3 className=''>My updates</h3>
+          <h4 className=''>My updates</h4>
           <div>
             <div className='section-header mt-4'>Recently Viewed</div>
             <div className='section-list-wrapper'>

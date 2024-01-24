@@ -124,7 +124,7 @@ const CommunityForumsComponent = () => {
   return (
     <div className='community-forum-wrapper'>
       <div className='community-forum-card-wrapper shadow-sm'>
-        <h3>Community Forums</h3>
+        <h4>Community Forums</h4>
         {getSuggestedForums.status === 'base' ||
         getSuggestedForums.status === 'loading' ? (
           <ForumCardsLoader />

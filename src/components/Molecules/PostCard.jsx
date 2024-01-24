@@ -146,8 +146,6 @@ const PostCard = ({
   };
   const [commentType, setCommentType] = useState('');
   const handleSubmit = (name, post) => {
-    console.log('name', name);
-    console.log('reply', reply);
     if (name === 'comment' && comment !== '') {
       const data = {
         [idType]: post[idType],
@@ -189,15 +187,12 @@ const PostCard = ({
         post[idType] === createCommentForumsPost.data[idType])
     ) {
       let data;
-      // console.log('pre useeffectdata ', getAllPostsLocal);
       if (!forum) {
         data = getAllPostsLocal.map((item) => {
           let itemObj = { ...item };
           let itemObj2 = { ...item };
-          console.log('itemObj##### ', itemObj);
           if (item[idType] === getCommentsByPostId.data[idType]) {
             itemObj = { ...getCommentsByPostId.data };
-            console.log('itemObjNew##### ', itemObj);
             const commentedUsers = itemObj.commentedUsers.map(
               (commentedUser) => {
                 const commentedUserObj = { ...commentedUser };
@@ -219,7 +214,6 @@ const PostCard = ({
             );
             itemObj.commentedUsers = [...commentedUsers];
           }
-          console.log('itemObjFinal##### ', itemObj);
           return itemObj;
         });
       } else if (forum) {
