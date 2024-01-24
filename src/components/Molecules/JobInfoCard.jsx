@@ -25,9 +25,9 @@ const JobInfoCard = ({
         </div>
         <div className='hybrid'>
           {jobSelected?.isSaved ? (
-            <FaBookmark className='icon active' />
+            <FaBookmark size={20} className='icon active' />
           ) : (
-            <FaRegBookmark className='icon' />
+            <FaRegBookmark size={20} className='icon' />
           )}
         </div>
       </div>
@@ -72,7 +72,7 @@ const JobInfoCard = ({
       </div>
       <div className='overview'>
         <h3 className='title'>Overview</h3>
-        {jobSelected.job.jobDescription}
+        <div className='content' dangerouslySetInnerHTML={{ __html: jobSelected.job.jobDescription }} />
       </div>
 
       <div className='btn'>

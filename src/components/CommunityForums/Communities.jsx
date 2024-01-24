@@ -190,34 +190,30 @@ const Communities = () => {
     <div className='communities-wrapper'>
       <div className='container'>
         <div className='content-wrapper'>
-          {/* create community modal */}
-          <CreateCommunityModal />
           <div className='forums-true'>
-            {/* <div className='search-box'>
-                        <div className='search-box-wrapper'>
-                          <SearchBox
-                            onChange={onChange}
-                            value={searchValue}
-                            placeholder='Search'
-                          />
-                        </div>
-                      </div> */}
-            <div className='section-title'>
-              <h3 className='text-color22'>Communities </h3>
-              {getMyForums.status === 'base' ||
-              getMyForums.status === 'loading' ? (
-                <div className='loading-state'>
-                  <SingleLineLoader />
-                </div>
-              ) : getMyForums.status === 'successful' ? (
-                <p className='text-color222'>({myForumsLength})</p>
-              ) : (
-                <></>
-              )}
+            <div className='d-flex mb-5 justify-content-between align-items-center flex-wrap'>
+              <div className='section-title'>
+                <h3 className='text-color22'>Communities </h3>
+                {getMyForums.status === 'base' ||
+                  getMyForums.status === 'loading' ? (
+                  <div className='loading-state'>
+                    <SingleLineLoader />
+                  </div>
+                ) : getMyForums.status === 'successful' ? (
+                  <p className='text-color222'>({myForumsLength})</p>
+                ) : (
+                  <></>
+                )}
+              </div>
+              {/* create community modal */}
+
+              <CreateCommunityModal />
+
             </div>
+
             <div className='cards-wrapper'>
               {getMyForums.status === 'base' ||
-              getMyForums.status === 'loading' ? (
+                getMyForums.status === 'loading' ? (
                 <div className='loader'>
                   <ForumCardsLoader2 />
                 </div>

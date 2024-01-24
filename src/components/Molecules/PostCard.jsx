@@ -140,8 +140,6 @@ const PostCard = ({ post, getAllPostsLocal, setGetAllPostsLocal, forum }) => {
   };
   const [commentType, setCommentType] = useState('');
   const handleSubmit = (name, post) => {
-    console.log('name', name);
-    console.log('reply', reply);
     if (name === 'comment' && comment !== '') {
       const data = {
         [idType]: post[idType],
@@ -176,31 +174,19 @@ const PostCard = ({ post, getAllPostsLocal, setGetAllPostsLocal, forum }) => {
       post[idType] === createComment.data[idType]
     ) {
       let data;
-      console.log('pre useeffectdata ', getAllPostsLocal);
       if (!forum) {
         data = getAllPostsLocal.map((item) => {
           let itemObj = { ...item };
           let itemObj2 = { ...item };
-          console.log('itemObj##### ', itemObj);
           if (item[idType] === getCommentsByPostId.data[idType]) {
             itemObj = { ...getCommentsByPostId.data };
-            console.log('itemObjNew##### ', itemObj);
             const commentedUsers = itemObj.commentedUsers.map(
               (commentedUser) => {
                 const commentedUserObj = { ...commentedUser };
                 commentedUserObj.numberOfRepliesToDisplay = 2;
                 itemObj2.commentedUsers.forEach((commentedUser2) => {
                   if (commentedUser2.commentId === commentedUser.commentId) {
-                    console.log(
-                      'commentedUser2222222222222222222222222222222222###########',
-                      commentedUser2
-                    );
-
                     if (commentedUser2.showReplyCommentBox) {
-                      console.log(
-                        'commentedUser21111111111111111###########',
-                        commentedUser2
-                      );
                       commentedUserObj.showReplyCommentBox = true;
                     }
                   }
@@ -210,7 +196,6 @@ const PostCard = ({ post, getAllPostsLocal, setGetAllPostsLocal, forum }) => {
             );
             itemObj.commentedUsers = [...commentedUsers];
           }
-          console.log('itemObjFinal##### ', itemObj);
           return itemObj;
         });
       } else if (forum) {
@@ -345,7 +330,6 @@ const PostCard = ({ post, getAllPostsLocal, setGetAllPostsLocal, forum }) => {
             <button
               onClick={() => {
                 setShowCommentsSection(!showCommentsSection);
-                // setActivePostThatIsBeingReplied(post);
               }}
             >
               <Icon icon='comment' />

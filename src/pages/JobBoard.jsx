@@ -80,31 +80,7 @@ const JobBoard = () => {
 
   return (
     <div className='job-board-wrapper'>
-      {/* {!apply && (
-        <div className='search-box-section mx-auto'>
-          <div className='search-box-component-wrapper'>
-            <SearchBox
-              onChange={onChange}
-              value={searchValue}
-              placeholder='Search'
-            />
-          </div>
-          <button
-            onClick={() => {
-              setFilter(!filter);
-              setShowJobInfo(false);
-              // if (isMobile) {
-              // }
-            }}
-            type='submit'
-            className='primary-btn small-btn  filter-btn'
-          >
-            <VscSettings />
-            Filter
-            <HiOutlineChevronDown />
-          </button>
-        </div>
-      )} */}
+      
       {!filter && (
         <div className='tab-btns'>
           <button

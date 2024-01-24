@@ -141,11 +141,11 @@ export const ForumCard2 = ({ forum, setActiveForum }) => {
 
   return (
     <div className='forum-card-2' onClick={(e) => handleClick(e)}>
-      <h4 className='mt-3'>
+      <h5 className='mt-3'>
         {forum.forumName?.length > 25
           ? `${forum.forumName?.substring(0, 25)}...`
           : `${forum.forumName}`}
-      </h4>
+      </h5>
       <div className='community-forum-content'>
         {' '}
         {forum.details?.length > 180

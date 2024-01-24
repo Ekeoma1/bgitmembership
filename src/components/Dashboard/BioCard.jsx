@@ -25,13 +25,13 @@ const BioCard = ({ data }) => {
                   </span>
                 )}
               </div>
-              <div className='dashboard-text'>{data?.data?.biography}</div>
+              <div className='dashboard-text mb-3'>{data?.data?.biography}</div>
 
               <div className='dashboard-header mt-1'>
                 {/* What best desribe you? */}
                 Description
               </div>
-              <div className='dashboard-text'>{data?.data?.purpose}</div>
+              <div className='dashboard-text mb-3'>{data?.data?.purpose}</div>
               <div className='dashboard-header mt-1'>
                 {/* What your experience level? */}
                 Experience level

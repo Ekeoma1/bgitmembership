@@ -23,12 +23,12 @@ const resourcesList = [
 const Resources = () => {
   return (
     <div className="resources-wrapper shadow-sm mt-4">
-      <h3 className="mt-3">Resources</h3>
+      <h4 className="mt-3">Resources</h4>
 
       {resourcesList.map((list, key) => {
         return (
           <div key={key} className="resources-content">
-            <h4 className="resources-title">{list.title}</h4>
+            <h5 className="resources-title">{list.title}</h5>
             <div className="row align-items-center">
               <div className="col-10">
                 <div className="resources-text">{list.content}</div>

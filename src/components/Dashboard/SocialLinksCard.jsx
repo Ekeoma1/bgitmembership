@@ -97,7 +97,6 @@ const SocialLinksCard = ({ othersView, data }) => {
 
   useEffect(() => {
     if (getSocialLinksByUserId.status === 'successful') {
-      console.log('formDataTemp########', getSocialLinksByUserId.data);
       if (getSocialLinksByUserId.data?.length === 0) {
       } else {
         setFormData(getSocialLinksByUserId.data);
@@ -105,17 +104,19 @@ const SocialLinksCard = ({ othersView, data }) => {
     }
   }, [getSocialLinksByUserId]);
 
+  console.log(getSocialLinksByUserId)
+
   return (
     <div className='dashboard-card social-links-wrapper'>
       <>
         <div className='dashboard-header'>Social Links</div>
         {getSocialLinksByUserId.status === 'base' ||
-        getSocialLinksByUserId.status === 'loading' ? (
+          getSocialLinksByUserId.status === 'loading' ? (
           <SocialLinksLoader />
         ) : getSocialLinksByUserId.status === 'successful' ? (
           <>
             {Array.isArray(getSocialLinksByUserId.data) &&
-            getSocialLinksByUserId.data?.length > 0 ? (
+              getSocialLinksByUserId.data?.length > 0 ? (
               <div className='social-links-con'>
                 {getSocialLinksByUserId?.data?.map((link, key) => {
                   if (link.url !== '') {
@@ -124,22 +125,12 @@ const SocialLinksCard = ({ othersView, data }) => {
                         key={key}
                         className='d-flexs '
                         onClick={() => {
-                          // navigate(`${link.url}`, '_blank');
-                          // window.open(`${link.url}`, '_blank').focus();
-                          // const newTab = window.open(link.url, '_blank');
-                          // if (newTab) {
-                          //   newTab.focus(); // Ensure the new tab is focused
-                          // }
                         }}
                       >
-                        {/* <a
-                          href={'shshak'}
-                          target='_blank'
-                          className=''
-                          rel='noreferrer'
-                        > */}
                         <div className=''>
-                          <Link to={`${link.url}`} target='_blank'>
+                          <a rel='noreferrer'
+                            href={`/${link.url}`}
+                            target='_blank'>
                             {link.title === 'facebook' ? (
                               <FaFacebook />
                             ) : link.title === 'twitter' ? (
@@ -154,7 +145,7 @@ const SocialLinksCard = ({ othersView, data }) => {
                               ''
                             )}
                             <span className='dashboard-text'>{link.url}</span>
-                          </Link>
+                          </a>
                         </div>
 
                         {/* </a> */}
@@ -179,17 +170,16 @@ const SocialLinksCard = ({ othersView, data }) => {
                           addSocialLinks.status !== 'loading' &&
                             setShowSocialLinksModal(true);
                         }}
-                        className={`add-text-btn ${
-                          (addSocialLinks.status === 'loading' ||
+                        className={`add-text-btn ${(addSocialLinks.status === 'loading' ||
                             updateSocialLinks.status === 'loading') &&
                           'add-text-btn-2'
-                        } `}
+                          } `}
                       >
                         {addSocialLinks.status === 'loading'
                           ? 'Adding Social links..'
                           : updateSocialLinks.status === 'loading'
-                          ? 'Updating Social links..'
-                          : '+ Add Social Link'}
+                            ? 'Updating Social links..'
+                            : '+ Add Social Link'}
                       </button>
                     )}
                     <div className='social-links'>

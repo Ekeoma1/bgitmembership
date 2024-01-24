@@ -50,7 +50,6 @@ const JobCard = ({
   };
   useEffect(() => {
     const data = _.cloneDeep(getAllJobsLocal);
-    console.log('local', getAllJobsLocal);
     if (activeJob) {
       if (saveCurrentJob) {
         data?.forEach((item) => {
@@ -119,7 +118,7 @@ const JobCard = ({
         </h5>
       </div>
       <button className='save-icon center' onClick={handleSaveUnsaveJob}>
-        {job?.isSaved ? <FaBookmark className='active' /> : <FaRegBookmark />}
+        {job?.isSaved ? <FaBookmark size={20} className='active' /> : <FaRegBookmark size={20} />}
       </button>
     </div>
   );
