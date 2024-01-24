@@ -37,7 +37,13 @@ import MainButton from './MainButton';
 import SingleCommentWrapper from './CommentedUser';
 import CommentedUser from './CommentedUser';
 
-const PostCard = ({ post, getAllPostsLocal, setGetAllPostsLocal, forum }) => {
+const PostCard = ({
+  post,
+  getAllPostsLocal,
+  setGetAllPostsLocal,
+  forum,
+  from,
+}) => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const {
@@ -326,45 +332,54 @@ const PostCard = ({ post, getAllPostsLocal, setGetAllPostsLocal, forum }) => {
       </div>
       <div className='post-content-wrapper'>
         <div className='post-content'>{post?.content}</div>
-        {(post?.postImageUrl || post?.postVideoUrl) && (
+        {from !== 'dashboard' && (
           <>
-            {post.postImageUrl ? (
-              <div className='post-image'>
-                <img
-                  src={post?.postImageUrl}
-                  alt='post-img'
-                  className={`${
-                    postImgOnLoadStatus === 'success' ? 'd-block' : 'd-none'
-                  }`}
-                  onLoad={() => setPostImgOnLoadStatus('success')}
-                  onError={() => setPostImgOnLoadStatus('error')}
-                />
-                {postImgOnLoadStatus === 'base' && <MediaLoader />}
-                {postImgOnLoadStatus === 'error' && (
-                  <div className='error-img'>couldn't load img</div>
+            {(post?.postImageUrl || post?.postVideoUrl) && (
+              <>
+                {post.postImageUrl ? (
+                  <div className='post-image'>
+                    <img
+                      src={post?.postImageUrl}
+                      alt='post-img'
+                      className={`${
+                        postImgOnLoadStatus === 'success' ? 'd-block' : 'd-none'
+                      }`}
+                      onLoad={() => setPostImgOnLoadStatus('success')}
+                      onError={() => setPostImgOnLoadStatus('error')}
+                    />
+                    {postImgOnLoadStatus === 'base' && <MediaLoader />}
+                    {postImgOnLoadStatus === 'error' && (
+                      <div className='error-img'>couldn't load img</div>
+                    )}
+                  </div>
+                ) : (
+                  <div className='post-video'>
+                    <video
+                      controls
+                      className={`${
+                        postVideoOnLoadStatus === 'success'
+                          ? 'd-block'
+                          : 'd-none'
+                      }`}
+                      onLoadedMetadata={() =>
+                        setPostVideoOnLoadStatus('success')
+                      }
+                      onError={() => setPostVideoOnLoadStatus('error')}
+                    >
+                      <source src={post?.postVideoUrl} type='video/mp4' />
+                    </video>
+                    {postVideoOnLoadStatus === 'base' && <MediaLoader />}
+                    {postVideoOnLoadStatus === 'error' && (
+                      <div className='error-img'>couldn't load img</div>
+                    )}
+                  </div>
                 )}
-              </div>
-            ) : (
-              <div className='post-video'>
-                <video
-                  controls
-                  className={`${
-                    postVideoOnLoadStatus === 'success' ? 'd-block' : 'd-none'
-                  }`}
-                  onLoadedMetadata={() => setPostVideoOnLoadStatus('success')}
-                  onError={() => setPostVideoOnLoadStatus('error')}
-                >
-                  <source src={post?.postVideoUrl} type='video/mp4' />
-                </video>
-                {postVideoOnLoadStatus === 'base' && <MediaLoader />}
-                {postVideoOnLoadStatus === 'error' && (
-                  <div className='error-img'>couldn't load img</div>
-                )}
-              </div>
+              </>
             )}
           </>
         )}
       </div>
+
       <div className='post-card-footer'>
         <div className='post-card-footer-content'>
           <div className='d-flex align-items-center c-gap-10'>

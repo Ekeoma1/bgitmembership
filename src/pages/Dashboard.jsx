@@ -86,7 +86,7 @@ const Dashboard = () => {
             </div>
             <Group />
             <Resources />
-            <Posts />
+            <Posts from={'dashboard'} />
           </div>
           {/* show desktop */}
           <div className='col-lg-3 d-lg-block d-none'>

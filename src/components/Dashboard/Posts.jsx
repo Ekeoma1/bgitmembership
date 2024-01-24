@@ -10,7 +10,7 @@ import PostsLoader, {
   PostsLoader2,
 } from '../Atoms/skeleton-loaders/home-page/PostsLoader';
 
-const Posts = () => {
+const Posts = ({ from }) => {
   const { getAllPostsByUserId } = useSelector((state) => state.posts);
   const { getUserProfileById } = useSelector((state) => state.users);
   const [getAllPostsByUserIdLocal, setGetAllPostsByUserIdLocal] = useState([]);
@@ -59,6 +59,7 @@ const Posts = () => {
                       post={post}
                       getAllPostsLocal={getAllPostsByUserIdLocal}
                       setGetAllPostsLocal={setGetAllPostsByUserIdLocal}
+                      from={from}
                     />
                   </div>
                 ))}
