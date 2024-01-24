@@ -203,6 +203,10 @@ const postsSlice = createSlice({
     resetReplyCommentForumsPost: (state) => {
       state.createCommentForumsPost = initialState.createCommentForumsPost;
     },
+    resetGetAllCommentsByForumPostId: (state) => {
+      state.getAllCommentsByForumPostId =
+        initialState.getAllCommentsByForumPostId;
+    },
   },
   extraReducers: (builder) => {
     //create forum post
@@ -411,4 +415,5 @@ export const {
   resetCreateForumPost,
   resetCreateCommentForumsPost,
   resetReplyCommentForumsPost,
+  resetGetAllCommentsByForumPostId,
 } = postsSlice.actions;

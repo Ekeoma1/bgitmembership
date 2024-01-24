@@ -11,6 +11,7 @@ import SingleComment from './SingleComment';
 import CommentInput from './CommentInput';
 import {
   resetCreateCommentForumsPost,
+  resetGetAllCommentsByForumPostId,
   resetReplyCommentForumsPost,
   triggerGetAllCommentsByForumPostId,
   triggerReplyCommentForumsPost,
@@ -26,6 +27,7 @@ const CommentedUser = ({
   idType,
   createNewComment,
   setCreateNewComment,
+  activePostTemp,
 }) => {
   const { replyComment: replyCommentRedux, getCommentsByPostId } = useSelector(
     (state) => state.posts
@@ -101,10 +103,8 @@ const CommentedUser = ({
     ) {
       const data = getAllPostsLocal.map((item) => {
         let itemObj = { ...item };
-
         if (item.postId === getCommentsByPostId.data.postId) {
           //  const itemObj2 = { ...getCommentsByPostId.data };
-
           const commentedUsers = itemObj.commentedUsers.map((commentedUser) => {
             const commentedUserObj = { ...commentedUser };
             if (commentedUser.commentId === replyCommentRedux.data?.commentId) {
@@ -137,10 +137,15 @@ const CommentedUser = ({
   useEffect(() => {
     if (
       replyCommentForumsPost.status === 'successful' &&
-      replyCommentForumsPost.data.forumPostId === post.postId
+      replyCommentForumsPost.data?.commentId === commentedUser.commentId
     ) {
+      console.log('true');
+      // const data = {
+      //   queryParams: { [idType]: replyCommentForumsPost[idType] },
+      // };
+      // remove
       const data = {
-        queryParams: { [idType]: replyCommentForumsPost[idType] },
+        queryParams: { [idType]: activePostTemp[idType] },
       };
       dispatch(triggerGetAllCommentsByForumPostId(data));
     }
@@ -150,21 +155,36 @@ const CommentedUser = ({
     // so that useefffect will run only once
     if (
       getAllCommentsByForumPostId.status === 'successful' &&
-      post[idType] === getCommentsByPostId.data[idType]
+      replyCommentForumsPost.data?.commentId === commentedUser.commentId
     ) {
       console.log('two');
-      let data;
-      data = getAllPostsLocal.map((item) => {
+
+      const data = getAllPostsLocal.map((item) => {
         let itemObj = { ...item };
-        if (item.id === getAllCommentsByForumPostId.data.forumPostId) {
-          itemObj = { ...getCommentsByPostId.data };
+        if (item.postId === getAllCommentsByForumPostId.data.postId) {
+          //  const itemObj2 = { ...getCommentsByPostId.data };
           const commentedUsers = itemObj.commentedUsers.map((commentedUser) => {
             const commentedUserObj = { ...commentedUser };
-            commentedUserObj.numberOfRepliesToDisplay = 2;
+            if (
+              commentedUser.commentId === replyCommentForumsPost.data?.commentId
+            ) {
+              console.log('commentedUserObj', commentedUserObj);
+              console.log(
+                'replyCommentForumsPost.data',
+                replyCommentForumsPost.data
+              );
+              commentedUserObj.numberOfRepliesToDisplay =
+                commentedUserObj.numberOfRepliesToDisplay + 1;
+              commentedUserObj.replies = [
+                ...commentedUserObj.replies,
+                replyCommentForumsPost.data,
+              ];
+            }
             return commentedUserObj;
           });
           itemObj.commentedUsers = commentedUsers;
         }
+
         return itemObj;
       });
       setGetAllPostsLocal([...data]);
@@ -173,7 +193,10 @@ const CommentedUser = ({
       dispatch(resetCreateCommentForumsPost());
       dispatch(resetReplyCommentForumsPost());
       dispatch(resetGetCommentsByPostId());
+      dispatch(resetGetAllCommentsByForumPostId());
       setPreloaderCommentReply('');
+      // new
+      setShowLoader(false);
     }
   }, [getAllCommentsByForumPostId]);
 
@@ -198,12 +221,10 @@ const CommentedUser = ({
                 <div className='prev-posts-btn-wrapper'>
                   <p
                     onClick={() => {
-                      // const getAllPostsLocalTemp = [...getAllPostsLocal];
                       console.log('########################main');
                       const getAllPostsLocalTemp = getAllPostsLocal.map(
                         (item) => {
                           const postObj = { ...item };
-
                           if (item.postId === post.postId) {
                             console.log('#######first');
                             const commentedUsers = postObj.commentedUsers.map(
@@ -228,10 +249,6 @@ const CommentedUser = ({
 
                           return postObj;
                         }
-                      );
-                      console.log(
-                        'getAllPostsLocalTemp2',
-                        getAllPostsLocalTemp
                       );
                       setGetAllPostsLocal(getAllPostsLocalTemp);
                     }}
