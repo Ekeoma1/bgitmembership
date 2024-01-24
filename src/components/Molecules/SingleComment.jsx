@@ -37,6 +37,7 @@ const SingleComment = ({
   loaderContent,
 }) => {
   const dispatch = useDispatch();
+  const navigate=useNavigate()
   const { getMyProfile } = useSelector((state) => state.users);
 
   const timeoutIdRef = useRef(null);
@@ -153,9 +154,12 @@ const SingleComment = ({
     <div
       className={`comment ${loader && 'loader'} ${childComment && 'comment-2'}`}
     >
-      <div className={`img-con ${childComment && 'img-con-2'}`}>
+      <div
+        onClick={() => !loader && navigate(`/users/${comment2?.userId}`)}
+        className={`img-con ${childComment && 'img-con-2'}`}
+      >
         <img
-          className={`commenter-img ${childComment && 'commenter-img-2'}`}
+          className={`commenter-img ${!loader && 'commenter-img-3'} ${childComment && 'commenter-img-2'}`}
           src={
             loader ? getMyProfile.data?.imageUrl : comment2.userProfilePicture
           }
@@ -164,7 +168,10 @@ const SingleComment = ({
       </div>
       <div className='details-box'>
         <div className='details'>
-          <h5 className='name'>
+          <h5
+            className={`name ${!loader && 'name-2'}`}
+            onClick={() => !loader && navigate(`/users/${comment2?.userId}`)}
+          >
             {loader
               ? `${getMyProfile.data?.firstName} ${getMyProfile.data?.secondName}`
               : !childComment
