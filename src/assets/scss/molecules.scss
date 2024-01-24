@@ -720,6 +720,7 @@
   .img-con {
     min-width: 9.1rem;
     width: 9.1rem;
+
     @media screen and (max-width: '600px') {
       min-width: 3.8rem;
       width: 3.8rem;
@@ -740,6 +741,9 @@
       border-radius: 50%;
       overflow: hidden;
       object-fit: cover;
+      &.commenter-img-3 {
+        cursor: pointer;
+      }
       @media screen and (max-width: '600px') {
         min-width: 3.2rem;
         min-height: 3.2rem;
@@ -776,11 +780,15 @@
       .name {
         color: #000;
         font-weight: 600;
-        line-height: 120%;
-        margin-bottom: 0.2;
+        line-height: 100%;
+        margin-bottom: 0.2rem;
         font-family: $thic600;
         font-size: 17px;
-        cursor: pointer;
+        display: inline-block;
+        margin: auto ;
+        &.name-2 {
+          cursor: pointer;
+        }
       }
       .role {
         color: #807c8b;

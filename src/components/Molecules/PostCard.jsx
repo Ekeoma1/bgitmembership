@@ -159,10 +159,16 @@ const PostCard = ({ post, getAllPostsLocal, setGetAllPostsLocal, forum }) => {
       createComment.status === 'successful' ||
       createCommentForumsPost.status === 'successful'
     ) {
+      console.log('1');
       if (createComment.data[idType] === post[idType]) {
         const data = { queryParams: { [idType]: createComment.data[idType] } };
-        !forum && dispatch(triggerGetCommentsByPostId(data));
-        forum && dispatch(triggerGetAllCommentsByForumPostId(data));
+        dispatch(triggerGetCommentsByPostId(data));
+      }
+      if (createCommentForumsPost.data[idType] === post[idType]) {
+        const data = {
+          queryParams: { [idType]: createCommentForumsPost.data[idType] },
+        };
+        dispatch(triggerGetAllCommentsByForumPostId(data));
       }
     }
   }, [createComment, createCommentForumsPost]);
@@ -171,7 +177,8 @@ const PostCard = ({ post, getAllPostsLocal, setGetAllPostsLocal, forum }) => {
     if (
       (getCommentsByPostId.status === 'successful' ||
         getAllCommentsByForumPostId.status === 'successful') &&
-      post[idType] === createComment.data[idType]
+      (post[idType] === createComment.data[idType] ||
+        post[idType] === createCommentForumsPost.data[idType])
     ) {
       let data;
       if (!forum) {
@@ -183,11 +190,16 @@ const PostCard = ({ post, getAllPostsLocal, setGetAllPostsLocal, forum }) => {
             const commentedUsers = itemObj.commentedUsers.map(
               (commentedUser) => {
                 const commentedUserObj = { ...commentedUser };
-                commentedUserObj.numberOfRepliesToDisplay = 2;
                 itemObj2.commentedUsers.forEach((commentedUser2) => {
                   if (commentedUser2.commentId === commentedUser.commentId) {
                     if (commentedUser2.showReplyCommentBox) {
                       commentedUserObj.showReplyCommentBox = true;
+                    }
+                    if (commentedUser2.numberOfRepliesToDisplay) {
+                      commentedUserObj.numberOfRepliesToDisplay =
+                        commentedUser2.numberOfRepliesToDisplay;
+                    } else {
+                      commentedUserObj.numberOfRepliesToDisplay = 2;
                     }
                   }
                 });
@@ -205,6 +217,37 @@ const PostCard = ({ post, getAllPostsLocal, setGetAllPostsLocal, forum }) => {
             item = { ...getAllCommentsByForumPostId.data };
           }
           return item;
+        });
+        // new
+        data = getAllPostsLocal.map((item) => {
+          let itemObj = { ...item };
+          let itemObj2 = { ...item };
+          if (item[idType] === getAllCommentsByForumPostId.data[idType]) {
+            itemObj = { ...getAllCommentsByForumPostId.data };
+            console.log('itemObjNew##### ', itemObj);
+            const commentedUsers = itemObj.commentedUsers.map(
+              (commentedUser) => {
+                const commentedUserObj = { ...commentedUser };
+                itemObj2.commentedUsers.forEach((commentedUser2) => {
+                  if (commentedUser2.commentId === commentedUser.commentId) {
+                    if (commentedUser2.showReplyCommentBox) {
+                      commentedUserObj.showReplyCommentBox = true;
+                    }
+                    if (commentedUser2.numberOfRepliesToDisplay) {
+                      commentedUserObj.numberOfRepliesToDisplay =
+                        commentedUser2.numberOfRepliesToDisplay;
+                    } else {
+                      commentedUserObj.numberOfRepliesToDisplay = 2;
+                    }
+                  }
+                });
+                return commentedUserObj;
+              }
+            );
+            itemObj.commentedUsers = [...commentedUsers];
+          }
+          console.log('itemObjFinal##### ', itemObj);
+          return itemObj;
         });
       }
       setGetAllPostsLocal([...data]);
@@ -226,7 +269,8 @@ const PostCard = ({ post, getAllPostsLocal, setGetAllPostsLocal, forum }) => {
     getAllCommentsByForumPostId,
   ]);
   const [numberOfCommentsToDisplay, setNumberOfCommentsToDisplay] = useState(2);
-
+  const [activePostTemp, setActivePostTemp] = useState({});
+  // console.log('post forum', post);
   return (
     <div className='post-card shadow-sm mx-auto'>
       <div className='post-card-header'>
@@ -330,6 +374,7 @@ const PostCard = ({ post, getAllPostsLocal, setGetAllPostsLocal, forum }) => {
             <button
               onClick={() => {
                 setShowCommentsSection(!showCommentsSection);
+                setActivePostTemp(post);
               }}
             >
               <Icon icon='comment' />
@@ -394,6 +439,7 @@ const PostCard = ({ post, getAllPostsLocal, setGetAllPostsLocal, forum }) => {
                           idType={idType}
                           createNewComment={createNewComment}
                           setCreateNewComment={setCreateNewComment}
+                          activePostTemp={activePostTemp}
                         />
                       );
                     })}

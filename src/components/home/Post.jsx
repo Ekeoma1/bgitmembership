@@ -58,7 +58,6 @@ const Post = ({ forum }) => {
   useEffect(() => {
     if (!forum) {
       if (getAllPosts?.status === 'successful' && getAllPosts.data?.posts) {
-        // const temp = getAllPosts?.data?.posts;
         const temp = getAllPosts?.data?.posts.map((post) => {
           const objMain = { ...post };
           const commentedUsers = objMain.commentedUsers.map((commentedUser) => {
@@ -80,32 +79,28 @@ const Post = ({ forum }) => {
             }
           );
           setGetAllPostsLocal(getAllPostsAll);
-          // // new
-          // const getAllPostsLocalTemp = getAllPostsAll.map((post) => {
-          //   const objMain = { ...post };
-          //   const commentedUsers = objMain.commentedUsers.map(
-          //     (commentedUser) => {
-          //       const commentedUserObj = { ...commentedUser };
-          //       commentedUserObj.numberOfRepliesToDisplay = 2;
-          //       return commentedUserObj;
-          //     }
-          //   );
-          //   objMain.commentedUsers = commentedUsers;
-          //   return objMain;
-          // });
-          // setGetAllPostsLocal(getAllPostsLocalTemp);
         } else {
           setGetAllPostsLocal([...temp]);
         }
       }
     } else {
-      // forum 
+      // forum
       // update to same as top
       if (
         getForumPostsByForumId?.status === 'successful' &&
         getForumPostsByForumId.data?.forumPosts
       ) {
-        const temp = getForumPostsByForumId?.data?.forumPosts;
+        const temp = getForumPostsByForumId?.data?.forumPosts.map((post) => {
+          const objMain = { ...post };
+          const commentedUsers = objMain.commentedUsers.map((commentedUser) => {
+            const commentedUserObj = { ...commentedUser };
+            commentedUserObj.numberOfRepliesToDisplay = 2;
+            return commentedUserObj;
+          });
+          objMain.commentedUsers = commentedUsers;
+          return objMain;
+        });
+
         if (loadMore) {
           const getAllPostsPrevious = [...getAllPostsLocal];
           const getAllPostsAllTemp = [...getAllPostsPrevious, ...temp];
